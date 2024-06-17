@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CourseController!{% endblock %}
+
+{% block body %}
+{% if courses | default %}
+{% for course in courses %}
+    {{ course }}
+{% endfor %}
+{% endif %}
+
+{% endblock %}

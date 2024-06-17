@@ -4,4 +4,11 @@
 
 {% block body %}
 
+{% if services | default %}
+
+{% for service in services %}
+    {{ service }}
+{% endfor %}
+{% endif %}
+
 {% endblock %}

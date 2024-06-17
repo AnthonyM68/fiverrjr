@@ -19,7 +19,7 @@ class Service
     /**
      * @var Collection<int, course>
      */
-    #[ORM\ManyToMany(targetEntity: course::class, inversedBy: 'services')]
+    #[ORM\ManyToMany(targetEntity: Course::class, inversedBy: 'services')]
     private Collection $course;
 
     #[ORM\ManyToOne(inversedBy: 'service')]
@@ -42,6 +42,9 @@ class Service
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createDate = null;
+
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    private ?Order $orders = null;
 
     public function __construct()
     {
@@ -159,5 +162,21 @@ class Service
         $this->createDate = $createDate;
 
         return $this;
+    }
+
+    public function getOrders(): ?Order
+    {
+        return $this->orders;
+    }
+
+    public function setOrders(?Order $orders): static
+    {
+        $this->orders = $orders;
+
+        return $this;
+    }
+    public function __toString()
+    {
+        return $this->title;
     }
 }
