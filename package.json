@@ -1,0 +1,46 @@
+{
+  "name": "jsefomantikit",
+  "version": "0.0.3",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev-server": "encore dev-server --hot",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build-webpack": "encore production --progress",
+    "build-themes": "node build-themes.js",
+    "build": "npm run build-themes && npm run build-webpack && grunt build",
+    "gulp-install": "gulp install",
+    "gulp-build": "gulp build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@symfony/webpack-encore": "^4.0.0",
+    "bootstrap": "^5.3.3",
+    "core-js": "^3.37.1",
+    "fomantic-ui": "^2.9.4-beta.60",
+    "grunt": "^1.4.1",
+    "jquery": "^3.7.1",
+    "jquery-ui": "^1.13.0",
+    "less": "^4.1.1",
+    "uikit": "^3.21.4"
+  },
+  "devDependencies": {
+    "gulp": "^5.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-uglify": "^3.0.2",
+    "less-loader": "^11.1.4",
+    "sass": "^1.77.2",
+    "sass-loader": "^14.2.1",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4",
+    "webpack-notifier": "^1.15.0"
+  },
+  "keywords": [],
+  "description": ""
+}
