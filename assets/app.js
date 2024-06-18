@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
     toggleButton.addEventListener('click', function() {
       verticalMenu.classList.toggle('visible');
+      console.log('verticalMenu');
     });
   });
   

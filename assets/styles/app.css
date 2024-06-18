@@ -10,5 +10,12 @@
     top: -0.05em; 
     left: 0.15em; 
 } */
+ /* app.css */
+.visible {
+    display: block !important;
+  }
+.separator {
+    height:60px;
+}
 
 

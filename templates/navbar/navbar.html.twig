@@ -7,10 +7,11 @@
       <!--Start: Desktop Nav-->
       <div class="computer only row">
         {# <a class="header item">Project Name</a> #}
-        <a class="active item"> Accueil</a>
+        <a class="item"> Accueil</a>
         <a class="item"> </a>
         <a class="item"> </a>
         {# <a class="ui dropdown item">Dropdown<i class="dropdown icon"></i></a> #}
+
         <!-- Start: Popup -->
         <div class="ui fluid popup bottom left transition hidden" style="top: 553px; left: 1px; bottom: auto; right: auto; width: 657px;">
           <div class="ui four column relaxed divided grid">
@@ -75,11 +76,51 @@
               </div>
               </div>
           </a> #}
+
+
+          {% if app.user %}
+          <a href="{{ path('profile') }}" class="ui item">
+            Profil
+          </a>
+          <a href="{{ path('logout') }}" class="ui item">
+            Se déconnecter
+          </a>
+          <a href="#" class="ui item">
+            id:{{ app.user.id}}
+          </a>
+          
+          {% else %}
+          {% dump(app.user) %}
+          <a href="{{ path('login') }}"  class="ui item">
+            Se connecter
+          </a>
+          <a href="{{ path('register') }}"  class="ui item">
+            S'enregistrer
+          </a>
+          {% endif %}
+
+
+
           
         </div>
       </div>
       <!--End: Desktop Nav-->
       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       <!--Start: Mobile Nav-->
       <div class="tablet mobile only row">
         <a class="header item"> Project Name</a>
@@ -90,6 +131,7 @@
             </div>
           </a>
         </div>
+
         <div class="ui vertical accordion borderless fluid menu">
           <!-- Start: Search -->
           {# <div class="item">
