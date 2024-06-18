@@ -3,6 +3,26 @@
 {% block title %}Hello CourseController!{% endblock %}
 
 {% block body %}
+
+{% if formAddCourse|default %}
+
+{{ form_start(formAddCourse, {'attr': {'class': 'ui form'}}) }}
+
+<div class="field">
+    {{ form_row(formAddCourse.nameCourse) }}
+</div>
+<div class="field">
+    {{ form_row(formAddCourse.category) }}
+</div>
+
+<div class="field">
+    {{ form_row(formAddCourse.Valider) }}
+</div>
+
+{{ form_end(formAddCourse) }}
+{% endif %}
+
+
 {% if courses | default %}
 {% for course in courses %}
     {{ course }}

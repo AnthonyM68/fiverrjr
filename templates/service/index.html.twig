@@ -4,6 +4,35 @@
 
 {% block body %}
 
+{% if formAddService|default %}
+
+{{ form_start(formAddService, {'attr': {'class': 'ui form'}}) }}
+
+<div class="field">
+    {{ form_row(formAddService.title) }}
+</div>
+<div class="field">
+    {{ form_row(formAddService.description) }}
+</div>
+<div class="field">
+    {{ form_row(formAddService.price) }}
+</div>
+<div class="field">
+    {{ form_row(formAddService.duration) }}
+</div>
+<div class="field">
+    {{ form_row(formAddService.createDate) }}
+</div>
+<div class="field">
+    {{ form_row(formAddService.course) }}
+</div>
+<div class="field">
+    {{ form_row(formAddService.Valider) }}
+</div>
+
+{{ form_end(formAddService) }}
+{% endif %}
+
 {% if services | default %}
 
 {% for service in services %}

@@ -34,7 +34,7 @@ class Service
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 2, scale: 0)]
+    #[ORM\Column(type: Types::FLOAT)]
     private ?string $price = null;
 
     #[ORM\Column]

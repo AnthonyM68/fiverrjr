@@ -4,9 +4,24 @@
 
 {% block body %}
 
+
+{% if formAddCategory|default %}
+
+{{ form_start(formAddCategory, {'attr': {'class': 'ui form'}}) }}
+
+<div class="field">
+    {{ form_row(formAddCategory.nameCategory) }}
+</div>
+<div class="field">
+    {{ form_row(formAddCategory.Valider) }}
+</div>
+{{ form_end(formAddCategory) }}
+{% endif %}
+
+
 {% if categories | default %}
 {% for category in categories %}
-    {{ category }}
+{{ category }}
 {% endfor %}
 {% endif %}
 

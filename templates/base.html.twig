@@ -18,7 +18,10 @@
 </head>
 
 <body>
-    {% block body %}{% endblock %}
+    <div class="container">
+        {% block body %}{% endblock %}
+    </div>
+
     {% block javascripts %}
     {{ encore_entry_script_tags('jquery_js') }}
     {{ encore_entry_script_tags('jquery_ui_js') }}
