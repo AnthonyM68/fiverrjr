@@ -4,43 +4,60 @@
 
 {% block body %}
 
+<div class="ui middle aligned center aligned grid ">
 
-<form method="post">
+    <div class="ui segment login-register" style="width:350px">
 
+        <h2 class="ui teal image header">
+            <img src="https://fomantic-ui.com/examples/assets/images/logo.png" class="image">
+            <div class="content">
+                Connection
+            </div>
+        </h2>
 
+        <form class="ui large form" method="post">
+            <div class="ui stacked segment">
+                <div class="field">
+                    <div class="ui right icon input floating-label">
+                        <i class="envelope icon"></i>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class=""
+                            autocomplete="email" required autofocus>
+                        <label for="inputEmail">Email</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui right icon input floating-label">
+                        <i class="lock icon"></i>
+                        <input type="password" name="password" id="inputPassword" class=""
+                            autocomplete="current-password" required>
+                        <label for="inputPassword">Password</label>
+                    </div>
+                </div>
+                <button class="ui fluid large teal submit button">Se connecter</button>
+            </div>
+            <div class="ui error message"></div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        </form>
 
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+        <div class="ui message">
+            Pas encore inscrit? <a href="{{ path('register') }}">Enregistrez-vous</a>
         </div>
-    {% endif %}
 
+        <form method="post">
+            {% if error %}
+            <div class="ui-state-error ui-corner-all">{{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+            {% endif %}
 
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
+            {% if app.user %}
+            <div class="mb-3">
+                Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a
+                    href="{{ path('logout') }}">Se déconnecter</a>
+            </div>
+            {% endif %}
+        </form>
     </div>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+</div>
 
 
 {% endblock %}

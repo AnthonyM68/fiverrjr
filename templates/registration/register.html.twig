@@ -3,27 +3,77 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+<div class="ui middle aligned center aligned grid">
+
+    <div class="ui segment login-register" style="width:350px">
+
+        <h2 class="ui teal image header">
+            <img src="https://fomantic-ui.com/examples/assets/images/logo.png" class="image">
+            <div class="content">
+                Enregistrement
+            </div>
+        </h2>
+
+        {{ form_start(registrationForm, {'attr' : {'class' : 'ui large form'}}) }}
+
+        <div class="ui stacked segment">
+            <div class="field">
+                <div class="ui right icon input floating-label">
+                    <i class="user icon"></i>
+                    {{ form_widget(registrationForm.username)}}
+                    {{ form_label(registrationForm.username, 'Nom d\'utilisateur') }}
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui right icon input floating-label">
+                    <i class="envelope icon"></i>
+                    {{ form_widget(registrationForm.email) }}
+                    {{ form_label(registrationForm.email)}}
+
+                </div>
+            </div>
+            <div class="field">
+                <div class="ui right icon input floating-label">
+                    <i class="lock icon"></i>
+                    {{ form_widget(registrationForm.plainPassword.first) }}
+                    {{ form_label(registrationForm.plainPassword.first, 'Mot de passe') }}
+
+                </div>
+
+                <div class="ui right icon input floating-label">
+                    <i class="lock icon"></i>
+                    {{ form_widget(registrationForm.plainPassword.second) }}
+                    {{ form_label(registrationForm.plainPassword.second, 'Répétez mot de passe') }}
+                </div>
+
+            </div>
+            <div class="ui message fluid large teal uk-text-center">
+                <div class="ui checkbox checkbox-container">
+                    {{ form_widget(registrationForm.agreeTerms) }}
+                    {{ form_label(registrationForm.agreeTerms, 'Acceptez les termes') }}
+                </div>
+            </div>
+            
+            <button type="submit" class="ui fluid large teal submit button">S'enregistrer</button>
+        </div>
+
+        <div class="ui error message">
+            {{ form_errors(registrationForm) }}
+        </div>
+
+        {{ form_end(registrationForm) }}
+
+        <div class="ui message uk-text-center">
+            Déjà inscrit? <a href="#">Connectez-vous</a>
+        </div>
+
+        {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="ui-state-error ui-corner-all" role="alert">{{ flash_error }}</div>
+        {% endfor %}
+    </div>
+</div>
 
 
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
 
 
-    <h1>Register</h1>
-
-    {{ form_errors(registrationForm) }}
-
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
-
-
-    
 {% endblock %}

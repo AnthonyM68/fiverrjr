@@ -28,8 +28,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    private array $roles;
-    // private array $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
@@ -37,13 +36,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -52,24 +51,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $picture = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, nullable: true)]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $portfolio = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $bio = null;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
+
+    #[ORM\Column(length: 100)]
+    private ?string $username = null;
 
     /**
      * @var Collection<int, Service>
      */
     #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'user')]
     private Collection $service;
-
-    #[ORM\Column]
-    private bool $isVerified = false;
-
 
     public function __construct()
     {
@@ -285,6 +286,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
 
         return $this;
     }

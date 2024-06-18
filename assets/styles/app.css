@@ -1,3 +1,14 @@
-body {
-    background-color: skyblue;
-}
+
+/* ajuster le check (v) dans register */
+/* .ui.checkbox.checkbox-container {
+    display: flex;
+    align-items: center; 
+    margin-bottom:-0.5rem; 
+} */
+/* ajuster le check (v) */
+/* .ui.checkbox.checkbox-container input[type="checkbox"] + label:before {
+    top: -0.05em; 
+    left: 0.15em; 
+} */
+
+

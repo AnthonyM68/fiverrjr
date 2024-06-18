@@ -19,27 +19,32 @@ Encore
      */
 
     // jquery
-    .addEntry('jquery_js', './assets/styles/jquery.min.js')
+    .addEntry('jquery', './assets/styles/jquery.min.js')
 
     // jquery-ui
-    .addEntry('jquery_ui_js', './assets/styles/jquery-ui.min.js')
+    .addEntry('jquery_ui', './assets/styles/jquery-ui.min.js')
     .addStyleEntry('jquery_ui_css', './assets/styles/jquery-ui.min.css')
 
-    // // semantic-ui
-    .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
-    // // semantic-themes
+    // semantic-ui
+    .addEntry('semantic', './semantic/dist/semantic.min.js')
+    .addStyleEntry('semantic_css', './semantic/dist/semantic.min.css')
+    // semantic-themes
     .addStyleEntry('semantic_less', './semantic/src/semantic.less')
-    .addEntry('semantic_js', './semantic/dist/semantic.js')
+    // general
+    // .addEntry('jquery_popup', './assets/styles/jquery.popup.minified.js') // ou .scss pour Sass
 
-    // // bootstrap 
-    .addEntry('bootstrap_js', './assets/styles/bootstrap.min.js')
+
+    // bootstrap 
+    .addEntry('bootstrap', './assets/styles/bootstrap.min.js')
     .addStyleEntry('bootstrap_css', './assets/styles/bootstrap.min.css')
 
-    // // uikit 
-    .addEntry('uikit_js', './assets/styles/uikit.min.js')
-    .addStyleEntry('uikit_css', './node_modules/uikit/dist/css/uikit.min.css')
-
+    // uikit 
+    .addEntry('uikit', './assets/styles/uikit.js')
+    .addEntry('uikit-icons', './assets/styles/uikit-icons.js')
+    .addStyleEntry('uikit_css', './assets/styles/uikit.min.css')
+    // app
     .addEntry('app', './assets/app.js')
+
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
