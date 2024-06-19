@@ -1,21 +1,14 @@
 
-/* ajuster le check (v) dans register */
-/* .ui.checkbox.checkbox-container {
-    display: flex;
-    align-items: center; 
-    margin-bottom:-0.5rem; 
-} */
-/* ajuster le check (v) */
-/* .ui.checkbox.checkbox-container input[type="checkbox"] + label:before {
-    top: -0.05em; 
-    left: 0.15em; 
-} */
- /* app.css */
 .visible {
     display: block !important;
   }
 .separator {
     height:60px;
 }
+/* masque les labels des champs de formulaire masqué */
+/* .hidden-field {
+    display: none;
+}  */
+
 
 

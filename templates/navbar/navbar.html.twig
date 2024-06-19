@@ -15,6 +15,7 @@
       <!-- Start: Popup -->
       <div class="ui fluid popup bottom left transition hidden"
         style="top: 553px; left: 1px; bottom: auto; right: auto; width: 657px;">
+        
         <div class="ui four column relaxed divided grid">
           <div class="column">
             <h4 class="ui header">Fabrics</h4>
@@ -103,9 +104,9 @@
 
         {# si administrateur #}
         {% if is_granted('ROLE_ADMIN') %}
-        {# <a href="{{ path('admin_dashboard') }}">Accéder au tableau de bord admin</a> #}
-        {% else %}
-
+        <a href="{{ path('admin') }}" class="ui item">
+          Tableau de bord
+        </a>
         {% endif %}
 
       </div>

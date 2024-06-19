@@ -33,17 +33,25 @@ class ServiceType extends AbstractType
     {
         $builder
             // ->add('course_id')
-            ->add('title', TextType::class)
+            ->add('title', TextType::class, [
+                'label' => 'Titre'
+            ])
             ->add('description', TextareaType::class)
             ->add('price', NumberType::class, [
+                'label' => 'Prix',
                 'scale' => 2, // forcer l'affichage de 2 décimales
                 'attr' => [
                     'step' => 0.01, // permettre des incréments de centimes
                 ],
             ])
-            ->add('duration', IntegerType::class)
+            ->add('duration', IntegerType::class, [ 
+                'label' => 'Durée'
+            ])
             ->add('createDate', DateType::class, [
-                'widget' => 'single_text'
+                'widget' => 'single_text',
+                'attr' => [
+                    'style' => 'display:none', // Masquer le champ avec du CSS
+                ]
             ])
             ->add('course', EntityType::class, [
                 'class' => Course::class,

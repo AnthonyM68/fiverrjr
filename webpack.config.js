@@ -18,30 +18,27 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
 
-    // jquery
-    .addEntry('jquery', './assets/styles/jquery.min.js')
-
-    // jquery-ui
-    .addEntry('jquery_ui', './assets/styles/jquery-ui.min.js')
-    .addStyleEntry('jquery_ui_css', './assets/styles/jquery-ui.min.css')
+    // Ajout des entrées pour jQuery et jQuery UI
+    .addEntry('jquery', './node_modules/jquery/dist/jquery.js')
+    .addEntry('jquery_ui', './node_modules/jquery-ui-dist/jquery-ui.js')
+    .addStyleEntry('jquery_ui_theme', './node_modules/jquery-ui/dist/themes/redmond/theme.css')
+    .addStyleEntry('jquery_structure', './node_modules/jquery-ui-dist/jquery-ui.structure.css')
 
     // semantic-ui
-    .addEntry('semantic', './semantic/dist/semantic.min.js')
-    .addStyleEntry('semantic_css', './semantic/dist/semantic.min.css')
+    .addEntry('semantic', './semantic/dist/semantic.js')
+    .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
     // semantic-themes
     .addStyleEntry('semantic_less', './semantic/src/semantic.less')
     // general
     // .addEntry('jquery_popup', './assets/styles/jquery.popup.minified.js') // ou .scss pour Sass
-
-
     // bootstrap 
-    .addEntry('bootstrap', './assets/styles/bootstrap.min.js')
-    .addStyleEntry('bootstrap_css', './assets/styles/bootstrap.min.css')
+    .addEntry('bootstrap', './node_modules/bootstrap/dist/js/bootstrap.js')
+    .addStyleEntry('bootstrap_css', './node_modules/bootstrap/dist/css/bootstrap.css')
 
     // uikit 
-    .addEntry('uikit', './assets/styles/uikit.js')
-    .addEntry('uikit-icons', './assets/styles/uikit-icons.js')
-    .addStyleEntry('uikit_css', './assets/styles/uikit.min.css')
+    .addEntry('uikit', './node_modules/uikit/dist/js/uikit.js')
+    .addEntry('uikit-icons', './node_modules/uikit/dist/js/uikit-icons.js')
+    .addStyleEntry('uikit_css', './node_modules/uikit/dist/css/uikit.css')
     // app
     .addEntry('app', './assets/app.js')
 

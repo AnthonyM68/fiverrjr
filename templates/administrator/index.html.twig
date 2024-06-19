@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ServiceController!{% endblock %}
+
+{% block body %}
+<div class="sperator"></div>
+
+
+<div class="ui grid">
+    <div class="four wide column">
+        <div class="ui vertical menu">
+            <a class="active teal item">
+                Inbox
+                <div class="ui teal left pointing label">1</div>
+            </a>
+            <a class="item">
+                Spam
+                <div class="ui label">51</div>
+            </a>
+            <a class="item">
+                Updates
+                <div class="ui label">1</div>
+            </a>
+            <div class="item">
+                <div class="ui transparent icon input">
+                    <input type="text" placeholder="Search mail...">
+                    <i class="search icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="twelve wide stretched column">
+        <div class="ui tab segment active" data-tab="bio-tab">
+            This is an stretched grid column. This segment will always match the tab height
+        </div>
+        <div class="ui tab segment" data-tab="pics-tab">
+            This is an stretched grid column. This segment will always match the tab height
+        </div>
+        <div class="ui tab segment" data-tab="companies-tab">
+            This is an stretched grid column. This segment will always match the tab height
+        </div>
+        <div class="ui tab segment" data-tab="links-tab">
+            This is an stretched grid column. This segment will always match the tab height
+        </div>
+    </div>
+</div>
+
+<div class="sperator"></div>
+
+
+
+{% endblock %}

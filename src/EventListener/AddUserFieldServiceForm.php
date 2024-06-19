@@ -38,7 +38,7 @@ class AddUserFieldSubscriber implements EventSubscriberInterface
                 'choice_label' => 'id',
                 'data' => $user,
                 'attr' => [
-                    'class' => 'hidden'
+                    'style' => 'display:none', 
                 ]
             ]);
         }
