@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Theme;
 use App\Entity\Course;
 use App\Entity\Service;
+use App\Form\ThemeType;
 use App\Entity\Category;
 use App\Form\CourseType;
 use App\Form\ServiceType;
 use App\Form\CategoryType;
+use App\Repository\ThemeRepository;
 use App\Repository\CourseRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\CategoryRepository;
@@ -53,6 +56,46 @@ class ServiceController extends AbstractController
             'formAddService' => $form->createView()
         ]);
     }
+    #[Route('/theme', name: 'list_themes')]
+    public function listThemes(ThemeRepository $categoryRepository): Response
+    {
+        $themes = $categoryRepository->findBy([], ["nameTheme" => "ASC"]);
+        return $this->render('theme/index.html.twig', [
+            'controller_name' => 'ServiceController',
+            'themes' => $themes
+        ]);
+    }
+
+    #[Route('/theme/new', name: 'new_theme')]
+    #[Route('/theme/{id}/edit', name: 'edit_theme')]
+    public function editTheme(?Theme $theme = null, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        if (!$theme) {
+            $theme = new Theme();
+        }
+
+        $form = $this->createForm(ThemeType::class, $theme);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $theme = $form->getData();
+            // prepare PDO
+            $entityManager->persist($theme);
+            // execute PDO
+            $entityManager->flush();
+
+            return $this->redirectToRoute('list_themes');
+        }
+        return $this->render('theme/index.html.twig', [
+            'controller_name' => 'ServiceController',
+            'theme_id' => $theme->getId(),
+            'formAddTheme' => $form
+        ]);
+    }
+
+
+
 
     #[Route('/category', name: 'list_categories')]
     public function listCategories(CategoryRepository $categoryRepository): Response

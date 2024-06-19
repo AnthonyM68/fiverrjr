@@ -13,6 +13,9 @@
     {{ form_row(formAddCategory.nameCategory) }}
 </div>
 <div class="field">
+    {{ form_row(formAddCategory.theme) }}
+</div>
+<div class="field">
     {{ form_row(formAddCategory.Valider) }}
 </div>
 
@@ -21,9 +24,21 @@
 
 
 {% if categories | default %}
-{% for category in categories %}
-{{ category }}
-{% endfor %}
+
+<div class="ui list">
+    {% for category in categories %}
+    <div class="item">
+        <i class="folder icon"></i>
+        <div class="content">
+            <div class="header">{{ category.nameCategory }}</div>
+            {# <div class="description">Source files for project</div> #}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<a href="{{ path('new_category') }}" class="ui button">
+    Ajouter une catégorie
+</a>
 {% endif %}
 
 {% endblock %}

@@ -18,12 +18,15 @@ class CourseType extends AbstractType
         $builder
         ->add('category', EntityType::class, [
                 'class' => Category::class,
+                'label' => 'Appartenance catégorie',
                 'choice_label' => 'nameCategory',
                 'attr' => [
                     'class' => 'ui fluid search dropdown'
                 ]
             ])
         ->add('nameCourse', TextType::class, [
+            
+            'label' => 'Nom de sous catégorie',
         ])
         ->add('Valider', SubmitType::class, [
             'attr' => [

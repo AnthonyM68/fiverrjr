@@ -23,10 +23,24 @@
 {% endif %}
 
 
+
+
 {% if courses | default %}
-{% for course in courses %}
-    {{ course }}
-{% endfor %}
+
+<div class="ui list">
+    {% for course in courses %}
+    <div class="item">
+        <i class="folder icon"></i>
+        <div class="content">
+            <div class="header">{{ course.nameCourse}}</div>
+            {# <div class="description">Source files for project</div> #}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<a href="{{ path('new_course') }}" class="ui button">
+    Ajouter une sous-catégorie
+</a>
 {% endif %}
 
 {% endblock %}

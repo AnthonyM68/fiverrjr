@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ServiceController!{% endblock %}
+
+{% block body %}
+
+
+{% if formAddTheme|default %}
+
+{{ form_start(formAddTheme, {'attr': {'class': 'ui form'}}) }}
+
+<div class="field">
+    {{ form_row(formAddTheme.nameTheme) }}
+</div>
+
+<div class="field">
+    {{ form_row(formAddTheme.Valider) }}
+</div>
+
+{{ form_end(formAddTheme) }}
+{% endif %}
+
+
+{% if themes | default %}
+<div class="ui list">
+    {% for theme in themes %}
+    <div class="item">
+        <i class="folder icon"></i>
+        <div class="content">
+            <div class="header">{{ theme.nameTheme }}</div>
+            {# <div class="description">Source files for project</div> #}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
