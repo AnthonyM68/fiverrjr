@@ -22,6 +22,13 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # intercepte et modifie le form pour créer la date d'enregistrement
     App\EventListener\UserRegistrationListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+    # intercepte et modifie le form service pour l'user_id automatiquement à partir de session
+    App\Form\EventListener\AddUserFieldSubscriber:
+        arguments: ['@security.helper']
+        tags:
+            - { name: 'kernel.event_subscriber' }

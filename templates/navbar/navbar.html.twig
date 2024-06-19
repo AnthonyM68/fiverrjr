@@ -1,189 +1,195 @@
 {% block navbar %}
 <!--Start: Nav  -->
 <div class="ui fixed borderless huge menu">
-  
-    <div class="ui container grid">
-      
-      <!--Start: Desktop Nav-->
-      <div class="computer only row">
-        {# <a class="header item">Project Name</a> #}
-        <a class="item"> Accueil</a>
-        <a class="item"> </a>
-        <a class="item"> </a>
-        {# <a class="ui dropdown item">Dropdown<i class="dropdown icon"></i></a> #}
 
-        <!-- Start: Popup -->
-        <div class="ui fluid popup bottom left transition hidden" style="top: 553px; left: 1px; bottom: auto; right: auto; width: 657px;">
-          <div class="ui four column relaxed divided grid">
-            <div class="column">
-              <h4 class="ui header">Fabrics</h4>
-              <div class="ui link list">
-                <a class="item">Cashmere</a>
-                <a class="item">Linen</a>
-                <a class="item">Cotton</a>
-                <a class="item">Viscose</a>
-              </div>
+  <div class="ui container grid">
+
+    <!--Start: Desktop Nav-->
+    <div class="computer only row">
+      {# <a class="header item">Project Name</a> #}
+      <a class="item"> Accueil</a>
+      <a class="item"> </a>
+      <a class="item"> </a>
+      {# <a class="ui dropdown item">Dropdown<i class="dropdown icon"></i></a> #}
+
+      <!-- Start: Popup -->
+      <div class="ui fluid popup bottom left transition hidden"
+        style="top: 553px; left: 1px; bottom: auto; right: auto; width: 657px;">
+        <div class="ui four column relaxed divided grid">
+          <div class="column">
+            <h4 class="ui header">Fabrics</h4>
+            <div class="ui link list">
+              <a class="item">Cashmere</a>
+              <a class="item">Linen</a>
+              <a class="item">Cotton</a>
+              <a class="item">Viscose</a>
             </div>
-            <div class="column">
-              <h4 class="ui header">Size</h4>
-              <div class="ui link list">
-                <a class="item">Small</a>
-                <a class="item">Medium</a>
-                <a class="item">Large</a>
-                <a class="item">Plus Sizes</a>
-              </div>
+          </div>
+          <div class="column">
+            <h4 class="ui header">Size</h4>
+            <div class="ui link list">
+              <a class="item">Small</a>
+              <a class="item">Medium</a>
+              <a class="item">Large</a>
+              <a class="item">Plus Sizes</a>
             </div>
-            <div class="column">
-              <h4 class="ui header">Colors</h4>
-              <div class="ui link list">
-                <a class="item">Neutrals</a>
-                <a class="item">Brights</a>
-                <a class="item">Pastels</a>
-              </div>
+          </div>
+          <div class="column">
+            <h4 class="ui header">Colors</h4>
+            <div class="ui link list">
+              <a class="item">Neutrals</a>
+              <a class="item">Brights</a>
+              <a class="item">Pastels</a>
             </div>
-            <div class="column">
-              <h4 class="ui header">Types</h4>
-              <div class="ui link list">
-                <a class="item">Knitwear</a>
-                <a class="item">Outerwear</a>
-                <a class="item">Pants</a>
-                <a class="item">Shoes</a>
-              </div>
+          </div>
+          <div class="column">
+            <h4 class="ui header">Types</h4>
+            <div class="ui link list">
+              <a class="item">Knitwear</a>
+              <a class="item">Outerwear</a>
+              <a class="item">Pants</a>
+              <a class="item">Shoes</a>
             </div>
           </div>
         </div>
-         <!-- End: Popup -->
-        
-        <div class="right menu">
-          <!-- Start: Search -->
-          {# <div class="item">
-            <div class="ui icon input">
-              <input type="text" placeholder="Search...">
-              <i class="search link icon"></i>
-            </div>
-          </div> #}
-           <!-- End: Search -->
-          
-          {# <a class="ui dropdown item">Select Country<i class="dropdown icon"></i>
-            <div class="menu">
-              <div class="item">
-                <i class="ke flag"></i>
-                Kenya
-              </div>
-              <div class="item">
-                <i class="tz flag"></i>
-                Tanzania
-              </div>
-              </div>
-          </a> #}
-
-
-          {% if app.user %}
-          <a href="{{ path('profile') }}" class="ui item">
-            Profil
-          </a>
-          <a href="{{ path('logout') }}" class="ui item">
-            Se déconnecter
-          </a>
-          <a href="#" class="ui item">
-            id:{{ app.user.id}}
-          </a>
-          
-          {% else %}
-          {% dump(app.user) %}
-          <a href="{{ path('login') }}"  class="ui item">
-            Se connecter
-          </a>
-          <a href="{{ path('register') }}"  class="ui item">
-            S'enregistrer
-          </a>
-          {% endif %}
-
-
-
-          
-        </div>
       </div>
-      <!--End: Desktop Nav-->
-      
+      <!-- End: Popup -->
 
+      <div class="right menu">
+        <!-- Start: Search -->
+        {# <div class="item">
+          <div class="ui icon input">
+            <input type="text" placeholder="Search...">
+            <i class="search link icon"></i>
+          </div>
+        </div> #}
+        <!-- End: Search -->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-      <!--Start: Mobile Nav-->
-      <div class="tablet mobile only row">
-        <a class="header item"> Project Name</a>
-        <div class="right menu">
-          <a class="menu item">
-            <div class="ui basic icon toggle button">
-              <i class="content icon"></i>
+        {# <a class="ui dropdown item">Select Country<i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item">
+              <i class="ke flag"></i>
+              Kenya
             </div>
-          </a>
-        </div>
-
-        <div class="ui vertical accordion borderless fluid menu">
-          <!-- Start: Search -->
-          {# <div class="item">
-            <div class="ui icon input">
-              <input type="text" placeholder="Search...">
-              <i class="search link icon"></i>
-            </div>
-          </div> #}
-           <!-- End: Search -->
-          <a class="active item"> Accueil</a>
-          <a class="item"> </a>
-          <a class="item"> </a>
-
-
-          <div class="item">
-            <div class="title">
-              Dropdown<i class="dropdown icon"></i>
-            </div>
-            <div class="content">
-              <div class="item">
-                Action
-              </div>
-              <div class="item active">
-                Another action
-              </div>
-              <div class="item">
-                Something else here
-              </div>
-              <div class="ui divider"></div>
-              <div class="header item">
-                Navbar header
-              </div>
-              <div class="item">
-                Seperated link
-              </div>
-              <div class="item">
-                One more seperated link
-              </div>
+            <div class="item">
+              <i class="tz flag"></i>
+              Tanzania
             </div>
           </div>
+        </a> #}
 
-          <div class="ui divider"></div>
-          
-          <a class="item" href="#">Default</a>
-          <a class="item" href="#">Static top</a>
-          <a class="active item" href="#">Fixed top</a>
-        </div>
+        {# si connecter #}
+        {% if app.user %}
+        <a href="#" class="ui item">
+          Bonjour {{ app.user.username}}
+        </a>
+        <a href="{{ path('profile') }}" class="ui item">
+          Profil
+        </a>
+        <a href="{{ path('logout') }}" class="ui item">
+          Se déconnecter
+        </a>
+        {# si non connecter #}
+        {% else %}
+        {% dump(app.user) %}
+        <a href="{{ path('login') }}" class="ui item">
+          Se connecter
+        </a>
+        <a href="{{ path('register') }}" class="ui item">
+          S'enregistrer
+        </a>
+        {% endif %}
+
+
+        {# si administrateur #}
+        {% if is_granted('ROLE_ADMIN') %}
+        {# <a href="{{ path('admin_dashboard') }}">Accéder au tableau de bord admin</a> #}
+        {% else %}
+
+        {% endif %}
+
       </div>
-      <!--End: Mobile Nav-->
     </div>
+    <!--End: Desktop Nav-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--Start: Mobile Nav-->
+    <div class="tablet mobile only row">
+      <a class="header item"> Project Name</a>
+      <div class="right menu">
+        <a class="menu item">
+          <div class="ui basic icon toggle button">
+            <i class="content icon"></i>
+          </div>
+        </a>
+      </div>
+
+      <div class="ui vertical accordion borderless fluid menu">
+        <!-- Start: Search -->
+        {# <div class="item">
+          <div class="ui icon input">
+            <input type="text" placeholder="Search...">
+            <i class="search link icon"></i>
+          </div>
+        </div> #}
+        <!-- End: Search -->
+        <a class="active item"> Accueil</a>
+        <a class="item"> </a>
+        <a class="item"> </a>
+
+
+        <div class="item">
+          <div class="title">
+            Dropdown<i class="dropdown icon"></i>
+          </div>
+          <div class="content">
+            <div class="item">
+              Action
+            </div>
+            <div class="item active">
+              Another action
+            </div>
+            <div class="item">
+              Something else here
+            </div>
+            <div class="ui divider"></div>
+            <div class="header item">
+              Navbar header
+            </div>
+            <div class="item">
+              Seperated link
+            </div>
+            <div class="item">
+              One more seperated link
+            </div>
+          </div>
+        </div>
+
+        <div class="ui divider"></div>
+
+        <a class="item" href="#">Default</a>
+        <a class="item" href="#">Static top</a>
+        <a class="active item" href="#">Fixed top</a>
+      </div>
+    </div>
+    <!--End: Mobile Nav-->
   </div>
-  <!--End: Nav  -->
+</div>
+<!--End: Nav  -->
 
 
 
