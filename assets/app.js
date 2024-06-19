@@ -11,9 +11,6 @@ import './styles/login-register.css';
 
 
 document.addEventListener('DOMContentLoaded', function () {
-
-  // $('.ui.tabular.menu .item').tab();
-
   let computerDropdownItems = document.querySelectorAll('.computer.only .dropdown.item');
 
   computerDropdownItems.forEach(function (item) {
@@ -57,6 +54,26 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('verticalMenu');
   });
 
+  document.addEventListener('DOMContentLoaded', () => {
+    const themeSelect = document.querySelector('#form_theme');
+    const categorySelect = document.querySelector('#form_category');
+
+    themeSelect.addEventListener('change', function() {
+        const themeId = this.value;
+
+        fetch(`/categories/${themeId}`)
+            .then(response => response.json())
+            .then(data => {
+                categorySelect.innerHTML = '<option value="">Select a category</option>';
+                data.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                });
+            });
+    });
+});
 
 
 });

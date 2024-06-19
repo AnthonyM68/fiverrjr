@@ -4,8 +4,12 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\Order;
+use App\Entity\Theme;
 use App\Entity\Course;
 use App\Entity\Service;
+use App\Entity\Category;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -53,6 +57,44 @@ class ServiceType extends AbstractType
                     'style' => 'display:none', // Masquer le champ avec du CSS
                 ]
             ])
+            // ->add('theme', EntityType::class, [
+            //     'class' => Theme::class,
+            //     'choice_label' => 'name',
+            //     'placeholder' => 'Select a theme',
+            //     'mapped' => false,
+            // ])
+
+
+            
+//             $formModifier = function ($form, $theme = null) {
+//             $categories = null === $theme ? [] : $theme->getCategories();
+
+//             $form->add('category', EntityType::class, [
+//                 'class' => Category::class,
+//                 'choices' => $categories,
+//                 'choice_label' => 'name',
+//                 'placeholder' => 'Select a category',
+//             ]);
+//         };
+
+//         $builder->get('theme')->addEventListener(
+//             FormEvents::POST_SUBMIT,
+//             function (FormEvent $event) use ($formModifier) {
+//                 $theme = $event->getForm()->getData();
+//                 $formModifier($event->getForm()->getParent(), $theme);
+//             }
+//         )
+// ;
+//         $builder->addEventListener(
+//             FormEvents::PRE_SET_DATA,
+//             function (FormEvent $event) use ($formModifier) {
+//                 $data = $event->getData();
+//                 $formModifier($event->getForm(), $data->getTheme());
+//             }
+//         )
+
+
+
             ->add('course', EntityType::class, [
                 'class' => Course::class,
                 'choice_label' => 'nameCourse',
@@ -75,6 +117,7 @@ class ServiceType extends AbstractType
                 ]
             ])
             ->addEventSubscriber(new AddUserFieldSubscriber($this->security)); // Ajouter le Subscriber ici
+
         ;
     }
 

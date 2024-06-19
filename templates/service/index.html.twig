@@ -7,6 +7,9 @@
 {% if formAddService|default %}
 
 {{ form_start(formAddService, {'attr': {'class': 'ui form'}}) }}
+{# 
+{{ form_row(form.theme) }}
+{{ form_row(form.category) }} #}
 
 <div class="field">
     {{ form_row(formAddService.title) }}
@@ -14,6 +17,7 @@
 <div class="field">
     {{ form_row(formAddService.description) }}
 </div>
+{# traitement en interne mais non  #}
 
 {# <div class="field hidden-field">
     {{ form_row(formAddService.user) }}
@@ -25,13 +29,13 @@
 <div class="field">
     {{ form_row(formAddService.duration) }}
 </div>
-
-<div class="field hidden-field">
+{# traitement en interne mais non  #}
+{# <div class="field hidden-field">
     {{ form_row(formAddService.createDate) }}
-</div>
+</div> #}
 
 <div class="field">
-    {{ form_row(formAddService.course) }}
+    {# {{ form_row(formAddService.course) }} #}
 </div>
 <div class="field">
     {{ form_row(formAddService.Valider) }}
