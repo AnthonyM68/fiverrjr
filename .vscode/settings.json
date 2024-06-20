@@ -1,0 +1,28 @@
+{
+    "folder-color.pathColors": [
+        {
+            "folderPath": "fiverrjr\\src\\Controller\\",
+            "color": "foldercolorizer.green"
+        },
+        {
+            "folderPath": "fiverrjr\\src\\Form\\",
+            "color": "foldercolorizer.blue"
+        },
+        {
+            "folderPath": "fiverrjr\\src\\Entity\\",
+            "color": "foldercolorizer.orange"
+        },
+        {
+            "folderPath": "fiverrjr\\src\\EventListener\\",
+            "color": "foldercolorizer.red"
+        },
+        {
+            "folderPath": "fiverrjr\\templates\\",
+            "color": "foldercolorizer.green"
+        },
+        {
+            "folderPath": "fiverrjr\\config\\packages\\messenger.yaml\\",
+            "color": "foldercolorizer.red"
+        }
+    ]
+}

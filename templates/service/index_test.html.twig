@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ServiceController!{% endblock %}
+
+{% block body %}
+
+{% if formAddService is defined %}
+    {{ form_start(formAddService, {'attr': { id: 'category_annonce_form' }}) }}
+    {{ form_row(formAddService.category) }}
+    {{ form_row(formAddService.Namecourse) }}
+    {{ form_end(formAddService) }}
+{% endif %}
+<script>
+    const form = document.getElementById('category_annonce_form');
+    const form_select_category = document.getElementById('annonce_category');
+    const form_select_course = document.getElementById('annonce_Namecourse');
+
+    const updateForm = async (data, url, method) => {
+        const requestOptions = {
+            method: method,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'charset': 'utf-8'
+            }
+        };
+
+        // Ajoutez le corps de la requête uniquement si la méthode n'est pas GET
+        if (method !== 'GET') {
+            requestOptions.body = data;
+        }
+
+        const req = await fetch(url, requestOptions);
+        const text = await req.text();
+
+        try {
+            return JSON.parse(text); // Parsez la réponse JSON
+        } catch (error) {
+            console.error('Failed to parse JSON:', error);
+            return []; // Retourne une liste vide en cas d'erreur
+        }
+    };
+
+    const changeOptions = async (e) => {
+        const categoryId = e.target.value;
+        const url = `/categories/${categoryId}`;
+        const courses = await updateForm('', url, 'GET');
+
+        // Assurez-vous que courses est bien un tableau avant d'itérer dessus
+        if (Array.isArray(courses)) {
+            form_select_course.innerHTML = ''; // Effacez les options actuelles
+
+            // Ajoutez les nouvelles options
+            courses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.id; // Assurez-vous que vous avez un champ id dans votre entité Course
+                option.textContent = course.name; // Remplacez 'name' par le nom du champ approprié dans votre entité Course
+                form_select_course.appendChild(option);
+            });
+        } else {
+            console.error('Expected an array of courses but got:', courses);
+        }
+    };
+
+    form_select_category.addEventListener('change', (e) => changeOptions(e));
+</script>
+{% endblock %}

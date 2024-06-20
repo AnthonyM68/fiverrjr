@@ -8,6 +8,7 @@ use App\Entity\Service;
 use App\Form\ThemeType;
 use App\Entity\Category;
 use App\Form\CourseType;
+use App\Form\AnnonceType;
 use App\Form\ServiceType;
 use App\Form\CategoryType;
 use App\Repository\ThemeRepository;
@@ -18,6 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ServiceController extends AbstractController
@@ -31,7 +33,46 @@ class ServiceController extends AbstractController
             'services' => $services
         ]);
     }
-    
+
+    #[Route('/create', name: 'app_meetup_create', methods: ['GET', 'POST'])]
+    public function create(Request $request): Response
+    {
+        $meetup = new AnnonceType();
+        $form = $this->createForm(AnnonceType::class, $meetup, ['action' => $this->generateUrl('app_meetup_create')]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // ... save the meetup, redirect etc.
+        }
+
+        return $this->render('service/index_test.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/test/new', name: 'new_test')]
+    public function editTest(EntityManagerInterface $entityManager, Request $request): Response
+    {
+
+        $course = new Course(); // Créez une nouvelle instance de Course
+
+        $form = $this->createForm(AnnonceType::class, $course);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager->persist($course);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('list_service');
+        }
+
+        return $this->render('service/index_test.html.twig', [
+            'controller_name' => 'ServiceController',
+            'formAddService' => $form->createView()
+        ]);
+    }
+
+
     #[Route('/service/new', name: 'new_service')]
     #[Route('/service/edit/{id}', name: 'edit_service')]
     public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request): Response
@@ -43,7 +84,7 @@ class ServiceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $entityManager->persist($service);
             $entityManager->flush();
 
@@ -106,6 +147,30 @@ class ServiceController extends AbstractController
             'categories' => $categories
         ]);
     }
+    #[Route('/categories/{id}', name: 'get_courses_by_category', methods: ['GET'])]
+    public function getCoursesByCategory(Category $category): Response
+    {
+        // Récupérez les cours associés à la catégorie
+        $courses = $category->getCourses();
+
+        // Générez une réponse JSON avec les cours
+        $response = new JsonResponse($courses);
+
+        return $response;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     #[Route('/category/new', name: 'new_category')]
     #[Route('/category/{id}/edit', name: 'edit_category')]
@@ -157,7 +222,7 @@ class ServiceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $entityManager->persist($course);
             $entityManager->flush();
 

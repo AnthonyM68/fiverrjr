@@ -56,6 +56,11 @@ class Category
     {
         return $this->courses;
     }
+    
+    public function getAvailablePositions(): Collection
+    {
+        return $this->courses;
+    }
 
     public function addCourse(Course $course): static
     {

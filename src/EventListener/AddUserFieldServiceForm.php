@@ -3,17 +3,18 @@
 namespace App\Form\EventListener;
 
 use App\Entity\User;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AddUserFieldSubscriber implements EventSubscriberInterface
+class AddUserFieldSubscriber extends AbstractType implements EventSubscriberInterface 
 {
     private $security;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security = null)
     {
         $this->security = $security;
     }

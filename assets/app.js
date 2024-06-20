@@ -11,71 +11,48 @@ import './styles/login-register.css';
 
 
 document.addEventListener('DOMContentLoaded', function () {
-  let computerDropdownItems = document.querySelectorAll('.computer.only .dropdown.item');
+  // let computerDropdownItems = document.querySelectorAll('.computer.only .dropdown.item');
 
-  computerDropdownItems.forEach(function (item) {
-    item.addEventListener('mouseover', function () {
-      let popupOptions = {
-        inline: true,
-        hoverable: true,
-        position: 'bottom left',
-        delay: {
-          show: 300,
-          hide: 800
-        }
-      };
-      // Logique pour afficher le popup
-    });
-  });
+  // computerDropdownItems.forEach(function (item) {
+  //   item.addEventListener('mouseover', function () {
+  //     let popupOptions = {
+  //       inline: true,
+  //       hoverable: true,
+  //       position: 'bottom left',
+  //       delay: {
+  //         show: 300,
+  //         hide: 800
+  //       }
+  //     };
+  //   });
+  // });
 
-  let uiDropdowns = document.querySelectorAll('.ui.dropdown');
-
-  uiDropdowns.forEach(function (dropdown) {
-    dropdown.addEventListener('click', function () {
-      let menu = dropdown.querySelector('.menu');
-      menu.classList.toggle('visible');
-    });
-  });
-
-  let uiAccordions = document.querySelectorAll('.ui.accordion > .title');
-
-  uiAccordions.forEach(function (title) {
-    title.addEventListener('click', function () {
-      let content = title.nextElementSibling;
-      content.classList.toggle('active');
-    });
-  });
-
-  let toggleButton = document.querySelector('.ui.toggle.button');
-  let verticalMenu = document.querySelector('.ui.vertical.menu');
-
-  toggleButton.addEventListener('click', function () {
-    verticalMenu.classList.toggle('visible');
-    console.log('verticalMenu');
-  });
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const themeSelect = document.querySelector('#form_theme');
-    const categorySelect = document.querySelector('#form_category');
-
-    themeSelect.addEventListener('change', function() {
-        const themeId = this.value;
-
-        fetch(`/categories/${themeId}`)
-            .then(response => response.json())
-            .then(data => {
-                categorySelect.innerHTML = '<option value="">Select a category</option>';
-                data.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category.id;
-                    option.textContent = category.name;
-                    categorySelect.appendChild(option);
-                });
-            });
-    });
-});
-
-
+  // let uiDropdowns = document.querySelectorAll('.ui.dropdown');
+  // if (uiDropdowns) {
+  //   uiDropdowns.forEach(function (dropdown) {
+  //     dropdown.addEventListener('click', function () {
+  //       let menu = dropdown.querySelector('.menu');
+  //       menu.classList.toggle('visible');
+  //     });
+  //   });
+  // }
+  // let uiAccordions = document.querySelectorAll('.ui.accordion > .title');
+  // if (uiAccordions) {
+  //   uiAccordions.forEach(function (title) {
+  //     title.addEventListener('click', function () {
+  //       let content = title.nextElementSibling;
+  //       content.classList.toggle('active');
+  //     });
+  //   });
+  // }
+  // let toggleButton = document.querySelector('.ui.toggle.button');
+  // let verticalMenu = document.querySelector('.ui.vertical.menu');
+  // if (toggleButton) {
+  //   toggleButton.addEventListener('click', function () {
+  //     verticalMenu.classList.toggle('visible');
+  //     console.log('verticalMenu');
+  //   });
+  // }
 });
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
