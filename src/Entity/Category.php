@@ -87,16 +87,4 @@ class Category
     {
         return $this->nameCategory;
     }
-
-    public function getTheme(): ?Theme
-    {
-        return $this->theme;
-    }
-
-    public function setTheme(?Theme $theme): static
-    {
-        $this->theme = $theme;
-
-        return $this;
-    }
 }

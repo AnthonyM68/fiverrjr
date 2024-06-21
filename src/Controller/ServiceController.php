@@ -33,46 +33,6 @@ class ServiceController extends AbstractController
             'services' => $services
         ]);
     }
-
-    #[Route('/create', name: 'app_meetup_create', methods: ['GET', 'POST'])]
-    public function create(Request $request): Response
-    {
-        $meetup = new AnnonceType();
-        $form = $this->createForm(AnnonceType::class, $meetup, ['action' => $this->generateUrl('app_meetup_create')]);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // ... save the meetup, redirect etc.
-        }
-
-        return $this->render('service/index_test.html.twig', [
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/test/new', name: 'new_test')]
-    public function editTest(EntityManagerInterface $entityManager, Request $request): Response
-    {
-
-        $course = new Course(); // Créez une nouvelle instance de Course
-
-        $form = $this->createForm(AnnonceType::class, $course);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $entityManager->persist($course);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('list_service');
-        }
-
-        return $this->render('service/index_test.html.twig', [
-            'controller_name' => 'ServiceController',
-            'formAddService' => $form->createView()
-        ]);
-    }
-
-
     #[Route('/service/new', name: 'new_service')]
     #[Route('/service/edit/{id}', name: 'edit_service')]
     public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request): Response
@@ -80,6 +40,22 @@ class ServiceController extends AbstractController
         if (!$service) {
             $service = new Service();
         }
+
+
+        $course = new Course(); // Créez une nouvelle instance de Course
+
+        $formCourses = $this->createForm(AnnonceType::class, $course);
+        $formCourses->handleRequest($request);
+
+        if ($formCourses->isSubmitted() && $formCourses->isValid()) {
+
+            $entityManager->persist($course);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('list_service');
+        }
+
+
         $form = $this->createForm(ServiceType::class, $service);
         $form->handleRequest($request);
 
@@ -94,7 +70,8 @@ class ServiceController extends AbstractController
         return $this->render('service/index.html.twig', [
             'controller_name' => 'CourseController',
             'course_id' => $service->getId(),
-            'formAddService' => $form->createView()
+            'formAddService' => $form->createView(),
+            'formAddCourse' => $formCourses->createView()
         ]);
     }
     #[Route('/theme', name: 'list_themes')]
@@ -107,6 +84,7 @@ class ServiceController extends AbstractController
         ]);
     }
 
+    
     #[Route('/theme/new', name: 'new_theme')]
     #[Route('/theme/{id}/edit', name: 'edit_theme')]
     public function editTheme(?Theme $theme = null, EntityManagerInterface $entityManager, Request $request): Response
@@ -146,31 +124,24 @@ class ServiceController extends AbstractController
             'controller_name' => 'ServiceController',
             'categories' => $categories
         ]);
+
+
+        
     }
+    // route pour récupérer les courses par category
     #[Route('/categories/{id}', name: 'get_courses_by_category', methods: ['GET'])]
     public function getCoursesByCategory(Category $category): Response
-    {
-        // Récupérez les cours associés à la catégorie
-        $courses = $category->getCourses();
-
-        // Générez une réponse JSON avec les cours
-        $response = new JsonResponse($courses);
-
-        return $response;
+    {   
+        $courses = $category->getCourses(); 
+        $courseData = [];
+        foreach ($courses as $course) {
+            $courseData[] = [
+                'id' => $course->getId(),
+                'name' => $course->getNamecourse(), 
+            ];
+        }
+        return new JsonResponse($courseData);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     #[Route('/category/new', name: 'new_category')]
     #[Route('/category/{id}/edit', name: 'edit_category')]

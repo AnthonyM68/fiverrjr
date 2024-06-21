@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Theme;
 use App\Entity\Course;
 use App\Entity\Category;
 use Symfony\Component\Form\FormEvent;
@@ -19,25 +20,20 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\form;
 
 class AnnonceType extends AbstractType
 {
-    // private $categoryRepository;
-    // private $entityManager;
-
-    // public function __construct(CategoryRepository $categoryRepository, EntityManagerInterface $entityManager)
-    // {
-    //     $this->categoryRepository = $categoryRepository;
-    //     $this->entityManager = $entityManager;
-    // }
-
-
-    // public function getCategory()
-    // {
-    //     $categories = $this->categoryRepository->findAll();
-    //     return $categories;
-
-    // }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            // ->add(
+            //     'theme',
+            //     EntityType::class,
+            //     [
+            //         'class' => Theme::class,
+            //         'placeholder' => '',
+            //         'attr' => [
+            //             'class' => 'ui fluid search dropdown'
+            //         ]
+            //     ]
+            // )
             ->add(
                 'category',
                 EntityType::class,
@@ -49,7 +45,6 @@ class AnnonceType extends AbstractType
                     ]
                 ]
             );
-
 
         $formModifier = function (FormInterface $form, ?Category $category = null): void {
 
@@ -84,8 +79,6 @@ class AnnonceType extends AbstractType
             }
         );
     }
-
-
 
     public function configureOptions(OptionsResolver $resolver): void
     {
