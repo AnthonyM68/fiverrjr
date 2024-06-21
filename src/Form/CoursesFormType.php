@@ -2,41 +2,23 @@
 
 namespace App\Form;
 
-use App\Entity\Theme;
 use App\Entity\Course;
 use App\Entity\Category;
 use Symfony\Component\Form\FormEvent;
-use App\Repository\CategoryRepository;
 use Symfony\Component\Form\FormEvents;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\DependencyInjection\Loader\Configurator\form;
 
-class AnnonceType extends AbstractType
+class CoursesFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            // ->add(
-            //     'theme',
-            //     EntityType::class,
-            //     [
-            //         'class' => Theme::class,
-            //         'placeholder' => '',
-            //         'attr' => [
-            //             'class' => 'ui fluid search dropdown'
-            //         ]
-            //     ]
-            // )
             ->add(
-                'category',
-                EntityType::class,
+                'category',EntityType::class,
                 [
                     'class' => Category::class,
                     'placeholder' => '',
@@ -48,11 +30,12 @@ class AnnonceType extends AbstractType
 
         $formModifier = function (FormInterface $form, ?Category $category = null): void {
 
-            $courses = null === $category ? [] : $category->getAvailablePositions();
+            $courses = null === $category ? [] : $category->getCourses();
 
-            $form->add('Namecourse', EntityType::class, [
+            $form->add('NameCourse', EntityType::class, [
                 'class' => Course::class,
                 'placeholder' => '',
+                'label' => 'Sous-catégorie',
                 'choices' => $courses,
                 'attr' => [
                     'class' => 'ui fluid search dropdown'
