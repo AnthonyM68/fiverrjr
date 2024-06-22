@@ -46,16 +46,6 @@ class Service
     #[ORM\ManyToOne(inversedBy: 'services')]
     private ?Order $orders = null;
 
-    
-    //  #[ORM\ManyToOne(targetEntity: Theme::class)]
-    //  #[ORM\JoinColumn(nullable:false)]
-     
-    // private $theme;
-
-
-
-
-
     public function __construct()
     {
         $this->course = new ArrayCollection();
@@ -185,23 +175,6 @@ class Service
 
         return $this;
     }
-
-
-
-
-    public function getTheme(): ?Theme
-    {
-        return $this->theme;
-    }
-
-    public function setTheme(?Theme $theme): self
-    {
-        $this->theme = $theme;
-
-        return $this;
-    }
-
-
 
 
     public function __toString()

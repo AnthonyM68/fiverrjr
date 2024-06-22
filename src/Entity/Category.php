@@ -24,8 +24,22 @@ class Category
     #[ORM\OneToMany(targetEntity: Course::class, mappedBy: 'category')]
     private Collection $courses;
 
-    #[ORM\ManyToOne(inversedBy: 'categories')]
+    #[ORM\ManyToOne(targetEntity: Theme::class, inversedBy: 'categories')]
+    #[ORM\JoinColumn(nullable:false)]
     private ?Theme $theme = null;
+
+    public function getTheme(): ?string
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(string $theme): static
+    {
+        $this->theme = $theme;
+
+        return $this;
+    }
+
 
     public function __construct()
     {

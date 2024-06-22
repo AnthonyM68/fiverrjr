@@ -25,7 +25,6 @@ class CourseType extends AbstractType
                 ]
             ])
         ->add('nameCourse', TextType::class, [
-            
             'label' => 'Nom de sous catégorie',
         ])
         ->add('Valider', SubmitType::class, [

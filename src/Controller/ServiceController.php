@@ -35,6 +35,7 @@ class ServiceController extends AbstractController
     }
     #[Route('/service/new', name: 'new_service')]
     #[Route('/service/edit/{id}', name: 'edit_service')]
+    
     public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         if (!$service) {
@@ -42,36 +43,19 @@ class ServiceController extends AbstractController
         }
 
 
-        $course = new Course(); // Créez une nouvelle instance de Course
-
-        $formCourses = $this->createForm(AnnonceType::class, $course);
-        $formCourses->handleRequest($request);
-
-        if ($formCourses->isSubmitted() && $formCourses->isValid()) {
-
-            $entityManager->persist($course);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('list_service');
-        }
-
 
         $form = $this->createForm(ServiceType::class, $service);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $entityManager->persist($service);
             $entityManager->flush();
 
-            return $this->redirectToRoute('list_courses');
+            return $this->redirectToRoute('service_success');
         }
 
         return $this->render('service/index.html.twig', [
-            'controller_name' => 'CourseController',
-            'course_id' => $service->getId(),
-            'formAddService' => $form->createView(),
-            'formAddCourse' => $formCourses->createView()
+            'form' => $form->createView(),
         ]);
     }
     #[Route('/theme', name: 'list_themes')]
@@ -112,8 +96,22 @@ class ServiceController extends AbstractController
             'formAddTheme' => $form
         ]);
     }
+    #[Route('/categories_by_theme/{themeId}', name: 'categories_by_theme', methods: ['GET'])]
+    public function getCategoriesByTheme(int $themeId, CategoryRepository $categoryRepository): JsonResponse
+    {
+        $categories = $categoryRepository->findBy(['theme' => $themeId]);
+        $data = [];
 
+        foreach ($categories as $category) {
+            $data[] = [
+                'id' => $category->getId(),
+                'name' => $category->getNameCategory(),
+            ];
+        }
 
+        return new JsonResponse($data);
+    }
+    
 
 
     #[Route('/category', name: 'list_categories')]
@@ -124,23 +122,6 @@ class ServiceController extends AbstractController
             'controller_name' => 'ServiceController',
             'categories' => $categories
         ]);
-
-
-        
-    }
-    // route pour récupérer les courses par category
-    #[Route('/categories/{id}', name: 'get_courses_by_category', methods: ['GET'])]
-    public function getCoursesByCategory(Category $category): Response
-    {   
-        $courses = $category->getCourses(); 
-        $courseData = [];
-        foreach ($courses as $course) {
-            $courseData[] = [
-                'id' => $course->getId(),
-                'name' => $course->getNamecourse(), 
-            ];
-        }
-        return new JsonResponse($courseData);
     }
 
     #[Route('/category/new', name: 'new_category')]
@@ -205,5 +186,20 @@ class ServiceController extends AbstractController
             'course_id' => $course->getId(),
             'formAddCourse' => $form->createView()
         ]);
+    }
+    #[Route('/courses_by_category/{categoryId}', name: 'courses_by_category', methods: ['GET'])]
+    public function getCoursesByCategory(int $categoryId, CourseRepository $courseRepository): JsonResponse
+    {
+        $courses = $courseRepository->findBy(['category' => $categoryId]);
+        $data = [];
+
+        foreach ($courses as $course) {
+            $data[] = [
+                'id' => $course->getId(),
+                'name' => $course->getNameCourse(),
+            ];
+        }
+
+        return new JsonResponse($data);
     }
 }

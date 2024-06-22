@@ -39,8 +39,16 @@ class ServiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('course', AnnonceType::class, [
+                'label' => 'Course',
+                'attr' => [
+                    'class' => 'ui fluid search dropdown'
+                ]
+            ])
             ->add('title', TextType::class, [
-                'label' => 'Titre'
+                'attr' => [
+                    'class' => 'ui fluid input'
+                ]
             ])
             ->add('description', TextareaType::class)
             ->add('price', NumberType::class, [
@@ -50,8 +58,11 @@ class ServiceType extends AbstractType
                     'step' => 0.01, // permettre des incréments de centimes
                 ],
             ])
-            ->add('duration', IntegerType::class, [ 
-                'label' => 'Durée'
+            ->add('duration', IntegerType::class, [
+                'label' => 'Durée',
+                'attr' => [
+                    'class' => 'ui fluid input'
+                ]
             ])
             ->add('createDate', DateType::class, [
                 'widget' => 'single_text',
@@ -59,14 +70,13 @@ class ServiceType extends AbstractType
                     'style' => 'display:none', // Masquer le champ avec du CSS
                 ]
             ])
-            ->add('Valider', SubmitType::class, [
+            ->add('valider', SubmitType::class, [
                 'attr' => [
                     'class' => 'ui-button ui-widget ui-corner-all'
                 ]
             ])
             ->addEventSubscriber(new AddUserFieldSubscriber($this->security)); // Ajouter le Subscriber ici
         ;
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void
