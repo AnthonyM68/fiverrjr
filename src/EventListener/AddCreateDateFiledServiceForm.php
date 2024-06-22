@@ -3,7 +3,7 @@
 use App\Entity\Service;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 
-class ServiceCreationListener
+class AddCreateDateFiledServiceForm
 {
     public function prePersist(PrePersistEventArgs $args): void
     {

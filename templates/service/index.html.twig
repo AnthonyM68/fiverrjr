@@ -2,46 +2,16 @@
 
 {% block title %}Hello ServiceController!{% endblock %}
 
-
-
 {% block body %}
+
 {% if form is defined %}
-
-
-
-<div class="field">
-    {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
-</div>
-<div class="field">
-    {{ form_row(form.title) }}
-</div>
-<div class="field">
-    {{ form_row(form.description) }}
-</div>
-<div class="field">
-    {{ form_row(form.price) }}
-</div>
-<div class="field">
-    {{ form_row(form.duration) }}
-</div>
-
-<hr>
+  {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
 {# Inclure le sous-formulaire AnnonceType #}
 {{ form_row(form.course.theme, {'attr': {'id': 'service_course_theme'}}) }}
 {{ form_row(form.course.NameCategory, {'attr': {'id': 'service_course_NameCategory'}}) }}
 {{ form_row(form.course.NameCourse, {'attr': {'id': 'service_course_NameCourse'}}) }}
-{{ form_row(form.valider) }}
-{{ form_end(form) }}
-{% endif %}
+<hr>
 
-
-
-
-{% if formAddService|default %}
-{{ form_start(formAddService, {'attr': {'class': 'ui form'}}) }}
-<div class="field">
-    {{ form_row(form.course.NameCourse, {'attr': {'id': 'service_annonce_course'}}) }}
-</div>
 <div class="field">
     {{ form_row(form.title) }}
 </div>
@@ -54,10 +24,10 @@
 <div class="field">
     {{ form_row(form.duration) }}
 </div>
-
 {{ form_row(form.valider) }}
 {{ form_end(form) }}
 {% endif %}
+
 
 {% if services | default %}
 {% for service in services %}
