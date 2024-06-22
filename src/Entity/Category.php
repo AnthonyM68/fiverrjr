@@ -94,17 +94,6 @@ class Category
         return $this;
     }
 
-    public function getTheme(): ?Theme
-    {
-        return $this->theme;
-    }
-
-    public function setTheme(?Theme $theme): static
-    {
-        $this->theme = $theme;
-
-        return $this;
-    }
     public function __toString()
     {
         return $this->nameCategory;

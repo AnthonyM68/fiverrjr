@@ -44,22 +44,6 @@ class ServiceController extends AbstractController
         if (!$service) {
             $service = new Service();
         }
-
-
-        $category = new Category(); // Créez une nouvelle instance de Course
-
-        $formCategories = $this->createForm(CategoriesFormType::class, $category);
-        $formCategories->handleRequest($request);
-
-        if ($formCategories->isSubmitted() && $formCategories->isValid()) {
-
-            $entityManager->persist($category);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('list_service');
-        }
-
-
         $form = $this->createForm(ServiceType::class, $service);
         $form->handleRequest($request);
 
@@ -70,7 +54,7 @@ class ServiceController extends AbstractController
             return $this->redirectToRoute('service_success');
         }
 
-        return $this->render('service/index.html.twig', [
+        return $this->render('service/new.html.twig', [
             'form' => $form->createView(),
         ]);
     }
