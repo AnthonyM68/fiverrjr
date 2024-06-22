@@ -5,25 +5,37 @@
 
 
 {% block body %}
-{% if formAddCategory is defined %}
+{% if form is defined %}
 
 
-{{ form_start(formAddCategory) }}
-{{ form_row(formAddCategory.theme) }}
-{{ form_row(formAddCategory.NameCategory) }}
-{{ form_end(formAddCategory) }}
-{% endif %}
 
-{% if formAddCourse is defined %}
-{{ form_start(formAddCourse) }}
-{{ form_row(formAddCourse.category) }}
-{{ form_row(formAddCourse.NameCourse) }}
-{{ form_end(formAddCourse) }}
-{% endif %}
-
-
+<div class="field">
+    {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
+</div>
+<div class="field">
+    {{ form_row(form.title) }}
+</div>
+<div class="field">
+    {{ form_row(form.description) }}
+</div>
+<div class="field">
+    {{ form_row(form.price) }}
+</div>
+<div class="field">
+    {{ form_row(form.duration) }}
+</div>
 
 <hr>
+{# Inclure le sous-formulaire AnnonceType #}
+{{ form_row(form.course.theme, {'attr': {'id': 'service_course_theme'}}) }}
+{{ form_row(form.course.NameCategory, {'attr': {'id': 'service_course_NameCategory'}}) }}
+{{ form_row(form.course.NameCourse, {'attr': {'id': 'service_course_NameCourse'}}) }}
+{{ form_row(form.valider) }}
+{{ form_end(form) }}
+{% endif %}
+
+
+
 
 {% if formAddService|default %}
 {{ form_start(formAddService, {'attr': {'class': 'ui form'}}) }}
@@ -54,84 +66,51 @@
 {% endif %}
 
 <script>
-    // récupère l'élément du formulaire par son identifiant 
-    const form = document.getElementById('courses_form');
-    // récupère l'élément de sélection Theme par son identifiant 
-    const form_select_theme = document.getElementById('categories_form_theme');
-    // récupère l'élément de sélection Category par son identifiant 
-    const form_select_category = document.getElementById('categories_form_NameCategory');
-    // récupère l'élément de sélection Namecourse par son identifiant 
-    const form_select_course = document.getElementById('courses_form_NameCourse');
+    const form_select_theme = document.getElementById('service_course_theme');
+    const form_select_category = document.getElementById('service_course_NameCategory');
+    const form_select_course = document.getElementById('service_course_NameCourse');
 
-    // mettre à jour le formulaire 
-    // on prépare la requête AJAX
-    const updateForm = async (data, url, method) => {
-        const requestOptions = {
-            method: method,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'charset': 'utf-8'
-            }
-        };
-        // Ajoutez le corps de la requête uniquement si la méthode n'est pas GET
-        if (method !== 'GET') {
-            requestOptions.body = data;
-        }
-
+    const updateForm = async (url) => {
         try {
-            // execute la requête et récupère les courses par méthode Fetch
-            const req = await fetch(url, requestOptions);
-            const text = await req.text();
-            // vérifie la réponse brute dans la console
-             console.log('Response text:', text); 
-            return JSON.parse(text); // Parse la réponse JSON
+            const req = await fetch(url);
+            return await req.json();
         } catch (error) {
             console.error('Failed to fetch or parse JSON:', error);
-            return []; // Retourne une liste vide en cas d'erreur
+            return [];
         }
     };
 
-    // Fonction pour changer les options du champ Category en fonction du Theme sélectionné
-    const changeCategories = async (e) => {
+    const updateCategories = async (e) => {
         const themeId = e.target.value;
-        const url = `/themes/${themeId}`;
-        const categories = await updateForm('', url, 'GET');
-    
-        if (Array.isArray(categories)) {
-            form_select_category.innerHTML = '';
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category.id;
-                option.textContent = category.name; // Utilisez le bon nom de propriété
-                form_select_category.appendChild(option);
-            });
-        }
+        const url = `/categories_by_theme/${themeId}`;
+        const categories = await updateForm(url);
+
+        form_select_category.innerHTML = '';
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.id;
+            option.textContent = category.name;
+            form_select_category.appendChild(option);
+        });
+
+        form_select_course.innerHTML = '';
     };
-    // Fonction pour changer les options du champ NameCourse en fonction de la Category sélectionnée
-    const changeCourses = async (e) => {
+
+    const updateCourses = async (e) => {
         const categoryId = e.target.value;
-        const url = `/categories/${categoryId}`;
-        const courses = await updateForm('', url, 'GET');
-    
-        if (Array.isArray(courses)) {
-            form_select_course.innerHTML = '';
-            courses.forEach(course => {
-                const option = document.createElement('option');
-                option.value = course.id;
-                option.textContent = course.name; // Utilisez le bon nom de propriété
-                form_select_course.appendChild(option);
-            });
-        }
+        const url = `/courses_by_category/${categoryId}`;
+        const courses = await updateForm(url);
+
+        form_select_course.innerHTML = '';
+        courses.forEach(course => {
+            const option = document.createElement('option');
+            option.value = course.id;
+            option.textContent = course.name;
+            form_select_course.appendChild(option);
+        });
     };
-    
 
-    // Écouteur d'événement pour le changement de Theme
-    form_select_theme.addEventListener('change', (e) => {
-        changeCategories(e);
-        form_select_category.dispatchEvent(new Event('change')); // Déclenche le changement de Category après avoir changé le Theme
-    });
-
-    // Écouteur d'événement pour le changement de Category
-    form_select_category.addEventListener('change', (e) => changeCourses(e));
+    form_select_theme.addEventListener('change', updateCategories);
+    form_select_category.addEventListener('change', updateCourses);
 </script>
 {% endblock %}
