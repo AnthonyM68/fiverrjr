@@ -6,27 +6,34 @@
 
 {% if form is defined %}
   {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
-{# Inclure le sous-formulaire AnnonceType #}
-{{ form_row(form.course.theme, {'attr': {'id': 'service_course_theme'}}) }}
-{{ form_row(form.course.NameCategory, {'attr': {'id': 'service_course_NameCategory'}}) }}
-{{ form_row(form.course.NameCourse, {'attr': {'id': 'service_course_NameCourse'}}) }}
-<hr>
+    {# Inclure le sous-formulaire AnnonceType #}
+    <div class="field">
+        {{ form_row(form.course.theme) }}
+    </div>
+    <div class="field" id="category_field" style="display: none;">
+        {{ form_row(form.course.NameCategory) }}
+    </div>
+    <div class="field" id="course_field" style="display: none;">
+        {{ form_row(form.course.NameCourse) }}
+    </div>
+    <hr>
 
-<div class="field">
-    {{ form_row(form.title) }}
-</div>
-<div class="field">
-    {{ form_row(form.description) }}
-</div>
-<div class="field">
-    {{ form_row(form.price) }}
-</div>
-<div class="field">
-    {{ form_row(form.duration) }}
-</div>
-{{ form_row(form.valider) }}
-{{ form_end(form) }}
+    <div class="field">
+        {{ form_row(form.title) }}
+    </div>
+    <div class="field">
+        {{ form_row(form.description) }}
+    </div>
+    <div class="field">
+        {{ form_row(form.price) }}
+    </div>
+    <div class="field">
+        {{ form_row(form.duration) }}
+    </div>
+    {{ form_row(form.valider) }}
+  {{ form_end(form) }}
 {% endif %}
+
 
 
 {% if services | default %}
@@ -54,7 +61,7 @@
         const themeId = e.target.value;
         const url = `/categories_by_theme/${themeId}`;
         const categories = await updateForm(url);
-
+    
         form_select_category.innerHTML = '';
         categories.forEach(category => {
             const option = document.createElement('option');
@@ -62,15 +69,16 @@
             option.textContent = category.name;
             form_select_category.appendChild(option);
         });
-
-        form_select_course.innerHTML = '';
+        document.getElementById('category_field').style.display = 'block';
+        document.getElementById('course_field').style.display = 'block';
+        updateCourses();
     };
-
-    const updateCourses = async (e) => {
-        const categoryId = e.target.value;
+    
+    const updateCourses = async () => {
+        const categoryId = form_select_category.value;
         const url = `/courses_by_category/${categoryId}`;
         const courses = await updateForm(url);
-
+    
         form_select_course.innerHTML = '';
         courses.forEach(course => {
             const option = document.createElement('option');
@@ -79,6 +87,7 @@
             form_select_course.appendChild(option);
         });
     };
+    
 
     form_select_theme.addEventListener('change', updateCategories);
     form_select_category.addEventListener('change', updateCourses);

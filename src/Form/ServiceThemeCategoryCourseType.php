@@ -19,20 +19,21 @@ class ServiceThemeCategoryCourseType extends AbstractType
         $builder
             ->add('theme', EntityType::class, [
                 'class' => Theme::class,
-                'placeholder' => 'Choose a Theme',
+                'label' => 'Thême',
+                'placeholder' => 'Choisissez un Thême',
                 'mapped' => false,
                 'attr' => ['class' => 'ui fluid search dropdown']
             ])
             ->add('NameCategory', EntityType::class, [
                 'class' => Category::class,
-                'placeholder' => 'Choose a Category',
+                'placeholder' => 'Choisissez une Catégorie',
                 'choices' => [],
                 'mapped' => false,
                 'attr' => ['class' => 'ui fluid search dropdown']
             ])
             ->add('NameCourse', EntityType::class, [
                 'class' => Course::class,
-                'placeholder' => 'Choose a Course',
+                'placeholder' => 'Choisissez une Sous-Catégorie',
                 'choices' => [],
                 'attr' => ['class' => 'ui fluid search dropdown']
             ]);

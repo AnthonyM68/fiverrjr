@@ -68,7 +68,9 @@ class ServiceType extends AbstractType
                 'widget' => 'single_text',
                 'attr' => [
                     'style' => 'display:none', // Masquer le champ avec du CSS
-                ]
+                ],
+                'label' => false, // Optionnel : masquer le label si nécessaire
+                'mapped' => false, // Ne pas mapper ce champ avec les données du formulaire
             ])
             ->add('valider', SubmitType::class, [
                 'attr' => [
