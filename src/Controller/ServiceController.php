@@ -15,6 +15,7 @@ use App\Form\CategoryType;
 use App\Form\CoursesFormType;
 use App\Form\CategoriesFormType;
 use App\Repository\ThemeRepository;
+use App\Repository\CourseRepository;
 use App\Repository\CoursesRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\CategoryRepository;
@@ -54,7 +55,7 @@ class ServiceController extends AbstractController
             return $this->redirectToRoute('service_success');
         }
 
-        return $this->render('service/new.html.twig', [
+        return $this->render('service/index.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -67,6 +68,9 @@ class ServiceController extends AbstractController
             'themes' => $themes
         ]);
     }
+
+
+
     #[Route('/theme/new', name: 'new_theme')]
     #[Route('/theme/{id}/edit', name: 'edit_theme')]
     public function editTheme(?Theme $theme = null, EntityManagerInterface $entityManager, Request $request): Response
@@ -94,6 +98,9 @@ class ServiceController extends AbstractController
             'formAddTheme' => $form
         ]);
     }
+
+
+
     #[Route('/categories_by_theme/{themeId}', name: 'categories_by_theme', methods: ['GET'])]
     public function getCategoriesByTheme(int $themeId, CategoryRepository $categoryRepository): JsonResponse
     {
@@ -121,10 +128,6 @@ class ServiceController extends AbstractController
             'categories' => $categories
         ]);
     }
-
-
-
-
 
     #[Route('/category/new', name: 'new_category')]
     #[Route('/category/{id}/edit', name: 'edit_category')]
@@ -154,6 +157,21 @@ class ServiceController extends AbstractController
         ]);
     }
 
+    #[Route('/courses_by_category/{categoryId}', name: 'courses_by_category', methods: ['GET'])]
+    public function getCoursesByCategory(int $categoryId, CourseRepository $courseRepository): JsonResponse
+    {
+        $courses = $courseRepository->findBy(['category' => $categoryId]);
+        $data = [];
+
+        foreach ($courses as $course) {
+            $data[] = [
+                'id' => $course->getId(),
+                'name' => $course->getNameCourse(),
+            ];
+        }
+
+        return new JsonResponse($data);
+    }
 
     #[Route('/course', name: 'list_courses')]
     public function listCourses(CourseRepository $courseRepository): Response
@@ -189,19 +207,5 @@ class ServiceController extends AbstractController
             'formAddCourse' => $form->createView()
         ]);
     }
-    #[Route('/courses_by_category/{categoryId}', name: 'courses_by_category', methods: ['GET'])]
-    public function getCoursesByCategory(int $categoryId, CourseRepository $courseRepository): JsonResponse
-    {
-        $courses = $courseRepository->findBy(['category' => $categoryId]);
-        $data = [];
-
-        foreach ($courses as $course) {
-            $data[] = [
-                'id' => $course->getId(),
-                'name' => $course->getNameCourse(),
-            ];
-        }
-
-        return new JsonResponse($data);
-    }
+   
 }

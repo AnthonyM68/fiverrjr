@@ -39,7 +39,7 @@ class ServiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('course', AnnonceType::class, [
+            ->add('course', ServiceThemeCategoryCourseType::class, [
                 'label' => 'Course',
                 'attr' => [
                     'class' => 'ui fluid search dropdown'
