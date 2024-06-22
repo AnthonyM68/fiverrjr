@@ -36,3 +36,5 @@ services:
     App\EventListener\ServiceCreationListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+    App\Form\CoursesFormType:
+        tags: ['form.type']

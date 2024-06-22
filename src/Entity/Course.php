@@ -47,6 +47,8 @@ class Course
 
         return $this;
     }
+
+
     public function __toString()
     {
         return $this->nameCourse;

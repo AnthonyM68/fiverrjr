@@ -71,10 +71,6 @@ class Category
         return $this->courses;
     }
     
-    public function getAvailablePositions(): Collection
-    {
-        return $this->courses;
-    }
 
     public function addCourse(Course $course): static
     {
@@ -94,6 +90,18 @@ class Category
                 $course->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTheme(): ?Theme
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?Theme $theme): static
+    {
+        $this->theme = $theme;
 
         return $this;
     }

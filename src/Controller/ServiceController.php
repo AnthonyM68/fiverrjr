@@ -2,17 +2,20 @@
 
 namespace App\Controller;
 
+use CourseFormType;
 use App\Entity\Theme;
 use App\Entity\Course;
 use App\Entity\Service;
 use App\Form\ThemeType;
 use App\Entity\Category;
 use App\Form\CourseType;
-use App\Form\AnnonceType;
 use App\Form\ServiceType;
+
 use App\Form\CategoryType;
+use App\Form\CoursesFormType;
+use App\Form\CategoriesFormType;
 use App\Repository\ThemeRepository;
-use App\Repository\CourseRepository;
+use App\Repository\CoursesRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,6 +46,19 @@ class ServiceController extends AbstractController
         }
 
 
+        $category = new Category(); // Créez une nouvelle instance de Course
+
+        $formCategories = $this->createForm(CategoriesFormType::class, $category);
+        $formCategories->handleRequest($request);
+
+        if ($formCategories->isSubmitted() && $formCategories->isValid()) {
+
+            $entityManager->persist($category);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('list_service');
+        }
+
 
         $form = $this->createForm(ServiceType::class, $service);
         $form->handleRequest($request);
@@ -67,8 +83,6 @@ class ServiceController extends AbstractController
             'themes' => $themes
         ]);
     }
-
-    
     #[Route('/theme/new', name: 'new_theme')]
     #[Route('/theme/{id}/edit', name: 'edit_theme')]
     public function editTheme(?Theme $theme = null, EntityManagerInterface $entityManager, Request $request): Response
@@ -123,6 +137,10 @@ class ServiceController extends AbstractController
             'categories' => $categories
         ]);
     }
+
+
+
+
 
     #[Route('/category/new', name: 'new_category')]
     #[Route('/category/{id}/edit', name: 'edit_category')]
