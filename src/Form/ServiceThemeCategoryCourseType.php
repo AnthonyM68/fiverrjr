@@ -19,62 +19,52 @@ class ServiceThemeCategoryCourseType extends AbstractType
         $builder
             ->add('theme', EntityType::class, [
                 'class' => Theme::class,
-                'label' => 'Thême',
                 'placeholder' => 'Choisissez un Thême',
-                'mapped' => false,
+                'mapped' => false, // Non mapped à service
                 'attr' => ['class' => 'ui fluid search dropdown']
             ])
-            ->add('NameCategory', EntityType::class, [
+            ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'placeholder' => 'Choisissez une Catégorie',
-                'choices' => [],
-                'mapped' => false,
+                'mapped' => false, // Non mapped à service
                 'attr' => ['class' => 'ui fluid search dropdown']
             ])
-            ->add('NameCourse', EntityType::class, [
+            // ne pas indiquer de mapped 
+            ->add('course', EntityType::class, [
                 'class' => Course::class,
                 'placeholder' => 'Choisissez une Sous-Catégorie',
-                'choices' => [],
                 'attr' => ['class' => 'ui fluid search dropdown']
             ]);
-
+        // Écouteurs d'événements pour les champs theme et category
         $builder->get('theme')->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) {
                 $form = $event->getForm();
                 $theme = $form->getData();
-
+                // On recherche les catégories appartenant à un thême
                 $categories = $theme ? $theme->getCategories() : [];
-
+                 // Ajout dynamique du champ category après la sélection du thème
                 $form->getParent()->add('category', EntityType::class, [
                     'class' => Category::class,
-                    'placeholder' => 'Choose a Category',
                     'choices' => $categories,
                     'mapped' => false,
                     'attr' => ['class' => 'ui fluid search dropdown']
                 ]);
-
-                $form->getParent()->add('course', EntityType::class, [
-                    'class' => Course::class,
-                    'placeholder' => 'Choose a Course',
-                    'choices' => [],
-                    'attr' => ['class' => 'ui fluid search dropdown']
-                ]);
             }
         );
-
-        $builder->get('NameCategory')->addEventListener(
+        $builder->get('category')->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) {
                 $form = $event->getForm();
                 $category = $form->getData();
-
+                // On recherche les courses appartenant à une catégorie
                 $courses = $category ? $category->getCourses() : [];
-
+                dd($courses);
+                // Ajout dynamique du champ course après la sélection de la catégorie
                 $form->getParent()->add('course', EntityType::class, [
                     'class' => Course::class,
-                    'placeholder' => 'Choose a Course',
                     'choices' => $courses,
+                    'mapped' => true,
                     'attr' => ['class' => 'ui fluid search dropdown']
                 ]);
             }

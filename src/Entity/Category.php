@@ -28,24 +28,10 @@ class Category
     #[ORM\JoinColumn(nullable:false)]
     private ?Theme $theme = null;
 
-    public function getTheme(): ?string
-    {
-        return $this->theme;
-    }
-
-    public function setTheme(string $theme): static
-    {
-        $this->theme = $theme;
-
-        return $this;
-    }
-
-
     public function __construct()
     {
         $this->courses = new ArrayCollection();
     }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -63,6 +49,19 @@ class Category
         return $this;
     }
 
+
+    public function getTheme(): ?string
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(string $theme): static
+    {
+        $this->theme = $theme;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Course>
      */
@@ -71,7 +70,6 @@ class Category
         return $this->courses;
     }
     
-
     public function addCourse(Course $course): static
     {
         if (!$this->courses->contains($course)) {

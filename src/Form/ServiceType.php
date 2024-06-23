@@ -2,22 +2,13 @@
 
 namespace App\Form;
 
-use App\Entity\User;
-use App\Entity\Order;
-use App\Entity\Theme;
-use App\Entity\Course;
 use App\Entity\Service;
-use App\Entity\Category;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
+
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormInterface;
-
 use Symfony\Bundle\SecurityBundle\Security;
-
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use App\Form\EventListener\AddUserFieldSubscriber;
+use App\Form\EventListener\AddUserFieldServiceForm;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,19 +22,19 @@ class ServiceType extends AbstractType
 {
     private $security;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, EntityManagerInterface $entityManager)
     {
         $this->security = $security;
+        $this->entityManager = $entityManager;
     }
+    private $entityManager;
+
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('course', ServiceThemeCategoryCourseType::class, [
-                'label' => 'Course',
-                'attr' => [
-                    'class' => 'ui fluid search dropdown'
-                ]
+                'mapped' => false, // Nous ne voulons pas mapper directement sur l'entité Service
             ])
             ->add('title', TextType::class, [
                 'attr' => [
@@ -66,6 +57,7 @@ class ServiceType extends AbstractType
             ])
             ->add('createDate', DateType::class, [
                 'widget' => 'single_text',
+                'required' => false, // Champ optionnel
                 'attr' => [
                     'style' => 'display:none', // Masquer le champ avec du CSS
                 ],
@@ -77,8 +69,15 @@ class ServiceType extends AbstractType
                     'class' => 'ui-button ui-widget ui-corner-all'
                 ]
             ])
-            ->addEventSubscriber(new AddUserFieldSubscriber($this->security)); // Ajouter le Subscriber ici
-        ;
+            // On place un écouteur pour récupérer l'ID User avant de persister
+            ->addEventSubscriber(new AddUserFieldServiceForm($this->security));
+           /**  un service est enregistré pour insert dateCreate avant de persister
+            *   AddCreateDateFiledServiceForm.php
+            *    App\EventListener\AddCreateDateFiledServiceForm:
+            *       tags:
+            *           - { name: doctrine.event_listener, event: prePersist }
+             */
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

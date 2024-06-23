@@ -39,20 +39,28 @@ class ServiceController extends AbstractController
     }
     #[Route('/service/new', name: 'new_service')]
     #[Route('/service/edit/{id}', name: 'edit_service')]
-    
+
     public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         if (!$service) {
             $service = new Service();
         }
+
         $form = $this->createForm(ServiceType::class, $service);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $subFormData = $form->get('course')->getData();
+            $category = $subFormData['course'] ?? null;
+
+            if ($category) {
+                $service->setCourse($category);
+            }
+
             $entityManager->persist($service);
             $entityManager->flush();
 
-            return $this->redirectToRoute('list_services');
+            return $this->redirectToRoute('list_service');
         }
 
         return $this->render('service/index.html.twig', [
@@ -116,7 +124,7 @@ class ServiceController extends AbstractController
 
         return new JsonResponse($data);
     }
-    
+
 
 
     #[Route('/category', name: 'list_categories')]
@@ -207,5 +215,4 @@ class ServiceController extends AbstractController
             'formAddCourse' => $form->createView()
         ]);
     }
-   
 }

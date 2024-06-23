@@ -1,15 +1,26 @@
-<?php namespace App\EventListener;
+<?php
 
+
+namespace App\EventListener;
+
+use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Events;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use App\Entity\Service;
-use Doctrine\ORM\Event\PrePersistEventArgs;
 
 class AddCreateDateFiledServiceForm
 {
-    public function prePersist(PrePersistEventArgs $args): void
+    // public function getSubscribedEvents()
+    // {
+    //     return [
+    //         Events::prePersist,
+    //     ];
+    // }
+
+    public function prePersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getObject();
 
-        // On vérifie si l'objet est une instance de Service
         if ($entity instanceof Service) {
             $entity->setCreateDate(new \DateTime());
         }
