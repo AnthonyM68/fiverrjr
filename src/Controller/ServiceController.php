@@ -54,20 +54,6 @@ class ServiceController extends AbstractController
             if ($category) {
                 $service->setCourse($category);
             }
-
-        
-
-            // Définir l'utilisateur connecté si ce n'est pas déjà fait
-            /*if (!$service->getUser()) {
-                $user = $this->security->getUser();
-                if ($user !== null) {
-                    $service->setUser($user);
-                } else {
-                    // Débogage
-                    throw new \Exception('L\'utilisateur ne peut pas être nul. Vérifiez que l\'utilisateur est authentifié.');
-                }
-            }*/
-
             $entityManager->persist($service);
             $entityManager->flush();
 
@@ -148,7 +134,7 @@ class ServiceController extends AbstractController
         ]);
     }
 
-    #[Route('/category/new', name: 'new_category')]
+    #[Route('/category/new/test', name: 'new_category')]
     #[Route('/category/{id}/edit', name: 'edit_category')]
     public function editCategory(?Category $category = null, EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -170,7 +156,6 @@ class ServiceController extends AbstractController
             return $this->redirectToRoute('list_categories');
         }
         return $this->render('category/index.html.twig', [
-            'controller_name' => 'ServiceController',
             'category_id' => $category->getId(),
             'formAddCategory' => $form
         ]);

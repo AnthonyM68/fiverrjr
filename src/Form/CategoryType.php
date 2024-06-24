@@ -19,12 +19,12 @@ class CategoryType extends AbstractType
             ->add('theme', EntityType::class, [
                 'class' => Theme::class,
                 'label' => 'Appartenance Thême',
-                'choice_label' => 'nameTheme',
+                'choice_label' => 'NameTheme',
                 'attr' => [
                     'class' => 'ui fluid search dropdown'
                 ]
             ])
-            ->add('nameCategory', TextType::class, [
+            ->add('NameCategory', TextType::class, [
                 'label' => 'Nom de Catégorie',
             ])
             ->add('Valider', SubmitType::class, [

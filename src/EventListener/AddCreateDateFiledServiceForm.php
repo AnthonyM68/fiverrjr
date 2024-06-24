@@ -14,15 +14,19 @@ class AddCreateDateFiledServiceForm implements EventSubscriberInterface
     {
         $entity = $args->getObject();
 
+  
+
         // On vérifie si l'objet est une instance de Service
         if ($entity instanceof Service) {
             $entity->setCreateDate(new \DateTime());
+
+            $user = $entity->getUser();
+            if ($user === null) {
+                throw new \Exception('L\'utilisateur ne peut pas être nul');
+            }
         }
 
-        $user = $entity->getUser();
-        if ($user === null) {
-            throw new \Exception('L\'utilisateur ne peut pas être nul');
-        }
+       
     }
 
     public static function getSubscribedEvents(): array

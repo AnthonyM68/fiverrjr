@@ -50,12 +50,12 @@ class Category
     }
 
 
-    public function getTheme(): ?string
+    public function getTheme(): ?Theme
     {
         return $this->theme;
     }
 
-    public function setTheme(string $theme): static
+    public function setTheme(?Theme $theme): static
     {
         $this->theme = $theme;
 

@@ -27,13 +27,16 @@ services:
     App\EventListener\UserRegistrationListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+
+
     # intercepte et créer la date de création d'un service (form Service)
     App\EventListener\AddCreateDateFiledServiceForm:
         tags:
            - { name: doctrine.event_listener, event: prePersist }
 
-    # App\Form\EventListener\AddUserFieldServiceForm:
-    #     arguments: ['@security.helper']
-    #     tags:
-    #         - { name: 'kernel.event_subscriber' }
+
+    App\Form\EventListener\AddUserFieldServiceForm:
+        arguments: ['@security.helper']
+        tags:
+            - { name: 'kernel.event_subscriber' }
 
