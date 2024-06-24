@@ -32,15 +32,8 @@ services:
         tags:
            - { name: doctrine.event_listener, event: prePersist }
 
+    # App\Form\EventListener\AddUserFieldServiceForm:
+    #     arguments: ['@security.helper']
+    #     tags:
+    #         - { name: 'kernel.event_subscriber' }
 
-
-    App\Form\EventListener\AddUserFieldServiceForm:
-        arguments:
-            - '@security.token_storage'
-        tags:
-            - { name: form.type_extension, extended_type: App\Form\ServiceType }
-
-
-            
-    App\Form\CoursesFormType:
-        tags: ['form.type']

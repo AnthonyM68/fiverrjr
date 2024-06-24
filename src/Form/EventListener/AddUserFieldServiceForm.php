@@ -3,7 +3,6 @@
 namespace App\Form\EventListener;
 
 use App\Entity\User;
-use App\Entity\Service;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -11,11 +10,11 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AddUserFieldServiceForm extends AbstractType implements EventSubscriberInterface 
+class AddUserFieldServiceForm implements EventSubscriberInterface 
 {
     private $security;
 
-    public function __construct(Security $security = null)
+    public function __construct(Security $security)
     {
         $this->security = $security;
     }
@@ -31,18 +30,13 @@ class AddUserFieldServiceForm extends AbstractType implements EventSubscriberInt
     public function preSetData(FormEvent $event)
     {
         $form = $event->getForm();
-        $service = $event->getData();
+        $user = $this->security->getUser();
 
-        if ($service instanceof Service) {
-            // Ajouter un champ caché pour l'ID de l'utilisateur
+        if ($user instanceof User) {
             $form->add('user', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'id',
-                'data' => $this->security->getUser(),
-               /* 'attr' => [
-                    'style' => 'display:none', // Masquer le champ avec du CSS
-                ],*/
-                'mapped' => false, // Ne pas mapper ce champ avec les données du formulaire
+                'data' => $user,
             ]);
         }
     }
@@ -53,7 +47,7 @@ class AddUserFieldServiceForm extends AbstractType implements EventSubscriberInt
         $user = $this->security->getUser();
 
         if ($user instanceof User) {
-            $data['user'] = $user;
+            $data['user'] = $user->getId();
         }
 
         $event->setData($data);

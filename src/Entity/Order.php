@@ -145,7 +145,7 @@ class Order
     {
         if ($this->services->removeElement($service)) {
             // set the owning side to null (unless already changed)
-            if ($service->getOrders() === $this) {
+            if ($service->getOrder() === $this) {
                 $service->setOrders(null);
             }
         }

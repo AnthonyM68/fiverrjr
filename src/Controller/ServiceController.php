@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Controller;
-
-use CourseFormType;
 use App\Entity\Theme;
 use App\Entity\Course;
 use App\Entity\Service;
@@ -10,24 +8,24 @@ use App\Form\ThemeType;
 use App\Entity\Category;
 use App\Form\CourseType;
 use App\Form\ServiceType;
-
 use App\Form\CategoryType;
-use App\Form\CoursesFormType;
-use App\Form\CategoriesFormType;
 use App\Repository\ThemeRepository;
 use App\Repository\CourseRepository;
-use App\Repository\CoursesRepository;
 use App\Repository\ServiceRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+// use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ServiceController extends AbstractController
 {
+    // private $security;
+
     #[Route('/service', name: 'list_service')]
     public function index(ServiceRepository $serviceRepository): Response
     {
@@ -39,7 +37,7 @@ class ServiceController extends AbstractController
     }
     #[Route('/service/new', name: 'new_service')]
     #[Route('/service/edit/{id}', name: 'edit_service')]
-
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         if (!$service) {
@@ -56,6 +54,19 @@ class ServiceController extends AbstractController
             if ($category) {
                 $service->setCourse($category);
             }
+
+        
+
+            // Définir l'utilisateur connecté si ce n'est pas déjà fait
+            /*if (!$service->getUser()) {
+                $user = $this->security->getUser();
+                if ($user !== null) {
+                    $service->setUser($user);
+                } else {
+                    // Débogage
+                    throw new \Exception('L\'utilisateur ne peut pas être nul. Vérifiez que l\'utilisateur est authentifié.');
+                }
+            }*/
 
             $entityManager->persist($service);
             $entityManager->flush();

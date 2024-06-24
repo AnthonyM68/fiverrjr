@@ -15,8 +15,14 @@ security:
             security: false
         main:
             lazy: true
+            # anonymous: lazy
             provider: app_user_provider
             custom_authenticator: App\Security\AppAuthenticator
+            entry_point: form_login
+            form_login:
+                login_path: login
+                check_path: login
+
             logout:
                 path: logout
                 
@@ -44,6 +50,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/service, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:

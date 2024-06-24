@@ -3,12 +3,19 @@
 namespace App\Form;
 
 use App\Entity\Service;
-
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Form\ServiceThemeCategoryCourseType;
 use Symfony\Component\Form\FormBuilderInterface;
+
 use App\Form\EventListener\AddUserFieldServiceForm;
+use App\EventListener\AddCreateDateFiledServiceForm;
+
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -69,15 +76,10 @@ class ServiceType extends AbstractType
                     'class' => 'ui-button ui-widget ui-corner-all'
                 ]
             ])
-            // On place un écouteur pour récupérer l'ID User avant de persister
-            ->addEventSubscriber(new AddUserFieldServiceForm($this->security));
-           /**  un service est enregistré pour insert dateCreate avant de persister
-            *   AddCreateDateFiledServiceForm.php
-            *    App\EventListener\AddCreateDateFiledServiceForm:
-            *       tags:
-            *           - { name: doctrine.event_listener, event: prePersist }
-             */
-
+            // Écouteur pour ajouter l'utilisateur
+            ->addEventSubscriber(new AddUserFieldServiceForm($this->security))
+            // Écouteur pour ajouter la date de création
+            ->addEventSubscriber(new AddCreateDateFiledServiceForm());
     }
 
     public function configureOptions(OptionsResolver $resolver): void

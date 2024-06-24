@@ -25,11 +25,15 @@ class Service
     #[ORM\JoinColumn(nullable: false)]
     private ?Course $course = null;
 
-    #[ORM\ManyToOne(inversedBy: 'service')]
+    // #[ORM\Column(name: 'user_id', type: 'integer', nullable: true)]
+    // private ?int $userId = null;
+
+    #[ORM\ManyToOne(inversedBy: 'services')]
+    #[ORM\JoinColumn(nullable: false)] // Assurez-vous que cette relation ne peut pas être nulle
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
-    private ?Order $orders = null;
+    private ?Order $order = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -89,6 +93,17 @@ class Service
     //     return $this;
     // }
 
+     // Getters and setters for user and user_id
+    //  public function getUserId(): ?int
+    //  {
+    //      return $this->userId;
+    //  }
+ 
+    //  public function setUserId(?int $userId): self
+    //  {
+    //      $this->userId = $userId;
+    //      return $this;
+    //  }
     public function getUser(): ?User
     {
         return $this->user;
@@ -159,14 +174,14 @@ class Service
         return $this;
     }
 
-    public function getOrders(): ?Order
+    public function getOrder(): ?Order
     {
-        return $this->orders;
+        return $this->order;
     }
 
-    public function setOrders(?Order $orders): static
+    public function setOrders(?Order $order): static
     {
-        $this->orders = $orders;
+        $this->order = $order;
 
         return $this;
     }
