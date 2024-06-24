@@ -1,11 +1,33 @@
-
 .visible {
-    display: block !important;
-  }
-.separator {
-    height:60px;
+  display: block !important;
 }
-/* masque les labels des champs de formulaire masqué */
-/* .hidden-field {
-    display: none;
-}  */
+.separator {
+  height: 60px;
+}
+.ui.dropdown .menu {
+  display: block !important;
+}
+
+/* Pour les dropdowns principaux */
+.ui.vertical.menu .ui.dropdown .menu {
+  min-width: 200px; /* Largeur minimale pour les dropdowns */
+  padding: 0; /* Supprime le padding par défaut */
+  box-shadow: none; /* Supprime l'ombre par défaut */
+}
+
+/* Pour les dropdowns imbriqués */
+.ui.vertical.menu .ui.dropdown .menu .ui.dropdown .menu {
+  top: 0; /* Positionne le sous-menu au-dessus du parent */
+  left: 100%; /* Positionne le sous-menu à droite du parent */
+  min-width: 200px; /* Largeur minimale pour les sous-dropdowns */
+}
+
+/* Ajustement du padding pour les items */
+.ui.vertical.menu .ui.dropdown .menu .item {
+  padding: 10px 16px; /* Ajuste le padding pour les items */
+}
+
+/* Ajustement de la hauteur pour les items du premier niveau */
+.ui.vertical.menu .ui.dropdown .menu > .item {
+  height: auto; /* Hauteur automatique pour s'adapter au contenu */
+}

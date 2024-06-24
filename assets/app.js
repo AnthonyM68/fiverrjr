@@ -10,32 +10,59 @@ import './styles/app.css';
 import './styles/login-register.css';
 
 
+
 document.addEventListener('DOMContentLoaded', function () {
-  // let computerDropdownItems = document.querySelectorAll('.computer.only .dropdown.item');
 
-  // computerDropdownItems.forEach(function (item) {
-  //   item.addEventListener('mouseover', function () {
-  //     let popupOptions = {
-  //       inline: true,
-  //       hoverable: true,
-  //       position: 'bottom left',
-  //       delay: {
-  //         show: 300,
-  //         hide: 800
-  //       }
-  //     };
-  //   });
-  // });
+      $('.ui.dropdown').dropdown({
+        on: 'click',
+        action: 'nothing', 
+        preserveHTML: true, 
+        action: function(text, value, element) {
+        
+          if($(element).hasClass('dropdown')) {
+            return false;
+          }
+        }
+      });
 
-  // let uiDropdowns = document.querySelectorAll('.ui.dropdown');
-  // if (uiDropdowns) {
-  //   uiDropdowns.forEach(function (dropdown) {
-  //     dropdown.addEventListener('click', function () {
-  //       let menu = dropdown.querySelector('.menu');
-  //       menu.classList.toggle('visible');
-  //     });
-  //   });
-  // }
+ 
+
+
+  /*let computerDropdownItems = document.querySelectorAll('.computer.only .dropdown.item');
+
+  computerDropdownItems.forEach(function (item) {
+    item.addEventListener('mouseover', function () {
+      let popupOptions = {
+        inline: true,
+        hoverable: true,
+        position: 'bottom left',
+        delay: {
+          show: 300,
+          hide: 800
+        }
+      };
+    });
+  });
+
+  let uiDropdowns = document.querySelectorAll('.ui.dropdown');
+  if (uiDropdowns) {
+    uiDropdowns.forEach(function (dropdown) {
+
+
+
+      dropdown.addEventListener('click', function (e) {
+
+        console.log(e.target.id);
+         let menu = document.querySelector(`#${e.target.id}-dropdown`);
+         console.log(menu);
+         menu.classList.toggle('visible');
+      });
+
+
+
+
+    });
+  }*/
   // let uiAccordions = document.querySelectorAll('.ui.accordion > .title');
   // if (uiAccordions) {
   //   uiAccordions.forEach(function (title) {

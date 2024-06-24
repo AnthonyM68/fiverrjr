@@ -106,6 +106,33 @@ class ServiceController extends AbstractController
 
 
 
+    #[Route('/categories_and_courses_by_theme/{themeId}', name: 'categories_by_theme', methods: ['GET'])]
+    public function getCategoriesAndCoursesByTheme(int $themeId, CategoryRepository $categoryRepository): JsonResponse
+    {
+        $categories = $categoryRepository->findBy(['theme' => $themeId]);
+        $data = [];
+    
+        foreach ($categories as $category) {
+            $courses = [];
+            foreach ($category->getCourses() as $course) {
+                $courses[] = [
+                    'id' => $course->getId(),
+                    'name' => $course->getNameCourse(),
+                ];
+            }
+    
+            $data[] = [
+                'id' => $category->getId(),
+                'name' => $category->getNameCategory(),
+                'courses' => $courses,
+            ];
+        }
+    
+        return new JsonResponse($data);
+    }
+    
+
+
     #[Route('/categories_by_theme/{themeId}', name: 'categories_by_theme', methods: ['GET'])]
     public function getCategoriesByTheme(int $themeId, CategoryRepository $categoryRepository): JsonResponse
     {

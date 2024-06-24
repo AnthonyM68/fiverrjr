@@ -42,11 +42,21 @@
 {% endfor %}
 {% endif %}
 
+
 {% if services | default %}
-{% for service in services %}
-{{ service }}
-{% endfor %}
-{% endif %}
+
+<div class="ui list">
+    {% for service in services %}
+    <div class="item">
+        <i class="folder icon"></i>
+        <div class="content">
+            <div class="header">{{ service.title }}</div>
+            {# <div class="description">Source files for project</div> #}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %} 
 
 <script>
     // Sélection des éléments du formulaire

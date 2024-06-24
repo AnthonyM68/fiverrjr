@@ -1,20 +1,22 @@
-body {
+/* body {
   min-height: 2000px;
-}
+} */
 
-.offices {
+ .offices {
   color: #fff;
 }
 .flags a {
   padding: 0.012em;
 }
-/* Nav */
+
 .ui.fixed.borderless.menu {
   background-color: #a0a0a0;
 }
 
 .ui .computer.only .item {
   color: #fff;
+  display:flex;
+  justify-content: space-between;
 }
 
 .ui .computer.only .item:hover {
@@ -46,7 +48,7 @@ body {
   font-size: 1.2em;
 }
 
-/* Nav */
+
 .ui.message {
   background-color: rga(238, 238, 238);
   box-shadow: none;
@@ -67,7 +69,6 @@ body {
   background-color: #a0a0a0;
 }
 
-/* Mobile */
 .tablet.mobile.only .header,
 .ui.icon.button > .icon {
   color: #fff;
@@ -133,4 +134,6 @@ body {
 .ui.vertical.menu .header.item {
   text-transform: uppercase;
   color: #fff;
-}
+} 
+
+

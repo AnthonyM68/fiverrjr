@@ -12,13 +12,17 @@
     {{ encore_entry_link_tags('jquery_structure') }}
     {{ encore_entry_link_tags('uikit_css') }}
     {{ encore_entry_link_tags('semantic_css') }}
-    {{ encore_entry_link_tags('semantic_less') }}
+    {# {{ encore_entry_link_tags('semantic_less') }} #}
 
     {% endblock %}
 </head>
 
 <body>
     <header>{% include 'navbar/navbar.html.twig' %}</header>
+
+    
+
+
     <artcile>
         <div class="ui container">
             <div class="separator"></div>
@@ -34,8 +38,8 @@
     {{ encore_entry_script_tags('uikit-icons') }}
     {# {{ encore_entry_script_tags('bootstrap') }} #}
     {{ encore_entry_script_tags('semantic') }}
-    {# {{ encore_entry_script_tags('app') }} #}
-    {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {{ encore_entry_script_tags('app') }}
+    {# {% block importmap %}{{ importmap('app') }}{% endblock %} #}
     {% endblock %}
 </body>
 
