@@ -1,8 +1,16 @@
 /* body {
   min-height: 2000px;
 } */
+body {
+  background-color: blue !important;
+}
 
- .offices {
+.ui.fixed.borderless.huge.menu .ui.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.offices {
   color: #fff;
 }
 .flags a {
@@ -15,7 +23,7 @@
 
 .ui .computer.only .item {
   color: #fff;
-  display:flex;
+  display: flex;
   justify-content: space-between;
 }
 
@@ -47,7 +55,6 @@
 .ui.fixed.borderless.menu .row > a.header.item {
   font-size: 1.2em;
 }
-
 
 .ui.message {
   background-color: rga(238, 238, 238);
@@ -134,6 +141,4 @@
 .ui.vertical.menu .header.item {
   text-transform: uppercase;
   color: #fff;
-} 
-
-
+}

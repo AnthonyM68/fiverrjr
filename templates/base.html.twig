@@ -6,13 +6,13 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-    {% block stylesheets %}
-    {{ encore_entry_link_tags('jquery_ui_theme') }}
-    {{ encore_entry_link_tags('jquery_structure') }}
-    {{ encore_entry_link_tags('uikit_css') }}
-    {{ encore_entry_link_tags('semantic_css') }}
-    {{ encore_entry_link_tags('semantic_less') }}
-    {{ encore_entry_link_tags('app') }}
+        {% block stylesheets %}
+        {{ encore_entry_link_tags('jquery_ui_theme') }}
+        {{ encore_entry_link_tags('jquery_structure') }}
+        {{ encore_entry_link_tags('uikit_css') }}
+        {{ encore_entry_link_tags('semantic_css') }}
+        {{ encore_entry_link_tags('app_styles') }}
+        {# {{ encore_entry_link_tags('semantic_less') }} #}
     {% endblock %}
 </head>
 
@@ -27,11 +27,9 @@
     <footer>{% include 'footer/footer.html.twig' %}</footer>
 
     {% block javascripts %}
-    {{ encore_entry_script_tags('jquery') }}
     {{ encore_entry_script_tags('jquery_ui') }}
     {{ encore_entry_script_tags('uikit') }}
     {{ encore_entry_script_tags('uikit-icons') }}
-    {# {{ encore_entry_script_tags('bootstrap') }} #}
     {{ encore_entry_script_tags('semantic') }}
     {{ encore_entry_script_tags('app') }}
     {# {% block importmap %}{{ importmap('app') }}{% endblock %} #}

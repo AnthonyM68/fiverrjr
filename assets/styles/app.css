@@ -4,9 +4,6 @@
 .separator {
   height: 60px;
 }
-.title-home {
-  color: blue !important;
-}
 body {
-  background-color:red !important;
+  background-color: red !important;
 }

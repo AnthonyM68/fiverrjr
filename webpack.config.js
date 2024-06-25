@@ -1,5 +1,6 @@
 const Encore = require('@symfony/webpack-encore');
-const path = require('path'); // Ajoutez cette ligne
+const path = require('path');
+const webpack = require('webpack'); // Ajout de l'importation de webpack
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
 if (!Encore.isRuntimeEnvironmentConfigured()) {
@@ -18,12 +19,15 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
 
-    // Ajout des entrées pour jQuery et jQuery UI
-    .addEntry('jquery', './node_modules/jquery/dist/jquery.js')
+    // Ajout des entrées pour jQuery
+    // .addEntry('jquery', './node_modules/jquery/dist/jquery.js')
+    // .addEntry('jquery', './node_modules/jquery/dist/jquery.js')
+    // et jQuery UI
     .addEntry('jquery_ui', './node_modules/jquery-ui-dist/jquery-ui.js')
     .addStyleEntry('jquery_ui_theme', './node_modules/jquery-ui/dist/themes/redmond/theme.css')
     .addStyleEntry('jquery_structure', './node_modules/jquery-ui-dist/jquery-ui.structure.css')
 
+    // .addStyleEntry('app_styles', './assets/styles/app.css')
     // semantic-ui
     .addEntry('semantic', './semantic/dist/semantic.js')
     .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
@@ -42,6 +46,14 @@ Encore
     // app
     .addEntry('app', './assets/app.js')
 
+    .addStyleEntry('app_styles', [
+        './assets/styles/navbar.css',
+        './assets/styles/dropdown.css',
+        './assets/styles/login-register.css',
+        './assets/styles/app.css'
+    ])
+
+
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
@@ -53,6 +65,11 @@ Encore
     .enableLessLoader()
     .autoProvidejQuery()
     .enableBuildNotifications()
+    .addPlugin(new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery'
+    }))
     .configureDevServerOptions(options => {
         options.hot = true;
         options.liveReload = true;

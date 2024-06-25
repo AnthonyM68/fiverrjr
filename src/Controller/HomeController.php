@@ -13,6 +13,7 @@ class HomeController extends AbstractController
     {
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
+            'title_page' => 'Accueil'
         ]);
     }
 
@@ -21,6 +22,7 @@ class HomeController extends AbstractController
     {
         return $this->render('administrator/index.html.twig', [
             'controller_name' => 'HomeController',
+            'title_page' => 'Tableau de bord'
         ]);
     }
 }
