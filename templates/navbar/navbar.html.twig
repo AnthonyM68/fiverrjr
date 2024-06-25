@@ -48,56 +48,69 @@
     </div>
   </div>
 </div>
-{% endblock %}
+<style>
+  .visible {
+    display: block !important;
+  }
 
-{# {% block navbar %}
-<div class="ui fixed borderless huge menu">
-  <div class="ui grid">
-    <!-- Start: Desktop Nav -->
-    <div class="computer only row">
-      <div class="left menu">
-        <!-- Lien pour ouvrir le dropdown des thèmes -->
-        <div class="ui dropdown link item">
-          <i class="dropdown icon"></i>
-          Thèmes
-          <div class="menu">
-            {% for theme in get_navbar_data() %}
-            <div class="item ui dropdown">
-              <i class="dropdown icon"></i>
-              {{ theme.name }}
-              <div class="menu">
-                {% for category in theme.categories %}
-                <div class="item ui dropdown">
-                  <i class="dropdown icon"></i>
-                  {{ category.name }}
-                  <div class="menu">
-                    {% for course in category.courses %}
-                    <div class="item">{{ course.name }}</div>
-                    {% endfor %}
-                  </div>
-                </div>
-                {% endfor %}
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-      <!-- End: Desktop Nav -->
-      <div class="right menu">
-        {% if app.user %}
-        <a href="#" class="ui item">Bonjour {{ app.user.username }}</a>
-        <a href="{{ path('profile') }}" class="ui item">Profil</a>
-        <a href="{{ path('logout') }}" class="ui item">Se déconnecter</a>
-        {% else %}
-        <a href="{{ path('login') }}" class="ui item">Se connecter</a>
-        <a href="{{ path('register') }}" class="ui item">S'enregistrer</a>
-        {% endif %}
-        {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin') }}" class="ui item">Tableau de bord</a>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %} #}
+  .separator {
+    height: 60px;
+  }
+  body {
+    background-color:blue !important;
+    }
+
+
+  /* 
+.ui.fixed.borderless.huge.menu .ui.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+} */
+
+  /* Assurez-vous que les dropdowns sont visibles */
+  /*.ui.dropdown .menu {
+    display: block !important;
+    background-color: rgba(255, 0, 0, 0.1);
+
+  }*/
+
+  /* Largeur minimale pour les dropdowns */
+  .ui.vertical.menu .ui.dropdown .menu {
+    min-width: 500px !important;
+    /* Ajustez cette valeur selon vos besoins */
+    padding: 0;
+    box-shadow: none;
+    background-color: rgba(0, 255, 0, 0.1);
+    /* Fond vert clair pour vérifier la largeur */
+  }
+
+  /* Position des sous-menus */
+  .ui.vertical.menu .ui.dropdown .menu .ui.dropdown .menu {
+    top: 0;
+    /* Positionne le sous-menu aligné en haut du parent */
+    left: 100%;
+    /* Positionne le sous-menu à droite du parent */
+    margin-left: -1px;
+    /* Pour éviter les chevauchements */
+    min-width: 200px;
+    background-color: rgba(0, 0, 255, 0.1);
+    /* Fond bleu clair pour vérifier la position */
+  }
+
+  /* Ajustement du padding pour les items */
+  .ui.vertical.menu .ui.dropdown .menu .item {
+    padding: 10px 16px;
+    /* Ajustez selon vos besoins */
+    background-color: rgba(255, 255, 0, 0.1);
+    /* Fond jaune clair pour vérifier le padding */
+  }
+
+  /* Hauteur automatique pour les items du premier niveau */
+  .ui.vertical.menu .ui.dropdown .menu>.item {
+    height: auto;
+    background-color: rgba(255, 0, 255, 0.1);
+    /* Fond rose clair pour vérifier la hauteur */
+  }
+</style>
+{% endblock %}
