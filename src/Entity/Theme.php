@@ -75,6 +75,7 @@ class Theme
 
         return $this;
     }
+
     public function __toString()
     {
         return $this->nameTheme;

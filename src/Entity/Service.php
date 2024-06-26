@@ -27,7 +27,6 @@ class Service
 
     // #[ORM\Column(name: 'user_id', type: 'integer', nullable: true)]
     // private ?int $userId = null;
-
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)] // Assurez-vous que cette relation ne peut pas être nulle
     private ?User $user = null;

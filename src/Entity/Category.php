@@ -25,7 +25,7 @@ class Category
     private Collection $courses;
 
     #[ORM\ManyToOne(targetEntity: Theme::class, inversedBy: 'categories')]
-    #[ORM\JoinColumn(nullable:false)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Theme $theme = null;
 
     public function __construct()
@@ -69,7 +69,7 @@ class Category
     {
         return $this->courses;
     }
-    
+
     public function addCourse(Course $course): static
     {
         if (!$this->courses->contains($course)) {
@@ -91,7 +91,10 @@ class Category
 
         return $this;
     }
-
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
     public function __toString()
     {
         return $this->nameCategory;

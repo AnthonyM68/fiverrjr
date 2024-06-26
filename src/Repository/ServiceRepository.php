@@ -18,7 +18,7 @@ class ServiceRepository extends ServiceEntityRepository
     public function findByTerm($term)
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.title  LIKE :term')
+            ->andWhere('t.title  LIKE :term OR t.description LIKE :term')
             ->setParameter('term', '%' . $term . '%')
             ->getQuery()
             ->getResult();

@@ -27,12 +27,18 @@ class ThemeRepository extends ServiceEntityRepository
     public function searchByTermAllChilds($searchTerm)
     {
         return $this->createQueryBuilder('theme')
-            ->leftJoin('theme.categories', 'category')
-            ->leftJoin('category.courses', 'course')
-            ->andWhere('theme.nameTheme LIKE :searchTerm OR category.nameCategory LIKE :searchTerm OR course.nameCourse LIKE :searchTerm')
-            ->setParameter('searchTerm', '%' . $searchTerm . '%')
-            ->getQuery()
-            ->getResult();
+        ->leftJoin('theme.categories', 'category')
+        ->leftJoin('category.courses', 'course')
+        ->leftJoin('course.services', 'service')
+        ->addSelect('category', 'course', 'service')
+        ->where('theme.nameTheme LIKE :searchTerm')
+        ->orWhere('category.nameCategory LIKE :searchTerm')
+        ->orWhere('course.nameCourse LIKE :searchTerm')
+        ->orWhere('service.title LIKE :searchTerm')
+        ->orWhere('service.description LIKE :searchTerm')
+        ->setParameter('searchTerm', '%' . $searchTerm . '%')
+        ->getQuery()
+        ->getResult();
     }
     
     //    /**

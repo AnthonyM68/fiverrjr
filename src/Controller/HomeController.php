@@ -40,19 +40,38 @@ class HomeController extends AbstractController
     }
 
 
-    /*#[Route("/home/search", name: "home_search")]
-    public function search(Request $request): Response
+    #[Route("/home/search/all", name: "all_search")]
+    public function searchAll(Request $request): Response
     {
-        $searchTerm = $request->query->get('search_term'); // À adapter selon la méthode de recherche
-        // Requêtes pour chaque type d'entité
-         $themeResults = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
-        // dd($themeResults);
+        $formTheme = $this->createForm(SearchFormType::class, null, [
+            'search_table' => 'theme',
+            'search_label' => 'Recherchez votre service',
+        ]);
+        $formTheme->handleRequest($request);
+        $results = [];
+        $submittedFormName = null;
+       // $searchTerm = null;
+
+        if ($formTheme->isSubmitted() && $formTheme->isValid() && $request->request->get('submitted_form_type') === 'theme_category_course') {
+
+            $searchTerm = $formTheme->get('search_term')->getData();
+     
+            $results = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
+            if (empty($results)) {
+                $results['empty'] = true;
+            }
+            $submittedFormName = 'form_service';
+        }
+        // dd($results);
         return $this->render('home/index.html.twig', [
             'controller_name' => 'SearchController',
-            'title_page' => 'Résultats de la recherche',
-             'theme_results' => $themeResults,
+            'form_service' => $formTheme->createView(),
+            'results' => $results,
+            'search_term' => $searchTerm,
+            'submitted_form' => $submittedFormName,
         ]);
-    }*/
+    }
+
     #[Route("/home/service", name: "home_service_search")]
     public function search(Request $request): Response
     {
