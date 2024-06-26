@@ -3,5 +3,61 @@
 {% block title %}{{ title_page }}{% endblock %}
 
 {% block body %}
-<h1>{{ title_page }}</h1>
+
+<div class="ui container">
+    <div class="ui message">
+        <h1 class="ui huge header">
+            Recherchez votre service simplement et rapidement
+        </h1>
+        <p class="lead">
+            Recherchez simplement et efficacement grâce à nos fonctionnalités intuitives
+        </p>
+        {{ form_start(form_service, {'attr': {'id': 'form_service', 'class': 'ui form'}}) }}
+        {{ form_widget(form_service, {'attr': {'class': 'full-width-input'}}) }}
+        {# Input chacher pour transmettre correctement le type de formulaire soumis pour éviter les confusions #}
+        <input type="hidden" name="submitted_form_type" value="service">
+        {{ form_end(form_service) }}
+        {# <div class="ui label">Nb Th.</div> #}
+
+        <!-- End: Search -->
+    </div>
+</div>
+
+
+{% if submitted_form == 'form_service' and results.service|default %}
+<h2>Résultats</h2>
+<ul>
+    {% for service in results.service %}
+    <li>{{ service.title}}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if results.empty|default %}
+<h2>Aucun résultats</h2>
+{% endif %}
+
+{# Affichage des résultats pour les thèmes #}
+{# <h2>Résultats</h2>
+<ul>
+    {% for theme in theme_results %}
+    <li>{{ theme.nameTheme }}</li>
+
+    {% if theme.categories is not empty %}
+    <ul>
+        {% for category in theme.categories %}
+        <li>{{ category.nameCategory }}</li>
+
+        {% if category.courses is not empty %}
+        <ul>
+            {% for course in category.courses %}
+            <li>{{ course.nameCourse }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endfor %}
+</ul> #}
 {% endblock %}
