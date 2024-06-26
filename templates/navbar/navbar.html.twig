@@ -1,21 +1,21 @@
 {% block navbar %}
 <div class="ui fixed borderless huge menu">
   <div class="ui grid">
-    <!-- Start: Desktop Nav -->
     <div class="computer only row">
       <div class="left menu">
-        <!-- Lien pour ouvrir le dropdown des thèmes -->
-        <div class="ui dropdown link item">
-          <i class="dropdown icon"></i>
-          Thèmes
+        <div class="ui fluid dropdown link item">
+          <div class="item">
+            Thèmes
+            <i class="dropdown icon"></i>
+          </div>
           <div class="menu">
             {% for theme in get_navbar_data() %}
-            <div class="item ui dropdown">
+            <div class="item">
               <i class="dropdown icon"></i>
               {{ theme.name }}
               <div class="menu">
                 {% for category in theme.categories %}
-                <div class="item ui dropdown">
+                <div class="item">
                   <i class="dropdown icon"></i>
                   {{ category.name }}
                   <div class="menu">
@@ -31,7 +31,6 @@
           </div>
         </div>
       </div>
-      <!-- End: Desktop Nav -->
       <div class="right menu">
         {% if app.user %}
         <a href="#" class="ui item">Bonjour {{ app.user.username }}</a>

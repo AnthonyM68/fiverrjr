@@ -1,10 +1,27 @@
+/* Styles généraux pour la navbar */
+.ui.fixed.borderless.huge.menu {
+  width: 100%;
+  background-color: #fff;
+}
+
+.ui.grid {
+  width: 100%;
+}
+.computer.only.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.left.menu,
+.right.menu {
+  display: flex;
+  align-items: center;
+}
+
 /* body {
   min-height: 2000px;
 } */
-body {
-  background-color: blue !important;
-}
-
+/*
 .ui.fixed.borderless.huge.menu .ui.container {
   display: flex;
   justify-content: space-between;
@@ -37,7 +54,7 @@ body {
   color: #fff;
 }
 
-.ui.dropdown.item .menu {
+ .ui.dropdown.item .menu {
   background-color: #a0a0a0 !important;
 }
 .ui.menu .ui.dropdown .menu > .item {
@@ -50,7 +67,7 @@ body {
 .ui.menu .ui.dropdown .menu > .item:hover {
   background-color: #000000 !important;
   color: #fff !important;
-}
+} 
 
 .ui.fixed.borderless.menu .row > a.header.item {
   font-size: 1.2em;
@@ -142,3 +159,4 @@ body {
   text-transform: uppercase;
   color: #fff;
 }
+*/

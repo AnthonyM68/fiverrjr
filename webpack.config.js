@@ -19,21 +19,20 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
 
-    // Ajout des entrées pour jQuery
-    // .addEntry('jquery', './node_modules/jquery/dist/jquery.js')
-    // .addEntry('jquery', './node_modules/jquery/dist/jquery.js')
-    // et jQuery UI
+    // Ajouts des entrées
+
+    //jQuery UI
     .addEntry('jquery_ui', './node_modules/jquery-ui-dist/jquery-ui.js')
     .addStyleEntry('jquery_ui_theme', './node_modules/jquery-ui/dist/themes/redmond/theme.css')
     .addStyleEntry('jquery_structure', './node_modules/jquery-ui-dist/jquery-ui.structure.css')
-
-    // .addStyleEntry('app_styles', './assets/styles/app.css')
     // semantic-ui
     .addEntry('semantic', './semantic/dist/semantic.js')
     .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
     // semantic-themes
     .addStyleEntry('semantic_less', './semantic/src/semantic.less')
+
     // general
+
     // .addEntry('jquery_popup', './assets/styles/jquery.popup.minified.js') // ou .scss pour Sass
     // bootstrap 
     .addEntry('bootstrap', './node_modules/bootstrap/dist/js/bootstrap.js')
@@ -46,14 +45,13 @@ Encore
     // app
     .addEntry('app', './assets/app.js')
 
+    // assets personnalisés
     .addStyleEntry('app_styles', [
         './assets/styles/navbar.css',
         './assets/styles/dropdown.css',
         './assets/styles/login-register.css',
         './assets/styles/app.css'
     ])
-
-
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
@@ -65,11 +63,13 @@ Encore
     .enableLessLoader()
     .autoProvidejQuery()
     .enableBuildNotifications()
+    
     .addPlugin(new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery',
         'window.jQuery': 'jquery'
     }))
+    
     .configureDevServerOptions(options => {
         options.hot = true;
         options.liveReload = true;
