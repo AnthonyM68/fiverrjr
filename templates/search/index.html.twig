@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche{% endblock %}
+
+{% block body %}
+<div class="sperator"></div>
+
+<div class="ui grid">
+    <div class="four wide left attached column">
+        <div class="ui vertical fluid menu">
+
+            <div class="active teal item field">
+                {{ form_start(form_theme, {'attr': {'id': 'form_theme', 'class': 'ui form'}}) }}
+                {{ form_widget(form_theme, {'attr': {'class': 'full-width-input'}}) }}
+                {# Input chacher pour transmettre correctement le type de formulaire soumis pour éviter les confusions #}
+                <input type="hidden" name="submitted_form_type" value="theme">
+                {{ form_end(form_theme) }}
+                {# <div class="ui label">Nb Th.</div> #}
+            </div>
+            <div class="item field">
+                {{ form_start(form_category, {'attr': {'id': 'form_theme', 'class': 'ui form'}}) }}
+                {{ form_widget(form_category) }}
+                <input type="hidden" name="submitted_form_type" value="category">
+                {# Input chacher pour transmettre correctement le type de formulaire soumis pour éviter les confusions #}
+                {{ form_end(form_category, {'attr': {'class': 'full-width-input'}}) }}
+                
+                {# <div class="ui label">Nb Cat.</div> #}
+            </div>
+            <div class="item field">
+                {{ form_start(form_course, {'attr': {'id': 'form_theme', 'class': 'ui form'}}) }}
+                {{ form_widget(form_course) }}
+                <input type="hidden" name="submitted_form_type" value="course">
+                {# Input chacher pour transmettre correctement le type de formulaire soumis pour éviter les confusions #}
+                {{ form_end(form_course, {'attr': {'class': 'full-width-input'}}) }}
+                {# <div class="ui label">Nb Crs.</div> #}
+            </div>
+            
+            {# Next Work #}
+            <div class="item">
+                <div class="ui transparent icon input">
+                    <input type="text" placeholder="Autres...">
+                    <i class="search icon"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="twelve wide stretched column">
+
+        {# Affichage dynamique des résultats de recherche #}
+
+        {% if submitted_form == 'form_theme' and results.theme|default %}
+        <h2>Résultats pour Thème</h2>
+        <ul>
+            {% for theme in results.theme %}
+            <li>{{ theme.nameTheme }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if submitted_form == 'form_category' and results.category|default %}
+        <h2>Résultats pour Catégorie</h2>
+        <ul>
+            {% for category in results.category %}
+            <li>{{ category.nameCategory }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if submitted_form == 'form_course' and results.course|default %}
+        <h2>Résultats pour Sous-catégorie</h2>
+        <ul>
+            {% for course in results.course %}
+            <li>{{ course.nameCourse }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {# Si aucun résultats trouvés #}
+        {% if results.empty|default %}
+            <h2>Aucun résultats</h2>
+        {% endif %}
+    </div>
+</div>
+<div class="sperator"></div>
+{% endblock %}

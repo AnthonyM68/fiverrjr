@@ -5,7 +5,19 @@ import './styles/login-register.css';
 import './styles/app.css';
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Configuration du dropdown au survol
+
+  // Admin filtres
+  $('.ui.vertical.fluid.menu .item').on('click', function () {
+    // Récupérer l'attribut data-tab correspondant
+    let tabId = $(this).data('tab');
+    // Désactiver tous les segments
+    $('.ui.tab.segment').removeClass('active');
+    // Activer le segment correspondant
+    $('.ui.tab.segment[data-tab="' + tabId + '"]').addClass('active');
+  });
+
+
+  // Configuration du dropdown navbar Theme Category Course
   $('.ui.dropdown').dropdown({
     on: 'hover',
     action: 'nothing',
@@ -22,15 +34,14 @@ document.addEventListener('DOMContentLoaded', function () {
       if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
         adjustAllMenuHeights();
         // fixSubMenuPositions(); 
-        break; 
+        break;
       } else if (mutation.type === 'childList' && mutation.removedNodes.length > 0) {
         adjustAllMenuHeights();
         // fixSubMenuPositions(); 
-        break; 
+        break;
       }
     }
   });
-
   const container = document.querySelector('.ui.fixed.borderless.huge.menu');
   observer.observe(container, { childList: true, subtree: true });
 

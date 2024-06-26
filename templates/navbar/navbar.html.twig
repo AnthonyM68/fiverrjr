@@ -3,11 +3,20 @@
   <div class="ui grid">
     <div class="computer only row">
       <div class="left menu">
+
+        <div class="">
+          <a href="{{ path('home') }}" class="item">Entrepreneurs</a>
+        </div>
+        <div class="">
+          <a href="{{ path('home') }}" class="item">Développeurs</a>
+        </div>
+
         <div class="ui fluid dropdown link item">
           <div class="item">
             Thèmes
             <i class="dropdown icon"></i>
           </div>
+
           <div class="menu">
             {% for theme in get_navbar_data() %}
             <div class="item">
@@ -29,6 +38,11 @@
             </div>
             {% endfor %}
           </div>
+
+        </div>
+
+        <div class="">
+          <a href="{{ path('search') }}" class="item">Recherche avancée</a>
         </div>
       </div>
       <div class="right menu">

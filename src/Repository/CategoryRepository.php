@@ -15,7 +15,14 @@ class CategoryRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Category::class);
     }
-
+    public function findByTerm($term)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.nameCategory  LIKE :term')
+            ->setParameter('term', '%' . $term . '%')
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return Category[] Returns an array of Category objects
     //     */

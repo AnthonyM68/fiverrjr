@@ -35,9 +35,13 @@ class ServiceController extends AbstractController
             'services' => $services
         ]);
     }
+
+    
     #[Route('/service/new', name: 'new_service')]
     #[Route('/service/edit/{id}', name: 'edit_service')]
+
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
+
     public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         if (!$service) {

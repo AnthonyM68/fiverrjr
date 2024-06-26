@@ -2,5 +2,16 @@
   display: block !important;
 }
 .separator {
-  height: 60px;
+  height: 100px;
+}
+/* search motor  */
+.full-width-input {
+  width: 100% !important; /* Prend toute la largeur disponible */
+  box-sizing: border-box; 
+}
+
+/* On masque les * des required des moteur de recherche*/
+label.required::after {
+  content: "";
+  display: none !important;
 }

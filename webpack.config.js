@@ -50,6 +50,7 @@ Encore
         './assets/styles/navbar.css',
         './assets/styles/dropdown.css',
         './assets/styles/login-register.css',
+        './assets/styles/admin.css',
         './assets/styles/app.css'
     ])
     .splitEntryChunks()

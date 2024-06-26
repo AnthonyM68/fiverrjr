@@ -7,41 +7,38 @@
 
 
 <div class="ui grid">
-    <div class="four wide column">
-        <div class="ui vertical menu">
-            <a class="active teal item">
-                Inbox
-                <div class="ui teal left pointing label">1</div>
-            </a>
-            <a class="item">
-                Spam
-                <div class="ui label">51</div>
-            </a>
-            <a class="item">
-                Updates
-                <div class="ui label">1</div>
-            </a>
+    <div class="four wide left attached column">
+        <div class="ui vertical fluid menu">
+            <div class="active teal item">
+                {{ form_start(form_theme) }}
+                {{ form_widget(form_theme) }}
+                {{ form_end(form_theme) }}
+                <div class="ui label">Nb Th.</div>
+            </div>
+            <div class="item">
+                {{ form_start(form_category) }}
+                {{ form_widget(form_category) }}
+                {{ form_end(form_category) }}
+                <div class="ui label">Nb Cat.</div>
+            </div>
+            <div class="item">
+                {{ form_start(form_course) }}
+                {{ form_widget(form_course) }}
+                {{ form_end(form_course) }}
+                <div class="ui label">Nb Crs.</div>
+            </div>
             <div class="item">
                 <div class="ui transparent icon input">
-                    <input type="text" placeholder="Search mail...">
+                    <input type="text" placeholder="Autres...">
                     <i class="search icon"></i>
                 </div>
             </div>
         </div>
+        
     </div>
     <div class="twelve wide stretched column">
-        <div class="ui tab segment active" data-tab="bio-tab">
-            This is an stretched grid column. This segment will always match the tab height
-        </div>
-        <div class="ui tab segment" data-tab="pics-tab">
-            This is an stretched grid column. This segment will always match the tab height
-        </div>
-        <div class="ui tab segment" data-tab="companies-tab">
-            This is an stretched grid column. This segment will always match the tab height
-        </div>
-        <div class="ui tab segment" data-tab="links-tab">
-            This is an stretched grid column. This segment will always match the tab height
-        </div>
+        <!-- Contenu dynamique pour afficher les résultats de la recherche -->
+        <!-- Vous pouvez laisser cette partie vide pour l'instant -->
     </div>
 </div>
 
