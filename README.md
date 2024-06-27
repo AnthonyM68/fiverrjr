@@ -68,11 +68,8 @@ $ npm install
 Utilisez la base de données fournie dans le dépot et modifiez le fichier .env si besoin
 
 > DATABASE_URL="mysql://root@127.0.0.1:3306/fiverrjr"
-> MAILER_DSN=smtp://localhost:1025
-fichier
-> .env
 
-```php
+> MAILER_DSN=smtp://localhost:1025
 
 <h3 align="center">Languages and Tools:</h3>
 <div align="center">
