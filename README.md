@@ -1,5 +1,6 @@
 # Bienvenue sur notre plateforme d'échange de services !
-## Sommaire
+
+### Sommaire
 •	Introduction
 •	Objectif du Projet
 •	Fonctionnalités Principales
@@ -9,20 +10,22 @@
 •	Contributions
 •	Contact
 
-## Introduction
+### Introduction
 Bienvenue sur ma plateforme d'échange de services dédiée aux entrepreneurs et développeurs de la région Alsace (Haut-Rhin, Bas-Rhin). Mon application offre une expérience simplifiée et efficace pour la mise en relation de clients à la recherche de services spécifiques et de développeurs prêts à les offrir.
 
-## Objectif du Projet
+### Objectif du Projet
 L'objectif principal de mon projet, réalisé dans le cadre de mon examen de fin de formation de développeur web, est de créer une plateforme intuitive et accessible, inspirée des meilleures pratiques d'UI/UX, tout en maintenant un design sobre et clair. Ma mission est de favoriser l'échange de compétences et de services au sein de notre communauté locale.
 
-## Fonctionnalités Principales
+### Fonctionnalités Principales
+
 •	Catégorisation avancée des services : Thèmes, Catégories, Sous-Catégories jusqu'au niveau de service spécifique.
 •	Inscription et Profils Utilisateur : Gestion complète des profils pour développeurs juniors et entrepreneurs.
 •	Interface d'Administration : Outil de gestion de contenu pour les administrateurs.
 •	Dispositif de Facturation : Système intégré pour la gestion des transactions entre utilisateurs.
 •	Accessibilité et Design Responsif : Couleurs simples et claires conformes aux normes d'accessibilité.
 
-## Technologies Utilisées
+### Technologies Utilisées
+
 •	Symfony PHP Framework
 •	Doctrine ORM
 •	Twig Template Engine
@@ -31,13 +34,15 @@ L'objectif principal de mon projet, réalisé dans le cadre de mon examen de fin
 
 ## Organisation du Projet
 
-## Le projet est structuré en plusieurs modules principaux :
+### Le projet est structuré en plusieurs modules principaux :
+
 •	Backend : Gestion des données et logique métier.
 •	Frontend : Interface utilisateur basée sur des templates Twig.
 •	Administration : Interface d'administration sécurisée.
+
 ## Installation et Utilisation
 
-## Pour installer et utiliser notre application, suivez les instructions suivantes :
+### Pour installer et utiliser notre application, suivez les instructions suivantes :
 
 • Clonez le repository depuis GitHub.
 • Installez les dépendances avec Composer.
@@ -45,19 +50,19 @@ L'objectif principal de mon projet, réalisé dans le cadre de mon examen de fin
 • Lancez le serveur Webpack.
 • Lancez le serveur Symfony.
 
-## Contributions
+### Contributions
 S’agissant d’un projet d’examen la contribution n’est pas envisageable.
-## Contact
+### Contact
 Pour toute question ou commentaire, n'hésitez pas à nous contacter via notre page GitHub.
 
-# Schémas :
+### Schémas :
 
 > Réalisation des schémas conceptuels de données :
 > ![MCD](https://github.com/AnthonyM68/fiverrjr/blob/master/MCD.jpg)
 > ![UML](https://github.com/AnthonyM68/fiverrjr/blob/master/UML.jpg)
 > ![MLD](https://github.com/AnthonyM68/fiverrjr/blob/master/MLD.jpg)
 
-# NOTE :
+### NOTE :
 ```php
 $ git clone https://github.com/AnthonyM68/fiverrjr.git
 ```
