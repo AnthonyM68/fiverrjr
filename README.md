@@ -1,13 +1,13 @@
 # Bienvenue sur notre plateforme d'échange de services !
 ## Sommaire
-1.	Introduction
-2.	Objectif du Projet
-3.	Fonctionnalités Principales
-4.	Technologies Utilisées
-5.	Organisation du Projet
-6.	Installation et Utilisation
-7.	Contributions
-8.	Contact
+-	Introduction
+-	Objectif du Projet
+-	Fonctionnalités Principales
+-	Technologies Utilisées
+-	Organisation du Projet
+-	Installation et Utilisation
+-	Contributions
+-	Contact
 
 ## Introduction
 Bienvenue sur ma plateforme d'échange de services dédiée aux entrepreneurs et développeurs de la région Alsace (Haut-Rhin, Bas-Rhin). Mon application offre une expérience simplifiée et efficace pour la mise en relation de clients à la recherche de services spécifiques et de développeurs prêts à les offrir.
@@ -39,11 +39,11 @@ L'objectif principal de mon projet, réalisé dans le cadre de mon examen de fin
 
 ## Pour installer et utiliser notre application, suivez les instructions suivantes :
 
-1.	Clonez le repository depuis GitHub.
-2.	Installez les dépendances avec Composer.
-3.	Configurez votre base de données MySQL.
-4.	Lancez le serveur Webpack.
-5.	Lancez le serveur Symfony.
+- Clonez le repository depuis GitHub.
+- Installez les dépendances avec Composer.
+- Configurez votre base de données MySQL.
+- Lancez le serveur Webpack.
+- Lancez le serveur Symfony.
 
 ## Contributions
 S’agissant d’un projet d’examen la contribution n’est pas envisageable.
