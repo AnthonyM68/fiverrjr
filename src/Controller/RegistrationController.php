@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+// Importation des classes nécessaires
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\AppAuthenticator;
@@ -23,7 +23,7 @@ class RegistrationController extends AbstractController
     public function __construct(private EmailVerifier $emailVerifier)
     {
     }
-
+    // Route par la page de connection
     #[Route('/register', name: 'register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
@@ -62,6 +62,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
+    // Traitement de l'Email de comfirmation d'inscription
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
     {

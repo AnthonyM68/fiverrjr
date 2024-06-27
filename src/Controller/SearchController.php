@@ -1,8 +1,7 @@
 <?php
 
-
 namespace App\Controller;
-
+// Importation des classes nécessaires
 use App\Entity\Theme;
 use App\Entity\Course;
 use App\Entity\Category;

@@ -1,9 +1,6 @@
 {% extends 'base.html.twig' %}
 
-
-
 {% block body %}
-
 <div class="ui container">
     <div class="ui message">
         <h1 class="ui huge header">
@@ -12,82 +9,55 @@
         <p class="lead">
             Simple et efficace grâce à nos fonctionnalités intuitives...
         </p>
+        {# Formulaire de recherche, commençant ici #}
         {{ form_start(form_service, {'attr': {'id': 'theme_category_course', 'class': 'ui form'}}) }}
         {{ form_widget(form_service, {'attr': {'class': 'full-width-input'}}) }}
-        {# Input chacher pour transmettre correctement le type de formulaire soumis pour éviter les confusions #}
+        {# Champ caché pour transmettre correctement le type de formulaire soumis pour éviter les confusions #}
         <input type="hidden" name="submitted_form_type" value="theme_category_course">
         {{ form_end(form_service, {'attr': {'class': 'full-width-input'}}) }}
-        {# <div class="ui label">Nb Th.</div> #}
-
-        <!-- End: Search -->
     </div>
 </div>
+
+{# Vérification si le formulaire soumis est 'form_service' et s'il y a des résultats #}
 {% if submitted_form == 'form_service' and results|default %}
 <h2>Résultats</h2>
 <ul>
-    {% if results|default %}
-    {% for result in results %}
-        {% if result.nameTheme is defined and result.nameTheme|lower is not empty and result.nameTheme|lower matches '/.*' ~ search_term ~ '.*/' %}
-            <li>{{ result.nameTheme }}</li>
-        {% endif %}
-        {% for category in result.categories %}
-        {{ search_term  }}
-
-        {# bug a fixer  #}
-            {% if category.nameCategory is defined and category.nameCategory|lower is not empty  %}
-                <li>{{ category.nameCategory }}</li>
-            {% endif %}
-            {% for course in category.courses %}
-                {% if course.nameCourse is defined and course.nameCourse|lower is not empty %}
-                    <li>{{ course.nameCourse }}</li>
-                {% endif %}
-                {% for service in course.services %}
-                    {% if service.title is defined and service.title|lower is not empty and service.title|lower matches '/.*' ~ search_term ~ '.*/' %}
-                        <li>{{ service.title }}</li>
-                    {% endif %}
-                    {% if service.description is defined and service.description|lower is not empty and service.description|lower matches '/.*' ~ search_term ~ '.*/' %}
-                        <li>{{ service.description }}</li>
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-        {% endfor %}
-    {% endfor %}
-{% else %}
+    {# Afficher un message si aucun résultat n'est trouvé #}
+    {% if results.empty|default %}
     <h2>Aucun résultats</h2>
-{% endif %}
-</ul>
-{# <ul>
-    {% if results|default %}
-    {% for result in results %}
-        {% if result.nameTheme is defined and result.nameTheme|lower is not empty %}
-            <li>{{ result.nameTheme }}</li>
-        {% endif %}
-        {% for category in result.categories %}
-            {% if category.nameCategory is defined and category.nameCategory|lower is not empty %}
-                <ul>
-                    <li>{{ category.nameCategory }}</li>
-                    {% for course in category.courses %}
-                        {% if course.nameCourse is defined and course.nameCourse|lower is not empty %}
-                            <ul>
-                                <li>{{ course.nameCourse }}</li>
-                                {% for service in course.services %}
-                                    {% if service.title is defined and service.title|lower is not empty %}
-                                        <li>{{ service.title }}</li>
-                                    {% endif %}
-                                    {% if service.description is defined and service.description|lower is not empty %}
-                                        <li>{{ service.description }}</li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
     {% else %}
-        <h2>Aucun résultats</h2>
+    {# Conversion du terme de recherche en minuscules pour une comparaison insensible à la casse #}
+    {% set search_term_lower = search_term|lower %}
+
+    {# Boucle à travers les résultats et affichage si le terme de recherche est trouvé #}
+    {% for result in results %}
+    {% if result.nameTheme is defined and result.nameTheme|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
+    <li>{{ result.nameTheme }}</li>
     {% endif %}
-</ul> #}
+
+    {% for category in result.categories %}
+    {% if category.nameCategory is defined and category.nameCategory|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
+    <li>{{ category.nameCategory }}</li>
+    {% endif %}
+
+    {% for course in category.courses %}
+    {% if course.nameCourse is defined and course.nameCourse|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
+    <li>{{ course.nameCourse }}</li>
+    {% endif %}
+
+    {% for service in course.services %}
+    {% if service.title is defined and service.title|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
+    <li>{{ service.title }}</li>
+    {% endif %}
+
+    {% if service.description is defined and service.description|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
+    <li>{{ service.description }}</li>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+    {% endfor %}
+    {% endfor %}
+    {% endif %}
+</ul>
 {% endif %}
 {% endblock %}

@@ -15,15 +15,16 @@ class ThemeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Theme::class);
     }
-    // Requête pour rechercher un term uniquement dans la table Theme
-    public function findByTerm($term)
+    // Requête pour rechercher un searchterm uniquement dans la table Theme
+    public function findByTerm($searchterm)
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.nameTheme  LIKE :term')
-            ->setParameter('term', '%' . $term . '%')
+            ->setParameter('term', '%' . $searchterm . '%')
             ->getQuery()
             ->getResult();
     }
+     // Requête pour rechercher un searchterm à partir de Theme->Category/Course/Service
     public function searchByTermAllChilds($searchTerm)
     {
         return $this->createQueryBuilder('theme')

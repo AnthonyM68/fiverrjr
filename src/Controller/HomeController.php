@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+// Importation des classes nécessaires
 use App\Entity\Theme;
 use App\Entity\Course;
 use App\Entity\Service;
@@ -16,11 +16,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class HomeController extends AbstractController
 {
     private $entityManager;
-
+    // Constructeur pour injecter l'EntityManager
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
+    /**
+     * Route pour la page d'accueil
+     *
+     * @return Response
+     */
     #[Route('/home', name: 'home')]
     public function index(): Response
     {
@@ -29,7 +34,11 @@ class HomeController extends AbstractController
             'title_page' => 'Accueil'
         ]);
     }
-
+    /**
+     * Page d'administration
+     *
+     * @return Response
+     */
     #[Route('/admin', name: 'admin')]
     public function administrator(): Response
     {
@@ -38,11 +47,16 @@ class HomeController extends AbstractController
             'title_page' => 'Tableau de bord'
         ]);
     }
-
-
+    /**
+     * Route pour la recherche dans toutes les entités
+     *
+     * @param Request $request
+     * @return Response
+     */
     #[Route("/home/search/all", name: "all_search")]
     public function searchAll(Request $request): Response
     {
+        // Création et gestion du formulaire de recherche
         $formTheme = $this->createForm(SearchFormType::class, null, [
             'search_table' => 'theme',
             'search_label' => 'Recherchez votre service',
@@ -50,19 +64,19 @@ class HomeController extends AbstractController
         $formTheme->handleRequest($request);
         $results = [];
         $submittedFormName = null;
-       // $searchTerm = null;
-
+        // Vérification si le formulaire est soumis et valide
         if ($formTheme->isSubmitted() && $formTheme->isValid() && $request->request->get('submitted_form_type') === 'theme_category_course') {
-
+            // On récupére les données de l'input
             $searchTerm = $formTheme->get('search_term')->getData();
-     
+            // Recherche des résultats correspondants au terme de recherche
             $results = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
+            // Si aucun résultat n'est trouvé, on ajoute un indicateur 'empty'
             if (empty($results)) {
                 $results['empty'] = true;
             }
             $submittedFormName = 'form_service';
         }
-        // dd($results);
+        // Rendu de la vue avec les résultats de la recherche
         return $this->render('home/index.html.twig', [
             'controller_name' => 'SearchController',
             'form_service' => $formTheme->createView(),
@@ -71,10 +85,16 @@ class HomeController extends AbstractController
             'submitted_form' => $submittedFormName,
         ]);
     }
-
+    /**
+     * Route pour la recherche dans l'entité Service
+     *
+     * @param Request $request
+     * @return Response
+     */
     #[Route("/home/service", name: "home_service_search")]
     public function search(Request $request): Response
     {
+        // Création et gestion du formulaire de recherche
         $formService = $this->createForm(SearchFormType::class, null, [
             'search_table' => 'service',
             'search_label' => 'Recherchez votre service',
@@ -82,18 +102,19 @@ class HomeController extends AbstractController
         $formService->handleRequest($request);
         $results = [];
         $submittedFormName = null;
-
+        // Vérification si le formulaire est soumis et valide
         if ($formService->isSubmitted() && $formService->isValid() && $request->request->get('submitted_form_type') === 'service') {
-
+            // On récupére les données de l'input
             $searchTerm = $formService->get('search_term')->getData();
-            
+            // Recherche des résultats correspondants au terme de recherche dans l'entité Service
             $results['service'] = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
-            
+            // Si aucun résultat n'est trouvé, on ajoute un indicateur 'empty'
             if (empty($results['service'])) {
                 $results['empty'] = true;
             }
             $submittedFormName = 'form_service';
         }
+        // Rendu de la vue avec les résultats de la recherche
         return $this->render('home/index.html.twig', [
             'controller_name' => 'SearchController',
             'title_page' => 'Résultats de la recherche',

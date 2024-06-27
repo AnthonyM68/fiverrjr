@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+// Importation des classes nécessaires
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
