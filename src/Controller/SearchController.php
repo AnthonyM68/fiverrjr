@@ -4,8 +4,10 @@ namespace App\Controller;
 // Importation des classes nécessaires
 use App\Entity\Theme;
 use App\Entity\Course;
+use App\Entity\Service;
 use App\Entity\Category;
 use App\Form\SearchFormType;
+use App\Form\ServiceSearchFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +26,6 @@ class SearchController extends AbstractController
     #[Route("/search", name: "search")]
     public function search(Request $request): Response
     {
-
         // Création des trois instances de formulaire pour chaque type de recherche
         $formTheme = $this->createForm(SearchFormType::class, null, [
             'search_table' => 'theme',
@@ -38,7 +39,6 @@ class SearchController extends AbstractController
             'search_table' => 'course',
             'search_label' => 'Par Sous-Catégorie:',
         ]);
-
         // Gestion de la soumission des formulaires
         $formTheme->handleRequest($request);
         $formCategory->handleRequest($request);
@@ -47,9 +47,7 @@ class SearchController extends AbstractController
         // Déclaration des résultats de recherche
         $results = [];
         $submittedFormName = null;
-
         // Traitement des soumissions de formulaire et exécution des requêtes
-
         // Chaque formulaire est vérifier par l'attribut value de l'input hidden pour éviter la confusion des formulaires
         if ($formTheme->isSubmitted() && $formTheme->isValid() && $request->request->get('submitted_form_type') === 'theme') {
             $searchTerm = $formTheme->get('search_term')->getData();
@@ -75,6 +73,22 @@ class SearchController extends AbstractController
             }
             $submittedFormName = 'form_course';
         }
+         // Gestion du formulaire personnalisé
+         if ($request->isMethod('POST') && $request->request->has('service_search_term')) {
+            $searchTerm = $request->request->get('custom_search_term');
+            
+            $results['service'] = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
+          
+            if (empty($results['service'])) {
+                $results['empty'] = true;
+            }
+            $submittedFormName = 'form_service';
+        }
+        // Comptage des enregistrements
+        $themeCount = $this->entityManager->getRepository(Theme::class)->countAll();
+        $categoryCount = $this->entityManager->getRepository(Category::class)->countAll();
+        $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
+        $serviceCount = $this->entityManager->getRepository(Service::class)->countAll();
 
         return $this->render('search/index.html.twig', [
             'controller_name' => 'SearchController',
@@ -84,6 +98,11 @@ class SearchController extends AbstractController
             'form_course' => $formCourse->createView(),
             'results' => $results,
             'submitted_form' => $submittedFormName,
+            'theme_count' => $themeCount,
+            'category_count' => $categoryCount,
+            'course_count' => $courseCount,
+            'service_count' => $serviceCount,
+            'errors' => $formTheme->getErrors(true), // Ajoutez les erreurs ici
         ]);
     }
 }

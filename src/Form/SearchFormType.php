@@ -21,7 +21,7 @@ class SearchFormType extends AbstractType
                 ],
                 'attr' => [
                     'readonly' => true,
-                    //'style' => 'display:none'
+                    'style' => 'display:none'
                 ],
                 'data' => $options['search_table'],
             ])
@@ -32,7 +32,8 @@ class SearchFormType extends AbstractType
                     'class' => 'required', // Ajoutez une classe CSS spéciale ici
                 ],
             ])
-            ->add('Valider', SubmitType::class, [
+            ->add('submit', SubmitType::class, [
+                'label' => 'Rechercher',
                 'attr' => [
                     'class' => 'ui-button ui-widget ui-corner-all'
                 ]

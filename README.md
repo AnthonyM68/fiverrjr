@@ -73,16 +73,16 @@ $ npm install
 Utilisez la base de données fournie dans le dépot et modifiez le fichier .env si besoin
 
 > DATABASE_URL="mysql://root@127.0.0.1:3306/fiverrjr"
-
 > MAILER_DSN=smtp://localhost:1025
 
 ```php
-$ npm run dev-server 
-```
-et depuis une autre console...
-```php
 $ symfony serve -d
 ```
+et depuis une autre console CMD, MINGW64:
+```php
+$ npm run dev-server 
+```
+attendez la fin des compilations et travaillez!
 
 <h3 align="center">Languages and Tools:</h3>
 <div align="center">

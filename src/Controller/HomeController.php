@@ -27,34 +27,7 @@ class HomeController extends AbstractController
      * @return Response
      */
     #[Route('/home', name: 'home')]
-    public function index(): Response
-    {
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
-            'title_page' => 'Accueil'
-        ]);
-    }
-    /**
-     * Page d'administration
-     *
-     * @return Response
-     */
-    #[Route('/admin', name: 'admin')]
-    public function administrator(): Response
-    {
-        return $this->render('administrator/index.html.twig', [
-            'controller_name' => 'HomeController',
-            'title_page' => 'Tableau de bord'
-        ]);
-    }
-    /**
-     * Route pour la recherche dans toutes les entités
-     *
-     * @param Request $request
-     * @return Response
-     */
-    #[Route("/home/search/all", name: "all_search")]
-    public function searchAll(Request $request): Response
+    public function index(Request $request): Response
     {
         // Création et gestion du formulaire de recherche
         $formTheme = $this->createForm(SearchFormType::class, null, [
@@ -63,6 +36,7 @@ class HomeController extends AbstractController
         ]);
         $formTheme->handleRequest($request);
         $results = [];
+        $searchTerm= null;
         $submittedFormName = null;
         // Vérification si le formulaire est soumis et valide
         if ($formTheme->isSubmitted() && $formTheme->isValid() && $request->request->get('submitted_form_type') === 'theme_category_course') {
@@ -83,8 +57,24 @@ class HomeController extends AbstractController
             'results' => $results,
             'search_term' => $searchTerm,
             'submitted_form' => $submittedFormName,
+             'title_page' => 'Accueil'
         ]);
     }
+    /**
+     * Page d'administration
+     *
+     * @return Response
+     */
+    #[Route('/admin', name: 'admin')]
+    public function administrator(): Response
+    {
+        return $this->render('administrator/index.html.twig', [
+            'controller_name' => 'HomeController',
+            'title_page' => 'Tableau de bord'
+        ]);
+    }
+
+
     /**
      * Route pour la recherche dans l'entité Service
      *

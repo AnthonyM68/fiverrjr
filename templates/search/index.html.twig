@@ -8,47 +8,47 @@
 <div class="ui grid">
     <div class="four wide left attached column">
         <div class="ui vertical fluid menu">
-
-            <div class="active teal item field">
+            <p>Date: <input type="text" id="datepicker"></p>
+            <div id="menu-service" class="item field {{ submitted_form == 'form_service' ? 'active teal' : '' }}">
+                <form method="post" action="{{ path('search') }}" class="ui form">
+                    <div class="ui icon input full-width-input">
+                        <input type="text" name="service_search_term">
+                        <i class="search icon"></i>
+                    </div>
+                    <input type="hidden" name="submitted_form_type" value="service">
+                    <button type="submit" class="ui button">Rechercher</button>
+                </form>
+                <div class="ui label">{{ service_count }}</div>
+            </div>
+            <div id="menu-theme" class="item field {{ submitted_form == 'form_theme' ? 'active teal' : '' }}">
                 {{ form_start(form_theme, {'attr': {'id': 'form_theme', 'class': 'ui form'}}) }}
-                {{ form_widget(form_theme, {'attr': {'class': 'full-width-input'}}) }}
-                {# Input chacher pour transmettre correctement le type de formulaire soumis pour éviter les confusions #}
+                {{ form_row(form_theme.search_term) }}
+                {{ form_row(form_theme.submit) }}
                 <input type="hidden" name="submitted_form_type" value="theme">
                 {{ form_end(form_theme) }}
-                {# <div class="ui label">Nb Th.</div> #}
+                <div class="ui label">{{ theme_count }}</div>
             </div>
-            <div class="item field">
-                {{ form_start(form_category, {'attr': {'id': 'form_theme', 'class': 'ui form'}}) }}
-                {{ form_widget(form_category) }}
+            <div id="menu-category" class="item field {{ submitted_form == 'form_category' ? 'active teal' : '' }}">
+                {{ form_start(form_category, {'attr': {'id': 'form_category', 'class': 'ui form'}}) }}
+                {{ form_row(form_category.search_term) }}
+                {{ form_row(form_category.submit) }}
                 <input type="hidden" name="submitted_form_type" value="category">
-                {# Input chacher pour transmettre correctement le type de formulaire soumis pour éviter les confusions #}
                 {{ form_end(form_category, {'attr': {'class': 'full-width-input'}}) }}
-                
-                {# <div class="ui label">Nb Cat.</div> #}
+                <div class="ui label">{{ category_count }}</div>
             </div>
-            <div class="item field">
-                {{ form_start(form_course, {'attr': {'id': 'form_theme', 'class': 'ui form'}}) }}
-                {{ form_widget(form_course) }}
+            <div id="menu-course" class="item field {{ submitted_form == 'form_course' ? 'active teal' : '' }}">
+                {{ form_start(form_course, {'attr': {'id': 'form_course', 'class': 'ui form'}}) }}
+                {{ form_row(form_course.search_term) }}
+                {{ form_row(form_course.submit) }}
                 <input type="hidden" name="submitted_form_type" value="course">
-                {# Input chacher pour transmettre correctement le type de formulaire soumis pour éviter les confusions #}
                 {{ form_end(form_course, {'attr': {'class': 'full-width-input'}}) }}
-                {# <div class="ui label">Nb Crs.</div> #}
+                <div class="ui label">{{ course_count }}</div>
             </div>
-            
-            {# Next Work #}
-            <div class="item">
-                <div class="ui transparent icon input">
-                    <input type="text" placeholder="Autres...">
-                    <i class="search icon"></i>
-                </div>
-            </div>
-        </div>
 
+        </div>
     </div>
     <div class="twelve wide stretched column">
-
         {# Affichage dynamique des résultats de recherche #}
-
         {% if submitted_form == 'form_theme' and results.theme|default %}
         <h2>Résultats pour Thème</h2>
         <ul>
@@ -75,9 +75,20 @@
             {% endfor %}
         </ul>
         {% endif %}
+
+        {% if submitted_form == 'form_service' and results.service|default %}
+        <h2>Résultats pour Service</h2>
+        <ul>
+            {% for service in results.service %}
+            <li>{{ service.title }}</li>
+            <li>{{ service.description }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
         {# Si aucun résultats trouvés #}
         {% if results.empty|default %}
-            <h2>Aucun résultats</h2>
+        <h2>Aucun résultats</h2>
         {% endif %}
     </div>
 </div>

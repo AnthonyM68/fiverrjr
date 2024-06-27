@@ -18,6 +18,9 @@ class Category
     #[ORM\Column(length: 50)]
     private ?string $nameCategory = null;
 
+    // a voir si necessaire...
+    private $services;
+
     /**
      * @var Collection<int, Course>
      */
