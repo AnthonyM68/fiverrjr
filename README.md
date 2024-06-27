@@ -71,8 +71,17 @@ Utilisez la base de données fournie dans le dépot et modifiez le fichier .env 
 
 > MAILER_DSN=smtp://localhost:1025
 
+```php
+$ npm run dev-server 
+```
+et depuis une autre console...
+```php
+$ symfony serve -d
+```
+
 <h3 align="center">Languages and Tools:</h3>
 <div align="center">
 <a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a>
+<a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://github.com/AwesomeLogos/logomono/blob/gh-pages/logos/symfony.svg" alt="mysql" width="40" height="40"/> </a>
 <a href="https://www.php.net" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg" alt="php" width="40" height="40"/> </a>
 </div>
