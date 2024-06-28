@@ -88,12 +88,12 @@
                     {% for service in course.services %}
                     {% if service.title|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
                     <li>
-                        <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title }}</a>
+                        <a href="{{ path('detail_service_home', { 'id': service.id }) }}">{{ service.title }}</a>
                     </li>
                     {% endif %}
                     {% if service.description|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
                     <li>
-                        <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.description }}</a>
+                        <a href="{{ path('detail_service_home', { 'id': service.id }) }}">{{ service.description }}</a>
                     </li>
                     {% endif %}
                     {% endfor %}
@@ -108,8 +108,7 @@
         {% endfor %}
     </ul>
     {% endif %}
-
-
 </ul>
 {% endif %}
+
 {% endblock %}

@@ -7,6 +7,7 @@ use App\Entity\Course;
 use App\Entity\Service;
 use App\Entity\Category;
 use App\Form\SearchFormType;
+use App\Repository\ServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +37,7 @@ class HomeController extends AbstractController
         ]);
         $formTheme->handleRequest($request);
         $results = [];
-        $searchTerm= null;
+        $searchTerm = null;
         $submittedFormName = null;
         // Vérification si le formulaire est soumis et valide
         if ($formTheme->isSubmitted() && $formTheme->isValid() && $request->request->get('submitted_form_type') === 'theme_category_course') {
@@ -57,7 +58,19 @@ class HomeController extends AbstractController
             'results' => $results,
             'search_term' => $searchTerm,
             'submitted_form' => $submittedFormName,
-             'title_page' => 'Accueil'
+            'title_page' => 'Accueil'
+        ]);
+    }
+    /* Détails d'un service*/
+    #[Route('/home/service/{id}/detail', name: 'detail_service_home')]
+    public function detailService(Service $service, Request $request, ServiceRepository $serviceRepository): Response
+    {
+        $service = $serviceRepository->find(["id" => $service->getId()]);
+        // dd($service);
+        return $this->render('service/index.html.twig', [
+            'controller_name' => 'ServiceController',
+            'view_name' => 'formation/detail.html.twig',
+            "service" => $service
         ]);
     }
     /**

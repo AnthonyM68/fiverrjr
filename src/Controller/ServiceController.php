@@ -79,17 +79,7 @@ class ServiceController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    /* Détails d'un service*/
-    #[Route('/service/{id}/detail', name: 'detail_service')]
-    public function detailService(Service $service, Request $request, ServiceRepository $serviceRepository): Response
-    {
-        $service = $serviceRepository->findBy(["id" => $service->getId()]);
-        return $this->render('service/index.html.twig', [
-            'controller_name' => 'ServiceController',
-            'view_name' => 'formation/detail.html.twig',
-            "service" => $service
-        ]);
-    }
+
     /**
      * THEMES
      */

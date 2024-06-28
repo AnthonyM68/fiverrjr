@@ -4,6 +4,11 @@
 
 {% block body %}
 
+
+{% if service|default %}
+{{ service.title }}
+{% endif %}
+
 {% if form is defined %}
 {{ form_start(form, {'attr': {'class': 'ui form'}}) }}
 
