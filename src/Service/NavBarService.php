@@ -56,3 +56,4 @@ class NavBarService
         return $data;
     }
 }
+
