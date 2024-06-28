@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   CONSTRAINT `FK_64C19C159027487` FOREIGN KEY (`theme_id`) REFERENCES `theme` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.category : ~11 rows (environ)
+-- Listage des données de la table fiverrjr.category : ~12 rows (environ)
 INSERT INTO `category` (`id`, `name_category`, `theme_id`) VALUES
 	(1, 'Création de Sites Web', 1),
 	(2, 'Sites E-commerce', 1),
@@ -75,10 +75,6 @@ INSERT INTO `course` (`id`, `category_id`, `name_course`) VALUES
 	(18, 7, 'Développement d\'API RESTful'),
 	(19, 7, 'Intégration de services tiers (Stripe, PayPal, etc.)');
 
--- Listage de la structure de table fiverrjr. doctrine_migration_versions
-IF NOT EXISTS ;
-
--- Listage des données de la table fiverrjr.doctrine_migration_versions : ~1 rows (environ)
 -- Listage de la structure de table fiverrjr. messenger_messages
 CREATE TABLE IF NOT EXISTS `messenger_messages` (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -131,9 +127,10 @@ CREATE TABLE IF NOT EXISTS `service` (
   CONSTRAINT `FK_E19D9AD2A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.service : ~1 rows (environ)
+-- Listage des données de la table fiverrjr.service : ~2 rows (environ)
 INSERT INTO `service` (`id`, `user_id`, `order_id`, `course_id`, `title`, `description`, `price`, `duration`, `create_date`) VALUES
-	(1, 1, NULL, 1, 'test', 'test', 10, 60, '2024-06-26 17:32:18');
+	(1, 1, NULL, 1, 'Titre service 1 ', 'Proposition de service de l\'utilisateur Admin', 10, 60, '2024-06-26 17:32:18'),
+	(2, 2, NULL, 2, 'Titre service 2', 'Proposition de service de l\'utilisateur: user', 50, 300, '2024-06-28 06:15:16');
 
 -- Listage de la structure de table fiverrjr. theme
 CREATE TABLE IF NOT EXISTS `theme` (
