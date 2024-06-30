@@ -27,7 +27,7 @@ Encore
     .addStyleEntry('jquery_structure', './node_modules/jquery-ui-dist/jquery-ui.structure.css')
     // semantic-ui
     .addEntry('semantic', './semantic/dist/semantic.js')
-    .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
+    // .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
     // semantic-themes
     .addStyleEntry('semantic_less', './semantic/src/semantic.less')
 
@@ -51,8 +51,12 @@ Encore
         './assets/styles/dropdown.css',
         './assets/styles/login-register.css',
         './assets/styles/admin.css',
-        './assets/styles/app.css'
+        './assets/styles/app.css',
+        './assets/styles/scss_styles.scss'
     ])
+    // REACT
+    .enableReactPreset()
+    
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()

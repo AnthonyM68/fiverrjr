@@ -24,6 +24,8 @@
 @black: #333;
 @primaryColor: @green;
 @secondaryColor: @black;
+/* fiverrjr*/
+@pageBackground: #f0f0f0; // Gris clair
 
 /* Links */
 @linkColor: #4078c0;
@@ -46,3 +48,4 @@
 @infoTextColor: #4e575b;
 @warningTextColor: #613a00;
 @errorTextColor: #911;
+

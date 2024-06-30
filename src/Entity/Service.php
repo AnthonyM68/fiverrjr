@@ -49,6 +49,9 @@ class Service
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createDate = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $picture = null;
+
     public function __construct()
     {
         // $this->course = new ArrayCollection();
@@ -189,5 +192,17 @@ class Service
     public function __toString()
     {
         return $this->title;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(string $picture): static
+    {
+        $this->picture = $picture;
+
+        return $this;
     }
 }

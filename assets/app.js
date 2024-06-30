@@ -1,10 +1,96 @@
-import 'jquery';
-import './styles/navbar.css';
-import './styles/dropdown.css';
-import './styles/login-register.css';
-import './styles/app.css';
+// Importation des modules nécessaires
+// npm install @babel/preset-react@^7.0.0 --save-dev
+import React from 'react';  // Importer React
+import ReactDOM from 'react-dom';  // Importer ReactDOM pour rendre le composant dans le DOM
+// On importe le composant stickyFooter personnalisé
+import StickyParent from './js/components/StickyFooter.js';
+import 'jquery'; // Importer Jquery (global)
+import './styles/navbar.css';// CSS Composant personnalisés
+import './styles/dropdown.css';// CSS Composant personnalisés
+import './styles/login-register.css';// CSS Composant personnalisés
+import './styles/app.css';// CSS Application global personnalisé
 
 document.addEventListener('DOMContentLoaded', function () {
+  // Initialiser le modal
+  $('.ui.basic.modal').modal('show');
+
+  // Intercepter la soumission du formulaire
+  const forms = document.querySelectorAll('.ajax-form');
+  forms.forEach(form => {
+    form.addEventListener('submit', function (event) {
+      event.preventDefault(); // Empêche le rechargement de la page
+
+      // Récupère les données du formulaire
+      const formData = new FormData(this);
+      const actionUrl = this.getAttribute('action');
+
+      // Envoie les données du formulaire via Fetch API
+      fetch(actionUrl, {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(data => {
+          console.log('Response data:', data);
+          if (data.error) {
+            console.error('Error from server:', data.error);
+            document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + data.error + '</p>';
+            return;
+          }
+
+          // Mise à jour du contenu avec les résultats
+          let resultsHtml = '';
+
+          if (data.submitted_form === 'form_service' && data.results.service) {
+            resultsHtml += '<h3>Résultats pour Service</h3><div class="ui divided items">';
+            data.results.service.forEach(service => {
+              resultsHtml += `
+               <div class="item">
+                 <div class="image">
+                   <img src="${service.picture}">
+                 </div>
+                 <div class="content">
+                   <a class="header">${service.title}</a>
+                   <div class="meta">
+                     <span class="cinema">Union Square 14</span>
+                   </div>
+                   <div class="description">
+                     <p>${service.description}</p>
+                   </div>
+                   <div class="extra">
+                     <div class="ui label">IMAX</div>
+                     <div class="ui label"><i class="globe icon"></i> Additional Languages</div>
+                   </div>
+                 </div>
+               </div>`;
+            });
+            resultsHtml += '</div>';
+          }
+
+          if (data.submitted_form === 'form_theme' && data.results.theme) {
+            resultsHtml += '<h2>Résultats pour Thème</h2><ul>';
+            data.results.theme.forEach(theme => {
+              resultsHtml += `<li>${theme.nameTheme}</li>`;
+            });
+            resultsHtml += '</ul>';
+          }
+
+          if (data.results.empty) {
+            resultsHtml += '<h2>Aucun résultats</h2>';
+          }
+
+          document.getElementById('search-results').innerHTML = resultsHtml;
+        })
+        .catch(error => {
+          console.error('Erreur lors de la soumission du formulaire:', error);
+          document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
+        });
+    });
+  });
+
+
   // Admin filtres
   $('.ui.vertical.fluid.menu .item').on('click', function () {
     // Récupérer l'attribut data-tab correspondant
