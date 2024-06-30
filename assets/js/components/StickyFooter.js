@@ -1,7 +1,6 @@
 // Importation des modules nécessaires
-import React from 'react';  // Importer React
-import ReactDOM from 'react-dom';  // Importer ReactDOM pour rendre le composant dans le DOM
-import { Sticky } from 'semantic-ui-react';  // Importer le composant Sticky de Semantic UI React
+import React from 'react'; // Importer React
+import { Sticky } from 'semantic-ui-react'; // Importer le composant Sticky de Semantic UI React
 
 // Fonction pour tester la compatibilité du positionnement sticky
 const testSticky = () => {
@@ -30,7 +29,7 @@ class MySticky extends Sticky {
     // Redéfinir la méthode addListeners pour ajouter un ResizeObserver
     this.addListeners = args => {
       oldAddListeners(args);
-      
+
       myObserver = new ResizeObserver(entries => {
         entries.forEach(entry => {
           const { scrollContext } = props;
@@ -43,11 +42,11 @@ class MySticky extends Sticky {
 
       myObserver.observe(this.props.context);
     };
-    
+
     // Redéfinir la méthode removeListeners pour retirer le ResizeObserver
     this.removeListeners = args => {
       oldRemoveListeners(args);
-      
+
       myObserver.unobserve(this.props.context);
     };
   }
@@ -64,13 +63,13 @@ class MySticky extends Sticky {
 // Composant StickyFooter pour gérer le footer sticky
 class StickyFooter extends React.Component {
   state = {
-    supportsSticky: true,  // État initial pour vérifier le support de sticky
+    supportsSticky: true, // État initial pour vérifier le support de sticky
   };
 
   // Vérifier le support de sticky lors du montage du composant
   componentDidMount() {
     const supportsSticky = testSticky();
-    
+
     this.setState({
       supportsSticky,
     });
@@ -79,7 +78,7 @@ class StickyFooter extends React.Component {
   // Méthode pour rendre le footer
   renderFooter = () => {
     const { supportsSticky } = this.state;
-    
+
     return (
       <footer className={supportsSticky ? 'sticky' : null}>
         <h1>sticky footer</h1>
@@ -88,20 +87,20 @@ class StickyFooter extends React.Component {
   };
 
   // Méthode render principale
-  render() {    
+  render() {
     const { supportsSticky } = this.state;
-    
+
     return (
-       supportsSticky ? this.renderFooter() :
-       (
-         <MySticky 
-           context={this.props.context}
-          >
-           {this.renderFooter()}
-         </MySticky>
-       )
+      supportsSticky ? this.renderFooter() :
+      (
+        <MySticky 
+          context={this.props.context}
+        >
+          {this.renderFooter()}
+        </MySticky>
+      )
     );
-  }  
+  }
 }
 
 // Composant principal StickyParent
@@ -116,23 +115,23 @@ class StickyParent extends React.Component {
   // Méthode pour raccourcir la hauteur du contexte
   shortenContext = () => {
     const { contextRef } = this.state;
-    
+
     if (contextRef.offsetHeight <= 200) return;
-    
+
     contextRef.style.height = `${contextRef.offsetHeight - 200}px`;
   };
 
   // Méthode pour réinitialiser la hauteur du contexte
   resetContextHeight = () => {
     const { contextRef } = this.state;
-    
+
     contextRef.style.height = '1000px';
   };
 
   // Méthode render principale
   render() {
     const { contextRef } = this.state;
-    
+
     return (
       <div className="container">
         <div className="context" ref={this.handleContextRef}>
@@ -149,5 +148,4 @@ class StickyParent extends React.Component {
   }
 }
 
-// Rendre le composant StickyParent dans l'élément avec l'id 'root'
-ReactDOM.render(<StickyParent />, document.getElementById('root'));
+export default StickyParent;

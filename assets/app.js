@@ -1,16 +1,23 @@
 // Importation des modules nécessaires
-// npm install @babel/preset-react@^7.0.0 --save-dev
 import React from 'react';  // Importer React
-import ReactDOM from 'react-dom';  // Importer ReactDOM pour rendre le composant dans le DOM
-// On importe le composant stickyFooter personnalisé
-import StickyParent from './js/components/StickyFooter.js';
-import 'jquery'; // Importer Jquery (global)
-import './styles/navbar.css';// CSS Composant personnalisés
-import './styles/dropdown.css';// CSS Composant personnalisés
-import './styles/login-register.css';// CSS Composant personnalisés
-import './styles/app.css';// CSS Application global personnalisé
+import { createRoot } from 'react-dom/client'; // Nouvelle importation pour React 18
+import StickyParent from './js/components/StickyFooter'; // On importe le composant StickyFooter personnalisé
+import 'jquery'; // Importer jQuery (global)
+import './styles/navbar.css'; // CSS Composants personnalisés
+import './styles/dropdown.css'; // CSS Composants personnalisés
+import './styles/login-register.css'; // CSS Composants personnalisés
+import './styles/app.css'; // CSS Application global personnalisé
+
+// Initialisation de createRoot
+const rootElement = document.getElementById('root');
+const root = createRoot(rootElement);
+
+// Rendre le composant StickyParent
+root.render(<StickyParent />);
 
 document.addEventListener('DOMContentLoaded', function () {
+
+  
   // Initialiser le modal
   $('.ui.basic.modal').modal('show');
 

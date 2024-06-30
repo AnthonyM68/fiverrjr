@@ -1,37 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ServiceController!{% endblock %}
+{% block title %}{{title_page}}{% endblock %}
 
 {% block body %}
-
-
+<h1>{{title_page}}</h1>
+{# On vérifie que le formulaire existe avant de l'afficher #}
 {% if formAddCategory|default %}
-
-{{ form_start(formAddCategory, {'attr': {'class': 'ui form'}}) }}
-
+{{ form_start(formAddCategory, {'attr': {'class': 'ui form', 'novalidate': 'novalidate'}}) }}
+{# la class field pour afficher les erreurs #}
 <div class="field">
-    {{ form_row(formAddCategory.NameCategory) }}
-</div>
-<div class="field">
+    {{ form_row(formAddCategory.nameCategory) }}
     {{ form_row(formAddCategory.theme) }}
+    {{ form_row(formAddCategory.submit) }}
 </div>
-<div class="field">
-    {{ form_row(formAddCategory.Valider) }}
-</div>
-
 {{ form_end(formAddCategory) }}
 {% endif %}
 
-
 {% if categories | default %}
-
 <div class="ui list">
     {% for category in categories %}
     <div class="item">
         <i class="folder icon"></i>
         <div class="content">
             <div class="header">{{ category.NameCategory }}</div>
-            {# <div class="description">Source files for project</div> #}
         </div>
     </div>
     {% endfor %}

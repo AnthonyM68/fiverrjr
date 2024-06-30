@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 // Importation correcte pour IsGranted
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ServiceController extends AbstractController
 {
@@ -89,7 +90,7 @@ class ServiceController extends AbstractController
     {
         // Récupère tous les thèmes triés par nom
         $themes = $themeRepository->findBy([], ["nameTheme" => "ASC"]);
-        
+
         // Rend la vue avec les thèmes récupérés
         return $this->render('theme/index.html.twig', [
             'controller_name' => 'ServiceController',
@@ -105,28 +106,33 @@ class ServiceController extends AbstractController
         if (!$theme) {
             $theme = new Theme();
         }
-
+        // Variable pour stocker les erreurs de validation
+        $errors = null;
         // Crée et gère le formulaire pour le thème
         $form = $this->createForm(ThemeType::class, $theme);
         $form->handleRequest($request);
-
         // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($theme);
-            $entityManager->flush();
-
-            // Redirige vers la liste des thèmes après sauvegarde
-            return $this->redirectToRoute('list_themes');
+        // Si le formulaire est soumis
+        if ($form->isSubmitted()) {
+            // Si le formulaire est valide, persiste et sauvegarde le thème
+            if ($form->isValid()) {
+                $entityManager->persist($theme);
+                $entityManager->flush();
+                // Redirige vers la liste des thèmes après sauvegarde
+                return $this->redirectToRoute('list_themes');
+            } else {
+                // Récupère les erreurs de validation
+                $errors = $form->getErrors(true);
+            }
         }
-
         // Rend la vue avec le formulaire
         return $this->render('theme/index.html.twig', [
-            'controller_name' => 'ServiceController',
+            'title_page' => 'Thèmes',
             'theme_id' => $theme->getId(),
-            'formAddTheme' => $form
+            'formAddTheme' => $form->createView(),
+            'errors' => $errors
         ]);
     }
-
     #[Route('/theme/{id}/detail', name: 'detail_theme')]
     public function detailTheme(?Theme $theme = null, ThemeRepository $themeRepository, Request $request): Response
     {
@@ -202,7 +208,7 @@ class ServiceController extends AbstractController
         ]);
     }
 
-    #[Route('/category/new/test', name: 'new_category')]
+    #[Route('/category/new', name: 'new_category')]
     #[Route('/category/{id}/edit', name: 'edit_category')]
     public function editCategory(?Category $category = null, EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -210,24 +216,32 @@ class ServiceController extends AbstractController
         if (!$category) {
             $category = new Category();
         }
-
+        // Variable pour stocker les erreurs de validation
+        $errors = null;
         // Crée et gère le formulaire pour la catégorie
         $form = $this->createForm(CategoryType::class, $category);
+        // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
         $form->handleRequest($request);
-
-        // Si le formulaire est soumis et valide, persiste et sauvegarde la catégorie
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($category);
-            $entityManager->flush();
-
-            // Redirige vers la liste des catégories après sauvegarde
-            return $this->redirectToRoute('list_categories');
+        // Si le formulaire est soumis
+        if ($form->isSubmitted()) {
+            // Si le formulaire est valide, persiste et sauvegarde la Category
+            if ($form->isValid()) {
+                $entityManager->persist($category);
+                $entityManager->flush();
+                // Redirige vers la liste des thèmes après sauvegarde
+                return $this->redirectToRoute('list_categories');
+            } else {
+                // Récupère les erreurs de validation
+                $errors = $form->getErrors(true);
+            }
         }
-
+       
         // Rend la vue avec le formulaire
         return $this->render('category/index.html.twig', [
+            'title_page' => 'Catégories',
             'category_id' => $category->getId(),
-            'formAddCategory' => $form
+            'formAddCategory' => $form->createView(),
+            'errors' => $errors
         ]);
     }
 
@@ -290,25 +304,32 @@ class ServiceController extends AbstractController
         if (!$course) {
             $course = new Course();
         }
-
+         // Variable pour stocker les erreurs de validation
+        $errors = null;;
         // Crée et gère le formulaire pour le cours
         $form = $this->createForm(CourseType::class, $course);
-        $form->handleRequest($request);
-
-        // Si le formulaire est soumis et valide, persiste et sauvegarde le cours
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($course);
-            $entityManager->flush();
-
-            // Redirige vers la liste des cours après sauvegarde
-            return $this->redirectToRoute('list_courses');
+        // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
+         $form->handleRequest($request);
+         // Si le formulaire est soumis
+         if ($form->isSubmitted()) {
+             // Si le formulaire est valide, persiste et sauvegarde la Sous-catégories
+            if ($form->isValid()) {
+                $entityManager->persist($course);
+                $entityManager->flush();
+                // Redirige vers la liste des thèmes après sauvegarde
+                return $this->redirectToRoute('list_courses');
+            } else {
+                // Récupère les erreurs de validation
+                $errors = $form->getErrors(true);
+            }
         }
 
         // Rend la vue avec le formulaire
         return $this->render('course/index.html.twig', [
-            'controller_name' => 'CourseController',
+            'title_page' => 'Sous-atégories',
             'course_id' => $course->getId(),
-            'formAddCourse' => $form->createView()
+            'formAddCourse' => $form->createView(),
+            'errors' => $errors
         ]);
     }
 

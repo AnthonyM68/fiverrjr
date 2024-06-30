@@ -1,26 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ServiceController!{% endblock %}
+{% block title %}{{title_page}}{% endblock %}
 
 {% block body %}
-
-
+<h1>{{title_page}}</h1>
+{# On vérifie que le formulaire existe avant de l'afficher #}
 {% if formAddTheme|default %}
-
-{{ form_start(formAddTheme, {'attr': {'class': 'ui form'}}) }}
-
+{{ form_start(formAddTheme, {'attr': {'class': 'ui form', 'novalidate': 'novalidate'}}) }}
+{# la class field pour afficher les erreurs #}
 <div class="field">
     {{ form_row(formAddTheme.nameTheme) }}
-</div>
-
-<div class="field">
-    {{ form_row(formAddTheme.Valider) }}
-</div>
-
+    {{ form_row(formAddTheme.submit) }}
+</div>    
 {{ form_end(formAddTheme) }}
 {% endif %}
-
-
+{# On affiche les thèmes touvés #}
 {% if themes | default %}
 <div class="ui list">
     {% for theme in themes %}
@@ -28,7 +22,6 @@
         <i class="folder icon"></i>
         <div class="content">
             <div class="header">{{ theme.nameTheme }}</div>
-            {# <div class="description">Source files for project</div> #}
         </div>
     </div>
     {% endfor %}

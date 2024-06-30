@@ -71,7 +71,7 @@ class ServiceType extends AbstractType
                 'label' => false, // Optionnel : masquer le label si nécessaire
                 'mapped' => false, // Ne pas mapper ce champ avec les données du formulaire
             ])
-            ->add('valider', SubmitType::class, [
+            ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'ui-button ui-widget ui-corner-all'
                 ]

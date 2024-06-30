@@ -8,6 +8,8 @@ use App\Repository\CourseRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 class Course
 {
@@ -17,6 +19,7 @@ class Course
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
     private ?string $nameCourse = null;
 
     #[ORM\ManyToOne(inversedBy: 'courses')]

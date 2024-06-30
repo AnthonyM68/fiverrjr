@@ -1,39 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CourseController!{% endblock %}
+{% block title %}{{title_page}}{% endblock %}
 
 {% block body %}
-
+<h1>{{title_page}}</h1>
+{# On vérifie que le formulaire existe avant de l'afficher #}
 {% if formAddCourse|default %}
-
-{{ form_start(formAddCourse, {'attr': {'class': 'ui form'}}) }}
-
+{{ form_start(formAddCourse, {'attr': {'class': 'ui form', 'novalidate': 'novalidate'}}) }}
+{# la class field pour afficher les erreurs #}
 <div class="field">
     {{ form_row(formAddCourse.nameCourse) }}
-</div>
-<div class="field">
     {{ form_row(formAddCourse.category) }}
+    {{ form_row(formAddCourse.submit) }}
 </div>
-
-<div class="field">
-    {{ form_row(formAddCourse.Valider) }}
-</div>
-
 {{ form_end(formAddCourse) }}
 {% endif %}
 
-
-
-
 {% if courses | default %}
-
 <div class="ui list">
     {% for course in courses %}
     <div class="item">
         <i class="folder icon"></i>
         <div class="content">
             <div class="header">{{ course.nameCourse}}</div>
-            {# <div class="description">Source files for project</div> #}
         </div>
     </div>
     {% endfor %}
