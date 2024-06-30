@@ -100,6 +100,7 @@ class ServiceController extends AbstractController
 
     #[Route('/theme/new', name: 'new_theme')]
     #[Route('/theme/{id}/edit', name: 'edit_theme')]
+    // #[IsGranted('ROLE_ADMIN')]
     public function editTheme(?Theme $theme = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         // Si le thème n'existe pas, crée un nouveau thème
@@ -210,6 +211,7 @@ class ServiceController extends AbstractController
 
     #[Route('/category/new', name: 'new_category')]
     #[Route('/category/{id}/edit', name: 'edit_category')]
+
     public function editCategory(?Category $category = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         // Si la catégorie n'existe pas, crée une nouvelle catégorie
@@ -298,6 +300,7 @@ class ServiceController extends AbstractController
 
     #[Route('/course/new', name: 'new_course')]
     #[Route('/course/edit/{id}', name: 'edit_course')]
+
     public function editCourse(?Course $course = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         // Si le cours n'existe pas, crée un nouveau cours
@@ -326,7 +329,7 @@ class ServiceController extends AbstractController
 
         // Rend la vue avec le formulaire
         return $this->render('course/index.html.twig', [
-            'title_page' => 'Sous-atégories',
+            'title_page' => 'Sous-catégories',
             'course_id' => $course->getId(),
             'formAddCourse' => $form->createView(),
             'errors' => $errors
@@ -338,7 +341,6 @@ class ServiceController extends AbstractController
     {
         // Récupère les détails du cours en fonction de l'ID
         $course = $courseRepository->findBy(["id" => $course->getId()]);
-
         // Rend la vue avec les détails du cours
         return $this->render('category/index.html.twig', [
             'controller_name' => 'ServiceController',

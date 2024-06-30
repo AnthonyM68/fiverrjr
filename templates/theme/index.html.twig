@@ -6,7 +6,8 @@
 <h1>{{title_page}}</h1>
 {# On vérifie que le formulaire existe avant de l'afficher #}
 {% if formAddTheme|default %}
-{{ form_start(formAddTheme, {'attr': {'class': 'ui form' }}) }}
+{# {{ form_start(formAddTheme, {'attr': {'class': 'ui form', 'novalidate': 'novalidate' }}) }} #}
+{{ form_start(formAddTheme, {'attr': {'class': 'ui form'}}) }}
 {# la class field pour afficher les erreurs #}
 <div class="field">
     {{ form_row(formAddTheme.nameTheme) }}

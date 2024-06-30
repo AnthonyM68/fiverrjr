@@ -25,7 +25,7 @@ class CourseType extends AbstractType
                 ]
             ])
         ->add('nameCourse', TextType::class, [
-            'label' => 'Nom de sous catégorie',
+            'label' => 'Nom de sous-catégorie',
         ])
         ->add('submit', SubmitType::class, [
             'attr' => [
