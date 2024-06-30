@@ -8,6 +8,7 @@ use Doctrine\Common\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 
+// Ajoute la date de création d'un Service
 class AddCreateDateFiledServiceForm implements EventSubscriberInterface
 {
     public function prePersist(LifecycleEventArgs $args): void
@@ -19,7 +20,7 @@ class AddCreateDateFiledServiceForm implements EventSubscriberInterface
 
             $user = $entity->getUser();
             if ($user === null) {
-                throw new \Exception('L\'utilisateur ne peut pas être nul');
+                throw new \Exception('Utilisateur inconnu');
             }
         } 
     }

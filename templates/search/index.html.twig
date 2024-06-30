@@ -15,7 +15,7 @@
                         class="item field {{ submitted_form == 'form_service' ? 'active teal' : '' }}">
                         <form method="post" action="{{ path('search_resultat') }}" class="ui form ajax-form">
                             <div class="ui icon input full-width-input">
-                                <input type="text" name="service_search_term">
+                                <input type="text" name="search_term">
                                 <i class="search icon"></i>
                             </div>
                             <input type="hidden" name="submitted_form_type" value="service">
@@ -25,8 +25,7 @@
                     </div>
                     <div id="menu-theme" class="item field {{ submitted_form == 'form_theme' ? 'active teal' : '' }}">
                         {{ form_start(form_theme, {'attr': {'id': 'form_theme', 'class': 'ui form ajax-form'}}) }}
-                        {{ form_row(form_theme.search_term) }}
-                        {{ form_row(form_theme.submit) }}
+                        {{ form_widget(form_theme, {'attr': {'class': 'full-width-input'}}) }}
                         <input type="hidden" name="submitted_form_type" value="theme">
                         {{ form_end(form_theme) }}
                         <div class="ui label">{{ theme_count }}</div>
@@ -34,8 +33,7 @@
                 </div>
             </div>
             <div class="twelve wide stretched column">
-                <div id="search-results">
-                </div>
+                <div id="search-results"></div>
             </div>
             <div class="actions">
                 <div class="ui red basic cancel inverted button">

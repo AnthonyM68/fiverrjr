@@ -26,11 +26,9 @@ document.addEventListener('DOMContentLoaded', function () {
   forms.forEach(form => {
     form.addEventListener('submit', function (event) {
       event.preventDefault(); // Empêche le rechargement de la page
-
       // Récupère les données du formulaire
       const formData = new FormData(this);
       const actionUrl = this.getAttribute('action');
-
       // Envoie les données du formulaire via Fetch API
       fetch(actionUrl, {
         method: 'POST',
@@ -46,13 +44,19 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + data.error + '</p>';
             return;
           }
-
-          // Mise à jour du contenu avec les résultats
           let resultsHtml = '';
-
+          if (data.results.empty) {
+            resultsHtml += '<h2>Aucun résultats</h2>';
+            document.getElementById('search-results').innerHTML = resultsHtml;
+            // Si pas de réultats on quitte
+            return;
+          }
+          // Mise à jour du contenu avec les résultats
           if (data.submitted_form === 'form_service' && data.results.service) {
+            alert();
             resultsHtml += '<h3>Résultats pour Service</h3><div class="ui divided items">';
             data.results.service.forEach(service => {
+              console.log(service);
               resultsHtml += `
                <div class="item">
                  <div class="image">
@@ -83,11 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             resultsHtml += '</ul>';
           }
-
-          if (data.results.empty) {
-            resultsHtml += '<h2>Aucun résultats</h2>';
-          }
-
           document.getElementById('search-results').innerHTML = resultsHtml;
         })
         .catch(error => {

@@ -25,6 +25,7 @@ class ThemeType extends AbstractType
                 ]
             ])
             ->add('submit', SubmitType::class, [
+                'label' => 'Valider',
                 'attr' => [
                     'class' => 'ui-button ui-widget ui-corner-all'
                 ]

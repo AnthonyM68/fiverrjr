@@ -101,6 +101,7 @@ class ServiceController extends AbstractController
     #[Route('/theme/new', name: 'new_theme')]
     #[Route('/theme/{id}/edit', name: 'edit_theme')]
     // #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]  // Restreint l'accès aux utilisateurs authentifiés
     public function editTheme(?Theme $theme = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         // Si le thème n'existe pas, crée un nouveau thème
@@ -211,7 +212,7 @@ class ServiceController extends AbstractController
 
     #[Route('/category/new', name: 'new_category')]
     #[Route('/category/{id}/edit', name: 'edit_category')]
-
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]  // Restreint l'accès aux utilisateurs authentifiés
     public function editCategory(?Category $category = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         // Si la catégorie n'existe pas, crée une nouvelle catégorie
@@ -300,7 +301,7 @@ class ServiceController extends AbstractController
 
     #[Route('/course/new', name: 'new_course')]
     #[Route('/course/edit/{id}', name: 'edit_course')]
-
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]  // Restreint l'accès aux utilisateurs authentifiés
     public function editCourse(?Course $course = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         // Si le cours n'existe pas, crée un nouveau cours

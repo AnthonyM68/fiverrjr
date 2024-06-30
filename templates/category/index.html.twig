@@ -9,10 +9,13 @@
 {{ form_start(formAddCategory, {'attr': {'class': 'ui form'}}) }}
 {# la class field pour afficher les erreurs #}
 <div class="field">
+    {{ form_widget(formAddCategory) }}
+</div>
+{# <div class="field">
     {{ form_row(formAddCategory.nameCategory) }}
     {{ form_row(formAddCategory.theme) }}
     {{ form_row(formAddCategory.submit) }}
-</div>
+</div> #}
 {{ form_end(formAddCategory) }}
 {% endif %}
 

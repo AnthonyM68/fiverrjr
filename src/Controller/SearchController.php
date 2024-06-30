@@ -71,49 +71,49 @@ class SearchController extends AbstractController
     }
 
     #[Route("/search/resultat", name: "search_resultat", methods: ["POST"])]
-public function searchResultat(Request $request): JsonResponse
-{
-    $results = [];
-    $submittedFormName = null;
+    public function searchResultat(Request $request): JsonResponse
+    {
+        $results = [];
+        $submittedFormName = null;
 
-    try {
-        if ($request->isMethod('POST')) {
-            if ($request->request->get('submitted_form_type') === 'theme') {
-                $searchTerm = $request->request->get('search_term');
-                $results['theme'] = $this->entityManager->getRepository(Theme::class)->findByTerm($searchTerm);
-                $submittedFormName = 'form_theme';
-            } elseif ($request->request->get('submitted_form_type') === 'category') {
-                $searchTerm = $request->request->get('search_term');
-                $results['category'] = $this->entityManager->getRepository(Category::class)->findByTerm($searchTerm);
-                $submittedFormName = 'form_category';
-            } elseif ($request->request->get('submitted_form_type') === 'course') {
-                $searchTerm = $request->request->get('search_term');
-                $results['course'] = $this->entityManager->getRepository(Course::class)->findByTerm($searchTerm);
-                $submittedFormName = 'form_course';
-            } elseif ($request->request->get('service_search_term')) {
-                $searchTerm = $request->request->get('custom_search_term');
-                $results['service'] = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
-                $submittedFormName = 'form_service';
+        try {
+            if ($request->isMethod('POST')) {
+                if ($request->request->get('submitted_form_type') === 'theme') {
+                    $searchTerm = $request->request->get('search_term');
+                    $results['theme'] = $this->entityManager->getRepository(Theme::class)->findByTerm($searchTerm);
+                    $submittedFormName = 'form_theme';
+                } elseif ($request->request->get('submitted_form_type') === 'service') {
+                    $searchTerm = $request->request->get('search_term');
+                    $results['service'] = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
+                    $submittedFormName = 'form_service';
+                }
+                // } elseif ($request->request->get('submitted_form_type') === 'category') {
+                //     $searchTerm = $request->request->get('search_term');
+                //     $results['category'] = $this->entityManager->getRepository(Category::class)->findByTerm($searchTerm);
+                //     $submittedFormName = 'form_category';
+                // } elseif ($request->request->get('submitted_form_type') === 'course') {
+                //     $searchTerm = $request->request->get('search_term');
+                //     $results['course'] = $this->entityManager->getRepository(Course::class)->findByTerm($searchTerm);
+                //     $submittedFormName = 'form_course';
             }
+
+            if (empty($results[$submittedFormName])) {
+                $results['empty'] = true;
+            }
+
+            // On retourne les données au format JSON
+            return new JsonResponse([
+                'results' => $results,
+                'submitted_form' => $submittedFormName
+            ]);
+
+        } catch (\Exception $e) {
+            // Log the error message
+            $this->logger->error('Error in searchResultat: ' . $e->getMessage());
+
+            return new JsonResponse([
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        if (empty($results[$submittedFormName])) {
-            $results['empty'] = true;
-        }
-
-        return new JsonResponse([
-            'results' => $results,
-            'submitted_form' => $submittedFormName
-        ]);
-
-    } catch (\Exception $e) {
-        // Log the error message
-        $this->logger->error('Error in searchResultat: ' . $e->getMessage());
-
-        return new JsonResponse([
-            'error' => $e->getMessage()
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
-}
-
 }
