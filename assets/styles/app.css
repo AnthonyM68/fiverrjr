@@ -15,6 +15,6 @@ label.required::after {
   display: none !important;
 }
 /* Assurez-vous que les champs ne sont pas en état d'erreur par défaut */
-.ui.form .field.error input {
+/* .ui.form .field.error input {
   border-color: #e0e1e2;
-}
+} */

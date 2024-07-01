@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ServiceController!{% endblock %}
+{% block title %}{{title_page}}{% endblock %}
 
 {% block body %}
-
+<h1>{{title_page}}</h1>
 
 {% if service|default %}
 {{ service.title }}
@@ -33,13 +33,6 @@
 {{ form_end(formAddService) }}
 {% endif %}
 
-{% if error is defined %}
-{% for error in formAddService.vars.errors %}
-<div class="ui error message">{{ error.message }}</div>
-{% endfor %}
-{% endif %}
-
-
 {% if services | default %}
 <div class="ui list">
     {% for service in services %}
@@ -55,7 +48,7 @@
 
 <script>
     // Sélection des éléments du formulaire
-    const form_select_theme = document.getElementById('service_course_theme');
+   /* const form_select_theme = document.getElementById('service_course_theme');
     const form_select_category = document.getElementById('service_course_category');
     const form_select_course = document.getElementById('service_course_course');
 
@@ -103,6 +96,6 @@
         });
     };
     form_select_theme.addEventListener('change', updateCategories);
-    form_select_category.addEventListener('change', updateCourses);
+    form_select_category.addEventListener('change', updateCourses);*/
 </script>
 {% endblock %}

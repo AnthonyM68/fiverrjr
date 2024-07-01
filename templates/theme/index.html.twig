@@ -4,18 +4,15 @@
 
 {% block body %}
 <h1>{{title_page}}</h1>
+
 {# On vérifie que le formulaire existe avant de l'afficher #}
-{% if formAddTheme|default %}
-{# {{ form_start(formAddTheme, {'attr': {'class': 'ui form', 'novalidate': 'novalidate' }}) }} #}
-{{ form_start(formAddTheme, {'attr': {'class': 'ui form'}}) }}
-{# la class field pour afficher les erreurs #}
-<div class="field">
-    {{ form_widget(formAddTheme) }}
-</div>
-{# <div class="field">
+{% if formAddTheme is defined %}
+{{ form_start(formAddTheme, {'attr': {'class': 'ui form', 'novalidate' : 'novalidate'}}) }}
+{# Si erreur on ajoute la class field #}
+<div class="{% if formAddTheme.nameTheme.vars.errors|length > 0 %}field{% endif %}">
     {{ form_row(formAddTheme.nameTheme) }}
     {{ form_row(formAddTheme.submit) }}
-</div>     #}
+</div>
 {{ form_end(formAddTheme) }}
 {% endif %}
 {# On affiche les thèmes touvés #}

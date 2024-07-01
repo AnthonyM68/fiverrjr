@@ -216,7 +216,8 @@ class ServiceController extends AbstractController
 
     #[Route('/category/new', name: 'new_category')]
     #[Route('/category/{id}/edit', name: 'edit_category')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]  // Restreint l'accès aux utilisateurs authentifiés
+    // Restreint l'accès aux utilisateurs authentifiés
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function editCategory(?Category $category = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         // Si la catégorie n'existe pas, crée une nouvelle catégorie
@@ -227,8 +228,8 @@ class ServiceController extends AbstractController
         $errors = null;
         // Crée et gère le formulaire pour la catégorie
         $form = $this->createForm(CategoryType::class, $category);
-        // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
         $form->handleRequest($request);
+        // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
         // Si le formulaire est soumis
         if ($form->isSubmitted()) {
             // Si le formulaire est valide, persiste et sauvegarde la Category

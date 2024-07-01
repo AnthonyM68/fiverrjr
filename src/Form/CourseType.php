@@ -28,8 +28,8 @@ class CourseType extends AbstractType
             'label' => 'Nom de sous-catégorie',
         ])
         ->add('submit', SubmitType::class, [
+            'label' => 'Soumettre',
             'attr' => [
-                'label' => 'Valider',
                 'class' => 'ui-button ui-widget ui-corner-all'
             ]
         ])

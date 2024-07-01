@@ -5,20 +5,18 @@
 {% block body %}
 <h1>{{title_page}}</h1>
 {# On vérifie que le formulaire existe avant de l'afficher #}
-{% if formAddCategory|default %}
-{{ form_start(formAddCategory, {'attr': {'class': 'ui form'}}) }}
+{% if formAddCategory is defined  %}
+{{ form_start(formAddCategory, {'attr': {'class': 'ui form', 'novalidate' : 'novalidate'}}) }}
 {# la class field pour afficher les erreurs #}
-<div class="field">
-    {{ form_widget(formAddCategory) }}
+
+<div class="{% if formAddCategory.nameCategory.vars.errors|length > 0 %}field {% endif %}">
+{{ form_row(formAddCategory.nameCategory) }}
+{{ form_row(formAddCategory.theme) }}
+{{ form_row(formAddCategory.submit) }}
 </div>
-{# <div class="field">
-    {{ form_row(formAddCategory.nameCategory) }}
-    {{ form_row(formAddCategory.theme) }}
-    {{ form_row(formAddCategory.submit) }}
-</div> #}
 {{ form_end(formAddCategory) }}
 {% endif %}
-
+{# On affiche les catégories touvées #}
 {% if categories | default %}
 <div class="ui list">
     {% for category in categories %}

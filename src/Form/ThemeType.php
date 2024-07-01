@@ -18,14 +18,15 @@ class ThemeType extends AbstractType
         $builder
             ->add('nameTheme', TextType::class, [
                 'label' => 'Nom de Thême',
-                'constraints' => [
-                    // new NotBlank([
-                    //     'message' => 'Ce champs ne doit pas être vide.',
-                    // ]),
-                ]
+                // Exemple de modification ou traduction, contraite, message Validator par défaut
+                // 'constraints' => [
+                //     new NotBlank([
+                //         'message' => 'Ce champs ne doit pas être vide.',
+                //     ]),
+                // ]
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Valider',
+                'label' => 'Soumettre',
                 'attr' => [
                     'class' => 'ui-button ui-widget ui-corner-all'
                 ]

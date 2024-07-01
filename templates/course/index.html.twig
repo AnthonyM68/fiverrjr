@@ -6,16 +6,13 @@
 <h1>{{title_page}}</h1>
 {# On vérifie que le formulaire existe avant de l'afficher #}
 {% if formAddCourse|default %}
-{{ form_start(formAddCourse, {'attr': {'class': 'ui form'}}) }}
+{{ form_start(formAddCourse, {'attr': {'class': 'ui form', 'novalidate' : 'novalidate'}}) }}
 {# la class field pour afficher les erreurs #}
-<div class="field">
-    {{ form_widget(formAddCourse) }}
-</div>
-{# <div class="field">
+<div class="{% if formAddCourse.nameCourse.vars.errors|length > 0 %}field{% endif %}">
     {{ form_row(formAddCourse.nameCourse) }}
     {{ form_row(formAddCourse.category) }}
     {{ form_row(formAddCourse.submit) }}
-</div> #}
+</div>
 {{ form_end(formAddCourse) }}
 {% endif %}
 
