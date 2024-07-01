@@ -81,7 +81,7 @@ class StickyFooter extends React.Component {
 
     return (
       <footer className={supportsSticky ? 'sticky' : null}>
-        <h1>sticky footer</h1>
+        {/* <h1>Component REACT</h1> */}
       </footer>
     );
   };
@@ -135,13 +135,23 @@ class StickyParent extends React.Component {
     return (
       <div className="container">
         <div className="context" ref={this.handleContextRef}>
-          <h1>context</h1>
-          <button onClick={this.shortenContext}>Shorten</button>
-          <button onClick={this.resetContextHeight}>Reset</button>
+          <h1>Assets </h1>
+          <ul>
+        <li>Thême Jquery-ui:
+            './node_modules/jquery-ui/dist/themes/Smoothness/theme.css' (smoothness)</li>
+        <li>Thême Semantic:
+            './semantic/src/themes/theme.less' (Github)</li>
+        <li>Styles github:
+            './semantic/src/themes/github/globals/site.variables'</li>
+        <li>Semantic Globals:
+            './semantic/src/site/globals/site.overrides'</li>
+    </ul>
+          {/* <button onClick={this.shortenContext}>Yes</button>
+          <button onClick={this.resetContextHeight}>No</button> */}
         </div>
         <StickyFooter context={contextRef} />
         <footer>
-          <h1>footer</h1>
+          {/* <h1>Footer</h1> */}
         </footer>
       </div>
     );

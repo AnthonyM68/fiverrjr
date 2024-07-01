@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+// Contraintes
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 class Service
@@ -25,25 +27,27 @@ class Service
     #[ORM\JoinColumn(nullable: false)]
     private ?Course $course = null;
 
-    // #[ORM\Column(name: 'user_id', type: 'integer', nullable: true)]
-    // private ?int $userId = null;
     #[ORM\ManyToOne(inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)] // Assurez-vous que cette relation ne peut pas être nulle
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     private ?Order $order = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::FLOAT)]
+     #[Assert\NotBlank]
     private ?float $price = null;
 
     #[ORM\Column]
+     #[Assert\NotBlank]
     private ?int $duration = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -70,42 +74,6 @@ class Service
         $this->course = $course;
         return $this;
     }
-
-    // /**
-    //  * @return Collection<int, course>
-    //  */
-    // public function getCourse(): Collection
-    // {
-    //     return $this->course;
-    // }
-
-    // public function addCourse(course $course): static
-    // {
-    //     if (!$this->course->contains($course)) {
-    //         $this->course->add($course);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeCourse(course $course): static
-    // {
-    //     $this->course->removeElement($course);
-
-    //     return $this;
-    // }
-
-     // Getters and setters for user and user_id
-    //  public function getUserId(): ?int
-    //  {
-    //      return $this->userId;
-    //  }
- 
-    //  public function setUserId(?int $userId): self
-    //  {
-    //      $this->userId = $userId;
-    //      return $this;
-    //  }
     public function getUser(): ?User
     {
         return $this->user;

@@ -32,7 +32,7 @@ class ServiceController extends AbstractController
      * @param ServiceRepository $serviceRepository
      * @return Response
      */
-    #[Route('/service', name: 'list_service')]
+    #[Route('/service', name: 'list_services')]
     public function index(ServiceRepository $serviceRepository): Response
     {
         // Récupère tous les services de la base de données
@@ -47,37 +47,41 @@ class ServiceController extends AbstractController
 
     #[Route('/service/new', name: 'new_service')]
     #[Route('/service/edit/{id}', name: 'edit_service')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]  // Restreint l'accès aux utilisateurs authentifiés
-
+    // Restreint l'accès aux utilisateurs authentifiés
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         // Si le service n'existe pas, crée un nouveau service
         if (!$service) {
             $service = new Service();
         }
-
+        // Variable pour stocker les erreurs de validation
+        $errors = null;
         // Crée et gère le formulaire pour le service
         $form = $this->createForm(ServiceType::class, $service);
+        // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
         $form->handleRequest($request);
+        // Si le formulaire est soumis
+        if ($form->isSubmitted()) {
+            // Si le formulaire est valide, persiste et sauvegarde la Category
+            if ($form->isValid()) {
 
-        // Si le formulaire est soumis et valide, persiste et sauvegarde le service
-        if ($form->isSubmitted() && $form->isValid()) {
-            $subFormData = $form->get('course')->getData();
-            $category = $subFormData['course'] ?? null;
+                $entityManager->persist($service);
+                $entityManager->flush();
 
-            if ($category) {
-                $service->setCourse($category);
+                // Redirige vers la liste des services après sauvegarde
+                return $this->redirectToRoute('list_services');
+            } else {
+                // Récupère les erreurs de validation
+                $errors = $form->getErrors(true);
             }
-            $entityManager->persist($service);
-            $entityManager->flush();
-
-            // Redirige vers la liste des services après sauvegarde
-            return $this->redirectToRoute('list_service');
         }
 
         // Rend la vue avec le formulaire
         return $this->render('service/index.html.twig', [
-            'form' => $form->createView(),
+            'title_page' => 'Services',
+            'formAddService' => $form->createView(),
+            'errors' => $errors
         ]);
     }
 
@@ -238,7 +242,7 @@ class ServiceController extends AbstractController
                 $errors = $form->getErrors(true);
             }
         }
-       
+
         // Rend la vue avec le formulaire
         return $this->render('category/index.html.twig', [
             'title_page' => 'Catégories',
@@ -308,15 +312,15 @@ class ServiceController extends AbstractController
         if (!$course) {
             $course = new Course();
         }
-         // Variable pour stocker les erreurs de validation
+        // Variable pour stocker les erreurs de validation
         $errors = null;;
         // Crée et gère le formulaire pour le cours
         $form = $this->createForm(CourseType::class, $course);
         // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
-         $form->handleRequest($request);
-         // Si le formulaire est soumis
-         if ($form->isSubmitted()) {
-             // Si le formulaire est valide, persiste et sauvegarde la Sous-catégories
+        $form->handleRequest($request);
+        // Si le formulaire est soumis
+        if ($form->isSubmitted()) {
+            // Si le formulaire est valide, persiste et sauvegarde la Sous-catégories
             if ($form->isValid()) {
                 $entityManager->persist($course);
                 $entityManager->flush();

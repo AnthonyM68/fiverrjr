@@ -9,59 +9,49 @@
 {{ service.title }}
 {% endif %}
 
-{% if form is defined %}
-{{ form_start(form, {'attr': {'class': 'ui form'}}) }}
+{% if formAddService is defined %}
+{{ form_start(formAddService, {'attr': {'class': 'ui form' }}) }}
 
 <div class="field">
-    {{ form_row(form.course.theme) }}
-</div>
-<div class="field">
-    {{ form_row(form.course.category) }}
-</div>
-<div class="field">
-   {{ form_row(form.course.course) }} 
-</div>
+    {{ form_row(formAddService.course.theme) }}
 
-<div class="field">
-    {{ form_row(form.user) }} 
- </div>
-<hr>
-<div class="field">
-    {{ form_row(form.title) }}
+    {{ form_row(formAddService.course.category) }}
+
+    {{ form_row(formAddService.course.course) }}
+
+    {{ form_row(formAddService.user) }}
+    <hr>
+    {{ form_row(formAddService.title) }}
+
+    {{ form_row(formAddService.description) }}
+
+    {{ form_row(formAddService.price) }}
+
+    {{ form_row(formAddService.duration) }}
 </div>
-<div class="field">
-    {{ form_row(form.description) }}
-</div>
-<div class="field">
-    {{ form_row(form.price) }}
-</div>
-<div class="field">
-    {{ form_row(form.duration) }}
-</div>
-{{ form_row(form.submit) }} 
-{{ form_end(form) }}
+{{ form_row(formAddService.submit) }}
+{{ form_end(formAddService) }}
 {% endif %}
+
 {% if error is defined %}
-{% for error in form.vars.errors %}
-    <div class="ui error message">{{ error.message }}</div>
+{% for error in formAddService.vars.errors %}
+<div class="ui error message">{{ error.message }}</div>
 {% endfor %}
 {% endif %}
 
 
 {% if services | default %}
-
 <div class="ui list">
     {% for service in services %}
     <div class="item">
         <i class="folder icon"></i>
         <div class="content">
             <div class="header">{{ service.title }}</div>
-            {# <div class="description">Source files for project</div> #}
         </div>
     </div>
     {% endfor %}
 </div>
-{% endif %} 
+{% endif %}
 
 <script>
     // Sélection des éléments du formulaire
