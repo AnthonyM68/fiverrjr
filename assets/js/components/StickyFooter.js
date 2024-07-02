@@ -1,9 +1,9 @@
 // Importation des modules nécessaires
-import React from 'react'; // Importer React
-import { Sticky } from 'semantic-ui-react'; // Importer le composant Sticky de Semantic UI React
+//import React from 'react'; // Importer React
+//import { Sticky } from 'semantic-ui-react'; // Importer le composant Sticky de Semantic UI React
 
 // Fonction pour tester la compatibilité du positionnement sticky
-const testSticky = () => {
+/*const testSticky = () => {
   // Préfixes pour les différents navigateurs
   const prefix = ['', '-o-', '-webkit-', '-moz-', '-ms-'];
   // Accéder au style de la balise head
@@ -81,7 +81,7 @@ class StickyFooter extends React.Component {
 
     return (
       <footer className={supportsSticky ? 'sticky' : null}>
-        {/* <h1>Component REACT</h1> */}
+         //<h1>Component REACT</h1> 
       </footer>
     );
   };
@@ -146,16 +146,16 @@ class StickyParent extends React.Component {
         <li>Semantic Globals:
             './semantic/src/site/globals/site.overrides'</li>
     </ul>
-          {/* <button onClick={this.shortenContext}>Yes</button>
-          <button onClick={this.resetContextHeight}>No</button> */}
+          //<button onClick={this.shortenContext}>Yes</button>
+          //<button onClick={this.resetContextHeight}>No</button> 
         </div>
         <StickyFooter context={contextRef} />
         <footer>
-          {/* <h1>Footer</h1> */}
+          // <h1>Footer</h1> 
         </footer>
       </div>
     );
   }
 }
 
-export default StickyParent;
+export default StickyParent;*/

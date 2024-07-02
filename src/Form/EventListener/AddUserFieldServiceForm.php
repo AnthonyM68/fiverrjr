@@ -42,6 +42,10 @@ class AddUserFieldServiceForm implements EventSubscriberInterface
                 'class' => User::class,   // Entité associée au champ
                 'choice_label' => 'id',   // Propriété de l'entité à afficher dans le champ (dans cet exemple, l'ID)
                 'data' => $user,          // Valeur par défaut du champ, ici l'utilisateur actuel
+                'attr' => [
+                    'style' => 'display:none', // Masquer le champ avec du CSS
+                ],
+                'label' => false, // Désactiver l'affichage du label
             ]);
         }
     }

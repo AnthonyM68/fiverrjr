@@ -156,12 +156,6 @@ class Service
         return $this;
     }
 
-
-    public function __toString()
-    {
-        return $this->title;
-    }
-
     public function getPicture(): ?string
     {
         return $this->picture;
@@ -173,4 +167,11 @@ class Service
 
         return $this;
     }
+    
+    public function __toString()
+    {
+        return $this->title;
+    }
+
+
 }

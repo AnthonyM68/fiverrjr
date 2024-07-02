@@ -19,12 +19,14 @@ class ServiceThemeCategoryCourseType extends AbstractType
         $builder
             ->add('theme', EntityType::class, [
                 'class' => Theme::class,
-                'placeholder' => 'Choisissez un Thême',
+                'label' => 'Thèmes',
+                'placeholder' => 'Choisissez un Thème',
                 'mapped' => false, // Non mapped à service
                 'attr' => ['class' => 'ui fluid search dropdown']
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
+                'label' => 'Catégories',
                 'placeholder' => 'Choisissez une Catégorie',
                 'mapped' => false, // Non mapped à service
                 'attr' => ['class' => 'ui fluid search dropdown']
@@ -32,6 +34,7 @@ class ServiceThemeCategoryCourseType extends AbstractType
             // ne pas indiquer de mapped 
             ->add('course', EntityType::class, [
                 'class' => Course::class,
+                'label' => 'Sous-catégories',
                 'placeholder' => 'Choisissez une Sous-Catégorie',
                 'attr' => ['class' => 'ui fluid search dropdown']
             ]);
@@ -59,7 +62,6 @@ class ServiceThemeCategoryCourseType extends AbstractType
                 $category = $form->getData();
                 // On recherche les courses appartenant à une catégorie
                 $courses = $category ? $category->getCourses() : [];
-                dd($courses);
                 // Ajout dynamique du champ course après la sélection de la catégorie
                 $form->getParent()->add('course', EntityType::class, [
                     'class' => Course::class,

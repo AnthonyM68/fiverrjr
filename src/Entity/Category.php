@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
 {
+    private $services;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -20,9 +22,6 @@ class Category
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
     private ?string $nameCategory = null;
-
-    private $services;
-
     /**
      * @var Collection<int, Course>
      */

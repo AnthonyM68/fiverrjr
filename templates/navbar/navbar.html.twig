@@ -41,14 +41,10 @@
             </div>
             {% endfor %}
           </div>
-
-        </div>
-
-        <div class="">
-          <a href="{{ path('search') }}" class="item">Recherches</a>
         </div>
       </div>
       <div class="right menu">
+        <a href="{{ path('search') }}" class="item">Recherches</a>
         {% if app.user %}
         <a href="#" class="ui item">Bonjour {{ app.user.username }}</a>
         <a href="{{ path('profile') }}" class="ui item">Profil</a>
@@ -65,4 +61,10 @@
   </div>
 </div>
 
+{% block javascripts %}
+{{ encore_entry_script_tags('view_navbar_dropdown_theme') }}
 {% endblock %}
+
+
+{% endblock %}
+

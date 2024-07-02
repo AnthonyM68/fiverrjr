@@ -27,12 +27,10 @@ Encore
     .addStyleEntry('jquery_structure', './node_modules/jquery-ui-dist/jquery-ui.structure.css')
     // semantic-ui
     .addEntry('semantic', './semantic/dist/semantic.js')
-    // .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
+    .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
     // semantic-themes
     .addStyleEntry('semantic_less', './semantic/src/semantic.less')
-
     // general
-
     // .addEntry('jquery_popup', './assets/styles/jquery.popup.minified.js') // ou .scss pour Sass
     // bootstrap 
     .addEntry('bootstrap', './node_modules/bootstrap/dist/js/bootstrap.js')
@@ -42,9 +40,6 @@ Encore
     .addEntry('uikit', './node_modules/uikit/dist/js/uikit.js')
     .addEntry('uikit-icons', './node_modules/uikit/dist/js/uikit-icons.js')
     .addStyleEntry('uikit_css', './node_modules/uikit/dist/css/uikit.css')
-    // app
-    .addEntry('app', './assets/app.js')
-
     // assets personnalisés
     .addStyleEntry('app_styles', [
         './assets/styles/navbar.css',
@@ -54,6 +49,18 @@ Encore
         './assets/styles/app.css',
         './assets/styles/scss_styles.scss'
     ])
+    // forms 
+    // Service
+    .addEntry('view_service_form', './assets/js/forms/ViewServiceForm.js')
+    // Search
+    .addEntry('view_search_form', './assets/js/forms/ViewSearch.js')
+    // Dropdown navbar
+    .addEntry('view_navbar_dropdown_theme', './assets/js/dropdown/Theme.js')
+    // Active link focus 
+    .addEntry('view_search_active_form', './assets/js/search/Search.js')
+    // app 
+    .addEntry('app', './assets/app.js')    
+
     // REACT
     .enableReactPreset()
     

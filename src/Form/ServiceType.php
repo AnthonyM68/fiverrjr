@@ -40,21 +40,29 @@ class ServiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            // Selecteur de sous-catégorie
+            // Affiche les 3 formulaires Theme, Category, Course
             ->add('course', ServiceThemeCategoryCourseType::class, [
                 'mapped' => false, // Nous ne voulons pas mapper directement sur l'entité Service
             ])
             ->add('title', TextType::class, [
+                'label' => 'Titre',
                 'attr' => [
                     'class' => 'ui fluid input'
                 ]
             ])
-            ->add('description', TextareaType::class)
+            ->add('description', TextareaType::class, [
+                'label' => 'Déscription',
+                'attr' => [
+                    'class' => 'ui fluid input'
+                ]
+            ])
             ->add('price', NumberType::class, [
                 'label' => 'Prix',
                 'scale' => 2, // forcer l'affichage de 2 décimales
                 'attr' => [
                     'step' => 0.01, // permettre des incréments de centimes
-                ],
+                ]
             ])
             ->add('duration', IntegerType::class, [
                 'label' => 'Durée',
@@ -64,22 +72,22 @@ class ServiceType extends AbstractType
             ])
             ->add('createDate', DateType::class, [
                 'widget' => 'single_text',
-                'required' => false, // Champ optionnel
+                'required' => false, // Non requis
                 'attr' => [
-                    'style' => 'display:none', // Masquer le champ avec du CSS
+                    'style' => 'display:none', // Masquer le champ 
                 ],
-                'label' => false, // Optionnel : masquer le label si nécessaire
+                'label' => false, // masquer le label
                 'mapped' => false, // Ne pas mapper ce champ avec les données du formulaire
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Valider',
+                'label' => 'Soumettre',
                 'attr' => [
                     'class' => 'ui-button ui-widget ui-corner-all'
                 ]
             ])
-            // Écouteur pour ajouter l'utilisateur
+            // Écouteur pour ajouter l'ID utilisateur avant de persister
             ->addEventSubscriber(new AddUserFieldServiceForm($this->security))
-            // Écouteur pour ajouter la date de création
+            // Écouteur pour ajouter la date de création avant de persister
             ->addEventSubscriber(new AddCreateDateFiledServiceForm());
     }
 

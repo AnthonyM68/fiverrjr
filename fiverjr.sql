@@ -118,6 +118,7 @@ CREATE TABLE IF NOT EXISTS `service` (
   `price` double NOT NULL,
   `duration` int NOT NULL,
   `create_date` datetime NOT NULL,
+  `picture` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_E19D9AD2A76ED395` (`user_id`),
   KEY `IDX_E19D9AD2591CC992` (`course_id`),
@@ -128,9 +129,9 @@ CREATE TABLE IF NOT EXISTS `service` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table fiverrjr.service : ~2 rows (environ)
-INSERT INTO `service` (`id`, `user_id`, `order_id`, `course_id`, `title`, `description`, `price`, `duration`, `create_date`) VALUES
-	(1, 1, NULL, 1, 'Titre service 1 ', 'Proposition de service de l\'utilisateur Admin', 10, 60, '2024-06-26 17:32:18'),
-	(2, 2, NULL, 2, 'Titre service 2', 'Proposition de service de l\'utilisateur: user', 50, 300, '2024-06-28 06:15:16');
+INSERT INTO `service` (`id`, `user_id`, `order_id`, `course_id`, `title`, `description`, `price`, `duration`, `create_date`, `picture`) VALUES
+	(1, 1, NULL, 1, 'Titre service 1 ', 'Proposition de service de l\'utilisateur Admin', 10, 60, '2024-06-26 17:32:18', './public/img/Service/service.jpg'),
+	(2, 2, NULL, 2, 'Titre service 2', 'Proposition de service de l\'utilisateur: user', 50, 300, '2024-06-28 06:15:16', './public/img/Service/service.jpg');
 
 -- Listage de la structure de table fiverrjr. theme
 CREATE TABLE IF NOT EXISTS `theme` (
@@ -170,8 +171,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- Listage des données de la table fiverrjr.user : ~2 rows (environ)
 INSERT INTO `user` (`id`, `email`, `roles`, `password`, `first_name`, `last_name`, `phone_number`, `date_register`, `picture`, `city`, `portfolio`, `bio`, `is_verified`, `username`) VALUES
-	(1, 'admin@gmail.com', '[]', '$2y$13$030uvowwY4st0yG1THvBuuC5vjemI9k4kUMluwi.IBH32YCV.uVl2', NULL, NULL, NULL, '2024-06-20 06:48:38', NULL, NULL, NULL, NULL, 0, 'jad67tony'),
-	(2, 'user@gmail.com', '[]', '$2y$13$DSnyXKGD9ZXNx6CzHbDow.wm3d.HK4gjuHviyVNW/m2WK4.FcWlrO', NULL, NULL, NULL, '2024-06-27 05:50:34', NULL, NULL, NULL, NULL, 0, 'Anthony');
+	(1, 'admin@gmail.com', '["ROLE_ADMIN"]', '$2y$13$030uvowwY4st0yG1THvBuuC5vjemI9k4kUMluwi.IBH32YCV.uVl2', NULL, NULL, NULL, '2024-06-20 06:48:38', '/public/img/Service/service.jpg', NULL, NULL, NULL, 0, 'jad67tony'),
+	(2, 'user@gmail.com', '[]', '$2y$13$DSnyXKGD9ZXNx6CzHbDow.wm3d.HK4gjuHviyVNW/m2WK4.FcWlrO', NULL, NULL, NULL, '2024-06-27 05:50:34', 'public/img/Service/service.jpg', NULL, NULL, NULL, 0, 'Anthony');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
