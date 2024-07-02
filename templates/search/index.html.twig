@@ -4,8 +4,7 @@
 
 {% block body %}
 <div class="sperator"></div>
-
-<div class="ui basic modal">
+<div class="ui modal">
     <h2>{{ title_page }}</h2>
     <div class="content">
         <div class="ui grid">
@@ -21,15 +20,15 @@
                             <input type="hidden" name="submitted_form_type" value="service">
                             <button type="submit" class="ui button">Rechercher</button>
                         </form>
-                        <div class="ui label">{{ service_count }}</div>
+                        {# <div class="ui label">{{ service_count }}</div> #}
                     </div>
-                    <div id="menu-theme" class="item field {{ submitted_form == 'form_theme' ? 'active teal' : '' }}">
+                     <div id="menu-theme" class="item field {{ submitted_form == 'form_theme' ? 'active teal' : '' }}">
                         {{ form_start(form_theme, {'attr': {'id': 'form_theme', 'class': 'ui form ajax-form'}}) }}
                         {{ form_widget(form_theme, {'attr': {'class': 'full-width-input'}}) }}
                         <input type="hidden" name="submitted_form_type" value="theme">
                         {{ form_end(form_theme) }}
                         <div class="ui label">{{ theme_count }}</div>
-                    </div>
+                    </div> 
                 </div>
             </div>
             <div class="twelve wide stretched column">
@@ -49,9 +48,8 @@
     </div>
 </div>
 <div class="sperator"></div>
-
-{% block javascripts %}
- {{ encore_entry_script_tags('view_search_active_form') }}
-{% endblock %}
+{# {% block javascripts %}
+ {{ encore_entry_script_tags('ViewSearch') }}
+{% endblock %} #}
 
 {% endblock %}
