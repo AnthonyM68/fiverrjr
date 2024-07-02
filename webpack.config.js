@@ -49,17 +49,24 @@ Encore
         './assets/styles/app.css',
         './assets/styles/scss_styles.scss'
     ])
+    // app 
+    .addEntry('app_test', './assets/app.js')   
+
+    // .addEntry('view_service_form', './assets/test.js')
+
+
     // forms 
     // Service
     .addEntry('view_service_form', './assets/js/forms/ViewServiceForm.js')
     // Search
     .addEntry('view_search_form', './assets/js/forms/ViewSearch.js')
+
     // Dropdown navbar
     .addEntry('view_navbar_dropdown_theme', './assets/js/dropdown/Theme.js')
-    // Active link focus 
+
+    // Active link seazrch motor focus 
     .addEntry('view_search_active_form', './assets/js/search/Search.js')
-    // app 
-    .addEntry('app', './assets/app.js')    
+     
 
     // REACT
     .enableReactPreset()
@@ -67,15 +74,16 @@ Encore
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
-    .cleanupOutputBeforeBuild()
+    // notify webpack
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
+    // sass
     .enableSassLoader()
+    // less
     .enableLessLoader()
+    // Jquery
     .autoProvidejQuery()
-    .enableBuildNotifications()
-    
     .addPlugin(new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery',
