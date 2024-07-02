@@ -1,12 +1,9 @@
-
 /**
  * Affichage dynamique des résultats de recherches /templates/search/index.html.twig
  * Formulaire SearchFormType
  */
 (function () {
     document.addEventListener('DOMContentLoaded', () => {
-        console.log("ViewSearch.js");
-        $('.ui.basic.modal').modal('show');
         // Intercepter la soumission du formulaire (Service-search-motor ou Them-search-motor) SearchController
         const forms = document.querySelectorAll('.ajax-form');
         forms.forEach(form => {

@@ -4,8 +4,7 @@
 (function () {
     // Configuration du dropdown navbar Theme Category Course
     document.addEventListener('DOMContentLoaded', () => {
-        console.log("Theme.js");
-        const observer = new MutationObserver(function (mutationsList) {
+        /*const observer = new MutationObserver(function (mutationsList) {
             for (let mutation of mutationsList) {
                 if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
                     adjustAllMenuHeights();
@@ -60,6 +59,6 @@
                 const parentOffset = parentMenu.getBoundingClientRect();
                 subMenu.style.top = parentOffset.top + 'px';
             });
-        }
+        }*/
     });
 })();

@@ -3,7 +3,7 @@
 //import { Sticky } from 'semantic-ui-react'; // Importer le composant Sticky de Semantic UI React
 
 // Fonction pour tester la compatibilité du positionnement sticky
-const testSticky = () => {
+/*const testSticky = () => {
   // Préfixes pour les différents navigateurs
   const prefix = ['', '-o-', '-webkit-', '-moz-', '-ms-'];
   // Accéder au style de la balise head
@@ -158,4 +158,4 @@ class StickyParent extends React.Component {
   }
 }
 
-export default StickyParent;
+export default StickyParent;*/

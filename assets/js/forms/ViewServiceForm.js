@@ -2,12 +2,8 @@
  * Gestion des contenu dynamique des select /service/new 
  * Formulaire ServiceThemeCategoryCourseType
  */
-import 'jquery';
 (function () {
     document.addEventListener('DOMContentLoaded', () => {
-        console.log("ViewService");
-        // Initialiser le modal de recherches avancées
-        $('.ui.basic.modal').modal('show');
         // Sélection des éléments du formulaire
         const form_select_theme = document.getElementById('service_course_theme');
         const form_select_category = document.getElementById('service_course_category');
