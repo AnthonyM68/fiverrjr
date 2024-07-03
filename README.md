@@ -84,6 +84,10 @@ $ npm run dev-server
 ```
 attendez la fin des compilations et travaillez!
 
+Compte administrateur pour manipulation du dashboard et des contraintes liées au ROLE_ADMIN
+> admin@gmail.com
+> mdp
+
 <h3 align="center">Languages and Tools:</h3>
 <div align="center">
 <a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a>

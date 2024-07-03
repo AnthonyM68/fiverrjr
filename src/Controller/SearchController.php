@@ -71,9 +71,10 @@ class SearchController extends AbstractController
         ]);
     }
 
-    #[Route("/search/resultat", name: "search_resultat", methods: ["POST"])]
+    #[Route("/search/results", name: "search_results", methods: ["POST"])]
     public function searchResultat(Request $request): JsonResponse
     {
+
         $results = [];
         $submittedFormName = null;
 
@@ -95,19 +96,19 @@ class SearchController extends AbstractController
                         ];
                     }, $services);
                     $submittedFormName = 'service';
-                } elseif ($request->request->get('submitted_form_type') === 'theme') {
+                } elseif ($request->request->get('submitted_form_type') === 'course') {
                     // On récupère le term a rechercher
                     $searchTerm = $request->request->get('search_term');
                     // Récupération des résultats de recherche par theme->category->course => services 
-                    $themes = $this->entityManager->getRepository(Theme::class)->findByTerm($searchTerm);
+                    $themes = $this->entityManager->getRepository(Course::class)->findByTerm($searchTerm);
                     // Sérialisation des résultats de thème
-                    $results['theme'] = array_map(function ($theme) {
+                    $results['course'] = array_map(function ($theme) {
                         return [
                             'id' => $theme->getId(),
-                            'nameTheme' => $theme->getNameTheme(),
+                            'nameCourse' => $theme->getNameCourse(),
                         ];
                     }, $themes);
-                    $submittedFormName = 'theme';
+                    $submittedFormName = 'course';
                 }
                 // Gestion des résultats vides
                 if (empty($results[$submittedFormName])) {
@@ -119,15 +120,6 @@ class SearchController extends AbstractController
                     'submitted_form' => $submittedFormName
                 ]);
             }
-            if (empty($results[$submittedFormName])) {
-                $results['empty'] = true;
-            }
-
-            // On retourne les données au format JSON
-            return new JsonResponse([
-                'results' => $results,
-                'submitted_form' => $submittedFormName
-            ]);
         } catch (\Exception $e) {
             // Log the error message
             $this->logger->error('Error in searchResultat: ' . $e->getMessage());

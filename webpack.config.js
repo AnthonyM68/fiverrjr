@@ -54,8 +54,13 @@ Encore
         './assets/styles/app.css',
         './assets/styles/scss_styles.scss'
     ])
+
     // REACT
-    // .enableReactPreset()
+    .enableReactPreset()
+    // SticiyFooter React
+    .addEntry('StickyFooter', './assets/js/components/StickyFooter.js')
+
+
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
