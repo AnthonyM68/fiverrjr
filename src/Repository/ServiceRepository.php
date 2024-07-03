@@ -15,6 +15,8 @@ class ServiceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Service::class);
     }
+
+
     public function findByTerm($term)
     {
         return $this->createQueryBuilder('t')
@@ -22,14 +24,17 @@ class ServiceRepository extends ServiceEntityRepository
             ->setParameter('term', '%' . $term . '%')
             ->getQuery()
             ->getResult();
+            
     }
+
+
     public function countAll()
-{
-    return $this->createQueryBuilder('t')
-        ->select('count(t.id)')
-        ->getQuery()
-        ->getSingleScalarResult();
-}
+    {
+        return $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     //    /**
     //     * @return Service[] Returns an array of Service objects
     //     */

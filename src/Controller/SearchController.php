@@ -80,24 +80,28 @@ class SearchController extends AbstractController
 
         try {
             if ($request->isMethod('POST')) {
-                // Vérification du formulaire soumis 
-                // if ($request->request->get('submitted_form_type')) {
-                    // On récupère le term a rechercher
-                    $searchTerm = $request->request->get('search_term');
-                    // Récupération des résultats de recherche pour les services
-                    $services = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
-                    // Sérialisation des résultats de service
-                    $results['service'] = array_map(function ($service) {
-                        return [
-                            'id' => $service->getId(),
-                            'title' => $service->getTitle(),
-                            'description' => $service->getDescription(),
-                            'picture' => $service->getPicture(),
-                        ];
-                    }, $services);
-                    $submittedFormName = 'service';
+                // Obtenez le contenu JSON de la requête
+                $jsonData = json_decode($request->getContent(), true);
+
+                // Récupérez les données nécessaires du tableau JSON
+                $submittedFormName = $jsonData['submitted_form_type'] ?? null;
+                $searchTerm = $jsonData['search_term'] ?? null;
+                // Ajoutez un log pour vérifier la valeur de searchTerm
+                // Récupération des résultats de recherche pour les services
+                // $services = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
+
+                // Sérialisation des résultats de service
+                // $results['service'] = array_map(function ($service) {
+                //     return [
+                //         'id' => $service->getId(),
+                //         'title' => $service->getTitle(),
+                //         'description' => $service->getDescription(),
+                //         'picture' => $service->getPicture(),
+                //     ];
+                // }, $services);
+                $submittedFormName = 'service';
                 //}
-                 /*elseif ($request->request->get('submitted_form_type') === 'course') {
+                /*elseif ($request->request->get('submitted_form_type') === 'course') {
                     dd("test");
                     // On récupère le term a rechercher
                     $searchTerm = $request->request->get('search_term');
@@ -121,13 +125,11 @@ class SearchController extends AbstractController
                 // Retour des données au format JSON
                 return new JsonResponse([
                     'results' => $results,
-                    'submitted_form' => $submittedFormName
+                    'submitted_form' => $submittedFormName,
+                    'search_term' => $searchTerm
                 ]);
             }
         } catch (\Exception $e) {
-            // Log the error message
-            $this->logger->error('Error in searchResultat: ' . $e->getMessage());
-
             return new JsonResponse([
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);

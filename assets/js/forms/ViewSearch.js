@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Récupère les données du formulaire
             const formData = new FormData(this);
             console.log(formData);
+            // Boucle sur le contenu de formData et log chaque paire clé-valeur
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+
             let actionUrl = this.getAttribute('action');
             console.log(actionUrl);
 
@@ -56,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(data => {
                     console.log(data);
                     console.log(data.submitted_form);
-                    
+
                     if (data.error) {
                         document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + data.error + '</p>';
                         return;
@@ -73,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Mise à jour du contenu avec les résultats
                     if (data.submitted_form === 'service' && data.results.service) {
 
-                        resultsHtml += '<h3>Résultats pour Service</h3><div class="ui divided items">';
+                        resultsHtml += '<h3>Résultats pour Service </h3><div class="ui divided items">';
                         data.results.service.forEach(service => {
                             resultsHtml += `
                <div class="item">
@@ -95,17 +100,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         resultsHtml += '</div>';
                     }
 
-                    if (data.submitted_form === 'test2' && data.results.course) {
+                    // if (data.submitted_form === 'test2' && data.results.course) {
 
-                        resultsHtml += '<h2>Résultats par Sous-catégorie</h2><ul>';
-                        data.results.course.forEach(course => {
-                            console.log(course.nameCourse.includes(searchTerm));
-                            if (course.nameCourse.includes(searchTerm)) {
-                                resultsHtml += `<li>${course.nameCourse}</li>`;
-                            }
-                        });
-                        resultsHtml += '</ul>';
-                    }
+                    //     resultsHtml += '<h2>Résultats par Sous-catégorie</h2><ul>';
+                    //     data.results.course.forEach(course => {
+                    //         console.log(course.nameCourse.includes(searchTerm));
+                    //         if (course.nameCourse.includes(searchTerm)) {
+                    //             resultsHtml += `<li>${course.nameCourse}</li>`;
+                    //         }
+                    //     });
+                    //     resultsHtml += '</ul>';
+                    // }
                     document.getElementById('search-results').innerHTML = resultsHtml;
                 })
                 .catch(error => {

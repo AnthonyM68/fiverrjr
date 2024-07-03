@@ -71,7 +71,7 @@ class ServiceController extends AbstractController
                 $subFormData = $form->get('course')->getData();
                 $course = $subFormData['course'] ?? null;
 
-                // Vérifie que le service a un cours associé
+                // Vérifie que le service que le service a un cours associé
                 if ($course) {
                     $service->setCourse($course);
                 }else {
