@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+
+// Commentaire : Ceci est un formulaire Symfony qui prend une table de recherche aléatoire et recherche un terme.
 class SearchFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -29,7 +31,7 @@ class SearchFormType extends AbstractType
                 'label' => $options['search_label'],
                 'required' => true,
                 'attr' => [
-                    'class' => 'required', // Ajoutez une classe CSS spéciale ici
+                    'class' => 'required',
                 ],
             ])
             ->add('submit', SubmitType::class, [

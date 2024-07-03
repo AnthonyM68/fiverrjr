@@ -7,7 +7,7 @@
 
 {# On vérifie que le formulaire existe avant de l'afficher #}
 {% if formAddTheme is defined %}
-{{ form_start(formAddTheme, {'attr': {'class': 'ui form', 'novalidate' : 'novalidate'}}) }}
+{{ form_start(formAddTheme, {'attr': {'class': 'ui form'}}) }}
 {# Si erreur on ajoute la class field #}
 <div class="{% if formAddTheme.nameTheme.vars.errors|length > 0 %}field{% endif %}">
     {{ form_row(formAddTheme.nameTheme) }}
@@ -27,6 +27,11 @@
     </div>
     {% endfor %}
 </div>
+{% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('new_theme') }}" class="ui button">
+        Ajouter une thème
+    </a>
+{% endif %}
 {% endif %}
 
 {% endblock %}

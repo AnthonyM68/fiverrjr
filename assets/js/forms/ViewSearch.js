@@ -26,14 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     forms.forEach(form => {
         form.addEventListener('submit', function (event) {
-  
+
             event.preventDefault(); // Empêche le rechargement de la page
             // Récupère les données du formulaire
             const formData = new FormData(this);
+            console.log(formData);
             let actionUrl = this.getAttribute('action');
             console.log(actionUrl);
 
-            if(actionUrl == null) {
+            if (actionUrl == null) {
                 actionUrl = 'search/results';
             }
             // Récupère le type de formulaire soumis
@@ -43,6 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Envoie les données du formulaire via Fetch API
             fetch(actionUrl, {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token("search_courses") }}'
+                },
                 body: formData,
             })
                 .then(response => {
@@ -51,14 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(data => {
                     console.log(data);
                     console.log(data.submitted_form);
-
+                    
                     if (data.error) {
                         document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + data.error + '</p>';
                         return;
                     }
 
                     let resultsHtml = '';
-                    
+
                     if (data.results.empty) {
                         resultsHtml += '<h2>Aucun résultats</h2>';
                         document.getElementById('search-results').innerHTML = resultsHtml;
@@ -73,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             resultsHtml += `
                <div class="item">
                  <div class="image">
-                   <img src="${service.picture}">
+                   <img src="./img/${service.picture}">
                  </div>
                  <div class="content">
                    <a class="header">${service.title}</a>
@@ -90,11 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         resultsHtml += '</div>';
                     }
 
-                    if (data.submitted_form === 'course' && data.results.course) {
-            
+                    if (data.submitted_form === 'test2' && data.results.course) {
+
                         resultsHtml += '<h2>Résultats par Sous-catégorie</h2><ul>';
                         data.results.course.forEach(course => {
-                            resultsHtml += `<li>${course.nameCourse}</li>`;
+                            console.log(course.nameCourse.includes(searchTerm));
+                            if (course.nameCourse.includes(searchTerm)) {
+                                resultsHtml += `<li>${course.nameCourse}</li>`;
+                            }
                         });
                         resultsHtml += '</ul>';
                     }

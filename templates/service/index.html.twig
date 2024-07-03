@@ -25,6 +25,10 @@
     {{ form_row(formAddService.user) }}
 </div>
 <hr>
+<div class="{% if formAddService.picture.vars.errors|length > 0 %} field{% endif %}">
+    {{ form_row(formAddService.picture) }}
+</div>
+
 <div class="{% if formAddService.title.vars.errors|length > 0 %} field{% endif %}">
     {{ form_row(formAddService.title) }}
 </div>
@@ -56,6 +60,13 @@
     </div>
     {% endfor %}
 </div>
+
+{% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('new_service') }}" class="ui button">
+        Ajouter un service
+    </a>
+{% endif %}
+
 {% endif %}
 
 {# On inject le script pour la gestion des contenus dynamique des select #}

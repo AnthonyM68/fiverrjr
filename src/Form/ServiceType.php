@@ -24,6 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class ServiceType extends AbstractType
 {
@@ -66,6 +67,12 @@ class ServiceType extends AbstractType
             ])
             ->add('duration', IntegerType::class, [
                 'label' => 'Durée',
+                'attr' => [
+                    'class' => 'ui fluid input'
+                ]
+            ])
+            ->add('picture', FileType::class, [
+                'label' => 'Image',
                 'attr' => [
                     'class' => 'ui fluid input'
                 ]

@@ -81,7 +81,7 @@ class SearchController extends AbstractController
         try {
             if ($request->isMethod('POST')) {
                 // Vérification du formulaire soumis 
-                if ($request->request->get('submitted_form_type') === 'service') {
+                // if ($request->request->get('submitted_form_type')) {
                     // On récupère le term a rechercher
                     $searchTerm = $request->request->get('search_term');
                     // Récupération des résultats de recherche pour les services
@@ -96,20 +96,24 @@ class SearchController extends AbstractController
                         ];
                     }, $services);
                     $submittedFormName = 'service';
-                } elseif ($request->request->get('submitted_form_type') === 'course') {
+                //}
+                 /*elseif ($request->request->get('submitted_form_type') === 'course') {
+                    dd("test");
                     // On récupère le term a rechercher
                     $searchTerm = $request->request->get('search_term');
                     // Récupération des résultats de recherche par theme->category->course => services 
-                    $themes = $this->entityManager->getRepository(Course::class)->findByTerm($searchTerm);
+                    $themes = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
                     // Sérialisation des résultats de thème
-                    $results['course'] = array_map(function ($theme) {
+                    $results['service'] = array_map(function ($service) {
                         return [
-                            'id' => $theme->getId(),
-                            'nameCourse' => $theme->getNameCourse(),
+                            'id' => $service->getId(),
+                            'title' => $service->getTitle(),
+                            'description' => $service->getDescription(),
+                            'picture' => $service->getPicture(),
                         ];
-                    }, $themes);
+                    }, $services);
                     $submittedFormName = 'course';
-                }
+                }*/
                 // Gestion des résultats vides
                 if (empty($results[$submittedFormName])) {
                     $results['empty'] = true;

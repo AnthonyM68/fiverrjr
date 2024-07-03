@@ -2,27 +2,29 @@
 
 namespace App\Controller;
 // Importation des classes nécessaires
-use App\Entity\Service;
 use App\Entity\Theme;
-use App\Entity\Category;
 use App\Entity\Course;
-use App\Form\ServiceType;
+use App\Entity\Service;
 use App\Form\ThemeType;
-use App\Form\CategoryType;
+use App\Entity\Category;
 use App\Form\CourseType;
-use App\Repository\ServiceRepository;
+use App\Form\ServiceType;
+use App\Form\CategoryType;
 use App\Repository\ThemeRepository;
-use App\Repository\CategoryRepository;
 use App\Repository\CourseRepository;
+use App\Repository\ServiceRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\String\Slugger\SluggerInterface;
 // Importation correcte pour IsGranted
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class ServiceController extends AbstractController
 {
@@ -40,7 +42,7 @@ class ServiceController extends AbstractController
 
         // Rend la vue avec les services récupérés
         return $this->render('service/index.html.twig', [
-            'controller_name' => 'ServiceController',
+            'title_page' => 'Liste des Services',
             'services' => $services
         ]);
     }
@@ -49,7 +51,7 @@ class ServiceController extends AbstractController
     #[Route('/service/edit/{id}', name: 'edit_service')]
     // Restreint l'accès aux utilisateurs authentifiés
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request): Response
+    public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger): Response
     {
         // Si le service n'existe pas, crée un nouveau service
         if (!$service) {
@@ -65,6 +67,55 @@ class ServiceController extends AbstractController
         if ($form->isSubmitted()) {
             // Si le formulaire est valide, persiste et sauvegarde la Category
             if ($form->isValid()) {
+
+                $subFormData = $form->get('course')->getData();
+                $course = $subFormData['course'] ?? null;
+
+                // Vérifie que le service a un cours associé
+                if ($course) {
+                    $service->setCourse($course);
+                }else {
+                    // Si aucun cours n'est sélectionné, ajouter une erreur de validation
+                    $form->get('course')->addError(new FormError('Veuillez sélectionner un cours.'));
+
+                    $errors = $form->get('course')->getErrors(true);
+
+                    return $this->render('service/index.html.twig', [
+                        'title_page' => 'Services',
+                        'formAddService' => $form->createView(),
+                        'errors' => $form->getErrors(true),
+                    ]);
+                }
+
+                $file = $form->get('picture')->getData();
+
+                if ($file) {
+                    // Générer un nouveau nom de fichier unique
+                    $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+
+                    // Déplacer le fichier vers le répertoire de destination
+                    // try {
+                    //     $file->move(
+                    //         $this->getParameter('uploads_directory'),
+                    //         $newFilename
+                    //     );
+                    // } catch (FileException $e) {
+                    //     // Gérer les exceptions si quelque chose se passe mal pendant l'upload
+                    // }
+
+                    // Mettre à jour la propriété 'attachment' pour stocker le nom du fichier
+                    // au lieu de son contenu
+
+                    // dd($newFilename);
+                    $service->setPicture($newFilename);
+                }
+                //$file->move($directory, $someNewFilename);
+
+                
+                
+
 
                 $entityManager->persist($service);
                 $entityManager->flush();
@@ -97,7 +148,7 @@ class ServiceController extends AbstractController
 
         // Rend la vue avec les thèmes récupérés
         return $this->render('theme/index.html.twig', [
-            'controller_name' => 'ServiceController',
+            'title_page' => 'Liste des Thèmes',
             'themes' => $themes
         ]);
     }
@@ -209,7 +260,7 @@ class ServiceController extends AbstractController
 
         // Rend la vue avec les catégories récupérées
         return $this->render('category/index.html.twig', [
-            'controller_name' => 'ServiceController',
+            'title_page' => 'Liste des Catégories',
             'categories' => $categories
         ]);
     }
@@ -297,9 +348,9 @@ class ServiceController extends AbstractController
         // Récupère tous les cours triés par nom
         $courses = $courseRepository->findBy([], ["nameCourse" => "ASC"]);
 
-        // Rend la vue avec les cours récupérés
+        // Rend la vue avec les course récupérés
         return $this->render('course/index.html.twig', [
-            'controller_name' => 'ServiceController',
+            'title_page' => 'Liste des Sous-catégories',
             'courses' => $courses
         ]);
     }

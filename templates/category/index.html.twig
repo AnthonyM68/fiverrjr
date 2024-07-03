@@ -6,7 +6,7 @@
 <h1>{{title_page}}</h1>
 {# On vérifie que le formulaire existe avant de l'afficher #}
 {% if formAddCategory is defined  %}
-{{ form_start(formAddCategory, {'attr': {'class': 'ui form', 'novalidate' : 'novalidate'}}) }}
+{{ form_start(formAddCategory, {'attr': {'class': 'ui form'}}) }}
 {# la class field pour afficher les erreurs #}
 
 <div class="{% if formAddCategory.nameCategory.vars.errors|length > 0 %}field {% endif %}">
@@ -28,9 +28,12 @@
     </div>
     {% endfor %}
 </div>
-<a href="{{ path('new_category') }}" class="ui button">
-    Ajouter une catégorie
-</a>
+{% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('new_category') }}" class="ui button">
+        Ajouter une catégorie
+    </a>
+{% endif %}
+
 {% endif %}
 
 {% endblock %}
