@@ -4,6 +4,17 @@
 (function () {
     // Configuration du dropdown navbar Theme Category Course
     document.addEventListener('DOMContentLoaded', () => {
+        // Configuration du dropdown navbar Theme Category Course
+        $('.ui.dropdown').dropdown({
+            on: 'hover',
+            action: 'nothing',
+            preserveHTML: true,
+            action: function (text, value, element) {
+                if ($(element).hasClass('dropdown')) {
+                    return false;
+                }
+            },
+        });
         /*const observer = new MutationObserver(function (mutationsList) {
             for (let mutation of mutationsList) {
                 if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {

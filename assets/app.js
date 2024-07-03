@@ -106,21 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
     $('.ui.tab.segment[data-tab="' + tabId + '"]').addClass('active');
   });
 
-  /*********************************************************
-   * Dropdonw
-   */
-  // Configuration du dropdown navbar Theme Category Course
-  // $('.ui.dropdown').dropdown({
-  //   on: 'hover',
-  //   action: 'nothing',
-  //   preserveHTML: true,
-  //   action: function (text, value, element) {
-  //     if ($(element).hasClass('dropdown')) {
-  //       return false;
-  //     }
-  //   },
-  // });
-
   const observer = new MutationObserver(function (mutationsList) {
     for (let mutation of mutationsList) {
       if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {

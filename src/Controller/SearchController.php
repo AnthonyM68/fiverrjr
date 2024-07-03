@@ -31,41 +31,41 @@ class SearchController extends AbstractController
     public function search(Request $request): Response
     {
         // Création des trois instances de formulaire pour chaque type de recherche
-        $formTheme = $this->createForm(SearchFormType::class, null, [
-            'search_table' => 'theme',
-            'search_label' => 'Par Thême:',
-        ]);
+        // $formTheme = $this->createForm(SearchFormType::class, null, [
+        //     'search_table' => 'theme',
+        //     'search_label' => 'Par Thême:',
+        // ]);
         // $formCategory = $this->createForm(SearchFormType::class, null, [
         //     'search_table' => 'category',
         //     'search_label' => 'Par Catégorie:',
         // ]);
-        // $formCourse = $this->createForm(SearchFormType::class, null, [
-        //     'search_table' => 'course',
-        //     'search_label' => 'Par Sous-Catégorie:',
-        // ]);
+        $formCourse = $this->createForm(SearchFormType::class, null, [
+            'search_table' => 'course',
+            'search_label' => 'Par Sous-Catégorie:',
+        ]);
         // Gestion de la soumission des formulaires
-        $formTheme->handleRequest($request);
+        // $formTheme->handleRequest($request);
         // $formCategory->handleRequest($request);
-        // $formCourse->handleRequest($request);
+        $formCourse->handleRequest($request);
 
         // Comptage des enregistrements
-        $themeCount = $this->entityManager->getRepository(Theme::class)->countAll();
+        // $themeCount = $this->entityManager->getRepository(Theme::class)->countAll();
         // $categoryCount = $this->entityManager->getRepository(Category::class)->countAll();
-        // $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
+        $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
         $serviceCount = $this->entityManager->getRepository(Service::class)->countAll();
 
         // Rendu de la vue avec les données des formulaires et les comptes d'enregistrements
         return $this->render('search/index.html.twig', [
             'controller_name' => 'SearchController',
             'title_page' => 'Résultats de la recherche',
-            'form_theme' => $formTheme->createView(),
+            // 'form_theme' => $formTheme->createView(),
             // 'form_category' => $formCategory->createView(),
-            // 'form_course' => $formCourse->createView(),
-            'theme_count' => $themeCount,
+            'form_course' => $formCourse->createView(),
+            // 'theme_count' => $themeCount,
             // 'category_count' => $categoryCount,
-            // 'course_count' => $courseCount,
+            'course_count' => $courseCount,
             'service_count' => $serviceCount,
-            'errors' => $formTheme->getErrors(true),
+            'errors' => $formCourse->getErrors(true),
             'title_page' => 'Recherches avancées',
             'submitted_form' => null
         ]);
