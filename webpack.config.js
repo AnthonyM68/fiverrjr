@@ -54,7 +54,6 @@ Encore
     ])
     // REACT
     // .enableReactPreset()
-    
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()

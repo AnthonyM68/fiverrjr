@@ -21,7 +21,7 @@ class SearchFormType extends AbstractType
                 ],
                 'attr' => [
                     'readonly' => true,
-                    // 'style' => 'display:none'
+                    'style' => 'display:none'
                 ],
                 'data' => $options['search_table'],
             ])

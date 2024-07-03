@@ -54,6 +54,7 @@ class SearchController extends AbstractController
         $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
         $serviceCount = $this->entityManager->getRepository(Service::class)->countAll();
 
+        // Rendu de la vue avec les données des formulaires et les comptes d'enregistrements
         return $this->render('search/index.html.twig', [
             'controller_name' => 'SearchController',
             'title_page' => 'Résultats de la recherche',
@@ -64,7 +65,7 @@ class SearchController extends AbstractController
             'category_count' => $categoryCount,
             'course_count' => $courseCount,
             'service_count' => $serviceCount,
-            'errors' => $formTheme->getErrors(true), // Ajoutez les erreurs ici
+            'errors' => $formTheme->getErrors(true),
             'title_page' => 'Recherches avancées',
             'submitted_form' => null
         ]);
@@ -78,23 +79,45 @@ class SearchController extends AbstractController
 
         try {
             if ($request->isMethod('POST')) {
-                if ($request->request->get('submitted_form_type') === 'theme') {
+                // Vérification du formulaire soumis 
+                if ($request->request->get('submitted_form_type') === 'service') {
                     $searchTerm = $request->request->get('search_term');
-                    $results['theme'] = $this->entityManager->getRepository(Theme::class)->findByTerm($searchTerm);
-                    $submittedFormName = 'form_theme';
-                } elseif ($request->request->get('submitted_form_type') === 'service') {
+                    // Récupération des résultats de recherche pour les services
+                    $services = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
+                    // Sérialisation des résultats de service
+                    $results['service'] = array_map(function ($service) {
+                        return [
+                            'id' => $service->getId(),
+                            'title' => $service->getTitle(),
+                            'description' => $service->getDescription(),
+                            'picture' => $service->getPicture(),
+                        ];
+                    }, $services);
+                    $submittedFormName = 'service';
+                } elseif ($request->request->get('submitted_form_type') === 'theme') {
                     $searchTerm = $request->request->get('search_term');
-                    $results['service'] = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
-                    $submittedFormName = 'form_service';
+                    // Récupération des résultats de recherche par theme->category->course => services 
+                    $themes = $this->entityManager->getRepository(Theme::class)->findByTerm($searchTerm);
+                    // Sérialisation des résultats de thème
+                    $results['theme'] = array_map(function ($theme) {
+                        return [
+                            'id' => $theme->getId(),
+                            'nameTheme' => $theme->getNameTheme(),
+                        ];
+                    }, $themes);
+                    $submittedFormName = 'theme';
                 }
-                // } elseif ($request->request->get('submitted_form_type') === 'category') {
-                //     $searchTerm = $request->request->get('search_term');
-                //     $results['category'] = $this->entityManager->getRepository(Category::class)->findByTerm($searchTerm);
-                //     $submittedFormName = 'form_category';
-                // } elseif ($request->request->get('submitted_form_type') === 'course') {
-                //     $searchTerm = $request->request->get('search_term');
-                //     $results['course'] = $this->entityManager->getRepository(Course::class)->findByTerm($searchTerm);
-                //     $submittedFormName = 'form_course';
+
+                // Gestion des résultats vides
+                if (empty($results[$submittedFormName])) {
+                    $results['empty'] = true;
+                }
+
+                // Retour des données au format JSON
+                return new JsonResponse([
+                    'results' => $results,
+                    'submitted_form' => $submittedFormName
+                ]);
             }
 
             if (empty($results[$submittedFormName])) {
@@ -106,7 +129,6 @@ class SearchController extends AbstractController
                 'results' => $results,
                 'submitted_form' => $submittedFormName
             ]);
-
         } catch (\Exception $e) {
             // Log the error message
             $this->logger->error('Error in searchResultat: ' . $e->getMessage());

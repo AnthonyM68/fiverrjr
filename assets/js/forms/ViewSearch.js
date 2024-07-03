@@ -2,18 +2,21 @@
  * Affichage dynamique des résultats de recherches /templates/search/index.html.twig
  * Formulaire SearchFormType
  */
-// import 'jquery'; // Importer jQuery (global)
-
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('viewsearch');
+    console.log('DOM fully loaded and parsed: ViewSearch.js');
+    $('.ui.modal').modal('show');
     // Intercepter la soumission du formulaire (Service-search-motor ou Them-search-motor) SearchController
     const forms = document.querySelectorAll('.ajax-form');
     forms.forEach(form => {
         form.addEventListener('submit', function (event) {
+            console.log('Form submitted');
             event.preventDefault(); // Empêche le rechargement de la page
             // Récupère les données du formulaire
             const formData = new FormData(this);
             const actionUrl = this.getAttribute('action');
+            // Récupère le type de formulaire soumis
+            const submittedFormType = formData.get('submitted_form_type');
+            console.log('Form submitted:', submittedFormType);
             // Envoie les données du formulaire via Fetch API
             fetch(actionUrl, {
                 method: 'POST',
@@ -23,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return response.json();
                 })
                 .then(data => {
+                    console.log(data);
                     if (data.error) {
                         document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + data.error + '</p>';
                         return;
@@ -35,7 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
                     // Mise à jour du contenu avec les résultats
-                    if (data.submitted_form === 'form_service' && data.results.service) {
+                    if (data.submitted_form === 'service' && data.results.service) {
+
                         resultsHtml += '<h3>Résultats pour Service</h3><div class="ui divided items">';
                         data.results.service.forEach(service => {
                             resultsHtml += `
@@ -46,15 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
                  <div class="content">
                    <a class="header">${service.title}</a>
                    <div class="meta">
-                     <span class="cinema">Union Square 14</span>
+                  
                    </div>
                    <div class="description">
                      <p>${service.description}</p>
                    </div>
-                   <div class="extra">
-                     <div class="ui label">IMAX</div>
-                     <div class="ui label"><i class="globe icon"></i> Additional Languages</div>
-                   </div>
+                
                  </div>
                </div>`;
                         });

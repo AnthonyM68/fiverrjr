@@ -48,8 +48,7 @@
     </div>
 </div>
 <div class="sperator"></div>
-{# {% block javascripts %}
- {{ encore_entry_script_tags('ViewSearch') }}
-{% endblock %} #}
-
+{% block javascript %}
+{{ encore_entry_script_tags('ViewSearch') }}
+{% endblock %}
 {% endblock %}
