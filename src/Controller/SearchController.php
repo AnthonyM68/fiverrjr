@@ -35,23 +35,23 @@ class SearchController extends AbstractController
             'search_table' => 'theme',
             'search_label' => 'Par Thême:',
         ]);
-        $formCategory = $this->createForm(SearchFormType::class, null, [
-            'search_table' => 'category',
-            'search_label' => 'Par Catégorie:',
-        ]);
-        $formCourse = $this->createForm(SearchFormType::class, null, [
-            'search_table' => 'course',
-            'search_label' => 'Par Sous-Catégorie:',
-        ]);
+        // $formCategory = $this->createForm(SearchFormType::class, null, [
+        //     'search_table' => 'category',
+        //     'search_label' => 'Par Catégorie:',
+        // ]);
+        // $formCourse = $this->createForm(SearchFormType::class, null, [
+        //     'search_table' => 'course',
+        //     'search_label' => 'Par Sous-Catégorie:',
+        // ]);
         // Gestion de la soumission des formulaires
         $formTheme->handleRequest($request);
-        $formCategory->handleRequest($request);
-        $formCourse->handleRequest($request);
+        // $formCategory->handleRequest($request);
+        // $formCourse->handleRequest($request);
 
         // Comptage des enregistrements
         $themeCount = $this->entityManager->getRepository(Theme::class)->countAll();
-        $categoryCount = $this->entityManager->getRepository(Category::class)->countAll();
-        $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
+        // $categoryCount = $this->entityManager->getRepository(Category::class)->countAll();
+        // $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
         $serviceCount = $this->entityManager->getRepository(Service::class)->countAll();
 
         // Rendu de la vue avec les données des formulaires et les comptes d'enregistrements
@@ -59,11 +59,11 @@ class SearchController extends AbstractController
             'controller_name' => 'SearchController',
             'title_page' => 'Résultats de la recherche',
             'form_theme' => $formTheme->createView(),
-            'form_category' => $formCategory->createView(),
-            'form_course' => $formCourse->createView(),
+            // 'form_category' => $formCategory->createView(),
+            // 'form_course' => $formCourse->createView(),
             'theme_count' => $themeCount,
-            'category_count' => $categoryCount,
-            'course_count' => $courseCount,
+            // 'category_count' => $categoryCount,
+            // 'course_count' => $courseCount,
             'service_count' => $serviceCount,
             'errors' => $formTheme->getErrors(true),
             'title_page' => 'Recherches avancées',
@@ -81,6 +81,7 @@ class SearchController extends AbstractController
             if ($request->isMethod('POST')) {
                 // Vérification du formulaire soumis 
                 if ($request->request->get('submitted_form_type') === 'service') {
+                    // On récupère le term a rechercher
                     $searchTerm = $request->request->get('search_term');
                     // Récupération des résultats de recherche pour les services
                     $services = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
@@ -95,6 +96,7 @@ class SearchController extends AbstractController
                     }, $services);
                     $submittedFormName = 'service';
                 } elseif ($request->request->get('submitted_form_type') === 'theme') {
+                    // On récupère le term a rechercher
                     $searchTerm = $request->request->get('search_term');
                     // Récupération des résultats de recherche par theme->category->course => services 
                     $themes = $this->entityManager->getRepository(Theme::class)->findByTerm($searchTerm);
@@ -107,19 +109,16 @@ class SearchController extends AbstractController
                     }, $themes);
                     $submittedFormName = 'theme';
                 }
-
                 // Gestion des résultats vides
                 if (empty($results[$submittedFormName])) {
                     $results['empty'] = true;
                 }
-
                 // Retour des données au format JSON
                 return new JsonResponse([
                     'results' => $results,
                     'submitted_form' => $submittedFormName
                 ]);
             }
-
             if (empty($results[$submittedFormName])) {
                 $results['empty'] = true;
             }

@@ -4,6 +4,20 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed: ViewSearch.js');
+
+    // Gestion Active Link sur les moteur de recherche
+    // Sélectionnez tous les éléments de menu
+    const menuItems = document.querySelectorAll('.ui.vertical.fluid.menu .item.field');
+    // Ajoutez un gestionnaire de clic à chaque élément de menu
+    menuItems.forEach(item => {
+        item.addEventListener('click', function () {
+            // Supprimez la classe 'active teal' de tous les éléments de menu
+            menuItems.forEach(menu => menu.classList.remove('active', 'teal'));
+            // Ajoutez la classe 'active teal' à l'élément cliqué
+            this.classList.add('active', 'teal');
+        });
+    });
+
     $('.ui.modal').modal('show');
     // Intercepter la soumission du formulaire (Service-search-motor ou Them-search-motor) SearchController
     const forms = document.querySelectorAll('.ajax-form');
@@ -51,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  <div class="content">
                    <a class="header">${service.title}</a>
                    <div class="meta">
-                  
+                        
                    </div>
                    <div class="description">
                      <p>${service.description}</p>

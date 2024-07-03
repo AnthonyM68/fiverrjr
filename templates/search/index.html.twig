@@ -8,10 +8,10 @@
     <h2>{{ title_page }}</h2>
     <div class="content">
         <div class="ui grid">
+
             <div class="four wide left attached column">
                 <div class="ui vertical fluid menu">
-                    <div id="menu-service"
-                        class="item field {{ submitted_form == 'form_service' ? 'active teal' : '' }}">
+                    <div id="menu-service" class="item field {{ submitted_form == 'form_service' ? 'active teal' : '' }}">
                         <form method="post" action="{{ path('search_resultat') }}" class="ui form ajax-form">
                             <div class="ui icon input full-width-input">
                                 <input type="text" name="search_term">
@@ -19,8 +19,9 @@
                             </div>
                             <input type="hidden" name="submitted_form_type" value="service">
                             <button type="submit" class="ui button">Rechercher</button>
+                            
                         </form>
-                        {# <div class="ui label">{{ service_count }}</div> #}
+                        <div class="ui label">{{ service_count }}</div>
                     </div>
                      <div id="menu-theme" class="item field {{ submitted_form == 'form_theme' ? 'active teal' : '' }}">
                         {{ form_start(form_theme, {'attr': {'id': 'form_theme', 'class': 'ui form ajax-form'}}) }}
@@ -31,13 +32,15 @@
                     </div> 
                 </div>
             </div>
+            
             <div class="twelve wide stretched column">
                 <div id="search-results"></div>
             </div>
+
             <div class="actions">
-                <div class="ui red basic cancel inverted button">
+                <div class="ui red cancel inverted button">
                     <i class="remove icon"></i>
-                    Annuler
+                    Fermer
                 </div>
                 <div class="ui green ok inverted button">
                     <i class="checkmark icon"></i>
@@ -47,7 +50,6 @@
         </div>
     </div>
 </div>
-<div class="sperator"></div>
 {% block javascript %}
 {{ encore_entry_script_tags('ViewSearch') }}
 {% endblock %}

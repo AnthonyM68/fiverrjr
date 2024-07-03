@@ -43,6 +43,7 @@ Encore
     // app
     .addEntry('app', './assets/app.js')
     .addEntry('ViewSearch', './assets/js/forms/ViewSearch.js')
+    .addEntry('ViewSeriveForm', './assets/js/forms/ViewServiceForm.js')
     // assets personnalisés
     .addStyleEntry('app_styles', [
         './assets/styles/navbar.css',
