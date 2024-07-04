@@ -1,34 +1,22 @@
-// Importation des modules nécessaires
-import React from 'react';  // Importer React
-import { createRoot } from 'react-dom/client'; // Nouvelle importation pour React 18
-import StickyParent from './js/components/StickyFooter'; // On importe le composant StickyFooter personnalisé
-import 'jquery'; // Importer jQuery (global)
-// Initialisation de createRoot
-const rootElement = document.getElementById('root');
-const root = createRoot(rootElement);
-
-// Rendre le composant StickyParent
-root.render(<StickyParent />);
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM fully loaded and parsed: app.js');
+    console.log('DOM fully loaded and parsed: app.js');
 
-  
-  const inputImgs = document.querySelectorAll(".inputImg");
+    const inputImgs = document.querySelectorAll(".inputImg");
     const imgPreviews = document.querySelectorAll(".imgPreview");
-    inputImgs.forEach(function(inputImg, index) {
+    inputImgs.forEach(function (inputImg, index) {
 
-        inputImg.addEventListener("change", function(event) {
+        inputImg.addEventListener("change", function (event) {
             const file = event.target.files[0];
-            const imgPreview = imgPreviews[index]; 
+            const imgPreview = imgPreviews[index];
 
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function() {
+                reader.onload = function () {
                     imgPreview.src = reader.result;
                     imgPreview.classList.add("d-block");
                 };
-                
+
                 reader.readAsDataURL(file);
             } else {
                 imgPreview.src = "#";
@@ -36,15 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-  // Admin filtres
-  // $('.ui.vertical.fluid.menu .item').on('click', function () {
-  //   // Récupérer l'attribut data-tab correspondant
-  //   let tabId = $(this).data('tab');
-  //   // Désactiver tous les segments
-  //   $('.ui.tab.segment').removeClass('active');
-  //   // Activer le segment correspondant
-  //   $('.ui.tab.segment[data-tab="' + tabId + '"]').addClass('active');
-  // });
+    // Admin filtres
+    // $('.ui.vertical.fluid.menu .item').on('click', function () {
+    //   // Récupérer l'attribut data-tab correspondant
+    //   let tabId = $(this).data('tab');
+    //   // Désactiver tous les segments
+    //   $('.ui.tab.segment').removeClass('active');
+    //   // Activer le segment correspondant
+    //   $('.ui.tab.segment[data-tab="' + tabId + '"]').addClass('active');
+    // });
 
 });
 

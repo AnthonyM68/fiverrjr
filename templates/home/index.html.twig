@@ -17,9 +17,7 @@
         {{ form_end(form_service, {'attr': {'class': 'full-width-input'}}) }}
     </div>
 </div>
-<div class="ui-state-disabled ui-corner-all" style="margin-bottom:5px">
-
-</div>
+{# <div class="ui-state-disabled ui-corner-all" style="margin-bottom:5px"></div> #}
 {# Vérification si le formulaire soumis est 'form_service' et s'il y a des résultats #}
 {% if submitted_form == 'form_service' and results|default %}
 <h2>Résultats</h2>
@@ -107,4 +105,35 @@
 </ul>
 {% endif %}
 
+<div class="ui segment">
+    <h2>Derniers inscrits et enregistrements</h2>
+    <div class="ui fluid carousel">
+        <div class="ui grid">
+            <div class="sixteen wide column">
+                <div class="ui carousel slider">
+                    <div class="carousel-slide">
+                        <h3>Dernier développeur inscrit</h3>
+                        {# <p>{{ dernierDeveloppeur.nom }}</p> #}
+                        {# <p>{{ dernierDeveloppeur.description }}</p> #}
+                    </div>
+                    <div class="carousel-slide">
+                        <h3>Dernière entreprise inscrite</h3>
+                        {# <p>{{ derniereEntreprise.nom }}</p> #}
+                        {# <p>{{ derniereEntreprise.description }}</p> #}
+                    </div>
+                    <div class="carousel-slide">
+                        <h3>Dernier service enregistré</h3>
+                        {# <p>{{ dernierService.nom }}</p> #}
+                        {# <p>{{ dernierService.description }}</p> #}
+                    </div>
+                    <!-- Ajoutez ici d'autres slides au besoin -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% block javascript %}
+{{ encore_entry_script_tags('HomeCarrousel') }}
+{{ encore_entry_script_tags('slick-carousel') }}
+{% endblock %}
 {% endblock %}

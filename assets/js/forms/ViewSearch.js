@@ -74,7 +74,7 @@ const submitForm = (formElement) => {
  * Gestion du formulaire .assets/js/formsViewSearch.js
  */
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed: ViewSearch.js');
+    console.log('-> ViewSearch.js loaded');
     // Initialise le modal
     $('.ui.modal').modal('show');
 

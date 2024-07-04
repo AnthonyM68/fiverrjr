@@ -4,6 +4,7 @@
 (function () {
     // Configuration du dropdown navbar Theme Category Course
     document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM fully loaded and parsed: ViewNavabarDropdown.js');
         // Configuration du dropdown navbar Theme Category Course
         $('.ui.dropdown').dropdown({
             on: 'hover',

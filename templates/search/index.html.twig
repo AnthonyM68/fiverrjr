@@ -4,9 +4,9 @@
 
 {% block body %}
 <div class="sperator"></div>
-<div class="ui modal padded margined">
-    <h2 class="margined padded">{{ title_page }}</h2>
-    <div class="content padded">
+<div class="ui modal padding-large">
+    <h2 class="margined padding-large">{{ title_page }}</h2>
+    <div class="content padding-large">
         <div class="ui grid">
             <div class="four wide left attached column">
                 <div class="ui vertical fluid menu">
@@ -22,12 +22,12 @@
                                 <i class="search icon"></i>
                             </div>
                             {# Radio buttons pour filtrer par prix #}
-                            <div class="field">
-                                <div class="ui radio checkbox">
+                            <div class="field padding">
+                                <div class="ui radio checkbox padding-small">
                                     <input type="radio" name="price_filter" value="low_to_high">
                                     <label>Du moins au plus cher</label>
                                 </div>
-                                <div class="ui radio checkbox">
+                                <div class="ui radio checkbox padding-small">
                                     <input type="radio" name="price_filter" value="high_to_low">
                                     <label>Du plus au moins cher</label>
                                 </div>
@@ -49,12 +49,10 @@
                     </div> #}
                 </div>
             </div>
-
             <div class="twelve wide stretched column">
                 <div id="search-results"></div>
             </div>
-
-            <div class="actions">
+            {# <div class="actions">
                 <div class="ui red cancel inverted button">
                     <i class="remove icon"></i>
                     Fermer
@@ -63,7 +61,7 @@
                     <i class="checkmark icon"></i>
                     Yes
                 </div>
-            </div>
+            </div> #}
         </div>
     </div>
 </div>

@@ -35,16 +35,22 @@ Encore
     // bootstrap 
     .addEntry('bootstrap', './node_modules/bootstrap/dist/js/bootstrap.js')
     .addStyleEntry('bootstrap_css', './node_modules/bootstrap/dist/css/bootstrap.css')
-
     // uikit 
     .addEntry('uikit', './node_modules/uikit/dist/js/uikit.js')
     .addEntry('uikit-icons', './node_modules/uikit/dist/js/uikit-icons.js')
     .addStyleEntry('uikit_css', './node_modules/uikit/dist/css/uikit.css')
     // app
     .addEntry('app', './assets/app.js')
+    // Search motor
     .addEntry('ViewSearch', './assets/js/forms/ViewSearch.js')
+    // Service add
     .addEntry('ViewServiceForm', './assets/js/forms/ViewServiceForm.js')
+    // Dropdown navbar
     .addEntry('ViewNavbarDropdown', './assets/js/dropdown/ViewNavbarDropdown.js')
+    // Carousel Home
+    .addEntry('HomeCarrousel', './assets/js/carrousel/HomeCarrousel.js')
+    .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
+    .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
     // assets personnalisés
     .addStyleEntry('app_styles', [
         './assets/styles/navbar.css',

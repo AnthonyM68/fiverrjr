@@ -1,0 +1,76 @@
+
+@import 'variables';
+
+// Padding
+.padding {
+    padding: $padding-medium; // Valeur par défaut
+}
+
+.padding-small {
+    padding: $padding-small;
+}
+
+.padding-large {
+    padding: $padding-large;
+}
+
+.padding-top {
+    padding-top: $padding-medium;
+}
+
+.padding-top-small {
+    padding-top: $padding-small;
+}
+
+.padding-top-large {
+    padding-top: $padding-large;
+}
+
+.padding-bottom {
+    padding-bottom: $padding-medium;
+}
+
+.padding-bottom-small {
+    padding-bottom: $padding-small;
+}
+
+.padding-bottom-large {
+    padding-bottom: $padding-large;
+}
+
+// Margin
+.margin {
+    margin: $margin-medium; // Valeur par défaut
+}
+
+.margin-small {
+    margin: $margin-small;
+}
+
+.margin-large {
+    margin: $margin-large;
+}
+
+.margin-top {
+    margin-top: $margin-medium;
+}
+
+.margin-top-small {
+    margin-top: $margin-small;
+}
+
+.margin-top-large {
+    margin-top: $margin-large;
+}
+
+.margin-bottom {
+    margin-bottom: $margin-medium;
+}
+
+.margin-bottom-small {
+    margin-bottom: $margin-small;
+}
+
+.margin-bottom-large {
+    margin-bottom: $margin-large;
+}

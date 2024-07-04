@@ -3,7 +3,7 @@ import { Sticky } from 'semantic-ui-react';
 
 // Test de compatibilité de la position sticky
 const testSticky = () => {
-  console.log('DOM fully loaded and parsed: StickyFooter.js');
+  console.log('-> StickyFooter.js loaded');
   const prefix = ['', '-o-', '-webkit-', '-moz-', '-ms-'];
   const test = document.createElement('div');
   for (let i = 0; i < prefix.length; i += 1) {
