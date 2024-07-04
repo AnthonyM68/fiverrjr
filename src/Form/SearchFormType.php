@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+// Formulaire de la navbar
+
 // Formulaire qui prend une table de recherche aléatoire et recherche un terme.
 class SearchFormType extends AbstractType
 {
@@ -28,19 +30,12 @@ class SearchFormType extends AbstractType
                 ],
                 'data' => $options['search_table'],
             ])
-
             ->add('search_term', TextType::class, [
                 'label' => $options['search_label'],
                 'required' => true,
                 'attr' => [
-                    'class' => 'required',
+                    'class' => 'required full-width-input', // Ajout de classe ici si nécessaire
                 ],
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Rechercher',
-                'attr' => [
-                    'class' => 'ui-button ui-widget ui-corner-all'
-                ]
             ]);
     }
 
@@ -49,6 +44,9 @@ class SearchFormType extends AbstractType
         $resolver->setDefaults([
             'search_label' => null,
             'search_table' => null,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            'csrf_token_id'   => 'search_item'
         ]);
     }
 }

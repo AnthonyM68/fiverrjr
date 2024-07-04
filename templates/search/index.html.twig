@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="sperator"></div>
-<div class="ui modal padding-large">
+<div class="ui modal search padding-large">
     <h2 class="margined padding-large">{{ title_page }}</h2>
     <div class="content padding-large">
         <div class="ui grid">
@@ -13,7 +13,7 @@
                     <div id="menu-service"
                         class="item field {{ submitted_form == 'form_service' ? 'active teal' : '' }}">
                         {# Formulaire de recherche d'un service au travers les 3 entity #}
-                        <form method="post" action="{{ path('search_results') }}" class="ui form ajax-form">
+                        <form method="post" action="{{ path('search_results') }}" class="ui form ajax-search-form">
                             {# le token masqué #}
                             <input type="hidden" name="_token" value="{{ csrf_token('search_item') }}">
                             {# Input du term a rechercher #}

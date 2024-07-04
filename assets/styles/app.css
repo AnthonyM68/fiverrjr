@@ -14,45 +14,8 @@ label.required::after {
   content: "";
   display: none !important;
 }
-/* Assurez-vous que les champs ne sont pas en état d'erreur par défaut */
-/* .ui.form .field.error input {
-  border-color: #e0e1e2;
-} */
-
-
- /* Component React StickyFooter */
-.sticky {
-  position: -webkit-sticky;
-  position: sticky;
-  bottom: 0;
-  background: #f1f1f1;
-  padding: 50px;
-  font-size: 20px;
-}
-.container {
-  height: 700px; 
-  overflow: auto; /* Garde le défilement */
-}
- .container::-webkit-scrollbar {
-  width: 0px;  
-  background: transparent; 
-} 
-.outer-container {
-  height: 700px;
-  overflow: hidden;
-  position: relative;
-}
-.inner-container {
-  height: 100%;
-  overflow-y: scroll;
-  padding-right: 15px; /* Compense la largeur de la scrollbar */
-  box-sizing: content-box; /* Assure que le padding n'affecte pas la largeur totale */
-}
-.inner-container::-webkit-scrollbar {
-  width: 0; /* Masque la scrollbar */
-}
-.context {
-  padding: 20px;
-  background: #eee;
+/* Assurez-vous que ce style est bien chargé */
+.ui.modal {
+  transition: all 0.3s ease;
 }
 

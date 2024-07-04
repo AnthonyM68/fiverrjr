@@ -1,21 +1,14 @@
-(function(){
-    // Gestion Active Link sur les moteur de recherche
-    // Sélectionnez tous les éléments de menu (les moteur de recherches, les formulaires)
-    const menuItems = document.querySelectorAll('.ui.vertical.fluid.menu .item.field');
-    // Ajoutez un gestionnaire de clic à chaque élément de menu
-    menuItems.forEach(item => {
-        item.addEventListener('click', function () {
-            // Supprimez la classe 'active teal' de tous les éléments de menu
-            menuItems.forEach(menu => menu.classList.remove('active', 'teal'));
-            // Ajoutez la classe 'active teal' à l'élément cliqué
-            this.classList.add('active', 'teal');
-        });
-    });
-}());
+
 
 const submitForm = (formElement) => {
+    // Initialiser le modal
+    $('.ui.modal.navbar').modal({
+        transition: 'slide down'
+    });
     const formData = new FormData(formElement);
     const jsonData = Object.fromEntries(formData.entries());
+    console.log(jsonData);
+    console.log(formElement.action);
     fetch(formElement.action, {
         method: 'POST',
         headers: {
@@ -27,6 +20,7 @@ const submitForm = (formElement) => {
             return response.json();
         })
         .then(data => {
+            console.log(data);
             let resultsHtml = '';
             if (data.error) {
                 document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + data.error + '</p>';
@@ -63,34 +57,30 @@ const submitForm = (formElement) => {
                 });
                 resultsHtml += '</div>';
             }
-            document.getElementById('search-results').innerHTML = resultsHtml;
+            $('.ui.modal.navbar').modal('show');
+            document.getElementById('search-results-navbar').innerHTML = resultsHtml;
         })
         .catch(error => {
-            document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
+            $('.ui.modal.navbar').modal('show');
+            document.getElementById('search-results-navbar').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
         });
 }
-/**
- * Affichage dynamique des résultats de recherches /templates/search/index.html.twig
- * Gestion du formulaire .assets/js/formsViewSearch.js
- */
+
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('-> ViewSearch.js loaded');
-    // Initialise le modal
-    $('.ui.modal.search').modal('show');
+    console.log('-> ViewNavbar.js loaded');
+    const searchIcon = document.getElementById('search-icon');
+    const form = document.querySelector('.ajax-form');
 
-    // On sélectionne le formulaire de recherche utilisé pour envois par AJAX
-    const formElement = document.querySelector('.ajax-search-form');
-     // Intercepter la soumission du formulaire (Service-search-motor ou Theme-search-motor)
-     formElement.addEventListener('submit', function (event) {
+
+    searchIcon.addEventListener('click', function () {
         event.preventDefault();
-        submitForm(formElement);
+        submitForm(form);
     });
-
-    // Ajout d'un écouteur d'événement sur les radio buttons pour filtrer par prix
-    const priceFilters = document.querySelectorAll('input[name="price_filter"]');
-    priceFilters.forEach(radio => {
-        radio.addEventListener('change', () => {
-            submitForm(formElement);
-        });
+    form.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            console.log('enter');
+            event.preventDefault();
+            submitForm(form);
+        }
     });
 });

@@ -41,6 +41,8 @@ Encore
     .addStyleEntry('uikit_css', './node_modules/uikit/dist/css/uikit.css')
     // app
     .addEntry('app', './assets/app.js')
+    // Navbar 
+    .addEntry('ViewNavbar', './assets/js/navbar/ViewNavbar.js')
     // Search motor
     .addEntry('ViewSearch', './assets/js/forms/ViewSearch.js')
     // Service add
@@ -53,6 +55,7 @@ Encore
     .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
     // assets personnalisés
     .addStyleEntry('app_styles', [
+        './assets/styles/sticky.css',
         './assets/styles/navbar.css',
         './assets/styles/dropdown.css',
         './assets/styles/login-register.css',

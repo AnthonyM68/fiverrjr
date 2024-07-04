@@ -2,6 +2,10 @@
      User Global Variables
 *******************************/
 
+// Définition d'une nouvelle variable de couleur
+@my-custom-background-color: #12172b;
+@my-custom-text-color: #fff;
+
 @pageMinWidth: 1049px;
 @pageOverflowX: visible;
 

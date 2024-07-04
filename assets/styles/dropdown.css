@@ -3,19 +3,21 @@
   position: relative;
   cursor: pointer;
 }
+.ui.fluid.dropdown {
+  width: auto !important; /* Revenir à la largeur automatique en fonction du contenu */
+}
 .ui.dropdown.item > .menu {
   display: none;
   position: absolute;
   background-color: #fff;
   z-index: 10;
-  min-width: 350px !important;
   top: 100%;
 }
 .ui.dropdown.item > .menu > .item > .menu {
   position: absolute;
   left: 100%;
   margin-left: -1px;
-  min-width: 300px; 
+  width:auto;
 }
 .ui.dropdown.item > .menu > .item > .menu > .item {
   height: auto;

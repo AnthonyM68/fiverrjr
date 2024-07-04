@@ -1,0 +1,8 @@
+/*******************************
+         Site Overrides
+*******************************/
+// Utilisation de la variable pour modifier l'arrière-plan d'un élément
+body {
+    background-color: @my-custom-background-color;
+    color:@my-custom-text-color;
+}

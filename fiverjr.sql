@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   PRIMARY KEY (`id`),
   KEY `IDX_64C19C159027487` (`theme_id`),
   CONSTRAINT `FK_64C19C159027487` FOREIGN KEY (`theme_id`) REFERENCES `theme` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table fiverrjr.category : ~12 rows (environ)
 INSERT INTO `category` (`id`, `name_category`, `theme_id`) VALUES
@@ -41,7 +41,8 @@ INSERT INTO `category` (`id`, `name_category`, `theme_id`) VALUES
 	(8, 'Applications iOS', 2),
 	(9, 'Applications Android', 2),
 	(10, 'Applications Hybrides', 2),
-	(11, 'Applications Android', 2);
+	(11, 'Applications Android', 2),
+	(13, 'Test Category 1', 1);
 
 -- Listage de la structure de table fiverrjr. course
 CREATE TABLE IF NOT EXISTS `course` (
@@ -51,9 +52,9 @@ CREATE TABLE IF NOT EXISTS `course` (
   PRIMARY KEY (`id`),
   KEY `IDX_169E6FB912469DE2` (`category_id`),
   CONSTRAINT `FK_169E6FB912469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.course : ~19 rows (environ)
+-- Listage des données de la table fiverrjr.course : ~20 rows (environ)
 INSERT INTO `course` (`id`, `category_id`, `name_course`) VALUES
 	(1, 1, 'Développement de sites vitrines'),
 	(2, 1, 'Développement de blogs'),
@@ -73,7 +74,8 @@ INSERT INTO `course` (`id`, `category_id`, `name_course`) VALUES
 	(16, 6, 'Développement de thèmes et plugins WordPress'),
 	(17, 6, 'Développement avec Joomla et Drupal'),
 	(18, 7, 'Développement d\'API RESTful'),
-	(19, 7, 'Intégration de services tiers (Stripe, PayPal, etc.)');
+	(19, 7, 'Intégration de services tiers (Stripe, PayPal, etc.)'),
+	(21, 1, 'Test Course 1');
 
 -- Listage de la structure de table fiverrjr. messenger_messages
 CREATE TABLE IF NOT EXISTS `messenger_messages` (
@@ -126,28 +128,30 @@ CREATE TABLE IF NOT EXISTS `service` (
   CONSTRAINT `FK_E19D9AD2591CC992` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
   CONSTRAINT `FK_E19D9AD28D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
   CONSTRAINT `FK_E19D9AD2A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.service : ~2 rows (environ)
+-- Listage des données de la table fiverrjr.service : ~3 rows (environ)
 INSERT INTO `service` (`id`, `user_id`, `order_id`, `course_id`, `title`, `description`, `price`, `duration`, `create_date`, `picture`) VALUES
-	(1, 1, NULL, 1, 'Titre service 1 ', 'Proposition de service de l\'utilisateur Admin', 10, 60, '2024-06-26 17:32:18', './public/img/Service/service.jpg'),
-	(2, 2, NULL, 2, 'Titre service 2', 'Proposition de service de l\'utilisateur: user', 50, 300, '2024-06-28 06:15:16', './public/img/Service/service.jpg');
+	(1, 1, NULL, 1, 'Titre service 1 ', 'Proposition de service de l\'utilisateur Admin', 10, 60, '2024-06-26 17:32:18', 'service.jpg'),
+	(2, 2, NULL, 2, 'Titre service 2', 'Proposition de service de l\'utilisateur: user', 50, 300, '2024-06-28 06:15:16', 'service.jpg'),
+	(5, 1, NULL, 1, 'Titre service 3', 'test picture', 20, 10, '2024-07-03 13:42:53', 'service.jpg');
 
 -- Listage de la structure de table fiverrjr. theme
 CREATE TABLE IF NOT EXISTS `theme` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name_theme` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.theme : ~6 rows (environ)
+-- Listage des données de la table fiverrjr.theme : ~7 rows (environ)
 INSERT INTO `theme` (`id`, `name_theme`) VALUES
 	(1, 'Développement Web'),
 	(2, 'Développement Mobile'),
 	(3, 'Développement de Logiciels'),
 	(4, 'Bases de Données'),
 	(5, 'DevOps et Administration Système'),
-	(6, 'Intelligence Artificielle et Data Science');
+	(6, 'Intelligence Artificielle et Data Science'),
+	(8, 'Test Theme 1');
 
 -- Listage de la structure de table fiverrjr. user
 CREATE TABLE IF NOT EXISTS `user` (

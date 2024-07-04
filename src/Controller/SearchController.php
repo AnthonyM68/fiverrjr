@@ -34,39 +34,27 @@ class SearchController extends AbstractController
     #[Route("/search", name: "search")]
     public function search(Request $request): Response
     {
-        // Création des trois instances de formulaire pour chaque type de recherche
-        // $formTheme = $this->createForm(SearchFormType::class, null, [
-        //     'search_table' => 'theme',
-        //     'search_label' => 'Par Thême:',
-        // ]);
-        // $formCategory = $this->createForm(SearchFormType::class, null, [
-        //     'search_table' => 'category',
-        //     'search_label' => 'Par Catégorie:',
-        // ]);
-        $formCourse = $this->createForm(SearchFormType::class, null, [
+        $formSearch = $this->createForm(SearchFormType::class, null, [
             'search_table' => 'course',
             'search_label' => 'Par Sous-Catégorie:'
-
         ]);
         // Gestion de la soumission des formulaires
-        // $formTheme->handleRequest($request);
-        // $formCategory->handleRequest($request);
-        $formCourse->handleRequest($request);
+        $formSearch->handleRequest($request);
 
         // Comptage des enregistrements
         // $themeCount = $this->entityManager->getRepository(Theme::class)->countAll();
         // $categoryCount = $this->entityManager->getRepository(Category::class)->countAll();
-        $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
+        // $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
         $serviceCount = $this->entityManager->getRepository(Service::class)->countAll();
 
         // Rendu de la vue avec les données des formulaires et les comptes d'enregistrements
         return $this->render('search/index.html.twig', [
             'controller_name' => 'SearchController',
             'title_page' => 'Résultats de la recherche',
-            'form' => $formCourse->createView(),
-            'course_count' => $courseCount,
+            // 'form' => $formCourse->createView(),
+            // 'course_count' => $courseCount,
             'service_count' => $serviceCount,
-            'errors' => $formCourse->getErrors(true),
+            'errors' => $formSearch->getErrors(true),
             'submitted_form' => null
         ]);
     }
@@ -76,11 +64,26 @@ class SearchController extends AbstractController
     {
         // Récupération des données JSON
         $jsonData = json_decode($request->getContent(), true);
+        
         // Récupération des champs nécessaires
+        // Si le token du formulaire personnalisé ViewSearch existe
         $token = $jsonData['_token'] ?? null;
+        if ($token) {
+            // Si le token n'est pas présent
+            if ($token === null) {
+                return new JsonResponse([
+                    'error' => 'Token is not defined or null'
+                ], JsonResponse::HTTP_BAD_REQUEST);
+            }
+            // Si le token n'est pas valide
+            if (!$this->isCsrfTokenValid('search_item', $token)) {
+                return new JsonResponse([
+                    'error' => 'Invalid CSRF token!'
+                ], JsonResponse::HTTP_BAD_REQUEST);
+            }
+        }
         $searchTerm = $jsonData['search_term'] ?? null;
         $submittedFormType = $jsonData['submitted_form_type'] ?? null;
-
         $priceFilter = $jsonData['price_filter'] ?? null;
 
         // Enregistrement des données de la requête dans les logs
@@ -90,18 +93,7 @@ class SearchController extends AbstractController
             'submittedFormType' => $submittedFormType,
             'priceFilter' => $priceFilter
         ]);
-        // Si le token n'est pas présent
-        if ($token === null) {
-            return new JsonResponse([
-                'error' => 'Token is not defined or null'
-            ], JsonResponse::HTTP_BAD_REQUEST);
-        }
-        // Si le token n'est pas valide
-        if (!$this->isCsrfTokenValid('search_item', $token)) {
-            return new JsonResponse([
-                'error' => 'Invalid CSRF token!'
-            ], JsonResponse::HTTP_BAD_REQUEST);
-        }
+
         // Récupération des résultats de recherche pour les services
         $queryBuilder = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
         // On filtre par prix

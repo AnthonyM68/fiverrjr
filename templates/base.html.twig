@@ -13,27 +13,26 @@
     {{ encore_entry_link_tags('jquery_structure') }}
     {{ encore_entry_link_tags('uikit_css') }}
      {# {{ encore_entry_link_tags('semantic_css') }} #}
-  
     {{ encore_entry_link_tags('semantic_less') }}
     {{ encore_entry_link_tags('app_styles') }}
     {{ encore_entry_link_tags('slick-carousel-css') }}
     {% endblock %}
 </head>
-
-
 <body>
-    <header>{% include 'navbar/navbar.html.twig' %}</header>
+    {# Modal de recherche navbar #}
+    {% include 'navbar/modal.html.twig' %}
+    <header>
+        {# On utilise un controller pour rendre un form #}
+        {{ render(controller('App\\Controller\\NavbarController::index')) }}
+    </header>
     <artcile>
         <div class="ui container">
             <div class="separator"></div>
             {% block body %}{% endblock %}
         </div>
     </artcile>
-
     <footer>{% include 'footer/footer.html.twig' %}</footer>
-
     {% block javascripts %}
-
     {{ encore_entry_script_tags('jquery_ui') }}
     {{ encore_entry_script_tags('uikit') }}
     {# {{ encore_entry_script_tags('uikit-icons') }} #}
