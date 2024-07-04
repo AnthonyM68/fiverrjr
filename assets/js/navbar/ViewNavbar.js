@@ -1,26 +1,30 @@
 
 
 const submitForm = (formElement) => {
-    // Initialiser le modal
+    // Initialiser le modal avec l'effet slide down
     $('.ui.modal.navbar').modal({
         transition: 'slide down'
     });
+    // On récupère les données du formulaire
+    // et on crée une nouvelle instance de formData
     const formData = new FormData(formElement);
+    // On convertit les données du formulaire en un objet JavaScript
     const jsonData = Object.fromEntries(formData.entries());
-    console.log(jsonData);
-    console.log(formElement.action);
+    // Requête AJAX
     fetch(formElement.action, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
+        // On sérialise l'objet javascript au format JSON
         body: JSON.stringify(jsonData)
     })
         .then(response => {
+            // On convertit la reponse JSON en un objet js
             return response.json();
         })
         .then(data => {
-            console.log(data);
+
             let resultsHtml = '';
             if (data.error) {
                 document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + data.error + '</p>';
@@ -57,10 +61,12 @@ const submitForm = (formElement) => {
                 });
                 resultsHtml += '</div>';
             }
+            // On ouvre le modal
             $('.ui.modal.navbar').modal('show');
             document.getElementById('search-results-navbar').innerHTML = resultsHtml;
         })
         .catch(error => {
+            // On ouvre le modal
             $('.ui.modal.navbar').modal('show');
             document.getElementById('search-results-navbar').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
         });
@@ -71,11 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchIcon = document.getElementById('search-icon');
     const form = document.querySelector('.ajax-form');
 
-
+    // On place un écouteur d'événement sur l'icon SEARCH
     searchIcon.addEventListener('click', function () {
         event.preventDefault();
         submitForm(form);
     });
+    // On place un ecouteur d'évenement pour la touche ENTER
     form.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             console.log('enter');

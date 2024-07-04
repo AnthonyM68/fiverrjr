@@ -42,8 +42,7 @@
                 </div>
             </div>
             <div class="right menu">
-                <!-- Start: Search -->
-                {# Formulaire de recherche, commençant ici #}
+                {# Formulaire de recherche#}
                 {{ form_start(form_service, {'attr': {'class': 'ui form ajax-form'}}) }}
                 <div class="ui icon input full-width-input">
                     {{ form_widget(form_service.search_term, {'attr': {'class': 'required'}}) }}
@@ -51,8 +50,6 @@
                 </div>
                 <input type="hidden" name="submitted_form_type" value="service">
                 {{ form_end(form_service) }}
-
-
                 <a href="{{ path('search') }}" class="item">Avancées</a>
                 {% if app.user %}
                 <a href="#" class="ui item">Bonjour {{ app.user.username }}</a>
