@@ -14,18 +14,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SearchController extends AbstractController
 {
     private $entityManager;
     private $logger;
+    private $csrfTokenManager;
 
-    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger)
+    public function __construct(EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager, LoggerInterface $logger)
     {
         $this->entityManager = $entityManager;
+        $this->csrfTokenManager = $csrfTokenManager;
         $this->logger = $logger;
     }
+
 
     #[Route("/search", name: "search")]
     public function search(Request $request): Response
@@ -41,7 +45,8 @@ class SearchController extends AbstractController
         // ]);
         $formCourse = $this->createForm(SearchFormType::class, null, [
             'search_table' => 'course',
-            'search_label' => 'Par Sous-Catégorie:',
+            'search_label' => 'Par Sous-Catégorie:'
+
         ]);
         // Gestion de la soumission des formulaires
         // $formTheme->handleRequest($request);
@@ -58,15 +63,10 @@ class SearchController extends AbstractController
         return $this->render('search/index.html.twig', [
             'controller_name' => 'SearchController',
             'title_page' => 'Résultats de la recherche',
-            // 'form_theme' => $formTheme->createView(),
-            // 'form_category' => $formCategory->createView(),
-            'form_course' => $formCourse->createView(),
-            // 'theme_count' => $themeCount,
-            // 'category_count' => $categoryCount,
+            'form' => $formCourse->createView(),
             'course_count' => $courseCount,
             'service_count' => $serviceCount,
             'errors' => $formCourse->getErrors(true),
-            'title_page' => 'Recherches avancées',
             'submitted_form' => null
         ]);
     }
@@ -74,65 +74,60 @@ class SearchController extends AbstractController
     #[Route("/search/results", name: "search_results", methods: ["POST"])]
     public function searchResultat(Request $request): JsonResponse
     {
+        // Récupération des données JSON
+        $jsonData = json_decode($request->getContent(), true);
+        // Récupération des champs nécessaires
+        $token = $jsonData['_token'] ?? null;
+        $searchTerm = $jsonData['search_term'] ?? null;
+        $submittedFormType = $jsonData['submitted_form_type'] ?? null;
 
-        $results = [];
-        $submittedFormName = null;
+        $priceFilter = $jsonData['price_filter'] ?? null;
 
-        try {
-            if ($request->isMethod('POST')) {
-                // Obtenez le contenu JSON de la requête
-                $jsonData = json_decode($request->getContent(), true);
-
-                // Récupérez les données nécessaires du tableau JSON
-                $submittedFormName = $jsonData['submitted_form_type'] ?? null;
-                $searchTerm = $jsonData['search_term'] ?? null;
-                // Ajoutez un log pour vérifier la valeur de searchTerm
-                // Récupération des résultats de recherche pour les services
-                // $services = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
-
-                // Sérialisation des résultats de service
-                // $results['service'] = array_map(function ($service) {
-                //     return [
-                //         'id' => $service->getId(),
-                //         'title' => $service->getTitle(),
-                //         'description' => $service->getDescription(),
-                //         'picture' => $service->getPicture(),
-                //     ];
-                // }, $services);
-                $submittedFormName = 'service';
-                //}
-                /*elseif ($request->request->get('submitted_form_type') === 'course') {
-                    dd("test");
-                    // On récupère le term a rechercher
-                    $searchTerm = $request->request->get('search_term');
-                    // Récupération des résultats de recherche par theme->category->course => services 
-                    $themes = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
-                    // Sérialisation des résultats de thème
-                    $results['service'] = array_map(function ($service) {
-                        return [
-                            'id' => $service->getId(),
-                            'title' => $service->getTitle(),
-                            'description' => $service->getDescription(),
-                            'picture' => $service->getPicture(),
-                        ];
-                    }, $services);
-                    $submittedFormName = 'course';
-                }*/
-                // Gestion des résultats vides
-                if (empty($results[$submittedFormName])) {
-                    $results['empty'] = true;
-                }
-                // Retour des données au format JSON
-                return new JsonResponse([
-                    'results' => $results,
-                    'submitted_form' => $submittedFormName,
-                    'search_term' => $searchTerm
-                ]);
-            }
-        } catch (\Exception $e) {
+        // Enregistrement des données de la requête dans les logs
+        $this->logger->info('Received searchResultat form data', [
+            'token' => $token,
+            'searchTerm' => $searchTerm,
+            'submittedFormType' => $submittedFormType,
+            'priceFilter' => $priceFilter
+        ]);
+        // Si le token n'est pas présent
+        if ($token === null) {
             return new JsonResponse([
-                'error' => $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                'error' => 'Token is not defined or null'
+            ], JsonResponse::HTTP_BAD_REQUEST);
         }
+        // Si le token n'est pas valide
+        if (!$this->isCsrfTokenValid('search_item', $token)) {
+            return new JsonResponse([
+                'error' => 'Invalid CSRF token!'
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+        // Récupération des résultats de recherche pour les services
+        $queryBuilder = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
+        // On filtre par prix
+        if ($priceFilter === 'low_to_high') {
+            $queryBuilder->orderBy('s.price', 'ASC');
+        } elseif ($priceFilter === 'high_to_low') {
+            $queryBuilder->orderBy('s.price', 'DESC');
+        }
+
+        $services = $queryBuilder->getQuery()->getResult();
+
+        // Sérialisation des résultats de service
+        $results['service'] = array_map(function ($service) {
+            return [
+                'id' => $service->getId(),
+                'title' => $service->getTitle(),
+                'description' => $service->getDescription(),
+                'picture' => $service->getPicture(),
+                'price' => $service->getPrice(),
+            ];
+        }, $services);
+
+        $submittedFormName = 'service';
+        $results['submitted_form'] = $submittedFormName;
+
+        // Retourner les résultats au format JSON
+        return new JsonResponse($results);
     }
 }

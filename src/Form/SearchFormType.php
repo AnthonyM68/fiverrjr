@@ -6,11 +6,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-
-// Commentaire : Ceci est un formulaire Symfony qui prend une table de recherche aléatoire et recherche un terme.
+// Formulaire qui prend une table de recherche aléatoire et recherche un terme.
 class SearchFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -27,6 +28,7 @@ class SearchFormType extends AbstractType
                 ],
                 'data' => $options['search_table'],
             ])
+
             ->add('search_term', TextType::class, [
                 'label' => $options['search_label'],
                 'required' => true,

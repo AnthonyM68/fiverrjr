@@ -15,23 +15,33 @@ class ServiceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Service::class);
     }
-
-
     public function findByTerm($term)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.title  LIKE :term OR t.description LIKE :term')
-            ->setParameter('term', '%' . $term . '%')
-            ->getQuery()
-            ->getResult();
-            
+        // Crée un QueryBuilder pour la classe Service, aliasée en 's'
+        $qb = $this->createQueryBuilder('s')
+            // Ajoute une clause WHERE pour filtrer les services dont le titre ou la description contient le terme de recherche
+            ->where('s.title LIKE :searchTerm OR s.description LIKE :searchTerm')
+            // Définit le paramètre 'searchTerm' pour la requête, avec des jokers (%) pour une recherche partielle
+            ->setParameter('searchTerm', '%' . $term . '%');
+
+        // Retourne le QueryBuilder au lieu d'exécuter immédiatement la requête
+        return $qb;
+
+        // Ancienne méthode qui exécutait immédiatement la requête et retournait les résultats
+        // Nous avons commenté cette partie car nous voulons maintenant retourner un QueryBuilder
+        // pour pouvoir appliquer des filtres supplémentaires avant d'exécuter la requête.
+        /*
+    return $this->createQueryBuilder('s')
+        ->andWhere('s.title LIKE :term OR s.description LIKE :term')
+        ->setParameter('term', '%' . $term . '%')
+        ->getQuery()
+        ->getResult();  
+    */
     }
-
-
     public function countAll()
     {
-        return $this->createQueryBuilder('t')
-            ->select('count(t.id)')
+        return $this->createQueryBuilder('s')
+            ->select('count(s.id)')
             ->getQuery()
             ->getSingleScalarResult();
     }

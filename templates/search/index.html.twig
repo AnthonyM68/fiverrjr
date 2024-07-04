@@ -4,37 +4,53 @@
 
 {% block body %}
 <div class="sperator"></div>
-<div class="ui modal">
-    <h2>{{ title_page }}</h2>
-    <div class="content">
+<div class="ui modal padded margined">
+    <h2 class="margined padded">{{ title_page }}</h2>
+    <div class="content padded">
         <div class="ui grid">
-
             <div class="four wide left attached column">
                 <div class="ui vertical fluid menu">
-                    <div id="menu-service" class="item field {{ submitted_form == 'form_service' ? 'active teal' : '' }}">
+                    <div id="menu-service"
+                        class="item field {{ submitted_form == 'form_service' ? 'active teal' : '' }}">
+                        {# Formulaire de recherche d'un service au travers les 3 entity #}
                         <form method="post" action="{{ path('search_results') }}" class="ui form ajax-form">
+                            {# le token masqué #}
+                            <input type="hidden" name="_token" value="{{ csrf_token('search_item') }}">
+                            {# Input du term a rechercher #}
                             <div class="ui icon input full-width-input">
-                                <input type="text" name="search_term">
+                                <input type="text" name="search_term" required>
                                 <i class="search icon"></i>
                             </div>
+                            {# Radio buttons pour filtrer par prix #}
+                            <div class="field">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="price_filter" value="low_to_high">
+                                    <label>Du moins au plus cher</label>
+                                </div>
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="price_filter" value="high_to_low">
+                                    <label>Du plus au moins cher</label>
+                                </div>
+                            </div>
+                            {# // On utilise cet input masqué pour que l'on soit certain du nom de ce formulaire après soumission et traitement #}
                             <input type="hidden" name="submitted_form_type" value="service">
                             <button type="submit" class="ui button">Rechercher</button>
-                            
                         </form>
+                        {# Afficheur du compteur de service #}
                         <div class="ui label">{{ service_count }}</div>
                     </div>
-                     {# <div id="menu-course" class="item field {{ submitted_form == 'form_course' ? 'active teal' : '' }}">
+                    {# <div id="menu-course"
+                        class="item field {{ submitted_form == 'form_course' ? 'active teal' : '' }}">
                         {{ form_start(form_course, {'attr': {'id': 'form_course', 'class': 'ui form ajax-form'}}) }}
                         {{ form_widget(form_course, {'attr': {'class': 'full-width-input'}}) }}
                         <input type="hidden" name="submitted_form_type" value="course">
                         {{ form_end(form_course) }}
                         <div class="ui label">{{ course_count }}</div>
-                    </div>  #}
+                    </div> #}
                 </div>
             </div>
-            
+
             <div class="twelve wide stretched column">
-               
                 <div id="search-results"></div>
             </div>
 
