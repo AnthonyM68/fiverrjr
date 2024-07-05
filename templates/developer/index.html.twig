@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{title_page}}{% endblock %}
+
+{% block body %}
+<h1>{{title_page}}</h1>
+
+{% if developers| default %}
+<div class="ui list">
+    {% for developer in developers %}
+    <div class="item">
+        <i class="folder icon"></i>
+        <div class="content">
+            <div class="header"><a href="{{ path()}}" {{ developer }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

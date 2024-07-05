@@ -4,9 +4,9 @@
 <div class="ui container">
 
     <div class="ui-state-disabled ui-corner-all" style="margin-bottom:5px"></div>
-    <div id="search-results">
+    <div id="search-results-navbar">
         {# Vérification si le formulaire soumis est 'form_service' et s'il y a des résultats #}
-        {% if submitted_form == 'form_service' and results|default %}
+        {% if submitted_form == 'service' and results|default %}
         <h2>Résultats</h2>
         <ul>
             {# Afficher un message si aucun résultat n'est trouvé #}
@@ -97,6 +97,9 @@
         </ul>
         {% endif %}
 
+
+            
+        
         <div class="ui segment">
             <h2>Derniers inscrits et enregistrements</h2>
             <div class="ui fluid carousel">

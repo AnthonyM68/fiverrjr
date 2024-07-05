@@ -47,6 +47,10 @@
                 </div>
 
             </div>
+            <div class="field">
+                    {{ form_widget(registrationForm.roles) }}
+                    {# {{ form_label(registrationForm.roles) }} #}
+            </div>
             <div class="ui message fluid large teal uk-text-center">
                 <div class="ui checkbox checkbox-container">
                     {{ form_widget(registrationForm.agreeTerms) }}

@@ -62,12 +62,12 @@ const submitForm = (formElement) => {
                 resultsHtml += '</div>';
             }
             // On ouvre le modal
-            $('.ui.modal.navbar').modal('show');
+            //$('.ui.modal.navbar').modal('show');
             document.getElementById('search-results-navbar').innerHTML = resultsHtml;
         })
         .catch(error => {
             // On ouvre le modal
-            $('.ui.modal.navbar').modal('show');
+            //$('.ui.modal.navbar').modal('show');
             document.getElementById('search-results-navbar').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
         });
 }
