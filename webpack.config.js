@@ -53,6 +53,7 @@ Encore
     .addEntry('HomeCarrousel', './assets/js/carrousel/HomeCarrousel.js')
     .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
     .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
+    .addStyleEntry('slick-carousel-theme-css', './node_modules/slick-carousel/slick/slick-theme.css') // Optionnel
     // assets personnalisés
     .addStyleEntry('app_styles', [
         './assets/styles/sticky.css',

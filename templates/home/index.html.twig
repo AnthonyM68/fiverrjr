@@ -1,9 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-<div class="ui container">
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('slick-carousel-css') }}
+    {{ encore_entry_link_tags('slick-carousel-theme-css') }} {# Optionnel, si vous utilisez le thème par défaut #}
+{% endblock %}
 
-    <div class="ui-state-disabled ui-corner-all" style="margin-bottom:5px"></div>
+{% block body %}
+
+<div class="ui container">
+    {# <div class="ui-state-disabled ui-corner-all" style="margin-bottom:5px"></div> #}
+    <div class="ui container" id="initial-container">
+        <!-- This div will take the height of the viewport -->
+    </div>
     <div id="search-results-navbar">
         {# Vérification si le formulaire soumis est 'form_service' et s'il y a des résultats #}
         {% if submitted_form == 'service' and results|default %}
@@ -96,32 +105,28 @@
             {% endif %}
         </ul>
         {% endif %}
-
-
-            
         
         <div class="ui segment">
-            <h2>Derniers inscrits et enregistrements</h2>
+            {# <h2>Derniers inscrits et enregistrements</h2> #}
             <div class="ui fluid carousel">
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui carousel slider">
                             <div class="carousel-slide">
                                 <h3>Dernier développeur inscrit</h3>
-                                {# <p>{{ dernierDeveloppeur.nom }}</p> #}
-                                {# <p>{{ dernierDeveloppeur.description }}</p> #}
+                                <img src="{{ asset(lastDeveloper.picture) }}" alt="{{ lastDeveloper.username }}">
+                                <p>{{ lastDeveloper.firstname }} {{ lastDeveloper.lastname }}</p>
                             </div>
                             <div class="carousel-slide">
                                 <h3>Dernière entreprise inscrite</h3>
-                                {# <p>{{ derniereEntreprise.nom }}</p> #}
-                                {# <p>{{ derniereEntreprise.description }}</p> #}
+                                <img src="{{ asset(lastEnterprise.picture) }}" alt="{{ lastEnterprise.username }}">
+                                <p>{{ lastEnterprise.firstname }} {{ lastEnterprise.lastname }}</p> 
                             </div>
                             <div class="carousel-slide">
                                 <h3>Dernier service enregistré</h3>
-                                {# <p>{{ dernierService.nom }}</p> #}
-                                {# <p>{{ dernierService.description }}</p> #}
+                                <img src="{{ asset(lastService.picture) }}" alt="{{ lastService.title }}">
+                                <p>{{ lastService.title }} {{ lastService.description }}</p>
                             </div>
-                            <!-- Ajoutez ici d'autres slides au besoin -->
                         </div>
                     </div>
                 </div>
@@ -129,8 +134,9 @@
         </div>
     </div>
 </div>
-{% block javascript %}
-{{ encore_entry_script_tags('HomeCarrousel') }}
-{{ encore_entry_script_tags('slick-carousel') }}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('HomeCarrousel') }}
+    {{ encore_entry_script_tags('slick-carousel') }}
 {% endblock %}
 {% endblock %}
