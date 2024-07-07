@@ -53,7 +53,7 @@
                 <a href="{{ path('search') }}" class="item">Avancées</a>
                 {% if app.user %}
                 <a href="#" class="ui item">Bonjour {{ app.user.username }}</a>
-                <a href="{{ path('profile') }}" class="ui item">Profil</a>
+                <a href="{{ path('profile_edit', {'id': app.user.id}) }}" class="ui item">Profil</a>
                 <a href="{{ path('logout') }}" class="ui item">Se déconnecter</a>
                 {% else %}
                 <a href="{{ path('login') }}" class="ui item">Se connecter</a>

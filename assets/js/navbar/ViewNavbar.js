@@ -74,9 +74,9 @@ const submitForm = (formElement) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('-> ViewNavbar.js loaded');
+
     const searchIcon = document.getElementById('search-icon');
     const form = document.querySelector('.ajax-form');
-
     // On place un écouteur d'événement sur l'icon SEARCH
     searchIcon.addEventListener('click', function () {
         event.preventDefault();

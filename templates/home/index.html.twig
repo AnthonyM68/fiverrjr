@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{title_page}}{% endblock %}
+
 {% block stylesheets %}
 {{ parent() }}
 {{ encore_entry_link_tags('slick-carousel-css') }}
@@ -8,7 +10,7 @@
 
 {% block body %}
 
-
+<h1>{{ title_page }}</h1>
     {# <div class="ui-state-disabled ui-corner-all" style="margin-bottom:5px"></div> #}
     <div class="ui container" id="initial-container">
         <!-- This div will take the height of the viewport -->

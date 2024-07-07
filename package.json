@@ -25,6 +25,7 @@
     "fomantic-ui": "^2.9.4-beta.60",
     "grunt": "^1.4.1",
     "jquery": "^3.7.1",
+    "jquery-popup-overlay": "^2.1.5",
     "jquery-ui": "^1.13.0",
     "less": "^4.1.1",
     "react": "^18.3.1",

@@ -68,7 +68,7 @@
         {{ form_end(registrationForm) }}
 
         <div class="ui message uk-text-center">
-            Déjà inscrit? <a href="#">Connectez-vous</a>
+            Déjà inscrit? <a href="{{ path('login') }}">Connectez-vous</a>
         </div>
 
         {% for flash_error in app.flashes('verify_email_error') %}
@@ -76,8 +76,4 @@
         {% endfor %}
     </div>
 </div>
-
-
-
-
 {% endblock %}

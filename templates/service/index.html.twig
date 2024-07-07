@@ -71,6 +71,7 @@
 
 {# On inject le script pour la gestion des contenus dynamique des select #}
 {% block javascripts %}
+{{ parent() }}
 {{ encore_entry_script_tags('ViewServiceForm') }}
 {% endblock %}
 

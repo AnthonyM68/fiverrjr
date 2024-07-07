@@ -1,13 +1,81 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Hello UserController!{% endblock %}
-
 {% block body %}
-
-
-
-<a href="{{ path('new_service') }}" class="ui button primary">
-    Déposer une annonce
-</a>
-
+<h1>{{ title_page }}</h1>
+<div class="ui container">
+    {{ form_start(form) }}
+    <div class="ui form">
+        {# Prévisualisation de l'image existante #}
+        {% if user.picture %}
+        <div class="field">
+            <img id="imagePreview" src="{{ asset(user.picture) }}" alt="Image Preview"
+                style="max-width: 200px; max-height: 200px;" />
+        </div>
+        {% endif %}
+        {# Champs inputFile #}
+        <div class="field">
+            {{ form_label(form.picture) }}
+            {{ form_widget(form.picture, {'attr': {'onchange': 'previewImage(event)'}}) }}
+            {{ form_errors(form.picture) }}
+        </div>
+        <div class="field">
+            {{ form_label(form.date_register) }}
+            {{ form_widget(form.date_register) }}
+            {{ form_errors(form.date_register) }}
+        </div>
+        <div class="field">
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username) }}
+            {{ form_errors(form.username) }}
+        </div>
+        <div class="field">
+            {{ form_label(form.first_name) }}
+            {{ form_widget(form.first_name) }}
+            {{ form_errors(form.first_name) }}
+        </div>
+        <div class="field">
+            {{ form_label(form.last_name) }}
+            {{ form_widget(form.last_name) }}
+            {{ form_errors(form.last_name) }}
+        </div>
+        <div class="field">
+            {{ form_label(form.phone_number) }}
+            {{ form_widget(form.phone_number) }}
+            {{ form_errors(form.phone_number) }}
+        </div>
+        <div class="field">
+            {{ form_label(form.city) }}
+            {{ form_widget(form.city) }}
+            {{ form_errors(form.city) }}
+        </div>
+        <div class="field">
+            {{ form_label(form.portfolio) }}
+            {{ form_widget(form.portfolio) }}
+            {{ form_errors(form.portfolio) }}
+        </div>
+        <div class="field">
+            {{ form_label(form.bio) }}
+            {{ form_widget(form.bio) }}
+            {{ form_errors(form.bio) }}
+        </div>
+        <div class="field">
+            {{ form_label(form.roles) }}
+            {{ form_widget(form.roles) }}
+            {{ form_errors(form.roles) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
+    <a href="{{ path('new_service') }}" class="ui button primary">
+        Déposer un service
+    </a>
+    <a href="" class="ui button primary">
+        Modifier un service
+    </a>
+    <a href="" class="ui button primary">
+        Suprimer un service
+    </a>
+</div>
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('previewImage') }}
+{% endblock %}
 {% endblock %}

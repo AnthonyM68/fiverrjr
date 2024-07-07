@@ -2,12 +2,13 @@
      User Global Variables
 *******************************/
 
-// Définition d'une nouvelle variable de couleur
-@my-custom-background-color: #12172b;
-@my-custom-text-color: #fffff;
+@myCustomBackgroundColor: #12172b;
+@bodyFontColorH1: #fff; 
+@formLabelFontColor: #fff;
 
 @pageMinWidth: 1049px;
 @pageOverflowX: visible;
+
 
 @emSize: 13px;
 @fontSize: 13px;

@@ -40,7 +40,7 @@ label.required::after {
 }
 .carousel-slide img {
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   height: auto; /* Maintient le ratio de l'image */
   max-height: 300px;
   object-fit: cover; /* Recadre l'image si nécessaire */

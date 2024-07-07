@@ -31,7 +31,7 @@ Encore
     // semantic-themes
     .addStyleEntry('semantic_less', './semantic/src/semantic.less')
     // general
-    // .addEntry('jquery_popup', './assets/styles/jquery.popup.minified.js') // ou .scss pour Sass
+    .addEntry('jquery_popup', './node_modules/jquery-popup-overlay/jquery.popupoverlay.js') // ou .scss pour Sass
     // bootstrap 
     .addEntry('bootstrap', './node_modules/bootstrap/dist/js/bootstrap.js')
     .addStyleEntry('bootstrap_css', './node_modules/bootstrap/dist/css/bootstrap.css')
@@ -54,6 +54,11 @@ Encore
     .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
     .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
     .addStyleEntry('slick-carousel-theme-css', './node_modules/slick-carousel/slick/slick-theme.css') // Optionnel
+    .addEntry('previewImage', './assets/js/profile/previewImage.js') 
+    
+    
+    
+    
     // assets personnalisés
     .addStyleEntry('app_styles', [
         './assets/styles/sticky.css',

@@ -4,5 +4,8 @@
 // Utilisation de la variable pour modifier l'arrière-plan d'un élément
 
 body {
-    background-color: @my-custom-background-color;
+    background-color: @myCustomBackgroundColor;
+}
+h1 {
+    color:@bodyFontColorH1;
 }

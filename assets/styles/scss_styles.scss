@@ -75,4 +75,6 @@
     margin-bottom: $margin-large;
 }
 
-  
+.ui.form:not(.inverted) .field > label:not(.button) {
+    color: #fff;
+}
