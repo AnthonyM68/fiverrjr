@@ -3,6 +3,7 @@
 {% block title %}Réinitialiser votre mot de passe{% endblock %}
 
 {% block body %}
+{% include "alertflash/flash_message.html.twig" %}
     <div class="ui middle aligned center aligned grid">
         <div class="ui segment login-register" style="width:350px">
             <h2 class="ui teal image header">
@@ -11,13 +12,6 @@
                     Réinitialiser le mot de passe
                 </div>
             </h2>
-
-            {% for flash_error in app.flashes('reset_password_error') %}
-                <div class="ui negative message">
-                    {{ flash_error }}
-                </div>
-            {% endfor %}
-
             {{ form_start(requestForm, {'attr': {'class': 'ui large form'}}) }}
                 <div class="ui stacked segment">
                     <div class="field">
