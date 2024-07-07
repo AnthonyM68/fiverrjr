@@ -35,15 +35,21 @@ class ServiceController extends AbstractController
      * @return Response
      */
     #[Route('/service', name: 'list_services')]
-    public function index(ServiceRepository $serviceRepository): Response
+    #[Route('/service/{id}', name: 'detail_service')]
+    public function index(int $id, ServiceRepository $serviceRepository): Response
     {
-        // Récupère tous les services de la base de données
-        $services = $serviceRepository->findAll();
+        if ($id) {
+            $detail = $serviceRepository->findby(['id' => $id]);
+        } else {
+            // Récupère tous les services de la base de données
+            $services = $serviceRepository->findAll();
+        }
 
         // Rend la vue avec les services récupérés
         return $this->render('service/index.html.twig', [
             'title_page' => 'Liste des Services',
-            'services' => $services
+            'services' => $services,
+            'detail' => $detail
         ]);
     }
 
@@ -74,7 +80,7 @@ class ServiceController extends AbstractController
                 // Vérifie que le service que le service a un cours associé
                 if ($course) {
                     $service->setCourse($course);
-                }else {
+                } else {
                     // Si aucun cours n'est sélectionné, ajouter une erreur de validation
                     $form->get('course')->addError(new FormError('Veuillez sélectionner un cours.'));
 
@@ -112,11 +118,6 @@ class ServiceController extends AbstractController
                     $service->setPicture($newFilename);
                 }
                 //$file->move($directory, $someNewFilename);
-
-                
-                
-
-
                 $entityManager->persist($service);
                 $entityManager->flush();
 
@@ -191,15 +192,14 @@ class ServiceController extends AbstractController
         ]);
     }
     #[Route('/theme/{id}/detail', name: 'detail_theme')]
-    public function detailTheme(?Theme $theme = null, ThemeRepository $themeRepository, Request $request): Response
+    public function detailTheme(?Theme $theme = null): Response
     {
         // Récupère les détails du thème en fonction de l'ID
-        $theme = $themeRepository->findBy(["id" => $theme->getId()]);
-
+        $categories = $theme->getCategories();
         // Rend la vue avec les détails du thème
         return $this->render('theme/index.html.twig', [
-            'controller_name' => 'ServiceController',
-            'theme' => $theme,
+            'title_page' => $theme->getNameTheme(),
+            'categories' => $categories,
         ]);
     }
 
@@ -305,15 +305,13 @@ class ServiceController extends AbstractController
     }
 
     #[Route('/category/{id}/detail', name: 'detail_category')]
-    public function detailCategory(?Category $category = null, ThemeRepository $categoryRepository, Request $request): Response
+    public function detailCategory(?Category $category = null): Response
     {
-        // Récupère les détails de la catégorie en fonction de l'ID
-        $category = $categoryRepository->findBy(["id" => $category->getId()]);
-
+        $courses = $category->getCourses();
         // Rend la vue avec les détails de la catégorie
         return $this->render('category/index.html.twig', [
-            'controller_name' => 'ServiceController',
-            'category' => $category,
+            'title_page' => $category->getNameCategory(),
+            'courses' => $courses,
         ]);
     }
 
@@ -394,14 +392,13 @@ class ServiceController extends AbstractController
     }
 
     #[Route('/course/{id}/detail', name: 'detail_course')]
-    public function detailCourse(?Course $course = null, ThemeRepository $courseRepository, Request $request): Response
+    public function detailCourse(?Course $course = null, ServiceRepository $serviceRepository, Request $request): Response
     {
-        // Récupère les détails du cours en fonction de l'ID
-        $course = $courseRepository->findBy(["id" => $course->getId()]);
+        $services = $course->getServices();
         // Rend la vue avec les détails du cours
-        return $this->render('category/index.html.twig', [
-            'controller_name' => 'ServiceController',
-            'category' => $course,
+        return $this->render('course/index.html.twig', [
+            'title_page' => $course->getNameCourse(),
+            'services' => $services,
         ]);
     }
 }

@@ -16,14 +16,14 @@
 </div>
 {{ form_end(formAddCategory) }}
 {% endif %}
-{# On affiche les catégories touvées #}
-{% if categories | default %}
+{# On affiche les courses touvées #}
+{% if courses | default %}
 <div class="ui list">
-    {% for category in categories %}
+    {% for course in courses %}
     <div class="item">
         <i class="folder icon"></i>
         <div class="content">
-            <div class="header">{{ category.NameCategory }}</div>
+            <div class="header"> <a href="{{ path('list_services', { 'id': course.id }) }}">{{ course.nameCourse}}</a></div>
         </div>
     </div>
     {% endfor %}

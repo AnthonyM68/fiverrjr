@@ -16,13 +16,13 @@
 {{ form_end(formAddCourse) }}
 {% endif %}
 
-{% if courses | default %}
+{% if services | default %}
 <div class="ui list">
-    {% for course in courses %}
+    {% for service in services %}
     <div class="item">
         <i class="folder icon"></i>
         <div class="content">
-            <div class="header">{{ course.nameCourse}}</div>
+            <div class="header"> <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title}}</a></div>
         </div>
     </div>
     {% endfor %}

@@ -18,19 +18,27 @@
                         <i class="theme icon"></i>
                     </div>
                     <div class="menu">
-                        {# Service/navbar/NavBarService.php #}
+                        {# Boucle sur les thèmes #}
                         {% for theme in get_navbar_data() %}
                         <div class="item">
-                            <i class="dropdown icon"></i>
-                            {{ theme.name }}
+                            <a href="{{ path('detail_theme', { 'id': theme.id }) }}">
+                                <i class="dropdown icon"></i>
+                                {{ theme.name }}
+                            </a>
                             <div class="menu">
+                                {# Boucle sur les catégories du thème #}
                                 {% for category in theme.categories %}
                                 <div class="item">
-                                    <i class="dropdown icon"></i>
-                                    {{ category.name }}
+                                    <a href="{{ path('detail_category', { 'id': category.id }) }}">
+                                        <i class="dropdown icon"></i>
+                                        {{ category.name }}
+                                    </a>
                                     <div class="menu">
+                                        {# Boucle sur les cours de la catégorie #}
                                         {% for course in category.courses %}
-                                        <div class="item">{{ course.name }}</div>
+                                        <div class="item">
+                                            <a href="{{ path('detail_course', { 'id': course.id }) }}">{{ course.name }}</a>
+                                        </div>
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -39,6 +47,7 @@
                         </div>
                         {% endfor %}
                     </div>
+                    
                 </div>
             </div>
             <div class="right menu">

@@ -66,15 +66,12 @@
 .margin-bottom {
     margin-bottom: $margin-medium;
 }
-
 .margin-bottom-small {
     margin-bottom: $margin-small;
 }
-
 .margin-bottom-large {
     margin-bottom: $margin-large;
 }
-
-.ui.form:not(.inverted) .field > label:not(.button) {
-    color: #fff;
+.folder.icon {
+    color:#fff;
 }
