@@ -35,6 +35,7 @@ class HomeController extends AbstractController
     #[Route('/home', name: 'home')]
     public function index(Request $request): Response
     {
+        // Données pour le carousel sur le home
         // Récupérer le dernier utilisateur avec le rôle ROLE_ENTERPRISE
         $lastEnterprise = $this->entityManager->getRepository(User::class)->findOneUsersByRole('ROLE_ENTERPRISE');
         // Récupérer le dernier utilisateur avec le rôle ROLE_DEVELOPER
@@ -48,13 +49,10 @@ class HomeController extends AbstractController
             'lastService' => $lastService
         ]);
         return $this->render('home/index.html.twig', [
-            // On recherche les résultats
+            // Données pour le carousel sur le home
             'lastEnterprise' => $lastEnterprise,
             'lastDeveloper' => $lastDeveloper,
             'lastService' => $lastService,
-            // 'form_service' => $formTheme->createView(),
-            // 'results' => $results,
-            // 'search_term' => $searchTerm,
             'submitted_form' => null,
             'title_page' => 'Accueil'
         ]);

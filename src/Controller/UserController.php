@@ -79,7 +79,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         if (!$user instanceof User) {
-            throw new \LogicException('L\'utilisateur doit être une instance de User.');
+            throw new \LogicException('User must be an instance of User');
         }
         // On crée une nouvelle instance du formulaire user avec l'utilistateur 
         // courrent récupéré en argument à la méthode

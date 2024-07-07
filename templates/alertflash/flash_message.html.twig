@@ -1,0 +1,29 @@
+{% for flash_message in app.flashes('success') %}
+<div class="ui success message">
+    <i class="close icon"></i>
+    <div class="header">
+        {{ flash_message }}
+    </div>
+    {# <p>/p> #}
+</div>
+{% endfor %}
+
+{% for flash_message in app.flashes('warning') %}
+<div class="ui orange message">
+    <i class="close icon"></i>
+    <div class="header">
+        {{ flash_message }}
+    </div>
+    {# <p></p> #}
+</div>
+{% endfor %}
+
+{% for flash_message in app.flashes('error') %}
+<div class="ui negative message">
+    <i class="close icon"></i>
+    <div class="header">
+        {{ flash_message }}
+    </div>
+    {# <p></p> #}
+</div>
+{% endfor %}

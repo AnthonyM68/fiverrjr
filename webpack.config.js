@@ -41,6 +41,8 @@ Encore
     .addStyleEntry('uikit_css', './node_modules/uikit/dist/css/uikit.css')
     // app
     .addEntry('app', './assets/app.js')
+    // Message_flash
+    .addEntry('messageFlash', './assets/js/alert/messageFlash.js') 
     // Navbar 
     .addEntry('ViewNavbar', './assets/js/navbar/ViewNavbar.js')
     // Search motor
