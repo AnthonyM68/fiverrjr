@@ -15,66 +15,53 @@
             </div>
         </h2>
 
-        {{ form_start(registrationForm, {'attr' : {'class' : 'ui large form'}}) }}
-
+        {{ form_start(registrationForm, {'attr': {'class': 'ui large form', 'novalidate': 'novalidate'}}) }}
         <div class="ui stacked segment">
             <div class="field">
+                {{ form_errors(registrationForm.username) }}
                 <div class="ui right icon input floating-label">
                     <i class="user icon"></i>
-                    {{ form_widget(registrationForm.username)}}
+                    {{ form_widget(registrationForm.username) }}
                     {{ form_label(registrationForm.username, 'Nom d\'utilisateur') }}
                 </div>
             </div>
             <div class="field">
+                {{ form_errors(registrationForm.email) }}
                 <div class="ui right icon input floating-label">
                     <i class="envelope icon"></i>
                     {{ form_widget(registrationForm.email) }}
-                    {{ form_label(registrationForm.email)}}
-
+                    {{ form_label(registrationForm.email) }}
                 </div>
             </div>
             <div class="field">
+                {{ form_errors(registrationForm.plainPassword.first) }}
                 <div class="ui right icon input floating-label">
                     <i class="lock icon"></i>
                     {{ form_widget(registrationForm.plainPassword.first) }}
                     {{ form_label(registrationForm.plainPassword.first, 'Mot de passe') }}
-
                 </div>
-
+                {{ form_errors(registrationForm.plainPassword.second) }}
                 <div class="ui right icon input floating-label">
                     <i class="lock icon"></i>
                     {{ form_widget(registrationForm.plainPassword.second) }}
                     {{ form_label(registrationForm.plainPassword.second, 'Répétez mot de passe') }}
                 </div>
-
             </div>
-            <div class="field">
-                    {{ form_widget(registrationForm.roles) }}
-                    {# {{ form_label(registrationForm.roles) }} #}
-            </div>
-            <div class="ui message fluid large teal uk-text-center">
+            {{ form_errors(registrationForm.agreeTerms) }}
+            <div class="ui message field fluid large teal center aligned">
                 <div class="ui checkbox checkbox-container">
                     {{ form_widget(registrationForm.agreeTerms) }}
                     {{ form_label(registrationForm.agreeTerms, 'Acceptez les termes') }}
                 </div>
             </div>
-            
-            <button type="submit" class="ui fluid large teal submit button">S'enregistrer</button>
+            <div class="field">
+                <button type="submit" class="ui fluid large teal submit button">S'enregistrer</button>
+            </div>
+            <div class="ui message field center aligned">
+                Déjà inscrit? <a href="{{ path('login') }}">Connectez-vous</a>
+            </div>
         </div>
-
-        <div class="ui error message">
-            {{ form_errors(registrationForm) }}
-        </div>
-
         {{ form_end(registrationForm) }}
-
-        <div class="ui message uk-text-center">
-            Déjà inscrit? <a href="{{ path('login') }}">Connectez-vous</a>
-        </div>
-
-        {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="ui-state-error ui-corner-all" role="alert">{{ flash_error }}</div>
-        {% endfor %}
     </div>
 </div>
 {% endblock %}

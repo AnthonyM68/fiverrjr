@@ -8,15 +8,19 @@
 
     <div class="ui segment login-register" style="width:350px">
 
-        <h2 class="ui teal image header">
+        <h2 class="ui teal image header ">
             <img src="https://fomantic-ui.com/examples/assets/images/logo.png" class="image">
             <div class="content">
                 Connection
             </div>
         </h2>
 
-        <form class="ui large form" method="post">
+        <form class="ui large form" novalidate='novalidate' method="post">
             <div class="ui stacked segment">
+                 {% if error %}
+                <div class="ui-state-error ui-corner-all margin-bottom">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %} 
+
                 <div class="field">
                     <div class="ui right icon input floating-label">
                         <i class="envelope icon"></i>
@@ -33,39 +37,19 @@
                         <label for="inputPassword">Password</label>
                     </div>
                 </div>
-                <button class="ui fluid large teal submit button">Se connecter</button>
+                <div class="field"><button class="ui fluid large teal submit button">Se connecter</button></div>
 
-
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <div class="ui message field center aligned">
+                    <div class="ui list">
+                        <div class="item">Pas encore inscrit? <a href="{{ path('register') }}">Enregistrez-vous</a>
+                        </div>
+                        <div class="item">Mot de passe oubliez? <a
+                                href="{{ path('app_forgot_password_request') }}">Réinitialisez</a></div>
+                    </div>
+                </div>
             </div>
-            <div class="ui error message"></div>
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         </form>
-
-        <div class="field">
-            Pas encore inscrit? <a href="{{ path('register') }}">Enregistrez-vous</a>
-        </div>
-        <div class="field">
-            Mot de passe oubliez? <a href="{{ path('app_forgot_password_request') }}">Réinitialisez</a>
-        </div>
-        {% if error %}
-        {# utilisé pour afficher des messages ou des liens conditionnels #}
-        <form class="ui message" method="post">
-            {# Vérifie s'il y a une erreur #}
-
-            {# Affiche le message d'erreur traduit #}
-            <div class="ui-state-error ui-corner-all">{{ error.messageKey|trans(error.messageData, 'security') }}
-            </div>
-            {% endif %}
-            {# si un utilisateur est connecté #}
-            {% if app.user %}
-            <div class="field">
-                {# indique l'identifiant de l'utilisateur et fournit un lien pour se déconnecter. #}
-                Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('logout') }}">Se
-                    déconnecter</a>
-            </div>
-
-        </form>
-        {% endif %}
     </div>
 </div>
 

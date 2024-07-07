@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed: message_flash.js');
 
     // Sélectionnez toutes les alertes Semantic UI
-    $('.ui.message, .ui.negative.message').each(function () {
+    $('.ui.message.anim').each(function () {
         let $alert = $(this);
         // Ajouter une classe pour l'effet slide up
         $alert.addClass('closing');

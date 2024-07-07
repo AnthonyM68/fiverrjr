@@ -22,9 +22,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    // Contrainte pour le champ email login
+    #[Assert\NotBlank]
+    #[Assert\Email(message: "Veuillez saisir une adresse email valide.")]
+    #[Assert\Length(
+        min: 5,
+        minMessage: "Votre email doit comporter au moins {{ limit }} caractères.",
+        max: 180,
+        maxMessage: "Votre email ne peut pas comporter plus de {{ limit }} caractères.")]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
-
 
     /**
      * @var array The user roles
@@ -37,9 +44,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column(length: 255, nullable: true)]
-
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 3, max: 4096)] // Contrainte provisoir
     private ?string $password = null;
 
     #[ORM\Column(length: 50, nullable: true)]

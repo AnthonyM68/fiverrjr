@@ -47,7 +47,7 @@ const submitForm = (formElement) => {
                     resultsHtml += `
        <div class="item">
          <div class="image">
-           <img src="./img/${service.picture}">
+           <img src="${service.picture}">
          </div>
          <div class="content">
            <a class="header">${service.title}</a>
