@@ -64,6 +64,7 @@ class ServiceItemController extends AbstractController
         if (!$service) {
             $service = new ServiceItem();
         }
+
         // Variable pour stocker les erreurs de validation
         $errors = null;
         // Crée et gère le formulaire pour le service
@@ -71,12 +72,12 @@ class ServiceItemController extends AbstractController
         // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
         $form->handleRequest($request);
         // Si le formulaire est soumis
-        if ($form->isSubmitted()) {
-            // Si le formulaire est valide, persiste et sauvegarde la Category
-            if ($form->isValid()) {
+        // if ($form->isSubmitted()) {
+        //     // Si le formulaire est valide, persiste et sauvegarde la Category
+        //     if ($form->isValid()) {
 
-                $subFormData = $form->get('course')->getData();
-                $course = $subFormData['course'] ?? null;
+        //         $subFormData = $form->get('course')->getData();
+        //         $course = $subFormData['course'] ?? null;
 
                 // si on a un résultat dans course
                 if ($course) {
@@ -95,47 +96,47 @@ class ServiceItemController extends AbstractController
                     ]);
                 }
 
-                $file = $form->get('picture')->getData();
+        //         $file = $form->get('picture')->getData();
 
-                if ($file) {
-                    // Générer un nouveau nom de fichier unique
-                    $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+        //         if ($file) {
+        //             // Générer un nouveau nom de fichier unique
+        //             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        //             $safeFilename = $slugger->slug($originalFilename);
+        //             $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
-                    // Déplacer le fichier vers le répertoire de destination
-                    // try {
-                    //     $file->move(
-                    //         $this->getParameter('uploads_directory'),
-                    //         $newFilename
-                    //     );
-                    // } catch (FileException $e) {
-                    //     // Gérer les exceptions si quelque chose se passe mal pendant l'upload
-                    // }
+        //             // Déplacer le fichier vers le répertoire de destination
+        //             // try {
+        //             //     $file->move(
+        //             //         $this->getParameter('uploads_directory'),
+        //             //         $newFilename
+        //             //     );
+        //             // } catch (FileException $e) {
+        //             //     // Gérer les exceptions si quelque chose se passe mal pendant l'upload
+        //             // }
 
-                    // Mettre à jour la propriété 'attachment' pour stocker le nom du fichier
-                    // au lieu de son contenu
+        //             // Mettre à jour la propriété 'attachment' pour stocker le nom du fichier
+        //             // au lieu de son contenu
 
-                    // dd($newFilename);
-                    $service->setPicture($newFilename);
-                }
-                //$file->move($directory, $someNewFilename);
-                $entityManager->persist($service);
-                $entityManager->flush();
+        //             // dd($newFilename);
+        //             $service->setPicture($newFilename);
+        //         }
+        //         //$file->move($directory, $someNewFilename);
+        //         $entityManager->persist($service);
+        //         $entityManager->flush();
 
-                // Redirige vers la liste des services après sauvegarde
-                return $this->redirectToRoute('list_services');
-            } else {
-                // Récupère les erreurs de validation
-                $errors = $form->getErrors(true);
-            }
-        }
+        //         // Redirige vers la liste des services après sauvegarde
+        //         return $this->redirectToRoute('list_services');
+        //     } else {
+        //         // Récupère les erreurs de validation
+        //         $errors = $form->getErrors(true);
+        //     }
+        // }
 
         // Rend la vue avec le formulaire
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Services',
             'formAddService' => $form->createView(),
-            'errors' => $errors
+            // 'errors' => $errors
         ]);
     }
     #[Route('/serviceItem/{id}', name: 'detail_service')]

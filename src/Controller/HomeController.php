@@ -44,26 +44,36 @@ class HomeController extends AbstractController
         // $lastService = $this->entityManager->getRepository(ServiceItem::class)->findOneBy([], ['id' => 'DESC']);
         // Enregistrement des données de la requête dans les logs
         $this->logger->info('HomeController: line:49 Résults Search', [
-            'lastEnterprise' =>  $lastEnterprise,
             'lastDeveloper' => $lastDeveloper,
+<<<<<<< HEAD
             // 'lastService' => $lastService
+=======
+            'lastEnterprise' =>  $lastEnterprise,
+            'lastService' => $lastService
+>>>>>>> ab4038126793de0d041a51225717c263819f881d
         ]);
         return $this->render('home/index.html.twig', [
             // Données pour le carousel sur le home
-            'lastEnterprise' => $lastEnterprise,
             'lastDeveloper' => $lastDeveloper,
+<<<<<<< HEAD
             // 'lastService' => $lastService,
+=======
+            'lastEnterprise' => $lastEnterprise,
+            'lastService' => $lastService,
+
+>>>>>>> ab4038126793de0d041a51225717c263819f881d
             'submitted_form' => null,
+            
             'title_page' => 'Accueil'
         ]);
     }
 
 
-    #[Route('/admin', name: 'admin')]
-    public function administrator(): Response
-    {
-        return $this->render('administrator/index.html.twig', [
-            'title_page' => 'Tableau de bord'
-        ]);
-    }
+    // #[Route('/admin', name: 'admin')]
+    // public function administrator(): Response
+    // {
+    //     return $this->render('administrator/index.html.twig', [
+    //         'title_page' => 'Tableau de bord'
+    //     ]);
+    // }
 }

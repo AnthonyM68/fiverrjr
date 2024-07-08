@@ -22,7 +22,7 @@
     <div class="item">
         <i class="folder icon"></i>
         <div class="content">
-            <div class="header"> <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title}}</a></div>
+            <div class="header">{{ service.id}} <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title}}</a></div>
         </div>
     </div>
     {% endfor %}

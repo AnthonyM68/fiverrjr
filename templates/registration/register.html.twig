@@ -47,6 +47,14 @@
                     {{ form_label(registrationForm.plainPassword.second, 'Répétez mot de passe') }}
                 </div>
             </div>
+            <div class="field">
+                {{ form_errors(registrationForm.roles) }}
+                <div class="ui right icon input floating-label">
+
+                    {{ form_widget(registrationForm.roles) }}
+                    {{ form_label(registrationForm.roles) }}
+                </div>
+            </div>
             {{ form_errors(registrationForm.agreeTerms) }}
             <div class="ui message field fluid large teal center aligned">
                 <div class="ui checkbox checkbox-container">
