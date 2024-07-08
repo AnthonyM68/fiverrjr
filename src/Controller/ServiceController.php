@@ -36,20 +36,22 @@ class ServiceController extends AbstractController
      */
     #[Route('/service', name: 'list_services')]
     #[Route('/service/{id}', name: 'detail_service')]
-    public function index(int $id, ServiceRepository $serviceRepository): Response
+    public function index(?Service $service = null, ServiceRepository $serviceRepository): Response
     {
-        if ($id) {
-            $detail = $serviceRepository->findby(['id' => $id]);
+        $result = '';
+        // si service existe alors on veux afficher le détail
+        if ($service) {
+            $results = $service;
         } else {
-            // Récupère tous les services de la base de données
-            $services = $serviceRepository->findAll();
+            // Récupère tous les service triés par date
+            $services = $serviceRepository->findBy([], ["createDate" => "ASC"]);
         }
+
 
         // Rend la vue avec les services récupérés
         return $this->render('service/index.html.twig', [
             'title_page' => 'Liste des Services',
-            'services' => $services,
-            'detail' => $detail
+            'results' => $results
         ]);
     }
 
@@ -136,6 +138,9 @@ class ServiceController extends AbstractController
             'errors' => $errors
         ]);
     }
+
+
+
 
     /**
      * THEMES

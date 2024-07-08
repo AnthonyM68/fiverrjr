@@ -19,9 +19,7 @@ label.required::after {
   transition: all 0.3s ease;
 }
 /*  couleur list semantic*/
-.ui.list > .item, .ui.list > .item > .content > .header {
- /*color: #fff !important;*/
-}
+
 #initial-container {
   height: 100vh; /* Full viewport height */
 }

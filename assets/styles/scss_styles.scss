@@ -72,6 +72,11 @@
 .margin-bottom-large {
     margin-bottom: $margin-large;
 }
+
+
 .folder.icon {
     color:#fff;
 }
+.ui.list > .item, .ui.list > .item > .content > .header {
+    color: #fff !important;
+   }
