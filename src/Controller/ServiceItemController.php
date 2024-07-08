@@ -2,73 +2,72 @@
 
 namespace App\Controller;
 // Importation des classes nécessaires
+use index;
 use App\Entity\Theme;
 use App\Entity\Course;
-use App\Entity\Service;
+use App\Entity\ServiceItem;
 use App\Form\ThemeType;
 use App\Entity\Category;
 use App\Form\CourseType;
-use App\Form\ServiceType;
+use App\Form\ServiceItemType;
 use App\Form\CategoryType;
 use App\Repository\ThemeRepository;
 use App\Repository\CourseRepository;
-use App\Repository\ServiceRepository;
+use App\Repository\ServiceItemRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\String\Slugger\SluggerInterface;
 // Importation correcte pour IsGranted
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
-class ServiceController extends AbstractController
+class ServiceItemController extends AbstractController
 {
     /**
      * SERVICES
      *
-     * @param ServiceRepository $serviceRepository
+     * @param ServiceItemRepository $ServiceItemRepository
      * @return Response
      */
-    #[Route('/service', name: 'list_services')]
-    #[Route('/service/{id}', name: 'detail_service')]
-    public function index(?Service $service = null, ServiceRepository $serviceRepository): Response
+    #[Route('/serviceItem', name: 'list_services')]
+    public function index(?ServiceItem $service = null, ServiceItemRepository $ServiceItemRepository): Response
     {
-        $result = '';
-        // si service existe alors on veux afficher le détail
-        if ($service) {
-            $results = $service;
-        } else {
-            // Récupère tous les service triés par date
-            $services = $serviceRepository->findBy([], ["createDate" => "ASC"]);
-        }
+        // $result = '';
+        // // si service existe alors on veux afficher le détail
+        // if ($service) {
+        //     $results = $service;
+        // } else {
+        //     // Récupère tous les service triés par date
+        //     $results = $ServiceItemRepository->findBy([], ["createDate" => "ASC"]);
+        // }
 
 
         // Rend la vue avec les services récupérés
-        return $this->render('service/index.html.twig', [
+        return $this->render('itemService/index.html.twig', [
             'title_page' => 'Liste des Services',
-            'results' => $results
+            // 'results' => $results
         ]);
     }
-
-    #[Route('/service/new', name: 'new_service')]
-    #[Route('/service/edit/{id}', name: 'edit_service')]
+    #[Route('/serviceItem/new', name: 'new_service')]
+    #[Route('/serviceItem/edit/{id}', name: 'edit_service')]
     // Restreint l'accès aux utilisateurs authentifiés
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger): Response
+    // #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function editService(?ServiceItem $service = null, EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger): Response
     {
         // Si le service n'existe pas, crée un nouveau service
         if (!$service) {
-            $service = new Service();
+            $service = new ServiceItem();
         }
         // Variable pour stocker les erreurs de validation
         $errors = null;
         // Crée et gère le formulaire pour le service
-        $form = $this->createForm(ServiceType::class, $service);
+        $form = $this->createForm(ServiceItemType::class, $service);
         // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
         $form->handleRequest($request);
         // Si le formulaire est soumis
@@ -79,16 +78,17 @@ class ServiceController extends AbstractController
                 $subFormData = $form->get('course')->getData();
                 $course = $subFormData['course'] ?? null;
 
-                // Vérifie que le service que le service a un cours associé
+                // si on a un résultat dans course
                 if ($course) {
+                    // On set la sous-categorie au service
                     $service->setCourse($course);
                 } else {
                     // Si aucun cours n'est sélectionné, ajouter une erreur de validation
                     $form->get('course')->addError(new FormError('Veuillez sélectionner un cours.'));
-
+                    // On recherche les erreurs
                     $errors = $form->get('course')->getErrors(true);
 
-                    return $this->render('service/index.html.twig', [
+                    return $this->render('serviceItem/service_item..html.twig', [
                         'title_page' => 'Services',
                         'formAddService' => $form->createView(),
                         'errors' => $form->getErrors(true),
@@ -132,12 +132,23 @@ class ServiceController extends AbstractController
         }
 
         // Rend la vue avec le formulaire
-        return $this->render('service/index.html.twig', [
+        return $this->render('itemService/index.html.twig', [
             'title_page' => 'Services',
             'formAddService' => $form->createView(),
             'errors' => $errors
         ]);
     }
+    #[Route('/serviceItem/{id}', name: 'detail_service')]
+    public function detailService(?ServiceItem $service = null, ServiceItemRepository $ServiceItemRepository): Response
+    {
+        dd($service);
+        // Rend la vue avec les services récupérés
+        return $this->render('itemService/index.html.twig', [
+            'title_page' => 'Détail du Service',
+            'detail' => $service
+        ]);
+    }
+
 
 
 
@@ -397,9 +408,9 @@ class ServiceController extends AbstractController
     }
 
     #[Route('/course/{id}/detail', name: 'detail_course')]
-    public function detailCourse(?Course $course = null, ServiceRepository $serviceRepository, Request $request): Response
+    public function detailCourse(?Course $course = null, ServiceItemRepository $ServiceItemRepository, Request $request): Response
     {
-        $services = $course->getServices();
+        $services = $course->getServiceItems();
         // Rend la vue avec les détails du cours
         return $this->render('course/index.html.twig', [
             'title_page' => $course->getNameCourse(),

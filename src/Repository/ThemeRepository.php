@@ -25,22 +25,22 @@ class ThemeRepository extends ServiceEntityRepository
             ->getResult();
     }
      // Requête pour rechercher un searchterm à partir de Theme->Category/Course/Service
-    public function searchByTermAllChilds($searchTerm)
-    {
-        return $this->createQueryBuilder('theme')
-        ->leftJoin('theme.categories', 'category')
-        ->leftJoin('category.courses', 'course')
-        ->leftJoin('course.services', 'service')
-        ->addSelect('category', 'course', 'service')
-        ->where('theme.nameTheme LIKE :searchTerm')
-        ->orWhere('category.nameCategory LIKE :searchTerm')
-        ->orWhere('course.nameCourse LIKE :searchTerm')
-        ->orWhere('service.title LIKE :searchTerm')
-        ->orWhere('service.description LIKE :searchTerm')
-        ->setParameter('searchTerm', '%' . $searchTerm . '%')
-        ->getQuery()
-        ->getResult();
-    }
+    // public function searchByTermAllChilds($searchTerm)
+    // {
+    //     return $this->createQueryBuilder('theme')
+    //     ->leftJoin('theme.categories', 'category')
+    //     ->leftJoin('category.courses', 'course')
+    //     ->leftJoin('course.services', 'service')
+    //     ->addSelect('category', 'course', 'service')
+    //     ->where('theme.nameTheme LIKE :searchTerm')
+    //     ->orWhere('category.nameCategory LIKE :searchTerm')
+    //     ->orWhere('course.nameCourse LIKE :searchTerm')
+    //     ->orWhere('service.title LIKE :searchTerm')
+    //     ->orWhere('service.description LIKE :searchTerm')
+    //     ->setParameter('searchTerm', '%' . $searchTerm . '%')
+    //     ->getQuery()
+    //     ->getResult();
+    // }
     public function countAll()
 {
     return $this->createQueryBuilder('t')

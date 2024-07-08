@@ -2,15 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\ServiceItem;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -79,7 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Service>
      */
-    #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'user')]
     private Collection $service;
 
     public function __construct()
@@ -267,7 +268,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->service;
     }
 
-    public function addService(Service $service): static
+    public function addService(ServiceItem $service): static
     {
         if (!$this->service->contains($service)) {
             $this->service->add($service);
@@ -277,7 +278,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeService(Service $service): static
+    public function removeService(ServiceItem $service): static
     {
         if ($this->service->removeElement($service)) {
             // set the owning side to null (unless already changed)

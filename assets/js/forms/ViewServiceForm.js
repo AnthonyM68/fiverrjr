@@ -4,8 +4,9 @@
  */
 (function () {
     document.addEventListener('DOMContentLoaded', () => {
+        console.log('=> ViewSearchForm.js loaded');
         // Sélection des éléments du formulaire
-        const form_select_theme = document.getElementById('service_course_theme');
+       /* const form_select_theme = document.getElementById('service_course_theme');
         const form_select_category = document.getElementById('service_course_category');
         const form_select_course = document.getElementById('service_course_course');
 
@@ -62,6 +63,6 @@
         };
 
         form_select_theme.addEventListener('change', updateCategories);
-        form_select_category.addEventListener('change', updateCourses);
+        form_select_category.addEventListener('change', updateCourses);*/
     });
 })();

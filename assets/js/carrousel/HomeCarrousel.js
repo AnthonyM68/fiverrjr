@@ -1,7 +1,7 @@
 
 (function () {
     document.addEventListener('DOMContentLoaded', () => {
-        console.log('-> HomeCarrousel.js loaded');
+        console.log('=> HomeCarrousel.js loaded');
         $('.ui.carousel.slider').slick({
             slidesToShow: 1,
             autoplay: true,

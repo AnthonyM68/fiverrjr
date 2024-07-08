@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Service;
+use App\Entity\ServiceItem;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +26,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 
-class ServiceType extends AbstractType
+class ServiceItemType extends AbstractType
 {
     private $security;
 
@@ -101,7 +101,7 @@ class ServiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Service::class,
+            'data_class' => ServiceItem::class,
         ]);
     }
 }

@@ -5,14 +5,14 @@ namespace App\Entity;
 use App\Entity\Course;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ServiceRepository;
+use App\Repository\ServiceItemRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 // Contraintes
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: ServiceRepository::class)]
-class Service
+#[ORM\Entity(repositoryClass: ServiceItemRepository::class)]
+class ServiceItem
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

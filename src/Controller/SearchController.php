@@ -4,7 +4,7 @@ namespace App\Controller;
 // Importation des classes nécessaires
 use App\Entity\Theme;
 use App\Entity\Course;
-use App\Entity\Service;
+use App\Entity\ServiceItem;
 use App\Entity\Category;
 use App\Form\SearchFormType;
 use Psr\Log\LoggerInterface;
@@ -45,7 +45,7 @@ class SearchController extends AbstractController
         // $themeCount = $this->entityManager->getRepository(Theme::class)->countAll();
         // $categoryCount = $this->entityManager->getRepository(Category::class)->countAll();
         // $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
-        $serviceCount = $this->entityManager->getRepository(Service::class)->countAll();
+        $ServiceCount = $this->entityManager->getRepository(ServiceItem::class)->countAll();
 
         // Rendu de la vue avec les données des formulaires et les comptes d'enregistrements
         return $this->render('search/index.html.twig', [
@@ -53,7 +53,7 @@ class SearchController extends AbstractController
             'title_page' => 'Résultats de la recherche',
             // 'form' => $formCourse->createView(),
             // 'course_count' => $courseCount,
-            'service_count' => $serviceCount,
+            'service_count' => $ServiceCount,
             'errors' => $formSearch->getErrors(true),
             'submitted_form' => null
         ]);
@@ -94,8 +94,8 @@ class SearchController extends AbstractController
             'priceFilter' => $priceFilter
         ]);
 
-        // Récupération des résultats de recherche pour les services
-        $queryBuilder = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
+        // Récupération des résultats de recherche pour les ServiceItems
+        $queryBuilder = $this->entityManager->getRepository(ServiceItem::class)->findByTerm($searchTerm);
         // On filtre par prix
         if ($priceFilter === 'low_to_high') {
             $queryBuilder->orderBy('s.price', 'ASC');
@@ -103,20 +103,20 @@ class SearchController extends AbstractController
             $queryBuilder->orderBy('s.price', 'DESC');
         }
 
-        $services = $queryBuilder->getQuery()->getResult();
+        $ServiceItems = $queryBuilder->getQuery()->getResult();
 
-        // Sérialisation des résultats de service
-        $results['service'] = array_map(function ($service) {
+        // Sérialisation des résultats de ServiceItem
+        $results['ServiceItem'] = array_map(function ($ServiceItem) {
             return [
-                'id' => $service->getId(),
-                'title' => $service->getTitle(),
-                'description' => $service->getDescription(),
-                'picture' => $service->getPicture(),
-                'price' => $service->getPrice(),
+                'id' => $ServiceItem->getId(),
+                'title' => $ServiceItem->getTitle(),
+                'description' => $ServiceItem->getDescription(),
+                'picture' => $ServiceItem->getPicture(),
+                'price' => $ServiceItem->getPrice(),
             ];
-        }, $services);
+        }, $ServiceItems);
 
-        $submittedFormName = 'service';
+        $submittedFormName = 'ServiceItem';
         $results['submitted_form'] = $submittedFormName;
 
         // Retourner les résultats au format JSON

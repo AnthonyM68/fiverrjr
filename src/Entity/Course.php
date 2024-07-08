@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Entity\Service;
+use App\Entity\ServiceItem;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CourseRepository;
 use Doctrine\Common\Collections\Collection;
@@ -25,38 +25,38 @@ class Course
     #[ORM\ManyToOne(inversedBy: 'courses')]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'course')]
-    private Collection $services;
+    #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'course')]
+    private Collection $ServiceItems;
 
     public function __construct()
     {
-        $this->services = new ArrayCollection();
+        $this->ServiceItems = new ArrayCollection();
     }
 
     /**
-     * @return Collection<int, Service>
+     * @return Collection<int, ServiceItem>
      */
-    public function getServices(): ?Collection
+    public function getServiceItems(): ?Collection
     {
-        return $this->services;
+        return $this->ServiceItems;
     }
 
-    public function addService(Service $service): self
+    public function addServiceItem(ServiceItem $ServiceItem): self
     {
-        if (!$this->services->contains($service)) {
-            $this->services[] = $service;
-            $service->setCourse($this);
+        if (!$this->ServiceItems->contains($ServiceItem)) {
+            $this->ServiceItems[] = $ServiceItem;
+            $ServiceItem->setCourse($this);
         }
 
         return $this;
     }
 
-    public function removeService(Service $service): self
+    public function removeServiceItem(ServiceItem $ServiceItem): self
     {
-        if ($this->services->removeElement($service)) {
+        if ($this->ServiceItems->removeElement($ServiceItem)) {
             // set the owning side to null (unless already changed)
-            if ($service->getCourse() === $this) {
-                $service->setCourse(null);
+            if ($ServiceItem->getCourse() === $this) {
+                $ServiceItem->setCourse(null);
             }
         }
 

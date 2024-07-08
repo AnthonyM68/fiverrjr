@@ -38,7 +38,7 @@ class Order
     /**
      * @var Collection<int, Service>
      */
-    #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'orders')]
+    #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'orders')]
     private Collection $services;
 
     public function __construct()
@@ -131,7 +131,7 @@ class Order
         return $this->services;
     }
 
-    public function addService(Service $service): static
+    public function addService(ServiceItem $service): static
     {
         if (!$this->services->contains($service)) {
             $this->services->add($service);
@@ -141,7 +141,7 @@ class Order
         return $this;
     }
 
-    public function removeService(Service $service): static
+    public function removeService(ServiceItem $service): static
     {
         if ($this->services->removeElement($service)) {
             // set the owning side to null (unless already changed)
