@@ -45,23 +45,12 @@ class HomeController extends AbstractController
         // Enregistrement des données de la requête dans les logs
         $this->logger->info('HomeController: line:49 Résults Search', [
             'lastDeveloper' => $lastDeveloper,
-<<<<<<< HEAD
             // 'lastService' => $lastService
-=======
-            'lastEnterprise' =>  $lastEnterprise,
-            'lastService' => $lastService
->>>>>>> ab4038126793de0d041a51225717c263819f881d
         ]);
         return $this->render('home/index.html.twig', [
             // Données pour le carousel sur le home
             'lastDeveloper' => $lastDeveloper,
-<<<<<<< HEAD
             // 'lastService' => $lastService,
-=======
-            'lastEnterprise' => $lastEnterprise,
-            'lastService' => $lastService,
-
->>>>>>> ab4038126793de0d041a51225717c263819f881d
             'submitted_form' => null,
             
             'title_page' => 'Accueil'
