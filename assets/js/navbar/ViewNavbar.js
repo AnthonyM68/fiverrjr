@@ -73,7 +73,8 @@ const submitForm = (formElement) => {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('-> ViewNavbar.js loaded');
+
+    console.log('DOM fully loaded and parsed: ViewNavbar.js');
 
     const searchIcon = document.getElementById('search-icon');
     const form = document.querySelector('.ajax-form');

@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\String\Slugger\SluggerInterface;
+// use Symfony\Component\String\Slugger\SluggerInterface;
 // Importation correcte pour IsGranted
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -35,111 +35,113 @@ class ServiceController extends AbstractController
      * @return Response
      */
     #[Route('/service', name: 'list_services')]
-    #[Route('/service/{id}', name: 'detail_service')]
+    #[Route('/service/detail/{id}', name: 'detail_service')]
     public function index(?Service $service = null, ServiceRepository $serviceRepository): Response
     {
-        $result = '';
+        $result = null;
         // si service existe alors on veux afficher le détail
         if ($service) {
             $results = $service;
         } else {
             // Récupère tous les service triés par date
-            $services = $serviceRepository->findBy([], ["createDate" => "ASC"]);
+            $results = $serviceRepository->findBy([], ["createDate" => "ASC"]);
         }
-
-
         // Rend la vue avec les services récupérés
-        return $this->render('service/index.html.twig', [
+        return $this->render('proposition_service/index.html.twig', [
             'title_page' => 'Liste des Services',
-            'results' => $results
+            // 'services' => $results
         ]);
     }
 
     #[Route('/service/new', name: 'new_service')]
-    #[Route('/service/edit/{id}', name: 'edit_service')]
+
+    // #[Route('/service/edit/{id}', name: 'edit_service')]
+
     // Restreint l'accès aux utilisateurs authentifiés
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger): Response
+    // #[IsGranted('IS_AUTHENTICATED_FULLY')]
+
+    public function editService(?Service $service = null, EntityManagerInterface $entityManager, Request $request): Response
     {
         // Si le service n'existe pas, crée un nouveau service
         if (!$service) {
             $service = new Service();
         }
+
         // Variable pour stocker les erreurs de validation
         $errors = null;
         // Crée et gère le formulaire pour le service
         $form = $this->createForm(ServiceType::class, $service);
+
+        
         // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
         $form->handleRequest($request);
         // Si le formulaire est soumis
-        if ($form->isSubmitted()) {
-            // Si le formulaire est valide, persiste et sauvegarde la Category
-            if ($form->isValid()) {
+        // if ($form->isSubmitted()) {
+        //     // Si le formulaire est valide, persiste et sauvegarde la Category
+        //     if ($form->isValid()) {
 
-                $subFormData = $form->get('course')->getData();
-                $course = $subFormData['course'] ?? null;
+        //         $subFormData = $form->get('course')->getData();
+        //         $course = $subFormData['course'] ?? null;
 
-                // Vérifie que le service que le service a un cours associé
-                if ($course) {
-                    $service->setCourse($course);
-                } else {
-                    // Si aucun cours n'est sélectionné, ajouter une erreur de validation
-                    $form->get('course')->addError(new FormError('Veuillez sélectionner un cours.'));
+        //         // Vérifie que le service que le service a un cours associé
+        //         if ($course) {
+        //             $service->setCourse($course);
+        //         } else {
+        //             // Si aucun cours n'est sélectionné, ajouter une erreur de validation
+        //             $form->get('course')->addError(new FormError('Veuillez sélectionner un cours.'));
 
-                    $errors = $form->get('course')->getErrors(true);
+        //             $errors = $form->get('course')->getErrors(true);
 
-                    return $this->render('service/index.html.twig', [
-                        'title_page' => 'Services',
-                        'formAddService' => $form->createView(),
-                        'errors' => $form->getErrors(true),
-                    ]);
-                }
+        //             return $this->render('service/index.html.twig', [
+        //                 'title_page' => 'Services',
+        //                 'formAddService' => $form->createView(),
+        //                 'errors' => $form->getErrors(true),
+        //             ]);
+        //         }
 
-                $file = $form->get('picture')->getData();
+        //         $file = $form->get('picture')->getData();
 
-                if ($file) {
-                    // Générer un nouveau nom de fichier unique
-                    $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+        //         if ($file) {
+        //             // Générer un nouveau nom de fichier unique
+        //             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        //             $safeFilename = $slugger->slug($originalFilename);
+        //             $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
-                    // Déplacer le fichier vers le répertoire de destination
-                    // try {
-                    //     $file->move(
-                    //         $this->getParameter('uploads_directory'),
-                    //         $newFilename
-                    //     );
-                    // } catch (FileException $e) {
-                    //     // Gérer les exceptions si quelque chose se passe mal pendant l'upload
-                    // }
+        //             // Déplacer le fichier vers le répertoire de destination
+        //             // try {
+        //             //     $file->move(
+        //             //         $this->getParameter('uploads_directory'),
+        //             //         $newFilename
+        //             //     );
+        //             // } catch (FileException $e) {
+        //             //     // Gérer les exceptions si quelque chose se passe mal pendant l'upload
+        //             // }
 
-                    // Mettre à jour la propriété 'attachment' pour stocker le nom du fichier
-                    // au lieu de son contenu
+        //             // Mettre à jour la propriété 'attachment' pour stocker le nom du fichier
+        //             // au lieu de son contenu
 
-                    // dd($newFilename);
-                    $service->setPicture($newFilename);
-                }
-                //$file->move($directory, $someNewFilename);
-                $entityManager->persist($service);
-                $entityManager->flush();
+        //             // dd($newFilename);
+        //             $service->setPicture($newFilename);
+        //         }
+        //         //$file->move($directory, $someNewFilename);
+        //         $entityManager->persist($service);
+        //         $entityManager->flush();
 
-                // Redirige vers la liste des services après sauvegarde
-                return $this->redirectToRoute('list_services');
-            } else {
-                // Récupère les erreurs de validation
-                $errors = $form->getErrors(true);
-            }
-        }
+        //         // Redirige vers la liste des services après sauvegarde
+        //         return $this->redirectToRoute('list_services');
+        //     } else {
+        //         // Récupère les erreurs de validation
+        //         $errors = $form->getErrors(true);
+        //     }
+        // }
 
         // Rend la vue avec le formulaire
-        return $this->render('service/index.html.twig', [
+        return $this->render('proposition_services/index.html.twig', [
             'title_page' => 'Services',
             'formAddService' => $form->createView(),
-            'errors' => $errors
+            // 'errors' => $errors
         ]);
     }
-
-
 
 
     /**

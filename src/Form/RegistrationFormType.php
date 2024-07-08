@@ -31,7 +31,7 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Saisissez votre nom d\'utilisateur',
                     ]),
                     new Assert\Length([
-                        'min' => 12,
+                        'min' => 3, // 12
                         'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères.',
                         'max' => 100,
                     ]),
@@ -76,19 +76,19 @@ class RegistrationFormType extends AbstractType
                 ]],
                 'required' => true,
             ])
-            // ->add('roles', ChoiceType::class, [
-            //     'choices' => [
-            //         'Développeur' => 'ROLE_DEVELOPER',
-            //         'Entrepreneur' => 'ROLE_ENTERPRISE',
-            //     ],
-            //     'attr' => [
-            //         'class' => 'ui checkbox checkbox-container',
-            //     ],
-            //     'multiple' => true,
-            //     // 'expanded' => true,
-            //     'label' => false,
-            //     'data' => []
-            // ])
+            ->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Développeur' => 'ROLE_DEVELOPER',
+                    'Entrepreneur' => 'ROLE_ENTERPRISE',
+                ],
+                'attr' => [
+                    'class' => 'ui checkbox checkbox-container',
+                ],
+                'multiple' => true,
+                // 'expanded' => true,
+                'label' => false,
+                'data' => []
+            ])
             ;
     }
 

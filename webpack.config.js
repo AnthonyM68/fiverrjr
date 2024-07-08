@@ -21,6 +21,7 @@ Encore
 
     // Ajouts des entrées
 
+    .addEntry('jquery_dev', './node_modules/jquery/dist/jquery.js')
     //jQuery UI
     .addEntry('jquery_ui', './node_modules/jquery-ui-dist/jquery-ui.js')
     .addStyleEntry('jquery_ui_theme', './node_modules/jquery-ui/dist/themes/blitzer/theme.css')
