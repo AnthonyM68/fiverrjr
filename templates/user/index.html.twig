@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
+{% include "alertflash/flash_message.html.twig" %}
 
 <h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
 <div class="ui container">
@@ -60,11 +60,6 @@
             {{ form_widget(form.bio) }}
             {{ form_errors(form.bio) }}
         </div>
-        <div class="field">
-            {{ form_label(form.roles) }}
-            {{ form_widget(form.roles) }}
-            {{ form_errors(form.roles) }}
-        </div>
     </div>
     {{ form_end(form) }}
     <a href="{{ path('new_service') }}" class="ui button primary">
@@ -79,6 +74,6 @@
 </div>
 {% block javascripts %}
 {{ parent() }}
-{{ encore_entry_script_tags('previewImage') }}
+
 {% endblock %}
 {% endblock %}

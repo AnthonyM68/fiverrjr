@@ -12,18 +12,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
     private $entityManager;
-    private $passwordHasher;
     private $logger;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, LoggerInterface $logger)
+    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger)
     {
         $this->entityManager = $entityManager;
-        $this->passwordHasher = $passwordHasher;
         $this->logger = $logger;
     }
 
@@ -44,78 +41,83 @@ class UserController extends AbstractController
             'controller_name' => 'UserController',
         ]);
     }
-    #[Route('/user/edit/{id}', name: 'edit_user')]
+    #[Route('/user/detail/{id}', name: 'edit_user')]
     public function detailsUser(): Response
     {
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
         ]);
     }
-    #[Route('/update_user_role/{userId}', name: 'update_user_role')]
-    public function updateUserRole(UserRepository $userRepository, int $userId): Response
-    {
-        // Récupérer l'utilisateur depuis le repository (exemple)
-        $userUpdate = $userRepository->find($userId);
+    // #[Route('/update_user_role/{userId}', name: 'update_user_role')]
+    // public function updateUserRole(UserRepository $userRepository, int $userId): Response
+    // {
+    //     // Récupérer l'utilisateur depuis le repository (exemple)
+    //     $userUpdate = $userRepository->find($userId);
 
-        if (!$userUpdate) {
-            throw $this->createNotFoundException('Utilisateur non trouvé');
-        }
-        // Mettre à jour le rôle de l'utilisateur
-        $userUpdate->setRoles(['ROLE_ADMIN']);
+    //     if (!$userUpdate) {
+    //         throw $this->createNotFoundException('Utilisateur non trouvé');
+    //     }
+    //     // Mettre à jour le rôle de l'utilisateur
+    //     $userUpdate->setRoles(['ROLE_ADMIN']);
 
-        // Persister les modifications
-        $this->entityManager->persist($userUpdate);
-        $this->entityManager->flush();
+    //     // Persister les modifications
+    //     $this->entityManager->persist($userUpdate);
+    //     $this->entityManager->flush();
 
-        // Redirection ou réponse
-        return $this->redirectToRoute('list_users');
-    }
+    //     // Redirection ou réponse
+    //     return $this->redirectToRoute('list_users');
+    // }
 
 
     #[Route('/profile/edit/{id}', name: 'profile_edit')]
-    public function edit(User $user, Request $request, UserPasswordHasherInterface  $userPasswordHasher): Response
+    public function edit(User $user, Request $request): Response
     {
         // On s'assure que $user est bien une instance de User et qu'il existe
-        $user = $this->getUser();
-
-        if (!$user instanceof User) {
-            throw new \LogicException('User must be an instance of User');
+        if (!$user) {
+            $user = new user();
         }
-        // On crée une nouvelle instance du formulaire user avec l'utilistateur 
-        // courrent récupéré en argument à la méthode
-        // permet pré-remplissage des champs
+        // dd($user);
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
+ 
             // On récupère les données du champ picture
             $pictureFile = $form->get('picture')->getData();
             // Si les données existe
             if ($pictureFile) {
-                // On créer un nom nom uniue
+                // On créer un nom uniue
                 $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
                 // On détermine le répertoire en fonction du rôle
                 $uploadDirectory = $this->getParameter('pictures_directory');
+                // configuration ( service.yaml )
+                $currentRoles = $user->getRoles();
                 if (in_array('ROLE_DEVELOPER', $user->getRoles())) {
                     $uploadDirectory = $this->getParameter('developer_pictures_directory');
                 } elseif (in_array('ROLE_ENTERPRISE', $user->getRoles())) {
                     $uploadDirectory = $this->getParameter('enterprise_pictures_directory');
                 }
+
+                // dd($uploadDirectory);
                 // On essaye de déplacé l'image
                 try {
                     $pictureFile->move(
                         $uploadDirectory,
                         $newFilename
-                    );
-                    $user->setPicture($newFilename);
+                    ); 
+                    // On crée le path du répertoir
+                    $relativePath = str_replace($this->getParameter('pictures_directory'), '', $uploadDirectory);
+                    $url = './img/' . $relativePath . '/' . $newFilename;
+                    // On set le nouveau nom de fichier en base de données
+                    $user->setPicture($url);
                 } catch (FileException $e) {
+
                     throw new \LogicException('Une erreur s\'est produite lors du téléchargement de l\'image.');
                 }
             }
-
+            // On enregistre en base de données
             $this->entityManager->persist($user);
             $this->entityManager->flush();
-
             $this->addFlash('success', 'Votre profil à bien été mis à jour');
             // On redirige sur le profil avec en paramètre l'id user, l'objet pour affiché 
             // à nouveau les infos de l'user
