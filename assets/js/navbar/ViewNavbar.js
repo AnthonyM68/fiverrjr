@@ -71,7 +71,6 @@ const submitForm = (formElement) => {
             document.getElementById('search-results-navbar').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
         });
 }
-<<<<<<< HEAD
 (function () {
     document.addEventListener('DOMContentLoaded', () => {
         console.log('=> ViewNavbar.js loaded!');
@@ -79,24 +78,6 @@ const submitForm = (formElement) => {
         const form = document.querySelector('.ajax-form');
         // On place un écouteur d'événement sur l'icon SEARCH
         searchIcon.addEventListener('click', function () {
-=======
-
-document.addEventListener('DOMContentLoaded', () => {
-
-    console.log('DOM fully loaded and parsed: ViewNavbar.js');
-
-    const searchIcon = document.getElementById('search-icon');
-    const form = document.querySelector('.ajax-form');
-    // On place un écouteur d'événement sur l'icon SEARCH
-    searchIcon.addEventListener('click', function () {
-        event.preventDefault();
-        submitForm(form);
-    });
-    // On place un ecouteur d'évenement pour la touche ENTER
-    form.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            console.log('enter');
->>>>>>> ab4038126793de0d041a51225717c263819f881d
             event.preventDefault();
             submitForm(form);
         });

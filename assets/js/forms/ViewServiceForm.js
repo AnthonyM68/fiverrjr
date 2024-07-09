@@ -2,7 +2,6 @@
  * Gestion des contenu dynamique des select /service/new 
  * Formulaire ServiceThemeCategoryCourseType
  */
-<<<<<<< HEAD
 (function () {
     document.addEventListener('DOMContentLoaded', () => {
         console.log('=> ViewSearchForm.js loaded');
@@ -10,8 +9,6 @@
        /* const form_select_theme = document.getElementById('service_course_theme');
         const form_select_category = document.getElementById('service_course_category');
         const form_select_course = document.getElementById('service_course_course');
-=======
->>>>>>> ab4038126793de0d041a51225717c263819f881d
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -73,13 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-<<<<<<< HEAD
         form_select_theme.addEventListener('change', updateCategories);
         form_select_category.addEventListener('change', updateCourses);*/
     });
 })();
-=======
-    form_select_theme.addEventListener('change', updateCategories);
-    form_select_category.addEventListener('change', updateCourses);
-});
->>>>>>> ab4038126793de0d041a51225717c263819f881d

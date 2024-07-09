@@ -41,28 +41,22 @@ class HomeController extends AbstractController
         // Récupérer le dernier utilisateur avec le rôle ROLE_DEVELOPER
         $lastDeveloper = $this->entityManager->getRepository(User::class)->findOneUsersByRole('ROLE_DEVELOPER');
         // // Récupérer le dernier service ajouté
-        // $lastService = $this->entityManager->getRepository(ServiceItem::class)->findOneBy([], ['id' => 'DESC']);
+        $lastService = $this->entityManager->getRepository(ServiceItem::class)->findOneBy([], ['id' => 'DESC']);
+
+        // dd($lastService);
         // Enregistrement des données de la requête dans les logs
         $this->logger->info('HomeController: line:49 Résults Search', [
             'lastDeveloper' => $lastDeveloper,
-            // 'lastService' => $lastService
+            'lastEnterprise' => $lastEnterprise,
+            'lastService' => $lastService
         ]);
         return $this->render('home/index.html.twig', [
             // Données pour le carousel sur le home
             'lastDeveloper' => $lastDeveloper,
-            // 'lastService' => $lastService,
+            'lastEnterprise' => $lastEnterprise,
+            'lastService' => $lastService,
             'submitted_form' => null,
-            
             'title_page' => 'Accueil'
         ]);
     }
-
-
-    // #[Route('/admin', name: 'admin')]
-    // public function administrator(): Response
-    // {
-    //     return $this->render('administrator/index.html.twig', [
-    //         'title_page' => 'Tableau de bord'
-    //     ]);
-    // }
 }
