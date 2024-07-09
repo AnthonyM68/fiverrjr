@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
-
 {% block body %}
 
-
 <h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
+<div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
+
 <div class="ui container">
     {{ form_start(form) }}
     <div class="ui form">
@@ -74,6 +74,7 @@
 </div>
 {% block javascripts %}
 {{ parent() }}
-
+{# On inject le script pour la prévisualisation de l'image avant upload (enregistrement) #}
+{{ encore_entry_script_tags('previewImage') }}
 {% endblock %}
 {% endblock %}

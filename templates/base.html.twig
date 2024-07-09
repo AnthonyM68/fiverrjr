@@ -26,7 +26,6 @@
         {{ render(controller('App\\Controller\\NavbarController::index')) }}
     </header>
     <artcile>
-        {% include "alertflash/flash_message.html.twig" %}
         <div class="ui container">
             <div class="separator"></div>
             {% block body %} {% endblock %}
@@ -35,7 +34,7 @@
     <footer>{% include 'footer/footer.html.twig' %}</footer>
 
     {% block javascripts %}
-    {{ encore_entry_script_tags('previewImage') }}
+
     {{ encore_entry_script_tags('jquery_ui') }}
     {{ encore_entry_script_tags('uikit') }}
     {{ encore_entry_script_tags('uikit-icons') }}

@@ -5,27 +5,29 @@ namespace App\Controller;
 use index;
 use App\Entity\Theme;
 use App\Entity\Course;
-use App\Entity\ServiceItem;
 use App\Form\ThemeType;
 use App\Entity\Category;
 use App\Form\CourseType;
-use App\Form\ServiceItemType;
 use App\Form\CategoryType;
+use App\Entity\ServiceItem;
+use App\Form\ServiceItemType;
 use App\Repository\ThemeRepository;
 use App\Repository\CourseRepository;
-use App\Repository\ServiceItemRepository;
 use App\Repository\CategoryRepository;
+use App\Service\ImageUploaderInterface;
+use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ServiceItemRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 // Importation correcte pour IsGranted
-use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils; //getUser()
 
 class ServiceItemController extends AbstractController
 {
@@ -57,14 +59,15 @@ class ServiceItemController extends AbstractController
     #[Route('/serviceItem/new', name: 'new_service')]
     #[Route('/serviceItem/edit/{id}', name: 'edit_service')]
     // Restreint l'accès aux utilisateurs authentifiés
-    // #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function editService(?ServiceItem $service = null, EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger): Response
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function editService(?ServiceItem $service = null, AuthenticationUtils $authenticationUtils, ImageUploaderInterface $imageUploader, Request $request): Response
     {
         // Si le service n'existe pas, crée un nouveau service
         if (!$service) {
             $service = new ServiceItem();
         }
-
+        // On récupére l'utilisateur courant
+        $user = $this->getUser();
         // Variable pour stocker les erreurs de validation
         $errors = null;
         // Crée et gère le formulaire pour le service
@@ -78,7 +81,6 @@ class ServiceItemController extends AbstractController
 
                 $subFormData = $form->get('course')->getData();
                 $course = $subFormData['course'] ?? null;
-
                 // si on a un résultat dans course
                 if ($course) {
                     // On set la sous-categorie au service
@@ -95,40 +97,10 @@ class ServiceItemController extends AbstractController
                         'errors' => $form->getErrors(true),
                     ]);
                 }
-
-                //         $file = $form->get('picture')->getData();
-
-                //         if ($file) {
-                //             // Générer un nouveau nom de fichier unique
-                //             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                //             $safeFilename = $slugger->slug($originalFilename);
-                //             $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
-
-                //             // Déplacer le fichier vers le répertoire de destination
-                //             // try {
-                //             //     $file->move(
-                //             //         $this->getParameter('uploads_directory'),
-                //             //         $newFilename
-                //             //     );
-                //             // } catch (FileException $e) {
-                //             //     // Gérer les exceptions si quelque chose se passe mal pendant l'upload
-                //             // }
-
-                //             // Mettre à jour la propriété 'attachment' pour stocker le nom du fichier
-                //             // au lieu de son contenu
-
-                //             // dd($newFilename);
-                //             $service->setPicture($newFilename);
-                //         }
-                //         //$file->move($directory, $someNewFilename);
-                //         $entityManager->persist($service);
-                //         $entityManager->flush();
-
-                //         // Redirige vers la liste des services après sauvegarde
-                //         return $this->redirectToRoute('list_services');
-                //     } else {
-                //         // Récupère les erreurs de validation
-                //         $errors = $form->getErrors(true);
+                $pictureFile = $form->get('picture')->getData();
+                if ($pictureFile) {
+                    $imageUploader->uploadImage($pictureFile, $user);
+                }
             }
         }
 
@@ -136,7 +108,7 @@ class ServiceItemController extends AbstractController
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Services',
             'formAddService' => $form->createView(),
-            // 'errors' => $errors
+            'errors' => $errors
         ]);
     }
     #[Route('/serviceItem/{id}', name: 'detail_service')]

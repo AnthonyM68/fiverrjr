@@ -74,8 +74,8 @@
         </div>
     </div>
 </div>
-    
-{% block javascripts %}
+{% block js %}
+{{ encore_entry_script_tags('semantic') }}
 {{ encore_entry_script_tags('ViewNavbarDropdown') }}
 {{ encore_entry_script_tags('ViewNavbar') }}
 {% endblock %}

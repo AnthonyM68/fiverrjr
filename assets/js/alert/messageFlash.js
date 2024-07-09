@@ -1,7 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('=> message_flash.js');
-
+    console.log('=> messageFlash.js');
     // Sélectionnez toutes les alertes Semantic UI
     $('.ui.message.anim').each(function () {
         let $alert = $(this);

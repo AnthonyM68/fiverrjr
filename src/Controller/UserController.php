@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use Psr\Log\LoggerInterface;
 use App\Repository\UserRepository;
+use App\Service\ImageUploaderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,7 +71,7 @@ class UserController extends AbstractController
 
 
     #[Route('/profile/edit/{id}', name: 'profile_edit')]
-    public function edit(User $user, Request $request): Response
+    public function edit(User $user, Request $request, ImageUploaderInterface $imageUploader): Response
     {
         // On s'assure que $user est bien une instance de User et qu'il existe
         if (!$user) {
@@ -81,48 +82,11 @@ class UserController extends AbstractController
         $form->handleRequest($request);
         // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
- 
-            // On récupère les données du champ picture
+            // On supprime l'image actuel, upload la nouvelle et persiste la nouvelle url
+            // ( ImageUploaderService )
             $pictureFile = $form->get('picture')->getData();
-            // Si les données existe
             if ($pictureFile) {
-                // Récupérer l'URL de l'image actuelle
-                $currentPicture = $user->getPicture();
-                // Si l'image actuelle existe, la supprimer du serveur
-                if ($currentPicture) {
-                    $currentFilePath = $this->getParameter('kernel.project_dir') . '/public/' . $currentPicture;
-                    if (file_exists($currentFilePath)) {
-                        unlink($currentFilePath);
-                    }
-                }
-                // On créer un nom uniue
-                $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
-                // On détermine le répertoire en fonction du rôle
-                $uploadDirectory = $this->getParameter('pictures_directory');
-                // configuration ( service.yaml )
-                $currentRoles = $user->getRoles();
-                if (in_array('ROLE_DEVELOPER', $user->getRoles())) {
-                    $uploadDirectory = $this->getParameter('developer_pictures_directory');
-                } elseif (in_array('ROLE_ENTERPRISE', $user->getRoles())) {
-                    $uploadDirectory = $this->getParameter('enterprise_pictures_directory');
-                }
-
-                // dd($uploadDirectory);
-                // On essaye de déplacé l'image
-                try {
-                    $pictureFile->move(
-                        $uploadDirectory,
-                        $newFilename
-                    ); 
-                    // On crée le path du répertoir
-                    $relativePath = str_replace($this->getParameter('pictures_directory'), '', $uploadDirectory);
-                    $url = './img/' . $relativePath . '/' . $newFilename;
-                    // On set le nouveau nom de fichier en base de données
-                    $user->setPicture($url);
-                } catch (FileException $e) {
-
-                    throw new \LogicException('Une erreur s\'est produite lors du téléchargement de l\'image.');
-                }
+                $imageUploader->uploadImage($pictureFile, $user);
             }
             // On enregistre en base de données
             $this->entityManager->persist($user);

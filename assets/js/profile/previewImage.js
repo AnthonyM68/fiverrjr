@@ -1,15 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('=> previewImage.js loaded!');
-    window.previewImage = function (event) {  // make it globally accessible
-        var input = event.target;
-        console.log('Input file selected:', input.files[0]);
-        var reader = new FileReader();
+
+    window.previewImage = function (event) {  
+        // au chargement du fichier dans le input file
+        let input = event.target;
+        // on récupère les infos du fichier pour le nom de fichier
+        let reader = new FileReader();
+        // au chargement du fichier dans le reader
         reader.onload = function () {
-            var imagePreview = document.getElementById('imagePreview');
-            console.log('File reader loaded:', reader.result);
+            // on récupére l'élément preview
+            let imagePreview = document.getElementById('imagePreview');
+            // on lui indique en attribut src l'url du fichier
             imagePreview.src = reader.result;
+            // on affiche l'image, le block
             imagePreview.style.display = 'block';
         };
+        // on sauvegarde l'url de l'image dans le reader
         reader.readAsDataURL(input.files[0]);
     }
 });

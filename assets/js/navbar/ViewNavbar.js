@@ -1,5 +1,3 @@
-
-
 const submitForm = (formElement) => {
     // Initialiser le modal avec l'effet slide down
     $('.ui.modal.navbar').modal({
@@ -71,23 +69,22 @@ const submitForm = (formElement) => {
             document.getElementById('search-results-navbar').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
         });
 }
-(function () {
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('=> ViewNavbar.js loaded!');
-        const searchIcon = document.getElementById('search-icon');
-        const form = document.querySelector('.ajax-form');
-        // On place un écouteur d'événement sur l'icon SEARCH
-        searchIcon.addEventListener('click', function () {
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('=> ViewNavbar.js loaded!');
+    const searchIcon = document.getElementById('search-icon');
+    const form = document.querySelector('.ajax-form');
+    // On place un écouteur d'événement sur l'icon SEARCH
+    searchIcon.addEventListener('click', function () {
+        event.preventDefault();
+        submitForm(form);
+    });
+    // On place un ecouteur d'évenement pour la touche ENTER
+    form.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            console.log('enter');
             event.preventDefault();
             submitForm(form);
-        });
-        // On place un ecouteur d'évenement pour la touche ENTER
-        form.addEventListener('keydown', function (event) {
-            if (event.key === 'Enter') {
-                console.log('enter');
-                event.preventDefault();
-                submitForm(form);
-            }
-        });
+        }
     });
 });

@@ -1,16 +1,10 @@
 {% extends 'base.html.twig' %}
 
-
-
 {% block body %}
-{% include "alertflash/flash_message.html.twig" %}
-{# <h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
-{% if detail|default %}
-    {{ detail }}
-{% endif %} #}
-
+<h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
+<div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
 {# formulaire d'ajout d'un nouveau service #}
-{% if formAddService is defined %} 
+{% if formAddService is defined %}
 {{ form_start(formAddService, {'attr': {'class': 'ui form'}}) }}
 
 <div class="{% if formAddService.course.theme.vars.errors|length > 0 %} field{% endif %}">
@@ -27,8 +21,7 @@
 </div>
 <hr>
 <div class="field">
-    <img id="imagePreview" src="" alt="Image Preview"
-        style="max-width: 200px; max-height: 200px;" />
+    <img id="imagePreview" src="" alt="Image Preview" style="max-width: 200px; max-height: 200px; display:none" />
 </div>
 <div class="{% if formAddService.picture.vars.errors|length > 0 %} field{% endif %}">
     {{ form_row(formAddService.picture) }}
@@ -51,80 +44,8 @@
 <div class="field">
     {{ form_row(formAddService.submit) }}
 </div>
-{{ form_end(formAddService) }} 
+{{ form_end(formAddService) }}
 {% endif %}
-
-{# si results contient un tableau on affiche la liste des résultats #}
-
-{# {% if results is iterable and results is not empty %} #}
-{# <div class="ui list">
-    {% for results in results %}
-{# {% if services|default and services is iterable and services is not empty %}
-<div class="ui list">
-    {% for service in services %}
-    <div class="item">
-        <i class="folder icon"></i>
-        <div class="content">
-            <div class="header">{{ service.title }}</div>
-        </div>
-    </div>
-    {% endfor %}
-</div> #}
-{# sinon on affiche le détail d'un service #}
-{# {% elseif results|default %}
-<div class="ui list">
-    <div class="item">
-        <i class="folder icon"></i>
-        <div class="content">
-            <div class="header">{{ results.title}}</div>
-        </div>
-    </div>
-</div>
-{% endif %} #}
-{# {% if is_granted('ROLE_ADMIN') %} #}
-{# {% if results|default %} #}
-{# <a href="{{ path('edit_service', { 'id': results.id }) }}" class="ui-button ui-widget ui-corner-all" title="Button with icon only">
-========
-{# {% elseif services|default %} #}
-{# {% set service = services %}
-<div class="ui card fluid">
-    <div class="content">
-      <div class="header">{{ service.title}}</div>
-      <div class="meta">
-        <span class="right floated time">{{ result.createDate | date('d-m-Y') }}</span>
-        <span class="category">{{ result.user.username()}}</span>
-      </div>
-      <div class="description">
-        <p>{{ result.description }}</p>
-      </div>
-    </div>
-    <div class="extra content">
-        <div class="left floated author">
-            {{result.price }}€
-          </div>
-      <div class="right floated author">
-        <img class="ui avatar image" src="{{ asset(result.user.picture) }}"> Matt
-      </div>
-    </div>
-  </div> #}
-{# {% endif %} #}
-
-
-
-{# {% if is_granted('ROLE_ADMIN') %}
-{% if results|default %}
-<a href="{{ path('edit_service') }}" class="ui-button ui-widget ui-corner-all"
-    title="Button with icon only">
-    <span class="ui-icon ui-icon-pencil"></span> Editer
-</a> #}
-{# <a href="{{ path('new_service') }}" class="ui-button ui-widget ui-corner-all" title="Button with icon only">
-    <span class="ui-icon ui-icon-plus"></span> Ajouter
-</a>
-<a href="{{ path('new_service') }}" class="ui-button ui-widget ui-corner-all" title="Button with icon only">
-    <span class="ui-icon ui-icon ui-icon-trash"></span> Supprimer
-</a>
-{% endif %}
-{% endif %} #}
 
 {% block javascripts %}
 {{ parent() }}
@@ -133,5 +54,4 @@
 {# On inject le script pour la prévisualisation de l'image avant upload (enregistrement) #}
 {{ encore_entry_script_tags('previewImage') }}
 {% endblock %}
-
 {% endblock %}
