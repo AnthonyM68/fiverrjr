@@ -1,34 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ title_page }} {% endblock %}
+
 
 {% block body %}
-{# {% if results is iterable and results is not empty %} #}
-<h1>{{title_page}}</h1>
+
+{# <h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
 {% if detail|default %}
     {{ detail }}
-{% endif %}
-
-
-
-{% block title %}
-{# si results contient un tableau on affiche la liste des résultats #}
-{% if services|default and services is iterable and services is not empty %}
-{{title_page}}
-{% else %}
-{# sinon le titre du détail du service #}
-Détail du service
-{% endif %}
-{% endblock %}
-
-{% block body %}
-{# {% if services|default and services is iterable and services is not empty %}
-<h1>{{title_page}}</h1>
-{% else %}
-<h1>Détail du service</h1>
 {% endif %} #}
+
 {# formulaire d'ajout d'un nouveau service #}
-{% if formAddService is defined %} #}
+{% if formAddService is defined %} 
 {{ form_start(formAddService, {'attr': {'class': 'ui form'}}) }}
 
 <div class="{% if formAddService.course.theme.vars.errors|length > 0 %} field{% endif %}">
@@ -99,8 +81,8 @@ Détail du service
     </div>
 </div>
 {% endif %} #}
-{% if is_granted('ROLE_ADMIN') %}
-{% if results|default %}
+{# {% if is_granted('ROLE_ADMIN') %} #}
+{# {% if results|default %} #}
 {# <a href="{{ path('edit_service', { 'id': results.id }) }}" class="ui-button ui-widget ui-corner-all" title="Button with icon only">
 ========
 {# {% elseif services|default %} #}
@@ -133,24 +115,23 @@ Détail du service
 {% if results|default %}
 <a href="{{ path('edit_service') }}" class="ui-button ui-widget ui-corner-all"
     title="Button with icon only">
->>>>>>>> ab4038126793de0d041a51225717c263819f881d:templates/proposition_services/index.html.twig
     <span class="ui-icon ui-icon-pencil"></span> Editer
 </a> #}
-<a href="{{ path('new_service') }}" class="ui-button ui-widget ui-corner-all" title="Button with icon only">
+{# <a href="{{ path('new_service') }}" class="ui-button ui-widget ui-corner-all" title="Button with icon only">
     <span class="ui-icon ui-icon-plus"></span> Ajouter
 </a>
 <a href="{{ path('new_service') }}" class="ui-button ui-widget ui-corner-all" title="Button with icon only">
     <span class="ui-icon ui-icon ui-icon-trash"></span> Supprimer
 </a>
 {% endif %}
-{% endif %}
+{% endif %} #}
 
 {% block javascripts %}
-{# {{ parent() }} #}
-
-{{ encore_entry_script_tags('ViewServiceForm') }}
-{{ encore_entry_script_tags('previewImage') }}
-
-{% endblock %}
+{{ parent() }}
 {# On inject le script pour la gestion des contenus dynamique des select #}
+{{ encore_entry_script_tags('ViewServiceForm') }}
+{# On inject le script pour la prévisualisation de l'image avant upload (enregistrement) #}
+{{ encore_entry_script_tags('previewImage') }}
+{% endblock %}
+
 {% endblock %}

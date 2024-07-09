@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
-
+    {{ encore_entry_script_tags('app') }}
     {% block app_jquery %}
-
+q
     {% endblock %}
 
     <link rel="icon"
@@ -15,7 +15,7 @@
     {% block stylesheets %}
     {# {{ encore_entry_link_tags('jquery_ui_theme') }} #}
     {# {{ encore_entry_link_tags('jquery_structure') }} #}
-    {# {{ encore_entry_link_tags('uikit_css') }} #}
+    {{ encore_entry_link_tags('uikit_css') }}
 
     {{ encore_entry_link_tags('slick-carousel-css') }}
     {{ encore_entry_link_tags('slick-carousel-theme-css') }}
@@ -48,7 +48,7 @@
     {{ encore_entry_script_tags('semantic') }}
     {{ encore_entry_script_tags('messageFlash') }}
     {{ encore_entry_script_tags('HomeCarrousel') }}
-    {{ encore_entry_script_tags('app') }}
+    
     {# {{ encore_entry_script_tags('StickyFooter') }} #}
     {% endblock %}
 </body>

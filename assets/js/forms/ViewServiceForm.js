@@ -1,76 +1,62 @@
-/**
- * Gestion des contenu dynamique des select /service/new 
- * Formulaire ServiceThemeCategoryCourseType
- */
 (function () {
     document.addEventListener('DOMContentLoaded', () => {
-        console.log('=> ViewSearchForm.js loaded');
-        // Sélection des éléments du formulaire
-       /* const form_select_theme = document.getElementById('service_course_theme');
-        const form_select_category = document.getElementById('service_course_category');
-        const form_select_course = document.getElementById('service_course_course');
+        console.log('=> ViewServiceForm.js loaded');
 
+        const service_item_course_theme = document.getElementById('service_item_course_theme');
+        const service_item_course_category = document.getElementById('service_item_course_category');
+        const service_item_course_course = document.getElementById('service_item_course_course');
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed: ViewServiceForm.js');
-    // Sélection des éléments du formulaire
-    const form_select_theme = document.getElementById('service_course_theme');
-    const form_select_category = document.getElementById('service_course_category');
-    const form_select_course = document.getElementById('service_course_course');
-
-    if (!form_select_theme || !form_select_category || !form_select_course) {
-        console.error('Form elements not found');
-        return;
-    }
-    const updateForm = async (url) => {
-        try {
-            const req = await fetch(url);
-            return await req.json();
-        } catch (error) {
-            console.error('Failed to fetch or parse JSON:', error);
-            return [];
+        if (!service_item_course_theme || !service_item_course_category || !service_item_course_course) {
+            console.error('Form elements not found');
+            return;
         }
-    };
 
-    // Fonction pour mettre à jour les catégories dynamiquement
-    const updateCategories = async (e) => {
-        const themeId = e.target.value;
-        console.log('Selected theme ID:', themeId);
-        const url = `/categories_by_theme/${themeId}`;
-        const categories = await updateForm(url);
-        console.log(categories);
+        const updateForm = async (url) => {
+            try {
+                const req = await fetch(url);
+                return await req.json();
+            } catch (error) {
+                console.error('Failed to fetch or parse JSON:', error);
+                return [];
+            }
+        };
 
-        form_select_category.innerHTML = '';
-        // On boucle sur les categories et remplissons le champs d'options
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category.id;
-            option.textContent = category.name;
-            form_select_category.appendChild(option);
-        });
-        // Afficher le champ Category une fois que les options sont chargées
-        updateCourses();
-    };
+        const updateCategories = async (e) => {
+            const themeId = e.target.value;
+            console.log('Selected theme ID:', themeId);
+            const url = `/categories_by_theme/${themeId}`;
+            const categories = await updateForm(url);
+            console.log(categories);
+            service_item_course_category.innerHTML = '';
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                service_item_course_category.appendChild(option);
+            });
+            updateCourses();
+        };
 
-    // Fonction pour mettre à jour les cours dynamiquement
-    const updateCourses = async () => {
-        const categoryId = form_select_category.value;
-        const url = `/courses_by_category/${categoryId}`;
+        const updateCourses = async () => {
+            const categoryId = service_item_course_category.value;
+            const url = `/courses_by_category/${categoryId}`;
+            const courses = await updateForm(url);
+            console.log('Courses:', courses);
+            service_item_course_course.innerHTML = '';
+            courses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.id;
+                option.textContent = course.name;
+                service_item_course_course.appendChild(option);
+            });
+        };
 
-        const courses = await updateForm(url);
-        console.log('Courses:', courses);
+        if (service_item_course_theme) {
+            service_item_course_theme.addEventListener('change', updateCategories);
+        }
 
-        form_select_course.innerHTML = '';
-        // On boucle sur les courses et remplissons le champs d'options
-        courses.forEach(course => {
-            const option = document.createElement('option');
-            option.value = course.id;
-            option.textContent = course.name;
-            form_select_course.appendChild(option);
-        });
-    };
-
-        form_select_theme.addEventListener('change', updateCategories);
-        form_select_category.addEventListener('change', updateCourses);*/
+        if (service_item_course_category) {
+            service_item_course_category.addEventListener('change', updateCourses);
+        }
     });
 })();

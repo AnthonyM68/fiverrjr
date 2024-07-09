@@ -54,6 +54,7 @@ Encore
     .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
     .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
     .addStyleEntry('slick-carousel-theme-css', './node_modules/slick-carousel/slick/slick-theme.css') // Optionnel
+    .addEntry('HomeCarrousel', './assets/js/carousel/HomeCarousel.js') 
     // Preview image FileUpload
     .addEntry('previewImage', './assets/js/profile/previewImage.js') 
     // assets personnalisés
@@ -66,7 +67,6 @@ Encore
         './assets/styles/app.css',
         './assets/styles/scss_styles.scss'
     ])
-
     // REACT
     .enableReactPreset()
     // SticiyFooter React
