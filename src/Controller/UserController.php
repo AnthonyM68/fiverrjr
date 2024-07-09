@@ -86,6 +86,15 @@ class UserController extends AbstractController
             $pictureFile = $form->get('picture')->getData();
             // Si les données existe
             if ($pictureFile) {
+                // Récupérer l'URL de l'image actuelle
+                $currentPicture = $user->getPicture();
+                // Si l'image actuelle existe, la supprimer du serveur
+                if ($currentPicture) {
+                    $currentFilePath = $this->getParameter('kernel.project_dir') . '/public/' . $currentPicture;
+                    if (file_exists($currentFilePath)) {
+                        unlink($currentFilePath);
+                    }
+                }
                 // On créer un nom uniue
                 $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
                 // On détermine le répertoire en fonction du rôle

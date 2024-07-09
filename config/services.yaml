@@ -8,6 +8,7 @@ parameters:
     pictures_directory: '%kernel.project_dir%/public/img/'
     developer_pictures_directory: '%kernel.project_dir%/public/img/developers'
     enterprise_pictures_directory: '%kernel.project_dir%/public/img/enterprises'
+    service_pictures_directory: '%kernel.project_dir%/public/img/services'
 
 services:
 
