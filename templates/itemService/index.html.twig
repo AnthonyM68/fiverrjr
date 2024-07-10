@@ -62,6 +62,20 @@
 {{ form_end(formAddService) }}
 {% endif %}
 
+{# Liste des services #}
+{% if services|default %}
+<div class="ui list">
+    {% for service in services %}
+    <div class="item">
+        <i class="folder icon"></i>
+        <div class="content">
+            <div class="header"> <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title}}</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 
 {% if service|default %}
 {# Détail d'un service #}
@@ -83,18 +97,8 @@
         </div>
     </div>
 </div>
-{# Liste des services #}
-<div class="ui list">
-    {% for service in services %}
-    <div class="item">
-        <i class="folder icon"></i>
-        <div class="content">
-            <div class="header"> <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title}}</a>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
+{# si l'utilisateur est connecter #}
+{% if app.user %}
 {# On s'assure que l'user est l'auteur du service #}
 {% if service.user.id == app.user.id %}
 <a href="" class="ui button primary">
@@ -103,11 +107,15 @@
 {% endif %}
 {% endif %}
 
+{% endif %}
 {% block javascripts %}
 {{ parent() }}
+{# On a besoin de ces scripts uniquement si nous créons ou éditons un Service #}
+{% if formAddService is defined %}
 {# On inject le script pour la gestion des contenus dynamique des select #}
 {{ encore_entry_script_tags('ViewServiceForm') }}
 {# On inject le script pour la prévisualisation de l'image avant upload (enregistrement) #}
 {{ encore_entry_script_tags('previewImage') }}
+{% endif %}
 {% endblock %}
 {% endblock %}

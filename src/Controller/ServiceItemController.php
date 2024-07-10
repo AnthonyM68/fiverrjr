@@ -39,11 +39,8 @@ class ServiceItemController extends AbstractController
     #[Route('/serviceItem', name: 'list_services')]
     public function index(?ServiceItem $service = null, ServiceItemRepository $ServiceItemRepository): Response
     {
-
         // Récupère tous les service triés par date
         $services = $ServiceItemRepository->findBy([], ["createDate" => "ASC"]);
-
-
         // Rend la vue avec les services récupérés
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Liste des Services',
@@ -54,7 +51,11 @@ class ServiceItemController extends AbstractController
     #[Route('/serviceItem/{id}', name: 'detail_service')]
     public function detailService(?ServiceItem $service = null, ServiceItemRepository $ServiceItemRepository): Response
     {
-        // Rend la vue avec les services récupérés
+        // Si le service n'existe pas, crée un nouveau service
+        if (!$service) {
+            $service = new ServiceItem();
+        }
+
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Détail du Service',
             'service' => $service
@@ -87,7 +88,7 @@ class ServiceItemController extends AbstractController
         if ($form->isSubmitted()) {
             // Si le formulaire est valide, persiste et sauvegarde la Category
             if ($form->isValid()) {
-               
+
                 $subFormData = $form->get('course')->getData();
                 $course = $subFormData['course'] ?? null;
 
