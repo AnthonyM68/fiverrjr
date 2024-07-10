@@ -3,11 +3,9 @@
 {% block title %}{{title_page}}{% endblock %}
 
 {% block body %}
-
-<h1>{{title_page}}</h1>
-
 {# On vérifie que le formulaire existe avant de l'afficher #}
 {% if formAddTheme is defined %}
+<h1 class="uk-animation-slide-down">{{title_page}}</h1>
 {{ form_start(formAddTheme, {'attr': {'class': 'ui form'}}) }}
 {# Si erreur on ajoute la class field #}
 <div class="{% if formAddTheme.nameTheme.vars.errors|length > 0 %}field{% endif %}">
@@ -17,24 +15,10 @@
 {{ form_end(formAddTheme) }}
 {% endif %}
 
-{# On affiche les catégories touvés #}
-{% if themes | default %}
-<div class="ui list">
-    {% for theme in themes %}
-    <div class="item">
-        <i class="folder icon"></i>
-        <div class="content">
-            <div class="header">
-                <a href="{{ path('detail_category', { 'id': theme.id }) }}">{{ theme.nameTheme }}</a>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-{% endif %}
-{# On affiche les catégories touvés #}
 {% if categories | default %}
-<div class="ui list">
+<h1 class="uk-animation-slide-left">{{title_page}}</h1>
+{# On affiche les catégories touvées #}
+<div class="ui list uk-animation-fade">
     {% for category in categories %}
     <div class="item">
         <i class="folder icon"></i>
@@ -46,11 +30,13 @@
     </div>
     {% endfor %}
 </div>
+{% endif %}
+
 {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('new_theme') }}" class="ui button">
         Ajouter une thème
     </a>
 {% endif %}
-{% endif %}
+
 
 {% endblock %}

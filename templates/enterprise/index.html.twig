@@ -4,7 +4,8 @@
 <h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
 
 {% if enterprises| default %}
-<div class="ui list">
+{# On affiche les entrprise touvées #}
+<div class="ui list uk-animation-fade">
     {% for enterprise in enterprises %}
     <div class="item">
         <i class="folder icon"></i>

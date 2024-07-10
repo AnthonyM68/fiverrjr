@@ -3,37 +3,40 @@
 {% block title %}{{title_page}}{% endblock %}
 
 {% block body %}
-<h1>{{title_page}}</h1>
 {# On vérifie que le formulaire existe avant de l'afficher #}
-{% if formAddCategory is defined  %}
+{% if formAddCategory is defined %}
+<h1 class="uk-animation-slide-down">{{title_page}}</h1>
 {{ form_start(formAddCategory, {'attr': {'class': 'ui form'}}) }}
 {# la class field pour afficher les erreurs #}
-
 <div class="{% if formAddCategory.nameCategory.vars.errors|length > 0 %}field {% endif %}">
-{{ form_row(formAddCategory.nameCategory) }}
-{{ form_row(formAddCategory.theme) }}
-{{ form_row(formAddCategory.submit) }}
+    {{ form_row(formAddCategory.nameCategory) }}
+    {{ form_row(formAddCategory.theme) }}
+    {{ form_row(formAddCategory.submit) }}
 </div>
 {{ form_end(formAddCategory) }}
 {% endif %}
-{# On affiche les courses touvées #}
+
 {% if courses | default %}
-<div class="ui list">
+<h1 class="uk-animation-slide-left">{{title_page}}</h1>
+{# On affiche les courses touvées #}
+<div class="ui list uk-animation-fade">
     {% for course in courses %}
     <div class="item">
         <i class="folder icon"></i>
         <div class="content">
-            <div class="header"> <a href="{{ path('detail_course', { 'id': course.id }) }}">{{ course.nameCourse}}</a></div>
+            <div class="header"> <a href="{{ path('detail_course', { 'id': course.id }) }}">{{ course.nameCourse}}</a>
+            </div>
         </div>
     </div>
     {% endfor %}
 </div>
-{% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('new_category') }}" class="ui button">
-        Ajouter une catégorie
-    </a>
 {% endif %}
 
+
+{% if is_granted('ROLE_ADMIN') %}
+<a href="{{ path('new_category') }}" class="ui button">
+    Ajouter une catégorie
+</a>
 {% endif %}
 
 {% endblock %}
