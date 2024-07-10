@@ -214,7 +214,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getPicture(): ?string
     {
-        return $this->picture;
+        return "bonjour";
     }
 
     public function setPicture(?string $picture): static

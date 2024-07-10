@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ServiceThemeCategoryCourseType extends AbstractType
@@ -22,21 +23,38 @@ class ServiceThemeCategoryCourseType extends AbstractType
                 'label' => 'Thèmes',
                 'placeholder' => 'Choisissez un Thème',
                 'mapped' => false, // Non mapped à service
-                'attr' => ['class' => 'ui fluid search dropdown']
+                'attr' => ['class' => 'ui fluid search dropdown'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez sélectionner un Thème',
+                    ]),
+                ],
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'label' => 'Catégories',
                 'placeholder' => 'Choisissez une Catégorie',
                 'mapped' => false, // Non mapped à service
-                'attr' => ['class' => 'ui fluid search dropdown']
+                'attr' => ['class' => 'ui fluid search dropdown'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez sélectionner une catégorie',
+                    ]),
+                ],
             ])
             // ne pas indiquer de mapped 
             ->add('course', EntityType::class, [
                 'class' => Course::class,
                 'label' => 'Sous-catégories',
                 'placeholder' => 'Choisissez une Sous-Catégorie',
-                'attr' => ['class' => 'ui fluid search dropdown']
+                'attr' => ['class' => 'ui fluid search dropdown'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez sélectionner une Sous-catégorie',
+                    ]),
+                ],
+
+
             ]);
         // Écouteurs d'événements pour les champs theme et category
         $builder->get('theme')->addEventListener(
@@ -46,7 +64,7 @@ class ServiceThemeCategoryCourseType extends AbstractType
                 $theme = $form->getData();
                 // On recherche les catégories appartenant à un thême
                 $categories = $theme ? $theme->getCategories() : [];
-                 // Ajout dynamique du champ category après la sélection du thème
+                // Ajout dynamique du champ category après la sélection du thème
                 $form->getParent()->add('category', EntityType::class, [
                     'class' => Category::class,
                     'choices' => $categories,
