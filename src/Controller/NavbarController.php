@@ -12,24 +12,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class NavbarController extends AbstractController
 {
-    private $entityManager;
-    // Constructeur pour injecter l'EntityManager
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
     #[Route('/navbar', name: 'app_navbar')]
-    public function index(Request $request): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Création et gestion du formulaire de recherche
         $formTheme = $this->createForm(SearchFormType::class, null, [
             // On change la route par défaut pour la recherche dynamic
             'action' => $this->generateUrl('search_results'),
+            // Envisager un changement / Axe d'amélioration du moteur de recherche
             'search_table' => 'theme',
             'search_label' => 'Recherchez votre service',
         ]);
         $formTheme->handleRequest($request);
+        // initialistation d'un tableau de résultats vide
         $results = [];
+        
         $searchTerm = null;
         $submittedFormName = null;
         // Vérification si le formulaire est soumis et valide
@@ -37,7 +34,7 @@ class NavbarController extends AbstractController
             // On récupére les données de l'input
             $searchTerm = $formTheme->get('search_term')->getData();
             // Recherche des résultats correspondants au terme de recherche
-            $results = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
+            $results = $entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
             // Si aucun résultat n'est trouvé, on ajoute un indicateur 'empty'
             if (empty($results)) {
                 $results['empty'] = true;
