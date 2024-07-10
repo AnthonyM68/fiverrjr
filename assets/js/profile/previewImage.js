@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('=> previewImage.js loaded!');
-
     window.previewImage = function (event) {  
         // au chargement du fichier dans le input file
         let input = event.target;

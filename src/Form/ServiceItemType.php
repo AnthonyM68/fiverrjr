@@ -72,10 +72,12 @@ class ServiceItemType extends AbstractType
                 ]
             ])
             ->add('picture', FileType::class, [
-                'label' => 'Image',
+                'label' => 'Image de service',
                 'attr' => [
-                    'class' => 'ui fluid input'
-                ]
+                    'class' => 'ui input',
+                ],
+                'required' => false,
+                'mapped' => false
             ])
             ->add('createDate', DateType::class, [
                 'widget' => 'single_text',

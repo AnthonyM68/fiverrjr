@@ -27,7 +27,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils; //getUser()
 
 class ServiceItemController extends AbstractController
 {
@@ -60,14 +59,14 @@ class ServiceItemController extends AbstractController
     #[Route('/serviceItem/edit/{id}', name: 'edit_service')]
     // Restreint l'accès aux utilisateurs authentifiés
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function editService(?ServiceItem $service = null, AuthenticationUtils $authenticationUtils, ImageUploaderInterface $imageUploader, Request $request): Response
+    public function editService(?ServiceItem $service = null, EntityManagerInterface $entityManager, ImageUploaderInterface $imageUploader, Request $request): Response
     {
         // Si le service n'existe pas, crée un nouveau service
         if (!$service) {
             $service = new ServiceItem();
         }
         // On récupére l'utilisateur courant
-        $user = $this->getUser();
+        // $user = $this->getUser();
         // Variable pour stocker les erreurs de validation
         $errors = null;
         // Crée et gère le formulaire pour le service
@@ -76,11 +75,14 @@ class ServiceItemController extends AbstractController
         $form->handleRequest($request);
         // Si le formulaire est soumis
         if ($form->isSubmitted()) {
+           
             // Si le formulaire est valide, persiste et sauvegarde la Category
             if ($form->isValid()) {
-
+               
                 $subFormData = $form->get('course')->getData();
+                
                 $course = $subFormData['course'] ?? null;
+
                 // si on a un résultat dans course
                 if ($course) {
                     // On set la sous-categorie au service
@@ -99,8 +101,10 @@ class ServiceItemController extends AbstractController
                 }
                 $pictureFile = $form->get('picture')->getData();
                 if ($pictureFile) {
-                    $imageUploader->uploadImage($pictureFile, $user);
+                    $imageUploader->uploadImage($pictureFile, $service->getUser());
                 }
+                $entityManager->persist($service);
+                $entityManager->flush();
             }
         }
 

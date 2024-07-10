@@ -2,7 +2,7 @@
 
 namespace App\EventListener;
 
-use App\Entity\Service;
+use App\Entity\ServiceItem;
 use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -14,8 +14,8 @@ class AddCreateDateFiledServiceForm implements EventSubscriberInterface
     public function prePersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getObject();
-        // On vérifie si l'objet est une instance de Service
-        if ($entity instanceof Service) {
+        // On vérifie si l'objet est une instance de ServiceItem
+        if ($entity instanceof ServiceItem) {
             $entity->setCreateDate(new \DateTime());
 
             $user = $entity->getUser();
