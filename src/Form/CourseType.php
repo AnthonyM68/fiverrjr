@@ -16,7 +16,7 @@ class CourseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('category', EntityType::class, [
+            ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'label' => 'Appartenance catégorie',
                 'choice_label' => 'nameCategory',
@@ -24,16 +24,15 @@ class CourseType extends AbstractType
                     'class' => 'ui fluid search dropdown'
                 ]
             ])
-        ->add('nameCourse', TextType::class, [
-            'label' => 'Nom de sous-catégorie'
-        ])
-        ->add('submit', SubmitType::class, [
-            'label' => 'Soumettre',
-            'attr' => [
-                'class' => 'ui-button ui-widget ui-corner-all'
-            ]
-        ])
-    ;
+            ->add('nameCourse', TextType::class, [
+                'label' => 'Nom de sous-catégorie'
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Soumettre',
+                'attr' => [
+                    'class' => 'ui-button ui-widget ui-corner-all'
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

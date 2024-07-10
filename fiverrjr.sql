@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `course` (
   CONSTRAINT `FK_169E6FB912469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.course : ~20 rows (environ)
+-- Listage des données de la table fiverrjr.course : ~19 rows (environ)
 INSERT INTO `course` (`id`, `category_id`, `name_course`) VALUES
 	(1, 1, 'Développement de sites vitrines'),
 	(2, 1, 'Développement de blogs'),
@@ -76,6 +76,18 @@ INSERT INTO `course` (`id`, `category_id`, `name_course`) VALUES
 	(18, 7, 'Développement d\'API RESTful'),
 	(19, 7, 'Intégration de services tiers (Stripe, PayPal, etc.)'),
 	(21, 1, 'Test Course 1');
+
+-- Listage de la structure de table fiverrjr. doctrine_migration_versions
+CREATE TABLE IF NOT EXISTS `doctrine_migration_versions` (
+  `version` varchar(191) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `executed_at` datetime DEFAULT NULL,
+  `execution_time` int DEFAULT NULL,
+  PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- Listage des données de la table fiverrjr.doctrine_migration_versions : ~1 rows (environ)
+INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
+	('DoctrineMigrations\\Version20240708154704', '2024-07-08 15:47:20', 570);
 
 -- Listage de la structure de table fiverrjr. messenger_messages
 CREATE TABLE IF NOT EXISTS `messenger_messages` (
@@ -109,32 +121,43 @@ CREATE TABLE IF NOT EXISTS `order` (
 
 -- Listage des données de la table fiverrjr.order : ~0 rows (environ)
 
--- Listage de la structure de table fiverrjr. service
-CREATE TABLE IF NOT EXISTS `service` (
+-- Listage de la structure de table fiverrjr. reset_password_request
+CREATE TABLE IF NOT EXISTS `reset_password_request` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `order_id` int DEFAULT NULL,
+  `selector` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `hashed_token` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requested_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
+  `expires_at` datetime NOT NULL COMMENT '(DC2Type:datetime_immutable)',
+  PRIMARY KEY (`id`),
+  KEY `IDX_7CE748AA76ED395` (`user_id`),
+  CONSTRAINT `FK_7CE748AA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table fiverrjr.reset_password_request : ~0 rows (environ)
+
+-- Listage de la structure de table fiverrjr. service_item
+CREATE TABLE IF NOT EXISTS `service_item` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `course_id` int NOT NULL,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int NOT NULL,
+  `order_id` int DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` double NOT NULL,
   `duration` int NOT NULL,
   `create_date` datetime NOT NULL,
   `picture` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `IDX_E19D9AD2A76ED395` (`user_id`),
-  KEY `IDX_E19D9AD2591CC992` (`course_id`),
-  KEY `IDX_E19D9AD28D9F6D38` (`order_id`),
-  CONSTRAINT `FK_E19D9AD2591CC992` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
-  CONSTRAINT `FK_E19D9AD28D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
-  CONSTRAINT `FK_E19D9AD2A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `IDX_D15891F2591CC992` (`course_id`),
+  KEY `IDX_D15891F2A76ED395` (`user_id`),
+  KEY `IDX_D15891F28D9F6D38` (`order_id`),
+  CONSTRAINT `FK_D15891F2591CC992` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
+  CONSTRAINT `FK_D15891F28D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
+  CONSTRAINT `FK_D15891F2A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.service : ~3 rows (environ)
-INSERT INTO `service` (`id`, `user_id`, `order_id`, `course_id`, `title`, `description`, `price`, `duration`, `create_date`, `picture`) VALUES
-	(1, 1, NULL, 1, 'Titre service 1 ', 'Proposition de service de l\'utilisateur Admin', 10, 60, '2024-06-26 17:32:18', 'service.jpg'),
-	(2, 2, NULL, 2, 'Titre service 2', 'Proposition de service de l\'utilisateur: user', 50, 300, '2024-06-28 06:15:16', 'service.jpg'),
-	(5, 1, NULL, 1, 'Titre service 3', 'test picture', 20, 10, '2024-07-03 13:42:53', 'service.jpg');
+-- Listage des données de la table fiverrjr.service_item : ~0 rows (environ)
 
 -- Listage de la structure de table fiverrjr. theme
 CREATE TABLE IF NOT EXISTS `theme` (
@@ -158,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `email` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `roles` json NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `first_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -175,8 +198,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- Listage des données de la table fiverrjr.user : ~2 rows (environ)
 INSERT INTO `user` (`id`, `email`, `roles`, `password`, `first_name`, `last_name`, `phone_number`, `date_register`, `picture`, `city`, `portfolio`, `bio`, `is_verified`, `username`) VALUES
-	(1, 'admin@gmail.com', '["ROLE_ADMIN"]', '$2y$13$030uvowwY4st0yG1THvBuuC5vjemI9k4kUMluwi.IBH32YCV.uVl2', NULL, NULL, NULL, '2024-06-20 06:48:38', '/public/img/Service/service.jpg', NULL, NULL, NULL, 0, 'jad67tony'),
-	(2, 'user@gmail.com', '[]', '$2y$13$DSnyXKGD9ZXNx6CzHbDow.wm3d.HK4gjuHviyVNW/m2WK4.FcWlrO', NULL, NULL, NULL, '2024-06-27 05:50:34', 'public/img/Service/service.jpg', NULL, NULL, NULL, 0, 'Anthony');
+	(1, 'enterprise@gmail.com', '["ROLE_ENTERPRISE"]', '$2y$13$030uvowwY4st0yG1THvBuuC5vjemI9k4kUMluwi.IBH32YCV.uVl2', 'Elan', 'Formation', '330760000000', '2024-06-20 06:48:38', './img/enterprises/enterprise.webp', 'Thann', NULL, NULL, 0, 'jad67tony'),
+	(2, 'developer@gmail.com', '["ROLE_DEVELOPER"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Anthony', 'Montmirail', '330760000000', '2024-06-27 00:00:00', './img/developers/668d715170e93.png', 'Thann', NULL, 'Test update', 0, 'Anthony');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 // Importation des classes nécessaires
+
+use App\Entity\ServiceItem;
 use App\Entity\User;
 use App\Form\UserType;
 use Psr\Log\LoggerInterface;
@@ -77,7 +79,7 @@ class UserController extends AbstractController
         if (!$user) {
             $user = new user();
         }
-        // dd($user);
+        
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         // Si le formulaire est soumis et valide
@@ -85,6 +87,7 @@ class UserController extends AbstractController
             // On supprime l'image actuel, upload la nouvelle et persiste la nouvelle url
             // ( ImageUploaderService )
             $pictureFile = $form->get('picture')->getData();
+
             if ($pictureFile) {
                 $imageUploader->uploadImage($pictureFile, $user);
             }
@@ -96,7 +99,7 @@ class UserController extends AbstractController
             // à nouveau les infos de l'user
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
-
+        // dd($form->getData());
         return $this->render('user/index.html.twig', [
             'title_page' => 'Votre profil',
             'form' => $form->createView(),

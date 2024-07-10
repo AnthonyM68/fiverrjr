@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('=> ViewServiceForm.js loaded!');
-
     const service_item_course_theme = document.getElementById('service_item_course_theme');
     const service_item_course_category = document.getElementById('service_item_course_category');
     const service_item_course_course = document.getElementById('service_item_course_course');

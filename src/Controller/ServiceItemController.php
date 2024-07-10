@@ -39,48 +39,56 @@ class ServiceItemController extends AbstractController
     #[Route('/serviceItem', name: 'list_services')]
     public function index(?ServiceItem $service = null, ServiceItemRepository $ServiceItemRepository): Response
     {
-        // $result = '';
-        // // si service existe alors on veux afficher le détail
-        // if ($service) {
-        //     $results = $service;
-        // } else {
-        //     // Récupère tous les service triés par date
-        //     $results = $ServiceItemRepository->findBy([], ["createDate" => "ASC"]);
-        // }
+
+        // Récupère tous les service triés par date
+        $services = $ServiceItemRepository->findBy([], ["createDate" => "ASC"]);
 
 
         // Rend la vue avec les services récupérés
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Liste des Services',
-            // 'results' => $results
+            'services' => $services
         ]);
     }
+
+    #[Route('/serviceItem/{id}', name: 'detail_service')]
+    public function detailService(?ServiceItem $service = null, ServiceItemRepository $ServiceItemRepository): Response
+    {
+        // Rend la vue avec les services récupérés
+        return $this->render('itemService/index.html.twig', [
+            'title_page' => 'Détail du Service',
+            'service' => $service
+        ]);
+    }
+
     #[Route('/serviceItem/new', name: 'new_service')]
     #[Route('/serviceItem/edit/{id}', name: 'edit_service')]
     // Restreint l'accès aux utilisateurs authentifiés
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function editService(?ServiceItem $service = null, EntityManagerInterface $entityManager, ImageUploaderInterface $imageUploader, Request $request): Response
     {
+
         // Si le service n'existe pas, crée un nouveau service
         if (!$service) {
             $service = new ServiceItem();
         }
-        // On récupére l'utilisateur courant
-        // $user = $this->getUser();
         // Variable pour stocker les erreurs de validation
         $errors = null;
         // Crée et gère le formulaire pour le service
         $form = $this->createForm(ServiceItemType::class, $service);
         // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
         $form->handleRequest($request);
+
+        // Pré-remplir les champs non mappés
+        if ($service->getCourse()) {
+            $form->get('course')->get('course')->setData($service->getCourse());
+        }
         // Si le formulaire est soumis
         if ($form->isSubmitted()) {
-           
             // Si le formulaire est valide, persiste et sauvegarde la Category
             if ($form->isValid()) {
                
                 $subFormData = $form->get('course')->getData();
-                
                 $course = $subFormData['course'] ?? null;
 
                 // si on a un résultat dans course
@@ -93,12 +101,13 @@ class ServiceItemController extends AbstractController
                     // On recherche les erreurs
                     $errors = $form->get('course')->getErrors(true);
 
-                    return $this->render('serviceItem/service_item..html.twig', [
+                    return $this->render('itemService/index.html.twig', [
                         'title_page' => 'Services',
                         'formAddService' => $form->createView(),
                         'errors' => $form->getErrors(true),
                     ]);
                 }
+
                 $pictureFile = $form->get('picture')->getData();
                 if ($pictureFile) {
                     $imageUploader->uploadImage($pictureFile, $service->getUser());
@@ -107,28 +116,14 @@ class ServiceItemController extends AbstractController
                 $entityManager->flush();
             }
         }
-
         // Rend la vue avec le formulaire
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Services',
             'formAddService' => $form->createView(),
-            'errors' => $errors
+            'errors' => $errors,
+            'service' => $service
         ]);
     }
-    #[Route('/serviceItem/{id}', name: 'detail_service')]
-    public function detailService(?ServiceItem $service = null, ServiceItemRepository $ServiceItemRepository): Response
-    {
-        dd($service);
-        // Rend la vue avec les services récupérés
-        return $this->render('itemService/index.html.twig', [
-            'title_page' => 'Détail du Service',
-            'detail' => $service
-        ]);
-    }
-
-
-
-
 
     /**
      * THEMES
