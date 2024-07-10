@@ -47,7 +47,7 @@ class ServiceItemController extends AbstractController
         // Rend la vue avec les services récupérés
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Liste des Services',
-             'services' => $services
+            'services' => $services
         ]);
     }
 
@@ -57,7 +57,7 @@ class ServiceItemController extends AbstractController
         // Rend la vue avec les services récupérés
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Détail du Service',
-            'detail' => $service
+            'service' => $service
         ]);
     }
 
@@ -67,18 +67,23 @@ class ServiceItemController extends AbstractController
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function editService(?ServiceItem $service = null, EntityManagerInterface $entityManager, ImageUploaderInterface $imageUploader, Request $request): Response
     {
+
         // Si le service n'existe pas, crée un nouveau service
         if (!$service) {
             $service = new ServiceItem();
         }
-        // On récupére l'utilisateur courant
-        $user = $this->getUser();
+
         // Variable pour stocker les erreurs de validation
         $errors = null;
         // Crée et gère le formulaire pour le service
         $form = $this->createForm(ServiceItemType::class, $service);
         // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
         $form->handleRequest($request);
+
+        // Pré-remplir les champs non mappés
+        if ($service->getCourse()) {
+            $form->get('course')->get('course')->setData($service->getCourse());
+        }
         // Si le formulaire est soumis
         if ($form->isSubmitted()) {
 
@@ -88,7 +93,6 @@ class ServiceItemController extends AbstractController
                 $subFormData = $form->get('course')->getData();
 
                 $course = $subFormData['course'] ?? null;
-
                 // si on a un résultat dans course
                 if ($course) {
                     // On set la sous-categorie au service
@@ -105,27 +109,24 @@ class ServiceItemController extends AbstractController
                         'errors' => $form->getErrors(true),
                     ]);
                 }
+
                 $pictureFile = $form->get('picture')->getData();
                 if ($pictureFile) {
                     $imageUploader->uploadImage($pictureFile, $service->getUser());
                 }
+
                 $entityManager->persist($service);
                 $entityManager->flush();
             }
         }
         // Rend la vue avec le formulaire
         return $this->render('itemService/index.html.twig', [
-            'url' => $service->getPicture(),
             'title_page' => 'Services',
             'formAddService' => $form->createView(),
-            'errors' => $errors
+            'errors' => $errors,
+            'service' => $service
         ]);
     }
-
-
-
-
-
 
     /**
      * THEMES
