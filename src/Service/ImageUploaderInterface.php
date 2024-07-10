@@ -7,5 +7,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface ImageUploaderInterface
 {
-    public function uploadImage(UploadedFile $file, $user, ServiceItem $service): void;
+    public function uploadImage(UploadedFile $file, $data): void;
+
+    
 }

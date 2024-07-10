@@ -5,6 +5,20 @@
 <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
 
 
+
+{% if services | default %}
+<div class="ui list">
+    {% for service in services %}
+    <div class="item">
+        <i class="folder icon"></i>
+        <div class="content">
+            <div class="header"> <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title}}</a></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 {# formulaire d'ajout d'un nouveau service #}
 {% if formAddService is defined %}
 

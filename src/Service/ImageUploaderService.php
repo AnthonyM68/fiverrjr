@@ -17,10 +17,9 @@ class ImageUploaderService implements ImageUploaderInterface
         $this->parameters = $parameters;
     }
 
-    public function uploadImage(UploadedFile $file, $user, ?ServiceItem $service = null): void
+    public function uploadImage(UploadedFile $file, $data): void
     {
-
-        $currentPicture = $user->getPicture();
+        $currentPicture = $data->getPicture();
         if ($currentPicture) {
             $currentFilePath = $this->parameters->get('kernel.project_dir') . '/public/' . $currentPicture;
             if (file_exists($currentFilePath)) {
@@ -31,13 +30,13 @@ class ImageUploaderService implements ImageUploaderInterface
         $newFilename = uniqid() . '.' . $file->guessExtension();
         $uploadDirectory = $this->parameters->get('pictures_directory');
 
-        if (!$service) {
-            if (in_array('ROLE_DEVELOPER', $user->getRoles())) {
+        if ($data instanceof User) {
+            if (in_array('ROLE_DEVELOPER', $data->getRoles())) {
                 $uploadDirectory = $this->parameters->get('developer_pictures_directory');
-            } elseif (in_array('ROLE_ENTERPRISE', $user->getRoles())) {
+            } elseif (in_array('ROLE_ENTERPRISE', $data->getRoles())) {
                 $uploadDirectory = $this->parameters->get('enterprise_pictures_directory');
             }
-        } else {
+        } elseif ($data instanceof ServiceItem) {
             $uploadDirectory = $this->parameters->get('service_pictures_directory');
         }
 
@@ -46,12 +45,8 @@ class ImageUploaderService implements ImageUploaderInterface
             $file->move($uploadDirectory, $newFilename);
             $relativePath = str_replace($this->parameters->get('pictures_directory'), '', $uploadDirectory);
             $url = './img/' . $relativePath . '/' . $newFilename;
+            $data->setPicture($url);
 
-            if($service) {
-                $service->setPicture($url);
-            } else {
-                $user->setPicture($url);
-            }
             
         } catch (FileException $e) {
             throw new \LogicException('Une erreur s\'est produite lors du téléchargement de l\'image.');

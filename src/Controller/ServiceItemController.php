@@ -39,20 +39,15 @@ class ServiceItemController extends AbstractController
     #[Route('/serviceItem', name: 'list_services')]
     public function index(?ServiceItem $service = null, ServiceItemRepository $ServiceItemRepository): Response
     {
-        // $result = '';
-        // // si service existe alors on veux afficher le détail
-        // if ($service) {
-        //     $results = $service;
-        // } else {
-        //     // Récupère tous les service triés par date
-        //     $results = $ServiceItemRepository->findBy([], ["createDate" => "ASC"]);
-        // }
+
+        // Récupère tous les service triés par date
+        $services = $ServiceItemRepository->findBy([], ["createDate" => "ASC"]);
 
 
         // Rend la vue avec les services récupérés
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Liste des Services',
-            // 'results' => $results
+             'services' => $services
         ]);
     }
 
@@ -76,10 +71,8 @@ class ServiceItemController extends AbstractController
         if (!$service) {
             $service = new ServiceItem();
         }
-
-
         // On récupére l'utilisateur courant
-        // $user = $this->getUser();
+        $user = $this->getUser();
         // Variable pour stocker les erreurs de validation
         $errors = null;
         // Crée et gère le formulaire pour le service
@@ -114,7 +107,7 @@ class ServiceItemController extends AbstractController
                 }
                 $pictureFile = $form->get('picture')->getData();
                 if ($pictureFile) {
-                    $imageUploader->uploadImage($pictureFile, $service->getUser(), $service);
+                    $imageUploader->uploadImage($pictureFile, $service->getUser());
                 }
                 $entityManager->persist($service);
                 $entityManager->flush();
