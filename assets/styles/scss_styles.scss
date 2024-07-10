@@ -79,6 +79,18 @@
 .ui.list > .item > .content > .header {
   color: #fff !important;
 }
+.ui.list.login > .item,
+.ui.list.login > .item > .content > .header {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+
 .ui.form label {
     color: #fff !important;
+}
+.ui.form.login label {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+.ui.form.register label {
+  color: rgba(0, 0, 0, 0.87) !important;
 }

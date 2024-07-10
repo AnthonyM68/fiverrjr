@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+// Controller de la recherche Avancée
 class SearchController extends AbstractController
 {
     private $entityManager;
@@ -29,8 +30,6 @@ class SearchController extends AbstractController
         $this->csrfTokenManager = $csrfTokenManager;
         $this->logger = $logger;
     }
-
-
     #[Route("/search", name: "search")]
     public function search(Request $request): Response
     {

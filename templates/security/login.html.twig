@@ -15,22 +15,20 @@
             </div>
         </h2>
 
-        <form class="ui large form" novalidate='novalidate' method="post">
+        <form class="ui large form login" novalidate='novalidate' method="post">
             <div class="ui stacked segment">
-                 {% if error %}
-                <div class="ui-state-error ui-corner-all margin-bottom">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                {% endif %} 
-
-                <div class="field">
-                    <div class="ui right icon input floating-label">
+                <div class={% if error %}"field"{% else %}""{% endif %}>
+                    {% if error %}{{ error.messageKey|trans(error.messageData, 'security') }}{% endif %}
+                    <div class="ui right icon input floating-label fluid">
                         <i class="envelope icon"></i>
                         <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class=""
                             autocomplete="email" required autofocus>
                         <label for="inputEmail">Email</label>
                     </div>
                 </div>
-                <div class="field">
-                    <div class="ui right icon input floating-label">
+                <div class={% if error %}"field"{% endif %}>
+                    {% if error %}{{ error.messageKey|trans(error.messageData, 'security') }}{% endif %}
+                    <div class="ui right icon input floating-label fluid">
                         <i class="lock icon"></i>
                         <input type="password" name="password" id="inputPassword" class=""
                             autocomplete="current-password" required>
@@ -41,7 +39,7 @@
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 <div class="ui message field center aligned">
-                    <div class="ui list">
+                    <div class="ui list login">
                         <div class="item">Pas encore inscrit? <a href="{{ path('register') }}">Enregistrez-vous</a>
                         </div>
                         <div class="item">Mot de passe oubliez? <a

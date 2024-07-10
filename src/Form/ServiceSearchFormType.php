@@ -25,6 +25,7 @@ class ServiceSearchFormType extends AbstractType
             'data' => $options['search_table'],
         ])
             ->add('search_term', ServiceSearchFormType::class, [
+                'required' => true,
                 'label' => 'Services...',
                  'attr' => ['placeholder' => 'Services...']
             ]);

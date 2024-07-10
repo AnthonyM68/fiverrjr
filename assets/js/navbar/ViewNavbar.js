@@ -1,15 +1,16 @@
-const submitForm = (formElement) => {
+const submitForm = (form) => {
     // Initialiser le modal avec l'effet slide down
     $('.ui.modal.navbar').modal({
         transition: 'slide down'
     });
     // On récupère les données du formulaire
     // et on crée une nouvelle instance de formData
-    const formData = new FormData(formElement);
+    const formData = new FormData(form);
     // On convertit les données du formulaire en un objet JavaScript
     const jsonData = Object.fromEntries(formData.entries());
-    // Requête AJAX
-    fetch(formElement.action, {
+    // A travers le form actuel on recherche l'url de l'attribut action
+    // On effectue la Requête AJAX
+    fetch(form.action, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -22,13 +23,15 @@ const submitForm = (formElement) => {
             return response.json();
         })
         .then(data => {
-
+            // On initialise une chaine de caractère vide
             let resultsHtml = '';
+            // S'il y'a de erreurs
             if (data.error) {
-                document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + data.error + '</p>';
+                document.getElementById('search-results').innerHTML = '<div class="ui-state-error ui-corner-all margin-bottom"><p class="error">An error occurred: ' + data.error + '</p></div>';
                 // On affiche le feedback et on quitte
                 return;
             }
+            // S'il n'y a pas de services
             if (data.service.length === 0) {
                 resultsHtml += '<h2>Aucun résultats</h2>';
                 document.getElementById('search-results').innerHTML = resultsHtml;
@@ -37,7 +40,8 @@ const submitForm = (formElement) => {
             }
             // Mise à jour du contenu avec les résultats
             if (data.submitted_form === 'service' && data.service.length !== 0) {
-
+                // On incrémente notre chaine vide des résultat sous forme de chaine HTML
+                // elements item d'une liste
                 resultsHtml += '<h3>Résultats pour Service </h3><div class="ui divided items">';
                 data.service.forEach(service => {
                     resultsHtml += `
@@ -66,23 +70,27 @@ const submitForm = (formElement) => {
         .catch(error => {
             // On ouvre le modal
             $('.ui.modal.navbar').modal('show');
-            document.getElementById('search-results-navbar').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
+            document.getElementById('search-results-navbar').innerHTML = '<div class="ui-state-error ui-corner-all ui"><p>An error occurred: ' + error.message + '</p></div>';
         });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('=> ViewNavbar.js loaded!');
     const searchIcon = document.getElementById('search-icon');
+    // console.log(searchIcon);
     const form = document.querySelector('.ajax-form');
+    // console.log(form);
     // On place un écouteur d'événement sur l'icon SEARCH
-    searchIcon.addEventListener('click', function () {
-        event.preventDefault();
-        submitForm(form);
+    searchIcon.addEventListener('click', function (event) {
+        if (document.getElementById('search_form_search_term').value.trim()) {
+            event.preventDefault();
+            submitForm(form);
+        }
+
     });
     // On place un ecouteur d'évenement pour la touche ENTER
     form.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            console.log('enter');
+        if (document.getElementById('search_form_search_term').value.trim()) {
             event.preventDefault();
             submitForm(form);
         }
