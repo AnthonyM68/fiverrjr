@@ -29,33 +29,19 @@ class ThemeRepository extends ServiceEntityRepository
     public function searchByTermAllChilds($searchTerm)
     {
         return $this->createQueryBuilder('t')
-        ->leftJoin('t.categories', 'c')
-        ->leftJoin('c.courses', 'co')
-        ->leftJoin('co.serviceItems', 'si')
-        ->addSelect('c', 'co', 'si')
-        ->where('t.nameTheme LIKE :searchTerm')
-        ->orWhere('c.nameCategory LIKE :searchTerm')
-        ->orWhere('co.nameCourse LIKE :searchTerm')
-        ->orWhere('si.title LIKE :searchTerm')
-        ->orWhere('si.description LIKE :searchTerm')
-        ->setParameter('searchTerm', '%' . $searchTerm . '%')
-        ->getQuery()
-        ->getResult();
-    }
-    
-    /*
-    SELECT t.*, c.*, co.*, si.*
-FROM theme t
-LEFT JOIN category c ON t.id = c.theme_id
-LEFT JOIN course co ON c.id = co.category_id
-LEFT JOIN service_item si ON co.id = si.course_id
-WHERE t.name_theme LIKE '%Développement%'
-   OR c.name_category LIKE '%Développement%'
-   OR co.name_course LIKE '%Développement%'
-   OR si.title LIKE '%Développement%'
-   OR si.description LIKE '%Développement%';
+            ->leftJoin('t.categories', 'c')
+            ->leftJoin('c.courses', 'co')
+            ->leftJoin('co.serviceItems', 'si')
+            ->addSelect('c', 'co', 'si')
+            ->where('t.nameTheme LIKE :searchTerm')
+            ->orWhere('c.nameCategory LIKE :searchTerm')
+            ->orWhere('co.nameCourse LIKE :searchTerm')
+            ->orWhere('si.title LIKE :searchTerm')
+            ->orWhere('si.description LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $searchTerm . '%');
 
-   */
+    }
+
     public function countAll()
     {
         return $this->createQueryBuilder('t')

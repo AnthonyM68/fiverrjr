@@ -26,7 +26,7 @@ class SearchController extends AbstractController
         $this->csrfTokenManager = $csrfTokenManager;
         $this->logger = $logger;
     }
-     // Enregistrement des données de la requête dans les logs
+    // Enregistrement des données de la requête dans les logs
     //  $this->logger->info('Received searchResultat form data', []);
 
     #[Route("/search", name: "search")]
@@ -38,13 +38,16 @@ class SearchController extends AbstractController
         // $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
         $ServiceCount = $this->entityManager->getRepository(ServiceItem::class)->countAll();
 
+        // $serviceItems = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds('Développement');
+        // $results = $serviceItems->getQuery()->getResult();
+
         // Rendu de la vue avec les données des formulaires et les comptes d'enregistrements
         return $this->render('search/index.html.twig', [
             'controller_name' => 'SearchController',
             'title_page' => 'Résultats de la recherche',
-            // 'form' => $formSearch->createView(),
-            // 'course_count' => $courseCount,
+            // 'results' => $results,
             'service_count' => $ServiceCount,
+            'search_term' => 'Développement'
 
         ]);
     }
@@ -86,20 +89,18 @@ class SearchController extends AbstractController
         $this->logger->info('Price:', ['priceFilter' => $priceFilter]);
 
         // Récupération des résultats de recherche pour les ServiceItems
-        $results = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
-
-        // $ServiceItems = $queryBuilder->getQuery()->getResult();
-       // Log des résultats pour vérification
-       $this->logger->info('Search results', ['results' => $results]);
+        $serviceItems = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
+        // // Log des résultats pour vérification
+         $this->logger->info('Search results', ['results' => $serviceItems]);
 
         // On filtre par prix
-        // if ($priceFilter === 'low_to_high') {
-        //     $results->orderBy('s.price', 'ASC');
-        // } elseif ($priceFilter === 'high_to_low') {
-        //     $results->orderBy('s.price', 'DESC');
-        // }
+        if ($priceFilter === 'low_to_high') {
+            $serviceItems->orderBy('si.price', 'ASC');
+        } elseif ($priceFilter === 'high_to_low') {
+            $serviceItems->orderBy('si.price', 'DESC');
+        }
         // Retourner les résultats au format JSON*/
-        return new JsonResponse($queryBuilder);
-                           
+        return new JsonResponse($serviceItems->getQuery()->getResult());
+        // return new JsonResponse($serviceItems);
     }
 }

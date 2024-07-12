@@ -21,11 +21,11 @@ class NavBarService
     }
     public function getNavBarData()
     {
+        $data = [];
         // On recherche tous les enregistrements Theme
         $themes = $this->themeRepository->findAll();
-        $data = [];
         // Pour chaque Theme on recherche les Category en relation
-        foreach ($themes as $theme) {
+         foreach ($themes as $theme) {
             $categories = $this->categoryRepository->findBy(['theme' => $theme->getId()]);
             $categoryData = [];
             // Pour chacune de ces Category, nous recherchons les Course en relation

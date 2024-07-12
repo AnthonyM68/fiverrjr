@@ -23,15 +23,15 @@ class ServiceItem
     //  */
     // #[ORM\ManyToMany(targetEntity: Course::class, inversedBy: 'services')]
     // private Collection $course;
-    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'serviceItem')]
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'serviceitem')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Course $course = null;
 
-    #[ORM\ManyToOne(inversedBy: 'serviceItem')]
+    #[ORM\ManyToOne(inversedBy: 'serviceitem')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'serviceItems')]
+    #[ORM\ManyToOne(inversedBy: 'serviceitem')]
     private ?Order $order = null;
 
     #[ORM\Column(length: 255)]

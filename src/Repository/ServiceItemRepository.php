@@ -18,9 +18,9 @@ class ServiceItemRepository extends ServiceEntityRepository
     public function findByTerm($term)
     {
         // Crée un QueryBuilder pour la classe Service, aliasée en 's'
-        $qb = $this->createQueryBuilder('s')
+        $qb = $this->createQueryBuilder('si')
             // Ajoute une clause WHERE pour filtrer les services dont le titre ou la description contient le terme de recherche
-            ->where('s.title LIKE :searchTerm OR s.description LIKE :searchTerm')
+            ->where('si.title LIKE :searchTerm OR si.description LIKE :searchTerm')
             // Définit le paramètre 'searchTerm' pour la requête, avec des jokers (%) pour une recherche partielle
             ->setParameter('searchTerm', '%' . $term . '%');
 

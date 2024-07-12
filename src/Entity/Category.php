@@ -12,12 +12,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
 {
+    private $serviceItems;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-
-    private $serviceItems;
-
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
