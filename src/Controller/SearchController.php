@@ -3,12 +3,8 @@
 namespace App\Controller;
 // Importation des classes nécessaires
 use App\Entity\Theme;
-use App\Entity\Course;
 use App\Entity\ServiceItem;
-use App\Entity\Category;
-use App\Form\SearchFormType;
 use Psr\Log\LoggerInterface;
-use App\Form\ServiceSearchFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,16 +26,12 @@ class SearchController extends AbstractController
         $this->csrfTokenManager = $csrfTokenManager;
         $this->logger = $logger;
     }
+     // Enregistrement des données de la requête dans les logs
+    //  $this->logger->info('Received searchResultat form data', []);
+
     #[Route("/search", name: "search")]
     public function search(Request $request): Response
     {
-        $formSearch = $this->createForm(SearchFormType::class, null, [
-            'search_table' => 'course',
-            'search_label' => 'Par Sous-Catégorie:'
-        ]);
-        // Gestion de la soumission des formulaires
-        $formSearch->handleRequest($request);
-
         // Comptage des enregistrements
         // $themeCount = $this->entityManager->getRepository(Theme::class)->countAll();
         // $categoryCount = $this->entityManager->getRepository(Category::class)->countAll();
@@ -50,23 +42,24 @@ class SearchController extends AbstractController
         return $this->render('search/index.html.twig', [
             'controller_name' => 'SearchController',
             'title_page' => 'Résultats de la recherche',
-            // 'form' => $formCourse->createView(),
+            // 'form' => $formSearch->createView(),
             // 'course_count' => $courseCount,
             'service_count' => $ServiceCount,
-            'errors' => $formSearch->getErrors(true),
-            'submitted_form' => null
+
         ]);
     }
-
+    // Réponse requête AJAX (ViewNavabar.js)
     #[Route("/search/results", name: "search_results", methods: ["POST"])]
+    // public function searchResultat(Request $request): JsonResponse
     public function searchResultat(Request $request): JsonResponse
     {
-        // Récupération des données JSON
+        // Récupération des donnéesdu formulaire au format JSON et les décodes
         $jsonData = json_decode($request->getContent(), true);
-        
-        // Récupération des champs nécessaires
-        // Si le token du formulaire personnalisé ViewSearch existe
+
+        // s'il y' une valeur dans le champ du token on la sauvegarde
+        // sinon token vaut null
         $token = $jsonData['_token'] ?? null;
+        // si le token du formulaire personnalisé ViewSearch existe
         if ($token) {
             // Si le token n'est pas présent
             if ($token === null) {
@@ -81,44 +74,32 @@ class SearchController extends AbstractController
                 ], JsonResponse::HTTP_BAD_REQUEST);
             }
         }
-        $searchTerm = $jsonData['search_term'] ?? null;
-        $submittedFormType = $jsonData['submitted_form_type'] ?? null;
-        $priceFilter = $jsonData['price_filter'] ?? null;
 
-        // Enregistrement des données de la requête dans les logs
-        $this->logger->info('Received searchResultat form data', [
-            'token' => $token,
-            'searchTerm' => $searchTerm,
-            'submittedFormType' => $submittedFormType,
-            'priceFilter' => $priceFilter
-        ]);
+
+        $searchTerm = $jsonData['search_term'] ?? null;
+        $this->logger->info('Term search:', ['search_term' => $searchTerm]);
+
+        $submittedFormType = $jsonData['submitted_form_type'] ?? null;
+        $this->logger->info('Form submitted:', ['submitted_form_type' => $submittedFormType]);
+
+        $priceFilter = $jsonData['price_filter'] ?? null;
+        $this->logger->info('Price:', ['priceFilter' => $priceFilter]);
 
         // Récupération des résultats de recherche pour les ServiceItems
-        $queryBuilder = $this->entityManager->getRepository(ServiceItem::class)->findByTerm($searchTerm);
+        $results = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
+
+        // $ServiceItems = $queryBuilder->getQuery()->getResult();
+       // Log des résultats pour vérification
+       $this->logger->info('Search results', ['results' => $results]);
+
         // On filtre par prix
-        if ($priceFilter === 'low_to_high') {
-            $queryBuilder->orderBy('s.price', 'ASC');
-        } elseif ($priceFilter === 'high_to_low') {
-            $queryBuilder->orderBy('s.price', 'DESC');
-        }
-
-        $ServiceItems = $queryBuilder->getQuery()->getResult();
-
-        // Sérialisation des résultats de ServiceItem
-        $results['ServiceItem'] = array_map(function ($ServiceItem) {
-            return [
-                'id' => $ServiceItem->getId(),
-                'title' => $ServiceItem->getTitle(),
-                'description' => $ServiceItem->getDescription(),
-                'picture' => $ServiceItem->getPicture(),
-                'price' => $ServiceItem->getPrice(),
-            ];
-        }, $ServiceItems);
-
-        $submittedFormName = 'ServiceItem';
-        $results['submitted_form'] = $submittedFormName;
-
-        // Retourner les résultats au format JSON
-        return new JsonResponse($results);
+        // if ($priceFilter === 'low_to_high') {
+        //     $results->orderBy('s.price', 'ASC');
+        // } elseif ($priceFilter === 'high_to_low') {
+        //     $results->orderBy('s.price', 'DESC');
+        // }
+        // Retourner les résultats au format JSON*/
+        return new JsonResponse($queryBuilder);
+                           
     }
 }

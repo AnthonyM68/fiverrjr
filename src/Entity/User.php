@@ -65,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $city = null;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $portfolio = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -81,11 +81,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Service>
      */
     #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'user')]
-    private Collection $service;
+    private Collection $serviceItems;
 
     public function __construct()
     {
-        $this->service = new ArrayCollection();
+        $this->serviceItems = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
 
@@ -263,27 +263,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Service>
      */
-    public function getService(): Collection
+    public function getServiceItems(): Collection
     {
-        return $this->service;
+        return $this->serviceItems;
     }
 
-    public function addService(ServiceItem $service): static
+    public function addServiceItem(ServiceItem $serviceItem): static
     {
-        if (!$this->service->contains($service)) {
-            $this->service->add($service);
-            $service->setUser($this);
+        if (!$this->serviceItems->contains($serviceItem)) {
+            $this->serviceItems->add($serviceItem);
+            $serviceItem->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeService(ServiceItem $service): static
+    public function removeService(ServiceItem $serviceItem): static
     {
-        if ($this->service->removeElement($service)) {
+        if ($this->serviceItems->removeElement($serviceItem)) {
             // set the owning side to null (unless already changed)
-            if ($service->getUser() === $this) {
-                $service->setUser(null);
+            if ($serviceItem->getUser() === $this) {
+                $serviceItem->setUser(null);
             }
         }
 

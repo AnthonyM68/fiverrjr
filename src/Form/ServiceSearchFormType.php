@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+// Formualire de recherche de la page search.html.twig
 class ServiceSearchFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -20,7 +21,7 @@ class ServiceSearchFormType extends AbstractType
             ],
             'attr' => [
                 'readonly' => true,
-                // 'style' => 'display:none'
+                'style' => 'display:none'
             ],
             'data' => $options['search_table'],
         ])

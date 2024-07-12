@@ -26,11 +26,11 @@ class Course
     private ?Category $category = null;
 
     #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'course')]
-    private Collection $ServiceItems;
+    private Collection $serviceItems;
 
     public function __construct()
     {
-        $this->ServiceItems = new ArrayCollection();
+        $this->serviceItems = new ArrayCollection();
     }
 
     /**
@@ -38,25 +38,24 @@ class Course
      */
     public function getServiceItems(): ?Collection
     {
-        return $this->ServiceItems;
+        return $this->serviceItems;
     }
-
-    public function addServiceItem(ServiceItem $ServiceItem): self
+    public function addServiceItem(ServiceItem $serviceItem): self
     {
-        if (!$this->ServiceItems->contains($ServiceItem)) {
-            $this->ServiceItems[] = $ServiceItem;
-            $ServiceItem->setCourse($this);
+        if (!$this->serviceItems->contains($serviceItem)) {
+            $this->serviceItems[] = $serviceItem;
+            $serviceItem->setCourse($this);
         }
 
         return $this;
     }
 
-    public function removeServiceItem(ServiceItem $ServiceItem): self
+    public function removeServiceItem(ServiceItem $serviceItem): self
     {
-        if ($this->ServiceItems->removeElement($ServiceItem)) {
+        if ($this->serviceItems->removeElement($serviceItem)) {
             // set the owning side to null (unless already changed)
-            if ($ServiceItem->getCourse() === $this) {
-                $ServiceItem->setCourse(null);
+            if ($serviceItem->getCourse() === $this) {
+                $serviceItem->setCourse(null);
             }
         }
 

@@ -1,6 +1,8 @@
+/* rend un élément visible */
 .visible {
   display: block !important;
 }
+/* ajoute un espaceur */
 .separator {
   height: 100px;
 }
@@ -14,12 +16,13 @@ label.required::after {
   content: "";
   display: none !important;
 }
-/* Assurez-vous que ce style est bien chargé */
+/* durée de mouvement d'un modal */
 .ui.modal {
   transition: all 0.3s ease;
 }
-/*  couleur list semantic*/
 
+
+/*  crée un container */
 #initial-container {
   height: 100vh; /* Full viewport height */
 }

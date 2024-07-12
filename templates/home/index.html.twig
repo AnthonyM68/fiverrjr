@@ -10,7 +10,6 @@
 <div class="ui container" id="initial-container"> 
     <!-- This div will take the height of the viewport -->
 </div>
-
 {# <h2>Derniers inscrits et enregistrements</h2> #}
 <div class="ui container" id="carousel-container">
     <div class="carousel-container">
@@ -38,14 +37,14 @@
                             </div>
                             {% endif %}
 
-                            {# {% if lastService %}
+                            {% if lastService %}
                             <div class="carousel-slide">
                                 <h3>Dernier service enregistré</h3>
                                 <img src="{{ asset(lastService.picture) }}" alt="{{ lastService.title }}">
                                 <p>{{ lastService.title }} {{ lastService.description }}</p>
                                 <p></p>
                             </div>
-                            {% endif %} #}
+                            {% endif %}
                         </div>
                     </div>
                 </div>

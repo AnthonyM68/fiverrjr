@@ -1,0 +1,109 @@
+<div class="ui modal navbar">
+    <div class="header">Liste des services trouvés</div>
+    <div class="content">
+
+        {# <div id="search-results-navbar"></div> #}
+
+        <div id="search-results-navbar">
+            {# Vérification si le formulaire soumis est 'form_service' et s'il y a des résultats #}
+            {% if results|default and results is iterable %}
+            <h2>Résultats</h2>
+            <ul>
+                {# Afficher un message si aucun résultat n'est trouvé #}
+                {% if results.empty|default %}
+                <h2>Aucun résultat</h2>
+                {% else %}
+                {# Conversion du terme de recherche en minuscules pour une comparaison insensible à la casse #}
+                {% set search_term_lower = search_term|lower %}
+
+                {# Boucle à travers les résultats et affichage si le terme de recherche est trouvé #}
+                <ul>
+                    {% for result in results %}
+                    {# Vérifie si le thème contient des catégories/cours/services correspondant au terme de recherche #}
+                    {% set display_theme = false %}
+                    {% for category in result.categories %}
+                    {% for course in category.courses %}
+                    {% for service in course.services %}
+                    {% if service.title|lower matches '/.*' ~ search_term_lower ~ '.*/' or service.description|lower
+                    matches
+                    '/.*' ~
+                    search_term_lower ~ '.*/' %}
+                    {% set display_theme = true %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                    {% endfor %}
+
+                    {# Affiche le thème si nécessaire #}
+                    {% if display_theme %}
+                    <li><strong>Thème : {{ result.nameTheme }}</strong></li>
+                    <ul>
+                        {% for category in result.categories %}
+                        {# Vérifie si la catégorie contient des cours/services correspondant au terme de recherche #}
+                        {% set display_category = false %}
+                        {% for course in category.courses %}
+                        {% for service in course.services %}
+                        {% if service.title|lower matches '/.*' ~ search_term_lower ~ '.*/' or service.description|lower
+                        matches
+                        '/.*' ~ search_term_lower ~ '.*/' %}
+                        {% set display_category = true %}
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+
+                        {# Affiche la catégorie si nécessaire #}
+                        {% if display_category %}
+                        <li><strong>Catégorie : {{ category.nameCategory }}</strong></li>
+                        <ul>
+                            {% for course in category.courses %}
+                            {# Vérifie si le cours contient des services correspondant au terme de recherche #}
+                            {% set display_course = false %}
+                            {% for service in course.services %}
+                            {% if service.title|lower matches '/.*' ~ search_term_lower ~ '.*/' or
+                            service.description|lower
+                            matches
+                            '/.*' ~ search_term_lower ~ '.*/' %}
+                            {% set display_course = true %}
+                            {% endif %}
+                            {% endfor %}
+
+                            {# Affiche le cours si nécessaire #}
+                            {% if display_course %}
+                            <li><strong>Cours : {{ course.nameCourse }}</strong></li>
+                            <ul>
+                                {% for service in course.services %}
+                                {% if service.title|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
+                                <li>
+                                    <a href="{{ path('detail_service_home', { 'id': service.id }) }}">{{ service.title
+                                        }}</a>
+                                </li>
+                                {% endif %}
+                                {% if service.description|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
+                                <li>
+                                    <a href="{{ path('detail_service_home', { 'id': service.id }) }}">{{
+                                        service.description
+                                        }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+    {# <div class="actions">
+        <div class="ui approve button">Approve</div>
+        <div class="ui button">Neutral</div>
+        <div class="ui cancel button">Cancel</div>
+    </div> #}
+</div>

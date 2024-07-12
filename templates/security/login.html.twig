@@ -17,7 +17,7 @@
 
         <form class="ui large form login" novalidate='novalidate' method="post">
             <div class="ui stacked segment">
-                <div class={% if error %}"field"{% else %}""{% endif %}>
+                <div class={% if error %}"field"{% endif %}>
                     {% if error %}{{ error.messageKey|trans(error.messageData, 'security') }}{% endif %}
                     <div class="ui right icon input floating-label fluid">
                         <i class="envelope icon"></i>

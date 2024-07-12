@@ -4,15 +4,17 @@
 
 {% block body %}
 <div class="sperator"></div>
-<div class="ui modal search padding-large">
+{# <div class="ui modal search padding-large search"> #}
+<div class="">
     <h2 class="margined padding-large">{{ title_page }}</h2>
     <div class="content padding-large">
         <div class="ui grid">
             <div class="four wide left attached column">
                 <div class="ui vertical fluid menu">
                     <div id="menu-service"
-                        class="item field {{ submitted_form == 'form_service' ? 'active teal' : '' }}">
+                        class="item field {% if submitted_form| default %}{{ submitted_form == 'form_service' ? 'active teal' : '' }} {% endif %}">
                         {# Formulaire de recherche d'un service au travers les 3 entity #}
+                        {# Soumission classique d'un formulaire #}
                         <form method="post" action="{{ path('search_results') }}" class="ui form ajax-search-form">
                             {# le token masqué #}
                             <input type="hidden" name="_token" value="{{ csrf_token('search_item') }}">
@@ -22,6 +24,7 @@
                                 <i class="search icon"></i>
                             </div>
                             {# Radio buttons pour filtrer par prix #}
+                            {# Gestion dynamique par javascript #}
                             <div class="field padding">
                                 <div class="ui radio checkbox padding-small">
                                     <input type="radio" name="price_filter" value="low_to_high">
@@ -33,7 +36,7 @@
                                 </div>
                             </div>
                             {# // On utilise cet input masqué pour que l'on soit certain du nom de ce formulaire après soumission et traitement #}
-                            <input type="hidden" name="submitted_form_type" value="service">
+                            <input type="hidden" name="submitted_form_type" value="search_with_setting">
                             <button type="submit" class="ui button">Rechercher</button>
                         </form>
                         {# Afficheur du compteur de service #}
@@ -50,7 +53,12 @@
                 </div>
             </div>
             <div class="twelve wide stretched column">
-                <div id="search-results"></div>
+                <div id="search-results">
+                    {% if data|default %}
+                    {{ data }}
+                    {% endif %}
+                   
+                </div>
             </div>
             {# <div class="actions">
                 <div class="ui red cancel inverted button">
@@ -67,6 +75,6 @@
 </div>
 {% block javascripts %}
 {{ parent() }}
-{{ encore_entry_script_tags('ViewSearch') }}
+{{ encore_entry_script_tags('searchMotor') }}
 {% endblock %}
 {% endblock %}

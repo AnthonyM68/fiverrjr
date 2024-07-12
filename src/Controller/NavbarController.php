@@ -16,6 +16,7 @@ class NavbarController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Création et gestion du formulaire de recherche
+        // ( SearchFormType )
         $formTheme = $this->createForm(SearchFormType::class, null, [
             // On change la route par défaut pour la recherche dynamic
             'action' => $this->generateUrl('search_results'),
@@ -26,8 +27,9 @@ class NavbarController extends AbstractController
         $formTheme->handleRequest($request);
         // initialistation d'un tableau de résultats vide
         $results = [];
-        
+        // variable pour contenir le term a rechercher
         $searchTerm = null;
+        // variable pour contenir le nom du formulaire soumis
         $submittedFormName = null;
         // Vérification si le formulaire est soumis et valide
         if ($formTheme->isSubmitted() && $formTheme->isValid() && $request->request->get('submitted_form_type') === 'service') {

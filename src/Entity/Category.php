@@ -12,11 +12,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
 {
-    private $services;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+
+    private $serviceItems;
+
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
@@ -28,24 +29,29 @@ class Category
     #[ORM\OneToMany(targetEntity: Course::class, mappedBy: 'category')]
     private Collection $courses;
 
+        /**
+     * @return Collection<int, Theme>
+     */
     #[ORM\ManyToOne(targetEntity: Theme::class, inversedBy: 'categories')]
+
     #[ORM\JoinColumn(nullable: false)]
     private ?Theme $theme = null;
+
+
 
     public function __construct()
     {
         $this->courses = new ArrayCollection();
     }
+
     public function getId(): ?int
     {
         return $this->id;
     }
-
     public function getNameCategory(): ?string
     {
         return $this->nameCategory;
     }
-
     public function setNameCategory(string $nameCategory): static
     {
         $this->nameCategory = $nameCategory;
@@ -53,7 +59,9 @@ class Category
         return $this;
     }
 
-
+    /**
+     * @return Collection<int, Theme>
+     */
     public function getTheme(): ?Theme
     {
         return $this->theme;
@@ -95,10 +103,19 @@ class Category
 
         return $this;
     }
-    public function getServices(): Collection
+
+
+    /**
+     * @return Collection<int, ServiceItem>
+     */
+    public function getServiceItems(): Collection
     {
-        return $this->services;
+        return $this->serviceItems;
     }
+
+
+
+
     public function __toString()
     {
         return $this->nameCategory;

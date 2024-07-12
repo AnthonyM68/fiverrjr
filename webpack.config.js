@@ -8,17 +8,12 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 }
 
 Encore
-
     .setOutputPath('public/build/')
-
-    .setPublicPath('/build')
-    /*
+    .setPublicPath('/build')/*
      * ENTRY CONFIG
-     *
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
-
     // Ajouts des entrées
     // Jquery 
     .addEntry('jquery', './node_modules/jquery/dist/jquery.js')
@@ -47,7 +42,8 @@ Encore
     // Navbar 
     .addEntry('ViewNavbar', './assets/js/navbar/ViewNavbar.js')
     // Search motor
-    .addEntry('ViewSearch', './assets/js/forms/ViewSearch.js')
+    // .addEntry('ViewSearch', './assets/js/forms/ViewSearch.js')
+    .addEntry('searchMotor', './assets/js/searchMotor/searchMotor.js')
     // Service add
     .addEntry('ViewServiceForm', './assets/js/forms/ViewServiceForm.js')
     // Dropdown navbar
@@ -73,34 +69,50 @@ Encore
     .enableReactPreset()
     // SticiyFooter React
     .addEntry('StickyFooter', './assets/js/components/StickyFooter.js')
+    // active le code splitting
+    // Divise en fragment et charge que lorsque nécessaire, gain performance
     .splitEntryChunks()
+    // combine tous les runtime chunks en un seul
+    // runtime charge et exécuter les modules et les combine, réduit le nombre de requête
     .enableSingleRuntimeChunk()
+    // efface le répertoire de sortie (public/build/) avant une nouvelle compilation
+    // cela évite les conflits et les problèmes de cache
     .cleanupOutputBeforeBuild()
-    .cleanupOutputBeforeBuild()
+    // active les notifications de comoilation
     .enableBuildNotifications()
+    // les source maps permettent de mapper le code minifié ou transpilé à son code source original
+    // A DESACTIVER EN PRODUCTION
     .enableSourceMaps(!Encore.isProduction())
+    // active le versioning des fichiers en production
     .enableVersioning(Encore.isProduction())
+    // traitement des fichiers Sass (.scss et .sass)
     .enableSassLoader()
+    // traitement des fichiers Less (.less). 
     .enableLessLoader()
+
+    // charge jQuery globalement dans tous les fichiers JavaScript 
+    // pas d'importation explicite dans les fichiers js.
     .autoProvidejQuery()
-    .enableBuildNotifications()
-    
+    // ajoute le plugin ProvidePlugin pour rendre jQuery disponible globalement
     .addPlugin(new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery',
         'window.jQuery': 'jquery'
     }))
-    
+    // configuration des options du serveur de développement
     .configureDevServerOptions(options => {
+        // rechargement à chaud
         options.hot = true;
         options.liveReload = true;
         options.static = {
+            // défini le dossier de sortie
             directory: path.join(__dirname, 'public')
         };
         options.client = {
             overlay: false,
             progress: false
         };
+        // Surveillance du thème semantic (changement de styles)
         options.watchFiles = ['assets/**/*', 'semantic/src/**/*'];
     })
     .configureBabelPresetEnv((config) => {

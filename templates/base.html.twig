@@ -20,10 +20,13 @@
 
 <body>
     <header>
+        {# {% include 'navbar/modal.html.twig' %} #}
         {# On utilise un controller pour rendre un form search dans la navbar #}
         {{ render(controller('App\\Controller\\NavbarController::index')) }}
     </header>
+
     <artcile>
+      
         <div class="ui container">
             <div class="separator"></div>
             {% block body %} {% endblock %}
