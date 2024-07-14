@@ -1,11 +1,17 @@
 /*******************************
          Site Overrides
 *******************************/
-// Utilisation de la variable pour modifier l'arrière-plan d'un élément
+// Utilisation de la variable pour modifier l'arrière-plan
 
 body {
     background-color: @myCustomBackgroundColor;
 }
-h1 {
+h1, h2, h3 {
     color:@bodyFontColorH1;
+}
+a {
+    color: @linkColor;
+}
+a:hover {
+    color: @linkHoverColor;
 }

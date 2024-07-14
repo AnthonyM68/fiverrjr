@@ -80,33 +80,14 @@
         </div>
     </div>
 </div>
-<div class="ui modal navbar">
-    <i class="close icon"></i>
-    <div class="header">
-      Résultats de recherche
-    </div>
-    <div class="image content">
-      <div class="ui medium image "></div>
-      <div class="description">
-        <div class="ui header fluid"></div>
-        <div id="search-results-navbar"></div>
-      </div>
-    </div>  
-    <div class="actions">
-      <div class="ui black deny button">
-        Quitter
-      </div>
-      {# <div class="ui positive right labeled icon button">
-        Yep, that's me
-        <i class="checkmark icon"></i>
-      </div> #}
-    </div>
-  </div>
 {% block js %}
 {{ encore_entry_script_tags('jquery_ui') }}
+
 {{ encore_entry_script_tags('semantic') }}
+
 {{ encore_entry_script_tags('ViewNavbarDropdown') }}
-{# {{ encore_entry_script_tags('searchMotor') }} #}
+
+{{ encore_entry_script_tags('searchMotor') }}
 {% endblock %}
 
 {% endblock %}

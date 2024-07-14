@@ -16,27 +16,6 @@ class SearchFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        // Nonm de table de recherche peu varier ( Axe d'amélioration )
-        // ( NavbarController )
-        // id: search_form_search_term
-        
-            // ->add('search_table', TextType::class, [
-            //     'label' => 'Table',
-            //     'label_attr' => [
-            //         // On masque le champ de table de recherche
-            //         // 'style' => 'display: none;'
-            //     ],
-            //     'attr' => [
-            //         'readonly' => true,
-            //         // 'style' => 'display:none'
-            //     ],
-            //     'data' => $options['search_table'],
-            //     'constraints' => [
-            //         new NotBlank([
-            //             'message' => 'Veuillez sélectionner un Thème',
-            //         ]),
-            //     ]
-            // ])
             // term a rechercher
             ->add('search_term', TextType::class, [
                 'required' => true,

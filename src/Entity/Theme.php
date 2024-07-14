@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ThemeRepository;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,9 +18,11 @@ class Theme
     #[ORM\Column]
     private ?int $id = null;
 
+
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
     private ?string $nameTheme = null;
+
 
     /**
      * @var Collection<int, Category>
@@ -27,11 +30,20 @@ class Theme
     #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'theme')]
     private Collection $categories;
 
+
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
     }
 
+
+
+    /**
+     * Theme
+     *
+     * @return integer|null
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -48,6 +60,11 @@ class Theme
 
         return $this;
     }
+
+
+
+
+
 
     /**
      * @return Collection<int, Category>
@@ -78,6 +95,16 @@ class Theme
 
         return $this;
     }
+
+
+
+
+
+
+
+
+
+
 
     public function __toString()
     {

@@ -40,7 +40,7 @@ class ThemeRepository extends ServiceEntityRepository
             ->orWhere('si.description LIKE :searchTerm')
             ->setParameter('searchTerm', '%' . $searchTerm . '%');
 
-    }
+          }
 
     public function countAll()
     {

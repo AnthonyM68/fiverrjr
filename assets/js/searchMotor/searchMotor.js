@@ -1,76 +1,75 @@
-const displayResults = (results) => {
-    $('.ui.modal.navbar').modal({
-        transition: 'slide down'
-    }).modal('show');
+const displayResults = (results, searchTerm) => {
 
-    console.log(results);
+    // $('.ui.modal.navbar').modal({
+    //     transition: 'slide down'
+    // }).modal('show');
 
     let resultsHtml = '';
 
     if (!results || results.length === 0) {
         resultsHtml = '<h2>Aucun résultat</h2>';
     } else {
-        resultsHtml += '<h3>Résultats</h3><ul>';
-        // const searchTermLower = searchTerm.toLowerCase();
+        resultsHtml += '<h3>Résultats</h3>';
+        const searchTermLower = searchTerm.toLowerCase();
 
         results.forEach(entityTheme => {
             if (entityTheme && entityTheme.nameTheme) {
-                resultsHtml += `<li><strong>Thème : ${entityTheme.nameTheme}</strong></li>`;
-                resultsHtml += '<ul style="margin-left: 20px;">';
-
+                resultsHtml += `<div class="item">
+                <i class="folder open outline icon"></i>
+                <div class="content">
+                <div class="header"><strong>Thème : ${entityTheme.nameTheme}</strong></div>
+                </div>
+                </div>`;
 
                 entityTheme.categories.forEach(category => {
-                    let displayCategory = false;
-                    resultsHtml += `<li><strong>Catégorie : ${category.nameCategory}</strong></li>`;
-                    resultsHtml += '<ul style="margin-left: 20px;">';
-    
+                    resultsHtml += `<div class="item">
+                        <i class="folder open outline icon"></i>
+                        <div class="content">
+                        <div class="header"><strong>Catégorie : ${category.nameCategory}</strong></div>
+                        </div>
+                        </div>`;
+
                     category.courses.forEach(course => {
-                        let displayCourse = false;
-                        resultsHtml += `<li><strong>Sous-catégorie : ${course.nameCourse}</strong></li>`;
-                        resultsHtml += '<ul style="margin-left: 20px;">';
-    
+                        resultsHtml += `<div class="item">
+                        <i class="folder open outline icon"></i>
+                        <div class="content">
+                        <div class="header"><strong>Sous-catégorie : ${course.nameCourse}</strong></div>
+                        </div>
+                        </div>`;
+
                         course.serviceItems.forEach(serviceItem => {
-                            if (serviceItem.title.toLowerCase().includes(searchTermLower) || 
+                            if (serviceItem.title.toLowerCase().includes(searchTermLower) ||
                                 serviceItem.description.toLowerCase().includes(searchTermLower)) {
-                                displayCategory = true;
-                                displayCourse = true;
-                                resultsHtml += `
-                                    <li>
-                                        <a href="/detail_service/${serviceItem.id}">${serviceItem.title}</a>
-                                    </li>
-                                    <li>
-                                        <a href="/detail_service/${serviceItem.id}">${serviceItem.description}</a>
-                                    </li>`;
+
+                                resultsHtml += `<div class="item">
+                                <i class="file icon"></i>
+                                <div class="content">
+                                <div class="header"><a href="/detail_service/${serviceItem.id}">${serviceItem.title}</a></div>
+                                <div class="description">${serviceItem.description}</div>
+                                </div>
+                                </div>`;
                             }
                         });
-    
-                        if (!displayCourse) {
-                            resultsHtml = resultsHtml.slice(0, -5); // Remove last closing </ul>
-                        }
-                        resultsHtml += '</ul>'; // Close sous-catégorie
                     });
-    
-                    if (!displayCategory) {
-                        resultsHtml = resultsHtml.slice(0, -5); // Remove last closing </ul>
-                    }
-                    resultsHtml += '</ul>'; // Close catégorie
                 });
             }
-
-            //resultsHtml += '</ul>'; // Close thème
         });
-
-        resultsHtml += '</ul>'; // Close résultats
     }
-
     document.getElementById('search-results').innerHTML = resultsHtml;
 };
 
 // Requête de recherche
 const submitForm = (formElement) => {
+    // on récupère les données du formumlaire et on crée un nouveau form
     const formData = new FormData(formElement);
+    console.log(formData);
+    // on convertit le formualire en objet JSON
     const jsonData = Object.fromEntries(formData.entries());
+
+    const term = jsonData['search_form[search_term]']
+
     console.log(jsonData);
+
     fetch(formElement.action, {
         method: 'POST',
         headers: {
@@ -79,11 +78,16 @@ const submitForm = (formElement) => {
         body: JSON.stringify(jsonData)
     })
         .then(response => {
-            return response.json();
+            // Vérification du statut de la réponse
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // Conversion de la réponse en JSON
         })
         .then(data => {
-
-            displayResults(data);
+            console.log(data);
+            console.log(term);
+            displayResults(data, term);
         })
         .catch(error => {
             document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';

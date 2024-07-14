@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,8 +13,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
 {
-    private $serviceItems;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -22,17 +21,21 @@ class Category
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
     private ?string $nameCategory = null;
+
+    
     /**
      * @var Collection<int, Course>
      */
     #[ORM\OneToMany(targetEntity: Course::class, mappedBy: 'category')]
     private Collection $courses;
 
-        /**
-     * @return Collection<int, Theme>
-     */
-    #[ORM\ManyToOne(targetEntity: Theme::class, inversedBy: 'categories')]
 
+/**
+ * Undocumented variable
+ *
+ * @var Theme|null
+ */
+    #[ORM\ManyToOne(targetEntity: Theme::class, inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Theme $theme = null;
 
@@ -43,6 +46,11 @@ class Category
         $this->courses = new ArrayCollection();
     }
 
+    /**
+     * Category
+     *
+     * @return integer|null
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -58,20 +66,8 @@ class Category
         return $this;
     }
 
-    /**
-     * @return Collection<int, Theme>
-     */
-    public function getTheme(): ?Theme
-    {
-        return $this->theme;
-    }
 
-    public function setTheme(?Theme $theme): static
-    {
-        $this->theme = $theme;
 
-        return $this;
-    }
 
     /**
      * @return Collection<int, Course>
@@ -104,13 +100,26 @@ class Category
     }
 
 
+
+
+
     /**
-     * @return Collection<int, ServiceItem>
+     * Undocumented function
+     *
+     * @return Theme|null
      */
-    public function getServiceItems(): Collection
+    public function getTheme(): ?Theme
     {
-        return $this->serviceItems;
+        return $this->theme;
     }
+
+    public function setTheme(?Theme $theme): static
+    {
+        $this->theme = $theme;
+
+        return $this;
+    }
+
 
 
 

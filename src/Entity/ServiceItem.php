@@ -18,21 +18,6 @@ class ServiceItem
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    // /**
-    //  * @var Collection<int, course>
-    //  */
-    // #[ORM\ManyToMany(targetEntity: Course::class, inversedBy: 'services')]
-    // private Collection $course;
-    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'serviceitem')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Course $course = null;
-
-    #[ORM\ManyToOne(inversedBy: 'serviceitem')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
-    #[ORM\ManyToOne(inversedBy: 'serviceitem')]
-    private ?Order $order = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
@@ -43,11 +28,11 @@ class ServiceItem
     private ?string $description = null;
 
     #[ORM\Column(type: Types::FLOAT)]
-     #[Assert\NotBlank]
+    #[Assert\NotBlank]
     private ?float $price = null;
 
     #[ORM\Column]
-     #[Assert\NotBlank]
+    #[Assert\NotBlank]
     private ?int $duration = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -55,6 +40,33 @@ class ServiceItem
 
     #[ORM\Column(length: 255, nullable: false)]
     private ?string $picture = null;
+
+
+    /**
+     * Undocumented Course
+     *
+     * @var Course|null
+     */
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'serviceItems')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Course $course = null;
+    /**
+     * Undocumented User
+     *
+     * @var User|null
+     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'serviceitems')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+    /**
+     * Undocumented Order
+     *
+     * @var Order|null
+     */
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'serviceitems')]
+    private ?Order $order = null;
+
+
 
     public function __construct()
     {
@@ -64,16 +76,29 @@ class ServiceItem
     {
         return $this->id;
     }
+
+
+    /**
+     * Undocumented Course
+     *
+     * @return Course|null
+     */
     public function getCourse(): ?Course
     {
         return $this->course;
     }
-
     public function setCourse(?Course $course): static
     {
         $this->course = $course;
         return $this;
     }
+
+
+    /**
+     * Undocumented User
+     *
+     * @return User|null
+     */
     public function getUser(): ?User
     {
         return $this->user;
@@ -84,6 +109,29 @@ class ServiceItem
 
         return $this;
     }
+
+    /**
+     * Undocumented Order
+     *
+     * @return Order|null
+     */
+    public function getOrder(): ?Order
+    {
+        return $this->order;
+    }
+
+    public function setOrders(?Order $order): static
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+
+
+
+
+
     public function getTitle(): ?string
     {
         return $this->title;
@@ -144,18 +192,6 @@ class ServiceItem
         return $this;
     }
 
-    public function getOrder(): ?Order
-    {
-        return $this->order;
-    }
-
-    public function setOrders(?Order $order): static
-    {
-        $this->order = $order;
-
-        return $this;
-    }
-
     public function getPicture(): ?string
     {
         return $this->picture;
@@ -167,11 +203,16 @@ class ServiceItem
 
         return $this;
     }
+
+
+
+
+
+
+
     
     public function __toString()
     {
         return $this->title;
     }
-
-
 }

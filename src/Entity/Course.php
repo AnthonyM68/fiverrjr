@@ -22,16 +22,57 @@ class Course
     #[Assert\NotBlank]
     private ?string $nameCourse = null;
 
-    #[ORM\ManyToOne(inversedBy: 'courses')]
-    private ?Category $category = null;
-
+    /**
+     * ServiceItem
+     *
+     * @var Collection<int
+     */
     #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'course')]
     private Collection $serviceItems;
+
+
+
+
+    /**
+     * Undocumented variable
+     *
+     * @var Category|null
+     */
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'courses')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
+
+
 
     public function __construct()
     {
         $this->serviceItems = new ArrayCollection();
     }
+
+    /**
+     * Course
+     *
+     * @return integer|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getNameCourse(): ?string
+    {
+        return $this->nameCourse;
+    }
+
+    public function setNameCourse(string $nameCourse): static
+    {
+        $this->nameCourse = $nameCourse;
+
+        return $this;
+    }
+
+
+
 
     /**
      * @return Collection<int, ServiceItem>
@@ -62,23 +103,13 @@ class Course
         return $this;
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
-    public function getNameCourse(): ?string
-    {
-        return $this->nameCourse;
-    }
 
-    public function setNameCourse(string $nameCourse): static
-    {
-        $this->nameCourse = $nameCourse;
-
-        return $this;
-    }
-
+    /**
+     * Undocumented function
+     *
+     * @return Category|null
+     */
     public function getCategory(): ?Category
     {
         return $this->category;
@@ -90,6 +121,10 @@ class Course
 
         return $this;
     }
+
+
+
+
 
     public function __toString()
     {

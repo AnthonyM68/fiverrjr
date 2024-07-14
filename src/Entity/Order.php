@@ -39,11 +39,11 @@ class Order
      * @var Collection<int, Service>
      */
     #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'orders')]
-    private Collection $services;
+    private Collection $servicesItems;
 
     public function __construct()
     {
-        $this->services = new ArrayCollection();
+        $this->servicesItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,27 +126,27 @@ class Order
     /**
      * @return Collection<int, Service>
      */
-    public function getServices(): Collection
+    public function getServiceItems(): Collection
     {
-        return $this->services;
+        return $this->servicesItems;
     }
 
-    public function addService(ServiceItem $service): static
+    public function addServiceItems(ServiceItem $servicesItem): static
     {
-        if (!$this->services->contains($service)) {
-            $this->services->add($service);
-            $service->setOrders($this);
+        if (!$this->servicesItems->contains($servicesItem)) {
+            $this->servicesItems->add($servicesItem);
+            $servicesItem->setOrders($this);
         }
 
         return $this;
     }
 
-    public function removeService(ServiceItem $service): static
+    public function removeServiceItems(ServiceItem $servicesItem): static
     {
-        if ($this->services->removeElement($service)) {
+        if ($this->servicesItems->removeElement($servicesItem)) {
             // set the owning side to null (unless already changed)
-            if ($service->getOrder() === $this) {
-                $service->setOrders(null);
+            if ($servicesItem->getOrder() === $this) {
+                $servicesItem->setOrders(null);
             }
         }
 
