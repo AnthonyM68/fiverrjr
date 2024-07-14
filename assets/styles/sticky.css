@@ -1,5 +1,5 @@
 /* Component React StickyFooter */
-.sticky {
+/* .sticky {
   position: -webkit-sticky;
   position: sticky;
   bottom: 0;
@@ -9,12 +9,12 @@
 }
 .container {
   height: 700px;
-  overflow: auto; /* Garde le défilement */
+  overflow: auto; Garde le défilement 
 }
 .container::-webkit-scrollbar {
   width: 0px;
   background: transparent;
-}
+} 
 .outer-container {
   height: 700px;
   overflow: hidden;
@@ -23,13 +23,13 @@
 .inner-container {
   height: 100%;
   overflow-y: scroll;
-  padding-right: 15px; /* Compense la largeur de la scrollbar */
-  box-sizing: content-box; /* Assure que le padding n'affecte pas la largeur totale */
+  padding-right: 15px; /* Compense la largeur de la scrollbar 
+  box-sizing: content-box; /* Assure que le padding n'affecte pas la largeur totale 
 }
 .inner-container::-webkit-scrollbar {
-  width: 0; /* Masque la scrollbar */
+  width: 0; /* Masque la scrollbar 
 }
 .context {
   padding: 20px;
   background: #eee;
-}
+} */

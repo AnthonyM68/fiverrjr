@@ -1,15 +1,24 @@
 {% extends 'base.html.twig' %}
-
+{% block stylesheets %}
+{{ parent() }}
+{{ encore_entry_link_tags('react-responsive-carousel') }}
+{% endblock %}
 
 {% block body %}
 {# title page #}
+{# <div class="ui container">
 {% if app.user %}<h1 class="uk-animation-slide-bottom">Bienvenue, {{ app.user.username }}!</h1> 
-
+{% else %}<h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
 {% endif %}
+</div> #}
 
-<div class="ui container" id="initial-container"> 
+<!-- Ajoutez cet élément où le composant React sera rendu -->
+<div id="carousel-root"></div>
+<div id="parallax-root"></div>
+
+{# <div class="ui container" id="initial-container"> 
     <!-- This div will take the height of the viewport -->
-</div>
+</div> #}
 {# <h2>Derniers inscrits et enregistrements</h2> #}
 <div class="ui container" id="carousel-container">
     <div class="carousel-container">
@@ -52,8 +61,10 @@
         </div>
     </div>
 </div>
+
 {% block javascripts %}
 {{ parent() }}
 {{ encore_entry_script_tags('HomeCarrousel') }}
+{{ encore_entry_script_tags('CarouselComponent') }}
 {% endblock %}
 {% endblock %}

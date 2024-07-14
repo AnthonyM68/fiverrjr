@@ -4,7 +4,7 @@
 // Utilisation de la variable pour modifier l'arrière-plan
 
 body {
-    background-color: @myCustomBackgroundColor;
+    // background-color: @myCustomBackgroundColor;
 }
 h1, h2, h3 {
     color:@bodyFontColorH1;

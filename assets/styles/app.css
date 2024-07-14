@@ -11,41 +11,65 @@
   width: 100% !important; /* Prend toute la largeur disponible */
   box-sizing: border-box; 
 }
-/* On masque les * des required des moteur de recherche*/
+/* On masque les * des required des moteur de recherche */
 label.required::after {
   content: "";
   display: none !important;
 }
-/* durée de mouvement d'un modal */
-.ui.modal {
-  transition: all 0.3s ease;
-}
-
 
 /*  crée un container */
 #initial-container {
-  height: 100vh; /* Full viewport height */
+  height: 100vh; 
+}
+.parallax-home {
+  background-image: url("../../public/img/services/service.jpg");
+}
+.parallax {
+  /* background-image: url("../../public/img/services/service.jpg"); */
+  min-height: 600px; 
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+/* style='height:1000px;background-color:red;font-size:36px' */
+.floating-text {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #fff;
+  padding: 50px;
+  height:500px;
+}
+.floating-text h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+.floating-text p {
+  font-size: 1.5rem; 
 }
 
-#carousel-container {
-  padding-top: 2rem;
-}
 
-.carousel-container {
-  max-width: 600px; /* largeur du container carousel */
-  margin: 0 auto; /* Centrer le carousel */
-  padding: 20px; /* Ajouter du padding autour de l'image */
-  background-color: #f9f9f9; /* Couleur de débordement du border */
-  border: 1px solid #ddd; /* Couleur de bordure */
-  border-radius: 10px; /* Optionnel : ajouter des coins arrondis */
-}
-.carousel-slide img {
+
+
+#search-results-container {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 500px;
-  height: auto; /* Maintient le ratio de l'image */
-  max-height: 300px;
-  object-fit: cover; /* Recadre l'image si nécessaire */
-  display: block;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.95); /* Optionnel : ajoute un fond blanc semi-transparent */
+  z-index: 1000; /* Z-index élevé pour le positionner au-dessus de tout */
+  overflow-y: auto;
+}
+
+.search-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+#close-results {
   margin-left: auto;
-  margin-right: auto;
 }

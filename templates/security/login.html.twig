@@ -6,16 +6,11 @@
 
 <div class="ui middle aligned center aligned grid ">
 
-    <div class="ui segment login-register" style="width:350px">
+    <div class="ui segment login-register uk-animation-fade" style="width:350px">
 
-        <h2 class="ui teal image header ">
-            <img src="https://fomantic-ui.com/examples/assets/images/logo.png" class="image">
-            <div class="content">
-                Connection
-            </div>
-        </h2>
+        <h2 class="ui header uk-animation-slide-right">Connection</h2>
 
-        <form class="ui large form login" novalidate='novalidate' method="post">
+        <form class="ui large form login" method="post">
             <div class="ui stacked segment">
                 <div class={% if error %}"field"{% endif %}>
                     {% if error %}{{ error.messageKey|trans(error.messageData, 'security') }}{% endif %}
@@ -35,7 +30,9 @@
                         <label for="inputPassword">Password</label>
                     </div>
                 </div>
-                <div class="field"><button class="ui fluid large teal submit button">Se connecter</button></div>
+                <div class="field">
+                    <button class="ui fluid button primary">Se connecter</button>
+                </div>
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 <div class="ui message field center aligned">

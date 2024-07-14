@@ -51,10 +51,14 @@ Encore
     // Slick-carousel
     .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
     .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
+    .addStyleEntry('carousel', './assets/styles/carousel.css')
     .addStyleEntry('slick-carousel-theme-css', './node_modules/slick-carousel/slick/slick-theme.css') // Optionnel
     .addEntry('HomeCarrousel', './assets/js/carousel/HomeCarousel.js') 
     // Preview image FileUpload
     .addEntry('previewImage', './assets/js/profile/previewImage.js') 
+    //React Carousel
+    .addStyleEntry('react-responsive-carousel', './node_modules/react-responsive-carousel/lib/styles/carousel.min.css')
+
     // assets personnalisés
     .addStyleEntry('app_styles', [
         './assets/styles/sticky.css',
@@ -63,10 +67,13 @@ Encore
         './assets/styles/login-register.css',
         './assets/styles/admin.css',
         './assets/styles/app.css',
-        './assets/styles/scss_styles.scss'
+        './assets/styles/scss_styles.scss',
+        './assets/styles/carousel.css'
     ])
     // REACT
     .enableReactPreset()
+    // CarouselComponent React
+    .addEntry('CarouselComponent', './assets/js/components/CarouselComponent.js')
     // SticiyFooter React
     .addEntry('StickyFooter', './assets/js/components/StickyFooter.js')
     // active le code splitting

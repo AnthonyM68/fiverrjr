@@ -34,7 +34,7 @@
 @pageBackground: #f0f0f0; // Gris clair
 
 /* Links */
-@linkColor: #4078c0;
+@linkColor: @primaryColor;
 @linkHoverColor: @linkColor;
 @linkHoverUnderline: underline;
 

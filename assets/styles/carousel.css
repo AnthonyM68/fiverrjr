@@ -1,0 +1,22 @@
+#carousel-container {
+  padding-top: 2rem;
+}
+
+.carousel-container {
+  max-width: 600px; /* largeur du container carousel */
+  margin: 0 auto; /* Centrer le carousel */
+  padding: 20px; /* Ajouter du padding autour de l'image */
+  background-color: #f9f9f9; /* Couleur de débordement du border */
+  border: 1px solid #ddd; /* Couleur de bordure */
+  border-radius: 10px; /* Optionnel : ajouter des coins arrondis */
+}
+.carousel-slide img {
+  width: 100%;
+  max-width: 500px;
+  height: auto; /* Maintient le ratio de l'image */
+  max-height: 300px;
+  object-fit: cover; /* Recadre l'image si nécessaire */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

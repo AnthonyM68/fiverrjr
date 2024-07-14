@@ -84,9 +84,8 @@
   color: rgba(0, 0, 0, 0.87) !important;
 }
 
-
 .ui.form label {
-    color: #fff !important;
+  color: #fff !important;
 }
 .ui.form.login label {
   color: rgba(0, 0, 0, 0.87) !important;
@@ -99,10 +98,26 @@
   color: rgba(0, 0, 0, 0.87) !important;
 }
 /* search results*/
-.ui.container .twelve h3, strong {
-  color: #fff !important;
+.ui.container .twelve h3,
+strong {
+  color: rgba(0, 0, 0, 0.87) !important;
 }
 
 .ui.list .item .description {
-  color: #fff !important;
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+.arborescence {
+  color: rgba(0, 0, 0, 0.87) !important;
+  margin-left: 10px;
+}
+.arborescence .folder{
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+.sixteen.search-results h2, h3 {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+.ui.dropdown .item a {
+  list-style-type: none;
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.87) !important;
 }

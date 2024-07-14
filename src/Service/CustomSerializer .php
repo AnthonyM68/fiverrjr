@@ -5,8 +5,9 @@ namespace App\Services;
 use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 use Symfony\Component\Serializer\SerializerInterface;
 
-// intercepte les appels au sérialiseur par défaut et d'ajouter des fonctionnalités supplémentaires si nécessaire.
-// #[AsDecorator('serializer')]
+// intercepte les appels au sérialiseur par défaut et ajoute des fonctionnalités supplémentaires si nécessaire.
+
+#[AsDecorator('serializer')]
 class CustomSerializer implements SerializerInterface
 {
     public function __construct(private readonly SerializerInterface $serializer)

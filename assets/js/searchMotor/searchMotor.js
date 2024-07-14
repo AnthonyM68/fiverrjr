@@ -1,9 +1,4 @@
 const displayResults = (results, searchTerm) => {
-
-    // $('.ui.modal.navbar').modal({
-    //     transition: 'slide down'
-    // }).modal('show');
-
     let resultsHtml = '';
 
     if (!results || results.length === 0) {
@@ -13,51 +8,86 @@ const displayResults = (results, searchTerm) => {
         const searchTermLower = searchTerm.toLowerCase();
 
         results.forEach(entityTheme => {
+            let displayTheme = false;
+            let themeHtml = '';
+
             if (entityTheme && entityTheme.nameTheme) {
-                resultsHtml += `<div class="item">
+                themeHtml += `<div class="ui list arborescence">`;
+
+                themeHtml += `<div class="item">
                 <i class="folder open outline icon"></i>
                 <div class="content">
                 <div class="header"><strong>Thème : ${entityTheme.nameTheme}</strong></div>
                 </div>
                 </div>`;
 
+                themeHtml += `<div class="ui list arborescence">`;
+
                 entityTheme.categories.forEach(category => {
-                    resultsHtml += `<div class="item">
+                    let displayCategory = false;
+                    let categoryHtml = '';
+
+                    categoryHtml += `<div class="item">
                         <i class="folder open outline icon"></i>
                         <div class="content">
                         <div class="header"><strong>Catégorie : ${category.nameCategory}</strong></div>
                         </div>
                         </div>`;
 
+                    categoryHtml += `<div class="ui list arborescence">`;
+
                     category.courses.forEach(course => {
-                        resultsHtml += `<div class="item">
+                        let displayCourse = false;
+                        let courseHtml = '';
+
+                        courseHtml += `<div class="item">
                         <i class="folder open outline icon"></i>
                         <div class="content">
                         <div class="header"><strong>Sous-catégorie : ${course.nameCourse}</strong></div>
                         </div>
                         </div>`;
 
+                        courseHtml += `<div class="ui list arborescence">`;
+
                         course.serviceItems.forEach(serviceItem => {
                             if (serviceItem.title.toLowerCase().includes(searchTermLower) ||
                                 serviceItem.description.toLowerCase().includes(searchTermLower)) {
-
-                                resultsHtml += `<div class="item">
+                                displayTheme = true;
+                                displayCategory = true;
+                                displayCourse = true;
+                                courseHtml += `<div class="item">
                                 <i class="file icon"></i>
                                 <div class="content">
-                                <div class="header"><a href="/detail_service/${serviceItem.id}">${serviceItem.title}</a></div>
-                                <div class="description">${serviceItem.description}</div>
+                                <div class="header"><a href="/detail_service/${serviceItem.id}">${serviceItem.title}</a> Par: ${serviceItem.user.username}</div>
+                                <div class="description">
+                                ${serviceItem.description}
+                                </div>
                                 </div>
                                 </div>`;
                             }
                         });
+
+                        if (displayCourse) {
+                            categoryHtml += courseHtml + `</div>`; // sous-catégorie
+                        }
                     });
+
+                    if (displayCategory) {
+                        themeHtml += categoryHtml + `</div>`; // catégorie
+                    }
                 });
+
+                if (displayTheme) {
+                    resultsHtml += themeHtml + `</div>`; // thème
+                }
             }
         });
     }
     document.getElementById('search-results').innerHTML = resultsHtml;
-};
 
+    // Affiche les résultats avec une animation slide down
+    $('#search-results-container').slideDown();
+};
 // Requête de recherche
 const submitForm = (formElement) => {
     // on récupère les données du formumlaire et on crée un nouveau form
@@ -91,6 +121,7 @@ const submitForm = (formElement) => {
         })
         .catch(error => {
             document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
+            $('#search-results-container').slideDown(); // Afficher la div même en cas d'erreur
         });
 }
 /**
@@ -133,4 +164,9 @@ document.addEventListener('DOMContentLoaded', () => {
             submitForm(formElement);
         });
     });
+    // Ajoutez un écouteur d'événements pour le bouton de fermeture
+    document.getElementById('close-results').addEventListener('click', () => {
+        $('#search-results-container').slideUp();
+    });
+
 });

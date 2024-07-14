@@ -101,7 +101,7 @@ class UserController extends AbstractController
         }
         // dd($form->getData());
         return $this->render('user/index.html.twig', [
-            'title_page' => 'Votre profil',
+            'title_page' => 'profil',
             'form' => $form->createView(),
             'user' => $user
         ]);

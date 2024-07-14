@@ -6,14 +6,9 @@
 {% block body %}
 <div class="ui middle aligned center aligned grid">
 
-    <div class="ui segment login-register" style="width:350px">
+    <div class="ui segment login-register uk-animation-fade" style="width:350px">
 
-        <h2 class="ui teal image header">
-            <img src="https://fomantic-ui.com/examples/assets/images/logo.png" class="image">
-            <div class="content">
-                Enregistrement
-            </div>
-        </h2>
+        <h2 class="ui header uk-animation-slide-right">Enregistrement</h2>
 
         {{ form_start(registrationForm, {'attr': {'class': 'ui large form register'}}) }}
         <div class="ui stacked segment">
@@ -67,7 +62,7 @@
                 </div>
             </div>
             <div class="field uk-margin-top">
-                <button type="submit" class="ui fluid large teal submit button">S'enregistrer</button>
+                <button type="submit" class="ui fluid button primary">S'enregistrer</button>
             </div>
             <div class="ui message field center aligned">
                 Déjà inscrit? <a href="{{ path('login') }}">Connectez-vous</a>

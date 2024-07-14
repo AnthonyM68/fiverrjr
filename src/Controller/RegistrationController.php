@@ -52,7 +52,7 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address('admin@fiverrjr.com', 'Admin Site'))
                     ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
+                    ->subject('Veuillez confirmeé votre Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
@@ -61,6 +61,7 @@ class RegistrationController extends AbstractController
         }
 
         return $this->render('registration/register.html.twig', [
+            'title_page' => 'Enregistrement',
             'registrationForm' => $form->createView()
         ]);
     }
