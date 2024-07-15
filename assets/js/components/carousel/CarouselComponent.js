@@ -5,8 +5,6 @@ import { Card, Icon, Image } from 'semantic-ui-react';
 import Carousel from 'react-multi-carousel'; // multi
 import { useInView } from 'react-intersection-observer';
 
-
-
 const CarouselComponent = () => {
   return (
     <div className="carousel-wrapper">

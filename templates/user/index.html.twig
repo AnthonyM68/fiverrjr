@@ -75,14 +75,16 @@
                     </div>
                 </div>
 
-                <div class="eight wide column">
-                    Wait...
+                <div class="eight wide column" id="last-developer-root">
+                    {% if lastDeveloper|default %}
+                        {{ lastDeveloper.username }}
+                    {% endif %}
                 </div>
             </div>
         </div>
         <div class="eight wide column">
             <div class="ui segment">
-                <h2>Commandes en cours</h2>
+                <h2>Commandes en cours (Order)</h2>
                 {% if orders is iterable %}
                 <div class="ui relaxed divided list">
                     {% for order in orders %}

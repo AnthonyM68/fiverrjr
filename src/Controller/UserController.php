@@ -16,18 +16,29 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class UserController extends AbstractController
 {
     private $entityManager;
+    private $orderRepository;
+    private $userRepository;
     private $logger;
 
-    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger,
+        OrderRepository $orderRepository,
+        UserRepository $userRepository,
+    ) {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
+        $this->orderRepository = $orderRepository;
+        $this->userRepository = $userRepository;
     }
 
     #[Route('/user/list', name: 'list_users')]
@@ -75,8 +86,9 @@ class UserController extends AbstractController
     // }
 
 
+
     #[Route('/profile/edit/{id}', name: 'profile_edit')]
-    public function edit(?User $user, Request $request, OrderRepository $orderRepository, ImageUploaderInterface $imageUploader): Response
+    public function edit(?User $user, Request $request, ImageUploaderInterface $imageUploader, UserRepository $userRepository, SerializerInterface $serializer): Response
     {
         // On s'assure que $user est bien une instance de User et qu'il existe
         if (!$user) {
@@ -85,10 +97,7 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        $orders = $orderRepository->findBy(['userId' => $user->getId()]);
-        // dd($orders);
-
-
+        $orders = $this->orderRepository->findBy(['userId' => $user->getId()]);
 
         // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
@@ -107,18 +116,44 @@ class UserController extends AbstractController
             // à nouveau les infos de l'user
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
-        // dd($form->getData());
+
+        $lastDeveloper = $userRepository->findOneUserByRole("ROLE_DEVELOPER");
+
         return $this->render('user/index.html.twig', [
             'title_page' => 'profil',
             'form' => $form->createView(),
             'user' => $user,
-            'orders' => $orders
+            'orders' => $orders,
+            'lastDeveloper' => $lastDeveloper
         ]);
     }
+    #[Route('/api/lastDeveloper', name: 'api_lastDeveloper', methods: ['GET'])]
+    public function lastDeveloper(UserRepository $userRepository, SerializerInterface $serializer): JsonResponse
+    {
+        $lastDeveloper = $userRepository->findOneUserByRole("ROLE_DEVELOPER");
+        // Pourquoi devoir faire cela !!!
+        $developerData = [
+            'id' => $lastDeveloper->getId(),
+            'firstName' => $lastDeveloper->getFirstName(),
+            'lastName' => $lastDeveloper->getLastName(),
+            'email' => $lastDeveloper->getEmail(),
+            'username' => $lastDeveloper->getUsername(),
+            'picture' => $lastDeveloper->getPicture(),
+            'dateRegister' => $lastDeveloper->getDateRegister()->format('Y-m-d H:i:s'), // Format de date et heure
+            'city' => $lastDeveloper->getCity(),
+            'portfolio' => $lastDeveloper->getPortfolio(),
+            'bio' => $lastDeveloper->getBio(),
+            // Ajoutez d'autres propriétés selon vos besoins
+        ];
 
 
-
-
+        if ($lastDeveloper) {
+            return new JsonResponse($developerData);
+        } else {
+            return new JsonResponse(['error' => 'No developer found'], 404);
+        }
+        // return new JsonResponse($lastDeveloper);
+    }
 
 
     #[Route('/developer', name: 'home_developer')]
@@ -139,6 +174,7 @@ class UserController extends AbstractController
             'developers' => $users
         ]);
     }
+
 
 
     #[Route('/developer/order', name: 'list_orders_developer')]

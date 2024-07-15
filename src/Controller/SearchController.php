@@ -94,16 +94,16 @@ class SearchController extends AbstractController
         $this->logger->info('Price:', ['priceFilter' => $priceFilter]);
 
         // Récupération des résultats de recherche pour les ServiceItems
-        $serviceItemsQuery = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
+        $queryBuilder = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
 
         $priceFilter = $jsonData['price_filter'] ?? null;
         if ($priceFilter === 'low_to_high') {
-            $serviceItemsQuery->orderBy('si.price', 'ASC');
+            $queryBuilder->orderBy('si.price', 'ASC');
         } elseif ($priceFilter === 'high_to_low') {
-            $serviceItemsQuery->orderBy('si.price', 'DESC');
+            $queryBuilder->orderBy('si.price', 'DESC');
         }
 
-        $serviceItems = $serviceItemsQuery->getQuery()->getResult();
+        $serviceItems = $queryBuilder->getQuery()->getResult();
         $results = $serializer->serialize($serviceItems, JsonEncoder::FORMAT);
         // Retournez le résultat avec JsonResponse
         return new JsonResponse($results, 200, [], true);
