@@ -108,6 +108,10 @@ class UserController extends AbstractController
     }
 
 
+
+
+
+
     #[Route('/developer', name: 'home_developer')]
     public function developer(): Response
     {
@@ -126,8 +130,20 @@ class UserController extends AbstractController
             'developers' => $users
         ]);
     }
+    #[Route('/developer/order', name: 'list_orders_developer')]
+    public function orders(UserRepository $userRepository): Response
+    {
 
-    #[Route('/enterprise', name: 'home_enterprise')]
+        // $users = $userRepository->findAll();
+        return $this->render('user/order/index.html.twig', [
+            'title_page' => 'Commandes'
+        ]);
+    }
+
+
+
+
+    #[Route('/client', name: 'home_client')]
     public function enterprise(Request $request): Response
     {
         // Récupération les User par le role: ROLE_ENTERPRISE
@@ -143,6 +159,17 @@ class UserController extends AbstractController
         return $this->render('enterprise/index.html.twig', [
             'title_page' => 'Liste des Entreprises',
             'enterprises' => $users
+        ]);
+    }
+
+
+
+    #[Route('/client/invoice', name: 'list_invoice_client')]
+    public function iunvoices(UserRepository $userRepository): Response
+    {
+        // $users = $userRepository->findAll();
+        return $this->render('user/invoice/index.html.twig', [
+            'title_page' => 'Factures'
         ]);
     }
 }
