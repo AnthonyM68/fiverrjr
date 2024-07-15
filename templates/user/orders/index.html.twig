@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{title_page}}{% endblock %}
+
+{% block body %}
+
+<div class="separator"></div>
+<div class="custom-container">
+<h1 class="uk-animation-slide-right">Bienvenue sur votre {{ title_page }} {{ app.user }}</h1>
+
+<div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
+
+
+<table class="ui celled table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>No Name Specified</td>
+            <td>Unknown</td>
+            <td class="negative">None</td>
+        </tr>
+        <tr class="positive">
+            <td>Jimmy</td>
+            <td><i class="icon checkmark"></i> Approved</td>
+            <td>None</td>
+        </tr>
+        <tr>
+            <td>Jamie</td>
+            <td>Unknown</td>
+            <td class="positive"><i class="icon close"></i> Requires call</td>
+        </tr>
+        <tr class="negative">
+            <td>Jill</td>
+            <td>Unknown</td>
+            <td>None</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+{% endblock %}

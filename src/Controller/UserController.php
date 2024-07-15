@@ -135,7 +135,7 @@ class UserController extends AbstractController
     {
 
         // $users = $userRepository->findAll();
-        return $this->render('user/order/index.html.twig', [
+        return $this->render('user/orders/index.html.twig', [
             'title_page' => 'Commandes'
         ]);
     }
@@ -168,7 +168,7 @@ class UserController extends AbstractController
     public function iunvoices(UserRepository $userRepository): Response
     {
         // $users = $userRepository->findAll();
-        return $this->render('user/invoice/index.html.twig', [
+        return $this->render('user/invoices/index.html.twig', [
             'title_page' => 'Factures'
         ]);
     }
