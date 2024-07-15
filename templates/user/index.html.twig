@@ -116,8 +116,6 @@
                         Mes commandes
                     </a>
 
-
-
                     {% elseif is_granted('ROLE_CLIENT') %}
                     <a href="{{ path('list_orders_developer') }}" class="ui button primary">
                         Mes factures
@@ -181,7 +179,7 @@
                     <a href="{{ path('list_orders_developer') }}" class="ui button primary">
                         Mes factures
                     </a>
-                    <a href="{{ path('new_order_developer') }}" class="ui button primary">
+                    <a href="{{ path('new_order_client') }}" class="ui button primary">
                         Nouvelle Commande
                     </a>
                     {% endif %}

@@ -7,11 +7,42 @@
 <div class="separator"></div>
 
 <div class="custom-container">
-    <h1 class="uk-animation-slide-right">{{ title_page }}</h1>
-
+  
     <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
 
-    <table class="ui celled table">
+    {% if formAddOrder is defined %}
+    <h1 class="uk-animation-slide-down">{{title_page}}</h1>
+
+    {{ form_start(formAddOrder, {'attr': {'class': 'ui form order'}}) }}
+    <div class="ui stacked segment">
+        {# la class field pour afficher les erreurs #}
+        <div class="{{ formAddOrder.userId.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_label(formAddOrder.userId) }}
+            {{ form_errors(formAddOrder.userId) }}
+            {{ form_widget(formAddOrder.userId) }}
+        </div>
+        <div class="{{ formAddOrder.serviceId.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_label(formAddOrder.serviceId) }}
+            {{ form_errors(formAddOrder.serviceId) }}
+            {{ form_widget(formAddOrder.serviceId) }}         
+        </div>
+        <div class="{{ formAddOrder.dateOrder.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_label(formAddOrder.dateOrder) }}
+            {{ form_errors(formAddOrder.dateOrder) }}
+            {{ form_widget(formAddOrder.dateOrder) }}         
+        </div>
+        <div class="{{ formAddOrder.dateDelivery.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_label(formAddOrder.dateDelivery) }}
+            {{ form_errors(formAddOrder.dateDelivery) }}
+            {{ form_widget(formAddOrder.dateDelivery) }}            
+        </div>
+
+    </div>
+    {{ form_end(formAddOrder) }}
+    {% endif %}
+
+
+    {# <table class="ui celled table">
         <thead>
             <tr>
                 <th>Name</th>
@@ -41,7 +72,7 @@
                 <td>None</td>
             </tr>
         </tbody>
-    </table>
+    </table> #}
 
     <a href="{{ path('profile_edit', {'id':app.user.id} ) }}" class="ui button primary">
         Mon Profil

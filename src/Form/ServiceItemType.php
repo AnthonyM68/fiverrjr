@@ -46,9 +46,6 @@ class ServiceItemType extends AbstractType
             ->add('course', ServiceThemeCategoryCourseType::class, [
                 'mapped' => false, // Nous ne voulons pas mapper directement sur l'entité Service
             ])
-
-
-            
             ->add('title', TextType::class, [
                 'label' => 'Titre',
                 'attr' => [

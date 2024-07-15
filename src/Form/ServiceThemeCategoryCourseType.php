@@ -53,12 +53,8 @@ class ServiceThemeCategoryCourseType extends AbstractType
                         'message' => 'Veuillez sélectionner une Sous-catégorie',
                     ]),
                 ],
-
-
             ]);
         // Recherche et remplis les champs appropriés (nécessaire si pas de js pour un rendu dynamique)
-
-
         // // Écouteurs d'événements pour les champs theme et category
         // $builder->get('theme')->addEventListener(
         //     FormEvents::POST_SUBMIT,

@@ -3,9 +3,11 @@
 namespace App\Controller;
 // Importation des classes nécessaires
 
-use App\Entity\ServiceItem;
 use App\Entity\User;
+use App\Entity\Order;
 use App\Form\UserType;
+use App\Form\OrderType;
+use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use App\Repository\UserRepository;
 use App\Service\ImageUploaderInterface;
@@ -79,7 +81,7 @@ class UserController extends AbstractController
         if (!$user) {
             $user = new user();
         }
-        
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         // Si le formulaire est soumis et valide
@@ -141,8 +143,21 @@ class UserController extends AbstractController
         ]);
     }
     #[Route('/developer/new/invoice', name: 'new_invoice_developer')]
-    public function newInvoice(UserRepository $userRepository): Response
+    public function newInvoice(?Order $order = null, UserRepository $userRepository): Response
     {
+        if (!$order) {
+            $order = new ServiceItem();
+        }
+        // Variable pour stocker les erreurs de validation
+        $errors = null;
+        // Crée et gère le formulaire pour le service
+        $form = $this->createForm(OrderType::class, $order);
+
+        if ($form->isSubmitted()) {
+            // Si le formulaire est valide, persiste et sauvegarde la Category
+            if ($form->isValid()) {
+            }
+        }
         return $this->render('user/invoice/index.html.twig', [
             'title_page' => 'Créer une facture'
         ]);
@@ -179,10 +194,26 @@ class UserController extends AbstractController
     }
 
     #[Route('/client/new/order', name: 'new_order_client')]
-    public function newOrder(UserRepository $userRepository): Response
+    public function newOrder(?Order $order = null, UserRepository $userRepository): Response
     {
+
+        if (!$order) {
+            $order = new Order();
+        }
+        // Variable pour stocker les erreurs de validation
+        $errors = null;
+        // Crée et gère le formulaire pour le service
+        $form = $this->createForm(OrderType::class, $order);
+
+        if ($form->isSubmitted()) {
+            // Si le formulaire est valide, persiste et sauvegarde la Category
+            if ($form->isValid()) {
+            }
+        }
         return $this->render('user/orders/index.html.twig', [
-            'title_page' => 'Nouvelle commande'
+            'title_page' => 'Nouvelle commande',
+            'formAddOrder' => $form->createView(),
+            'errors' => $form->getErrors(true),
         ]);
     }
 }
