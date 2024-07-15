@@ -46,6 +46,9 @@ class Order
     #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'orders')]
     private Collection $servicesItems;
 
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
+
     public function __construct()
     {
         $this->servicesItems = new ArrayCollection();
@@ -154,6 +157,18 @@ class Order
                 $servicesItem->setOrders(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
 
         return $this;
     }

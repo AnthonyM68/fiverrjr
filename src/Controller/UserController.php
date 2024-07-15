@@ -10,6 +10,7 @@ use App\Form\OrderType;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use App\Repository\UserRepository;
+use App\Repository\OrderRepository;
 use App\Service\ImageUploaderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,15 +76,20 @@ class UserController extends AbstractController
 
 
     #[Route('/profile/edit/{id}', name: 'profile_edit')]
-    public function edit(User $user, Request $request, ImageUploaderInterface $imageUploader): Response
+    public function edit(?User $user, Request $request, OrderRepository $orderRepository, ImageUploaderInterface $imageUploader): Response
     {
         // On s'assure que $user est bien une instance de User et qu'il existe
         if (!$user) {
             $user = new user();
         }
-
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
+
+        $orders = $orderRepository->findBy(['userId' => $user->getId()]);
+        // dd($orders);
+
+
+
         // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
             // On supprime l'image actuel, upload la nouvelle et persiste la nouvelle url
@@ -105,7 +111,8 @@ class UserController extends AbstractController
         return $this->render('user/index.html.twig', [
             'title_page' => 'profil',
             'form' => $form->createView(),
-            'user' => $user
+            'user' => $user,
+            'orders' => $orders
         ]);
     }
 
@@ -210,8 +217,9 @@ class UserController extends AbstractController
             if ($form->isValid()) {
                 $this->entityManager->persist($order);
                 $this->entityManager->flush();
+                $this->addFlash('success', 'Votre commande sera ajoutée au panier');
                 // Redirige vers la liste des thèmes après sauvegarde
-                return $this->redirectToRoute('list_categories');
+                return $this->redirectToRoute('list_services');
             }
         }
         return $this->render('user/orders/index.html.twig', [

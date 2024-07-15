@@ -1,8 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
-<div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
+<div class="separator"></div>
+<div class="custom-container">
+    <h1 class="uk-animation-slide-right">{{ title_page }} {% if service|default %}
+        {{ service.title }}
+    {% endif %}</h1>
+
+    <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
 
 {# formulaire d'ajout d'un nouveau service #}
 {% if formAddService is defined %}
@@ -78,22 +83,47 @@
 {% endif %}
 
 {% if service|default %}
-{# Détail d'un service #}
-<div class="ui fluid card">
-    <div class="content">
-        <div class="header">{{ service.title}}</div>
-        <div class="meta">
-            <span class="right floated time">{{ service.createDate|date("j F d/m/Y H:i") }}</span>
-            <span class="category">{{ service.course.nameCourse }}</span>
+<div class="custom-container">
+    {# Détail d'un service #}
+    <div class="ui fluid card">
+        <div class="content">
+            <div class="header">{{ service.title}}</div>
+            <div class="meta">
+                <span class="right floated time">{{ service.createDate|date("d/m/Y H:i") }}</span>
+                <span class="category">{{ service.course.nameCourse }}</span>
+            </div>
+            <div class="description">
+                <p>{{ service.description }}</p>
+            </div>
         </div>
-        <div class="description">
-            <p>{{ service.description }}</p>
-        </div>
-    </div>
-    <div class="extra content">
-        <div class="right floated author">
-            <img class="ui avatar image" src="{{ asset(service.user.picture) }}">
-            {{ service.user.username }}
+        <div class="extra content">
+            <div class="left floated author">
+                {% if formAddOrder is defined %}
+                <h1 class="uk-animation-slide-down">{{title_page}}</h1>
+            
+                {{ form_start(formAddOrder, {'attr': {'class': 'ui form order'}}) }}
+
+                    {# la class field pour afficher les erreurs #}
+            
+                    <div class="{{ formAddOrder.serviceId.vars.errors|length > 0 ? 'field error' }}">
+                        {{ form_label(formAddOrder.serviceId) }}
+                        {{ form_errors(formAddOrder.serviceId) }}
+                        {{ form_widget(formAddOrder.serviceId) }}
+                    </div>
+                    <div>
+                        <button type="submit" class="ui-button ui-widget ui-corner-all">
+                            <span class="ui-icon ui-icon-check"></span>Soumettre
+                        </button>
+                    </div>
+            
+
+                {{ form_end(formAddOrder) }}
+                {% endif %}
+            </div>
+            <div class="right floated author">
+                <img class="ui avatar image" src="{{ asset(service.user.picture) }}">
+                {{ service.user.username }}
+            </div>
         </div>
     </div>
 </div>
@@ -101,9 +131,9 @@
 {% if app.user %}
 {# On s'assure que l'user est l'auteur du service #}
 {% if service.user.id == app.user.id %}
-<a href="" class="ui button primary">
+{# <a href="" class="ui button primary">
     Suprimer un service
-</a>
+</a> #}
 {% endif %}
 {% endif %}
 

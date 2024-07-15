@@ -3,8 +3,10 @@
 namespace App\Controller;
 // Importation des classes nécessaires
 use index;
+use App\Entity\Order;
 use App\Entity\Theme;
 use App\Entity\Course;
+use App\Form\OrderType;
 use App\Form\ThemeType;
 use App\Entity\Category;
 use App\Form\CourseType;
@@ -13,15 +15,15 @@ use App\Entity\ServiceItem;
 use App\Form\ServiceItemType;
 use App\Repository\ThemeRepository;
 use App\Repository\CourseRepository;
+use Symfony\Component\Form\FormError;
 use App\Repository\CategoryRepository;
 use App\Service\ImageUploaderInterface;
-use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ServiceItemRepository;
 use Symfony\Component\HttpFoundation\Request;
+// Importation correcte pour IsGranted
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-// Importation correcte pour IsGranted
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -49,16 +51,30 @@ class ServiceItemController extends AbstractController
     }
 
     #[Route('/serviceItem/{id}', name: 'detail_service')]
-    public function detailService(?ServiceItem $service = null, ServiceItemRepository $ServiceItemRepository): Response
+    public function detailService(?Order $order = null, EntityManagerInterface $entityManager, Request $request): Response
     {
-        // Si le service n'existe pas, crée un nouveau service
-        if (!$service) {
-            $service = new ServiceItem();
+        if (!$order) {
+            $order = new Order();
         }
+        // Variable pour stocker les erreurs de validation
+        $errors = null;
+        // Crée et gère le formulaire pour le service
+        $form = $this->createForm(OrderType::class, $order);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted()) {
+            // Si le formulaire est valide, persiste et sauvegarde l'Order
+            if ($form->isValid()) {
+                $entityManager->persist($order);
+                $entityManager->flush();
+                $this->addFlash('success', 'Votre commande sera ajoutée au panier');
+                // Redirige vers la liste des thèmes après sauvegarde
+                return $this->redirectToRoute('profile_edit');
+            }
+        }
         return $this->render('itemService/index.html.twig', [
-            'title_page' => 'Détail du Service',
-            'service' => $service
+            'title_page' => 'Détail:',
+            'formAddOrder' => $form->createView()
         ]);
     }
 

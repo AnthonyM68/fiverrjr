@@ -12,6 +12,7 @@ use App\EventListener\AddDateOrderFiledOrderForm;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class OrderType extends AbstractType
@@ -27,8 +28,16 @@ class OrderType extends AbstractType
         $builder
             ->add('serviceId', IntegerType::class, [
                 'label' => 'Service Id',
+                'label' => false, // masquer le label
                 'attr' => [
-                    'class' => 'ui fluid input'
+                    'style' => 'display:none', // Masquer le champ 
+                ]
+            ])
+            ->add('nameCourse', TextType::class, [
+                'label' => 'Nom de sous-catégorie',
+                'label' => false, // masquer le label
+                'attr' => [
+                    'style' => 'display:none', // Masquer le champ 
                 ]
             ])
             // ->add('userId', IntegerType::class, [
