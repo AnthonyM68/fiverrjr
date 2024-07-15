@@ -7,7 +7,7 @@
 <div class="separator"></div>
 
 <div class="custom-container">
-  
+
     <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
 
     {% if formAddOrder is defined %}
@@ -16,25 +16,17 @@
     {{ form_start(formAddOrder, {'attr': {'class': 'ui form order'}}) }}
     <div class="ui stacked segment">
         {# la class field pour afficher les erreurs #}
-        <div class="{{ formAddOrder.userId.vars.errors|length > 0 ? 'field error' }}">
-            {{ form_label(formAddOrder.userId) }}
-            {{ form_errors(formAddOrder.userId) }}
-            {{ form_widget(formAddOrder.userId) }}
-        </div>
+
         <div class="{{ formAddOrder.serviceId.vars.errors|length > 0 ? 'field error' }}">
             {{ form_label(formAddOrder.serviceId) }}
             {{ form_errors(formAddOrder.serviceId) }}
-            {{ form_widget(formAddOrder.serviceId) }}         
+            {{ form_widget(formAddOrder.serviceId) }}
         </div>
-        <div class="{{ formAddOrder.dateOrder.vars.errors|length > 0 ? 'field error' }}">
-            {{ form_label(formAddOrder.dateOrder) }}
-            {{ form_errors(formAddOrder.dateOrder) }}
-            {{ form_widget(formAddOrder.dateOrder) }}         
-        </div>
-        <div class="{{ formAddOrder.dateDelivery.vars.errors|length > 0 ? 'field error' }}">
-            {{ form_label(formAddOrder.dateDelivery) }}
-            {{ form_errors(formAddOrder.dateDelivery) }}
-            {{ form_widget(formAddOrder.dateDelivery) }}            
+
+        <div>
+            <button type="submit" class="ui-button ui-widget ui-corner-all">
+                <span class="ui-icon ui-icon-check"></span>Soumettre
+            </button>
         </div>
 
     </div>

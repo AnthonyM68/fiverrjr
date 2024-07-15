@@ -19,7 +19,9 @@ Encore
     .addEntry('jquery', './node_modules/jquery/dist/jquery.js')
     //jQuery UI
     .addEntry('jquery_ui', './node_modules/jquery-ui-dist/jquery-ui.js')
+    // Jquery theme
     .addStyleEntry('jquery_ui_theme', './node_modules/jquery-ui/dist/themes/blitzer/theme.css')
+    // Jquery structure
     .addStyleEntry('jquery_structure', './node_modules/jquery-ui-dist/jquery-ui.structure.css')
     // semantic-ui
     .addEntry('semantic', './semantic/dist/semantic.js')

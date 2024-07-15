@@ -2,14 +2,14 @@
 
 namespace App\EventListener;
 
-use App\Entity\ServiceItem;
+use App\Entity\Order;
 
 use Doctrine\ORM\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 
-// Ajoute la date de création d'un Service 
-class AddCreateDateFiledServiceForm implements EventSubscriberInterface
+// Ajoute la date de création d'une commande ( Order ) 
+class AddDateOrderFiledOrderForm implements EventSubscriberInterface
 {
     // Méthode appelée avant que l'entité soit persistée (enregistrée) dans la base de données
     public function prePersist(LifecycleEventArgs $args): void
@@ -18,13 +18,12 @@ class AddCreateDateFiledServiceForm implements EventSubscriberInterface
         $entity = $args->getObject();
 
         // Vérifie si l'entité est une instance de ServiceItem
-        if ($entity instanceof ServiceItem) {
+        if ($entity instanceof Order) {
             // Définit la date de création à la date et heure actuelles
-            $entity->setCreateDate(new \DateTime());
+            $entity->setDateOrder(new \DateTime());
 
             // Récupère l'utilisateur associé à l'entité
             $user = $entity->getUser();
-
             // Vérifie si l'utilisateur est nul (non défini)
             if ($user === null) {
                 // Lance une exception si l'utilisateur est inconnu

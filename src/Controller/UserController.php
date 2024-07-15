@@ -193,10 +193,9 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/client/new/order', name: 'new_order_client')]
-    public function newOrder(?Order $order = null, UserRepository $userRepository): Response
+    #[Route('/client/order/add', name: 'new_order_client')]
+    public function newOrder(?Order $order = null, UserRepository $userRepository, Request $request): Response
     {
-
         if (!$order) {
             $order = new Order();
         }
@@ -204,10 +203,15 @@ class UserController extends AbstractController
         $errors = null;
         // Crée et gère le formulaire pour le service
         $form = $this->createForm(OrderType::class, $order);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            // Si le formulaire est valide, persiste et sauvegarde la Category
+            // Si le formulaire est valide, persiste et sauvegarde l'Order
             if ($form->isValid()) {
+                $this->entityManager->persist($order);
+                $this->entityManager->flush();
+                // Redirige vers la liste des thèmes après sauvegarde
+                return $this->redirectToRoute('list_categories');
             }
         }
         return $this->render('user/orders/index.html.twig', [

@@ -41,7 +41,6 @@ class ServiceItem
     #[ORM\Column(length: 255, nullable: false)]
     private ?string $picture = null;
 
-
     /**
      * Undocumented Course
      *

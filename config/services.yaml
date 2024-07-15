@@ -41,13 +41,24 @@ services:
     tags:
       - { name: doctrine.event_listener, event: prePersist }
 
+
+  # intercepte le formulaire et créer la date de création d'un service (form Service)
+  App\EventListener\AddDateOrderFiledOrderForm:
+    tags:
+      - { name: doctrine.event_listener, event: prePersist }
+
+
   # intercepte le formulaire et créer la date de création d'un service (form Service)
   App\EventListener\AddCreateDateFiledServiceForm:
     tags:
       - { name: doctrine.event_listener, event: prePersist }
+  
+
+
+
 
   # Ajoute l'id User automatiquement au formulaire lors d'un ajout de Service
-  App\Form\EventListener\AddUserFieldServiceForm:
+  App\Form\EventListener\AddUserField:
     arguments: ["@security.helper"]
     tags:
       - { name: "kernel.event_subscriber" }

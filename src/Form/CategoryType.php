@@ -7,6 +7,7 @@ use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -25,7 +26,12 @@ class CategoryType extends AbstractType
                 ]
             ])
             ->add('nameCategory', TextType::class, [
-                'label' => 'Nom de Catégorie'
+                'label' => 'Nom de Catégorie',
+                'constraints' => [
+                        new NotBlank([
+                            'message' => 'Veuillez entrer un nom de Catégorie',
+                        ]),
+                ]
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Soumettre',

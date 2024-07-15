@@ -18,21 +18,26 @@ class Order
     private ?int $id = null;
 
     #[ORM\Column]
+    #[ORM\JoinColumn(nullable: false)]
     private ?int $serviceId = null;
 
     #[ORM\Column]
+    #[ORM\JoinColumn(nullable: false)]
     private ?int $userId = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?\DateTimeInterface $dateOrder = null;
 
     #[ORM\Column]
+    #[ORM\JoinColumn(nullable: false)]
     private array $status = [];
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDelivery = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
     /**

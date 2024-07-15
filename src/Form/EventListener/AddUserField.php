@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 // Ecouteur d'événément pour ajouter automatiquement l'id user à l'enregistrement d'un service
-class AddUserFieldServiceForm implements EventSubscriberInterface
+class AddUserField implements EventSubscriberInterface
 {
     private $security;
 

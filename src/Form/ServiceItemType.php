@@ -10,12 +10,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Form\ServiceThemeCategoryCourseType;
 use Symfony\Component\Form\FormBuilderInterface;
-
-use App\Form\EventListener\AddUserFieldServiceForm;
+use App\Form\EventListener\AddUserField;
 use App\EventListener\AddCreateDateFiledServiceForm;
-
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,14 +26,11 @@ class ServiceItemType extends AbstractType
 {
     private $security;
 
-    public function __construct(Security $security, EntityManagerInterface $entityManager)
+    public function __construct(Security $security)
     {
         $this->security = $security;
-        $this->entityManager = $entityManager;
     }
-    private $entityManager;
-
-
+    
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -95,7 +88,7 @@ class ServiceItemType extends AbstractType
                 ]
             ])
             // Écouteur pour ajouter l'ID utilisateur avant de persister
-            ->addEventSubscriber(new AddUserFieldServiceForm($this->security))
+            ->addEventSubscriber(new AddUserField($this->security))
             // Écouteur pour ajouter la date de création avant de persister
             ->addEventSubscriber(new AddCreateDateFiledServiceForm());
     }
