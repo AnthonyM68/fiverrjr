@@ -1,5 +1,11 @@
 @import "variables";
 
+.custom-container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: $container-padding;
+}
+
 // Padding
 .padding {
   padding: $padding-medium; // Valeur par défaut
