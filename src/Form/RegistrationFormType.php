@@ -79,7 +79,7 @@ class RegistrationFormType extends AbstractType
             ->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Développeur' => 'ROLE_DEVELOPER',
-                    'Entrepreneur' => 'ROLE_ENTERPRISE',
+                    'Entrepreneur' => 'ROLE_CLIENT',
                 ],
                 'attr' => [
                     'class' => 'ui checkbox checkbox-container',

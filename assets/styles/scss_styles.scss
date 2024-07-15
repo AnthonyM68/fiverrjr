@@ -119,8 +119,7 @@ strong {
 .arborescence .folder {
   color: rgba(0, 0, 0, 0.87) !important;
 }
-.sixteen.search-results h2,
-h3 {
+.sixteen.search-results h2, h3 {
   color: rgba(0, 0, 0, 0.87) !important;
 }
 .ui.dropdown .item a {
@@ -129,3 +128,10 @@ h3 {
   color: rgba(0, 0, 0, 0.87) !important;
 }
 
+.ui.relaxed.divided .item {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+.ui.relaxed.divided .item .content a {
+  color: rgba(0, 0, 0, 0.87) !important;
+}

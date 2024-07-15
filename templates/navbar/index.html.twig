@@ -53,8 +53,7 @@
                 </div>
             </div>
             <div class="right menu">
-
-                {# Formulaire de recherche personnalisé avec sélecteur de class spécifique ajax-form#}
+                {# Formulaire de recherche avec sélecteur de class spécifique ajax-form#}
                 {{ form_start(form_service, {'attr': {'class': 'ui form ajax-form'}}) }}
                 <div class="ui icon input full-width-input">
                     {{ form_widget(form_service.search_term) }}
@@ -63,8 +62,9 @@
                 {# Input pour garantir le nom du formulaire #}
                 <input type="hidden" name="submitted_form_type" value="form_search_navabar">
                 {{ form_end(form_service) }}
-
                 <a href="{{ path('search') }}" class="item">Avancées</a>
+
+                {# Si l'utilisateur est connecté #}
                 {% if app.user %}
                 <a href="{{ path('profile_edit', {'id': app.user.id}) }}" class="ui item">Bonjour {{ app.user.username
                     }}</a>
@@ -73,6 +73,8 @@
                 <a href="{{ path('login') }}" class="ui item">Se connecter</a>
                 <a href="{{ path('register') }}" class="ui item">S'enregistrer</a>
                 {% endif %}
+
+                {# Si nous sommes administrateur #}
                 {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('admin') }}" class="ui item">Tableau de bord</a>
                 {% endif %}
@@ -82,11 +84,8 @@
 </div>
 {% block js %}
 {{ encore_entry_script_tags('jquery_ui') }}
-
 {{ encore_entry_script_tags('semantic') }}
-
 {{ encore_entry_script_tags('ViewNavbarDropdown') }}
-
 {{ encore_entry_script_tags('searchMotor') }}
 {% endblock %}
 

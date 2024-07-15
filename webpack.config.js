@@ -69,10 +69,10 @@ Encore
         './assets/styles/dropdown.css',
         './assets/styles/login-register.css',
         './assets/styles/admin.css',
-        './assets/styles/app.css',
-        './assets/styles/scss_styles.scss',
+        './assets/styles/app.css',    
         './assets/styles/carousel.css',
-        './assets/styles/parallax.css'
+        './assets/styles/parallax.css',
+        './assets/styles/scss_styles.scss'
     ])
     // REACT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
     .enableReactPreset()

@@ -130,13 +130,21 @@ class UserController extends AbstractController
             'developers' => $users
         ]);
     }
+
+
     #[Route('/developer/order', name: 'list_orders_developer')]
     public function orders(UserRepository $userRepository): Response
     {
 
-        // $users = $userRepository->findAll();
         return $this->render('user/orders/index.html.twig', [
-            'title_page' => 'Commandes'
+            'title_page' => 'Vos commandes'
+        ]);
+    }
+    #[Route('/developer/new/invoice', name: 'new_invoice_developer')]
+    public function newInvoice(UserRepository $userRepository): Response
+    {
+        return $this->render('user/invoice/index.html.twig', [
+            'title_page' => 'Créer une facture'
         ]);
     }
 
@@ -162,14 +170,19 @@ class UserController extends AbstractController
         ]);
     }
 
-
-
     #[Route('/client/invoice', name: 'list_invoice_client')]
-    public function iunvoices(UserRepository $userRepository): Response
+    public function invoices(UserRepository $userRepository): Response
     {
-        // $users = $userRepository->findAll();
         return $this->render('user/invoices/index.html.twig', [
-            'title_page' => 'Factures'
+            'title_page' => 'Vos factures'
+        ]);
+    }
+
+    #[Route('/client/new/order', name: 'new_order_client')]
+    public function newOrder(UserRepository $userRepository): Response
+    {
+        return $this->render('user/orders/index.html.twig', [
+            'title_page' => 'Nouvelle commande'
         ]);
     }
 }
