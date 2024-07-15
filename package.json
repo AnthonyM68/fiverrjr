@@ -30,6 +30,7 @@
     "less": "^4.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-intersection-observer": "^9.13.0",
     "react-multi-carousel": "^2.8.5",
     "react-responsive-carousel": "^3.2.23",
     "semantic-ui-css": "^2.5.0",

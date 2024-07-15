@@ -72,6 +72,7 @@
         </div>
         <div class="eight wide column">
             <div class="ui segment">
+
                 <div class="ui relaxed divided list">
                     <div class="item">
                         <i class="large github middle aligned icon"></i>
@@ -95,22 +96,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="ui container">
+                    <a href="{{ path('new_service') }}" class="ui button primary">
+                        Déposer un service
+                    </a>
+                    <a href="" class="ui button primary">
+                        Modifier un service
+                    </a>
+                    <a href="" class="ui button primary">
+                        Suprimer un service
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="ui container">
-    <a href="{{ path('new_service') }}" class="ui button primary">
-        Déposer un service
-    </a>
-    <a href="" class="ui button primary">
-        Modifier un service
-    </a>
-    <a href="" class="ui button primary">
-        Suprimer un service
-    </a>
-</div>
+
 {% block javascripts %}
 {{ parent() }}
 {# On inject le script pour la prévisualisation de l'image avant upload (enregistrement) #}

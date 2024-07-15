@@ -8,17 +8,23 @@
 {% block body %}
 {# title page #}
 {# <div class="ui container">
-{% if app.user %}<h1 class="uk-animation-slide-bottom">Bienvenue, {{ app.user.username }}!</h1> 
-{% else %}<h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
-{% endif %}
+    {% if app.user %}<h1 class="uk-animation-slide-bottom">Bienvenue, {{ app.user.username }}!</h1>
+    {% else %}<h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
+    {% endif %}
 </div> #}
 
-<!-- Ajoutez cet élément où le composant React sera rendu -->
-<div id="carousel-root"></div>
-<div id="parallax-root"></div>
-<div id="bestservices-root"></div>
 
-{# <div class="ui container" id="initial-container"> 
+{# <div id="carousel-root"></div> #}
+<div id="parallax-root"></div>
+
+
+<div class="custom-container">
+    {# <h2 class="uk-animation-slide-right">Meilleurs services</h2> #}
+    <div id="bestservices-root"></div>
+</div>
+
+
+{# <div class="ui container" id="initial-container">
     <!-- This div will take the height of the viewport -->
 </div> #}
 {# <h2>Derniers inscrits et enregistrements</h2> #}
