@@ -1,0 +1,29 @@
+.parallax-home {
+    background-image: url("../../public/img/services/service.jpg");
+  }
+  .parallax {
+    /* background-image: url("../../public/img/services/service.jpg"); */
+    min-height: 600px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  /* style='height:1000px;background-color:red;font-size:36px' */
+  .parallax-container .floating-text {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #fff;
+    padding: 50px;
+    height: 500px;
+  }
+  .parallax-container .floating-text h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: rgba(0, 0, 0, 0.87) !important;
+  }
+  .parallax-container .floating-text p {
+    font-size: 1.5rem;
+    color: rgba(0, 0, 0, 0.87) !important;
+  }

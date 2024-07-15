@@ -2,6 +2,7 @@
 {% block stylesheets %}
 {{ parent() }}
 {{ encore_entry_link_tags('react-responsive-carousel') }}
+{{ encore_entry_link_tags('react-multi-carousel') }}
 {% endblock %}
 
 {% block body %}
@@ -15,12 +16,15 @@
 <!-- Ajoutez cet élément où le composant React sera rendu -->
 <div id="carousel-root"></div>
 <div id="parallax-root"></div>
+<div id="bestservices-root"></div>
 
 {# <div class="ui container" id="initial-container"> 
     <!-- This div will take the height of the viewport -->
 </div> #}
 {# <h2>Derniers inscrits et enregistrements</h2> #}
-<div class="ui container" id="carousel-container">
+
+
+{# <div class="ui container" id="carousel-container">
     <div class="carousel-container">
         <div class="ui segment">
             <h2>Derniers inscrits et enregistrements</h2>
@@ -60,7 +64,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> #}
 
 {% block javascripts %}
 {{ parent() }}
