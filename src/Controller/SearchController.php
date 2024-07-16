@@ -70,20 +70,20 @@ class SearchController extends AbstractController
         $token = $jsonData['_token'] ?? null;
         // si le token du formulaire personnalisé ViewSearch existe
         if ($token) {
-        // Si le token n'est pas présent
-        if ($token === null) {
-            return new JsonResponse([
-                'error' => 'Token is not defined or null'
-            ], JsonResponse::HTTP_BAD_REQUEST);
-        }
-        // Si le token n'est pas valide
+            // Si le token n'est pas présent
+            if ($token === null) {
+                return new JsonResponse([
+                    'error' => 'Token is not defined or null'
+                ], JsonResponse::HTTP_BAD_REQUEST);
+            }
+            // Si le token n'est pas valide
             if (!$this->isCsrfTokenValid('search_item', $token)) {
                 return new JsonResponse([
                     'error' => 'Invalid CSRF token!'
                 ], JsonResponse::HTTP_BAD_REQUEST);
             }
         }
-
+        // on récupère la valeur des champs
         $searchTerm = $jsonData['search_term'] ?? null;
         $this->logger->info('Term search:', ['search_term' => $searchTerm]);
 
@@ -95,15 +95,19 @@ class SearchController extends AbstractController
 
         // Récupération des résultats de recherche pour les ServiceItems
         $queryBuilder = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
-
+        // on récupère la valeur du filtre
         $priceFilter = $jsonData['price_filter'] ?? null;
+        // on trie les résultats
         if ($priceFilter === 'low_to_high') {
             $queryBuilder->orderBy('si.price', 'ASC');
         } elseif ($priceFilter === 'high_to_low') {
             $queryBuilder->orderBy('si.price', 'DESC');
         }
-
+        // on recherche le resultat
         $serviceItems = $queryBuilder->getQuery()->getResult();
+        // On sérialise un tableau d'objet complexe
+        // on traite également les références circulaire et attribuons
+        // un ID unique pour éviter les boucles infinie 
         $results = $serializer->serialize($serviceItems, JsonEncoder::FORMAT);
         // Retournez le résultat avec JsonResponse
         return new JsonResponse($results, 200, [], true);

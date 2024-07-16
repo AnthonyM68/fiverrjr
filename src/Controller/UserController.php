@@ -11,34 +11,45 @@ use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use App\Repository\UserRepository;
 use App\Repository\OrderRepository;
+
 use App\Service\ImageUploaderInterface;
+
+
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UserController extends AbstractController
 {
+    private $logger;
     private $entityManager;
     private $orderRepository;
     private $userRepository;
-    private $logger;
+    private $urlGenerator;
+
 
     public function __construct(
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
         OrderRepository $orderRepository,
         UserRepository $userRepository,
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
         $this->orderRepository = $orderRepository;
         $this->userRepository = $userRepository;
+        $this->urlGenerator = $urlGenerator;
     }
 
     #[Route('/user/list', name: 'list_users')]
@@ -88,7 +99,7 @@ class UserController extends AbstractController
 
 
     #[Route('/profile/edit/{id}', name: 'profile_edit')]
-    public function edit(?User $user, Request $request, ImageUploaderInterface $imageUploader, UserRepository $userRepository, SerializerInterface $serializer): Response
+    public function edit(?User $user, Request $request, ImageUploaderInterface $imageUploader): Response
     {
         // On s'assure que $user est bien une instance de User et qu'il existe
         if (!$user) {
@@ -117,8 +128,8 @@ class UserController extends AbstractController
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
 
-        $lastDeveloper = $userRepository->findOneUserByRole("ROLE_DEVELOPER");
-
+        $lastDeveloper = $this->userRepository->findOneUserByRole("ROLE_DEVELOPER");
+        // dd($lastDeveloper);
         return $this->render('user/index.html.twig', [
             'title_page' => 'profil',
             'form' => $form->createView(),
@@ -127,33 +138,45 @@ class UserController extends AbstractController
             'lastDeveloper' => $lastDeveloper
         ]);
     }
-    #[Route('/api/lastDeveloper', name: 'api_lastDeveloper', methods: ['GET'])]
-    public function lastDeveloper(UserRepository $userRepository, SerializerInterface $serializer): JsonResponse
-    {
-        $lastDeveloper = $userRepository->findOneUserByRole("ROLE_DEVELOPER");
-        // Pourquoi devoir faire cela !!!
-        $developerData = [
-            'id' => $lastDeveloper->getId(),
-            'firstName' => $lastDeveloper->getFirstName(),
-            'lastName' => $lastDeveloper->getLastName(),
-            'email' => $lastDeveloper->getEmail(),
-            'username' => $lastDeveloper->getUsername(),
-            'picture' => $lastDeveloper->getPicture(),
-            'dateRegister' => $lastDeveloper->getDateRegister()->format('Y-m-d H:i:s'), // Format de date et heure
-            'city' => $lastDeveloper->getCity(),
-            'portfolio' => $lastDeveloper->getPortfolio(),
-            'bio' => $lastDeveloper->getBio(),
-            // Ajoutez d'autres propriétés selon vos besoins
-        ];
 
+
+    #[Route('/api/lastDeveloper', name: 'api_lastDeveloper', methods: ['GET'])]
+    public function lastDeveloper(SerializerInterface $serializer): JsonResponse
+    {
+        $lastDeveloper = $this->userRepository->findOneUserByRole("ROLE_DEVELOPER");
+        $lastDeveloper = $lastDeveloper->getQuery()->getOneOrNullResult();
 
         if ($lastDeveloper) {
-            return new JsonResponse($developerData);
+            $pictureFilename = $lastDeveloper->getPicture();
+
+            // On utilise le controller pour fournir le chemin absolu de l'image ( services.yaml )
+            if ($pictureFilename) {
+                $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
+                    'filename' => $pictureFilename,
+                ]);
+                $pictureUrl = json_decode($pictureUrlResponse->getContent(), true)['url']; // Extract the URL from JSON response
+            }
+            // On format les données avant de retourner à Javascript
+            $developerData = [
+                'id' => $lastDeveloper->getId(),
+                'firstName' => $lastDeveloper->getFirstName(),
+                'lastName' => $lastDeveloper->getLastName(),
+                'email' => $lastDeveloper->getEmail(),
+                'username' => $lastDeveloper->getUsername(),
+                'picture' =>  $pictureUrl,
+                'dateRegister' => $lastDeveloper->getDateRegister(),
+                'city' => $lastDeveloper->getCity(),
+                'portfolio' => $lastDeveloper->getPortfolio(),
+                'bio' => $lastDeveloper->getBio(),
+            ];
+
+            $jsonDeveloperData = $serializer->serialize($developerData, 'json');
+            return new JsonResponse($jsonDeveloperData, 200, [], true);
         } else {
             return new JsonResponse(['error' => 'No developer found'], 404);
         }
-        // return new JsonResponse($lastDeveloper);
     }
+
 
 
     #[Route('/developer', name: 'home_developer')]

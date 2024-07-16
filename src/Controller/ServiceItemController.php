@@ -125,12 +125,22 @@ class ServiceItemController extends AbstractController
                     ]);
                 }
 
+
+
+
                 $pictureFile = $form->get('picture')->getData();
                 if ($pictureFile) {
                     $imageUploader->uploadImage($pictureFile, $service->getUser());
                 }
                 $entityManager->persist($service);
                 $entityManager->flush();
+
+
+
+
+
+
+                
             }
         }
         // Rend la vue avec le formulaire

@@ -3,33 +3,24 @@ import { Card, Image } from 'semantic-ui-react';
 
 const LastDeveloperCard = ({ developer }) => {
     
+    const { picture, firstName, lastName, username, dateRegister, bio } = developer;
+
     return (
         <Card>
-            <Image src={developer.picture} wrapped ui={false} />
+            {picture && <Image src={picture} wrapped ui={false} />}
             <Card.Content>
                 <Card.Header>
-                    <span>{developer.firstName} {developer.lastName}</span>
-                    <span>{developer.username}</span>
+                    <span>{firstName} {lastName}</span>
+                    <span>{username}</span>
                 </Card.Header>
-
                 <Card.Meta>
-                    <span className='date'>Date d'inscription: {developer.dateRegister}</span>
+                    <span className='date'>Date d'inscription: {dateRegister}</span>
                 </Card.Meta>
-
-                <Card.Description>{developer.description}</Card.Description>
+                <Card.Description>{bio}</Card.Description>
             </Card.Content>
         </Card>
     );
 };
 
-// Vous pouvez définir des valeurs par défaut avec des paramètres par défaut de fonction
-LastDeveloperCard.defaultProps = {
-    developer: {
-        // image: 'default_image_url.jpg',
-        username: 'tony',
-        // joinDate: 'Unknown',
-        // description: 'No description provided.'
-    }
-};
 
 export default LastDeveloperCard;

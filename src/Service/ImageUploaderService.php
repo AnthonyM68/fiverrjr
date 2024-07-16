@@ -36,8 +36,8 @@ class ImageUploaderService implements ImageUploaderInterface
         if ($data instanceof User) {
             if (in_array('ROLE_DEVELOPER', $data->getRoles())) {
                 $uploadDirectory = $this->parameters->get('developer_pictures_directory');
-            } elseif (in_array('ROLE_ENTERPRISE', $data->getRoles())) {
-                $uploadDirectory = $this->parameters->get('enterprise_pictures_directory');
+            } elseif (in_array('ROLE_CLIENT', $data->getRoles())) {
+                $uploadDirectory = $this->parameters->get('client_pictures_directory');
             }
         } elseif ($data instanceof ServiceItem) {
             $uploadDirectory = $this->parameters->get('service_pictures_directory');

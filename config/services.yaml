@@ -7,7 +7,7 @@ parameters:
   # paramètres pour chaque type de répertoire
   pictures_directory: "%kernel.project_dir%/public/img/"
   developer_pictures_directory: "%kernel.project_dir%/public/img/developers"
-  enterprise_pictures_directory: "%kernel.project_dir%/public/img/enterprises"
+  client_pictures_directory: "%kernel.project_dir%/public/img/clients"
   service_pictures_directory: "%kernel.project_dir%/public/img/services"
 
 services:

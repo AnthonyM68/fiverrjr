@@ -16,7 +16,7 @@
                 <div class="eight wide column">
 
                     <div class="ui segment f">
-                        {{ form_start(form) }}
+                        {{ form_start(form, {'attr': {'class': 'ui form profile'}}) }}
                         <div class="ui form">
 
                             {% if user.picture %}
@@ -77,7 +77,7 @@
 
                 <div class="eight wide column" id="last-developer-root">
                     {% if lastDeveloper|default %}
-                        {{ lastDeveloper.username }}
+                        {{ lastDeveloper }}
                     {% endif %}
                 </div>
             </div>
