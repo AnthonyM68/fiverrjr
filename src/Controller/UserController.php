@@ -140,42 +140,7 @@ class UserController extends AbstractController
     }
 
 
-    #[Route('/api/lastDeveloper', name: 'api_lastDeveloper', methods: ['GET'])]
-    public function lastDeveloper(SerializerInterface $serializer): JsonResponse
-    {
-        $lastDeveloper = $this->userRepository->findOneUserByRole("ROLE_DEVELOPER");
-        $lastDeveloper = $lastDeveloper->getQuery()->getOneOrNullResult();
 
-        if ($lastDeveloper) {
-            $pictureFilename = $lastDeveloper->getPicture();
-
-            // On utilise le controller pour fournir le chemin absolu de l'image ( services.yaml )
-            if ($pictureFilename) {
-                $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
-                    'filename' => $pictureFilename,
-                ]);
-                $pictureUrl = json_decode($pictureUrlResponse->getContent(), true)['url']; // Extract the URL from JSON response
-            }
-            // On format les données avant de retourner à Javascript
-            $developerData = [
-                'id' => $lastDeveloper->getId(),
-                'firstName' => $lastDeveloper->getFirstName(),
-                'lastName' => $lastDeveloper->getLastName(),
-                'email' => $lastDeveloper->getEmail(),
-                'username' => $lastDeveloper->getUsername(),
-                'picture' =>  $pictureUrl,
-                'dateRegister' => $lastDeveloper->getDateRegister(),
-                'city' => $lastDeveloper->getCity(),
-                'portfolio' => $lastDeveloper->getPortfolio(),
-                'bio' => $lastDeveloper->getBio(),
-            ];
-
-            $jsonDeveloperData = $serializer->serialize($developerData, 'json');
-            return new JsonResponse($jsonDeveloperData, 200, [], true);
-        } else {
-            return new JsonResponse(['error' => 'No developer found'], 404);
-        }
-    }
 
 
 
@@ -197,17 +162,61 @@ class UserController extends AbstractController
             'developers' => $users
         ]);
     }
+    #[Route('/api/last/{userType}', name: 'api_lastDeveloper', methods: ['GET'])]
+    public function lastDeveloper(String $userType, SerializerInterface $serializer): JsonResponse
+    {
+        $lastDeveloper = $this->userRepository->findOneUserByRole($userType);
+        $lastDeveloper = $lastDeveloper->getQuery()->getOneOrNullResult();
+
+        if ($lastDeveloper) {
+            $pictureFilename = $lastDeveloper->getPicture();
+
+            // On utilise le controller pour fournir le chemin absolu de l'image ( services.yaml )
+            if ($pictureFilename) {
+                $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
+                    'filename' => $pictureFilename,
+                    'usertype' => $userType
+                ]);
+                $pictureUrl = json_decode($pictureUrlResponse->getContent(), true)['url']; // Extract the URL from JSON response
+            }
+            // On format les données avant de retourner à Javascript
+            $developerData = [
+                'id' => $lastDeveloper->getId(),
+                'firstName' => $lastDeveloper->getFirstName(),
+                'lastName' => $lastDeveloper->getLastName(),
+                'email' => $lastDeveloper->getEmail(),
+                'username' => $lastDeveloper->getUsername(),
+                'picture' =>  $pictureUrl,
+                'dateRegister' => $lastDeveloper->getDateRegister(),
+                'city' => $lastDeveloper->getCity(),
+                'portfolio' => $lastDeveloper->getPortfolio(),
+                'bio' => $lastDeveloper->getBio(),
+            ];
+
+            $jsonDeveloperData = $serializer->serialize($developerData, 'json');
+
+            return new JsonResponse($jsonDeveloperData, 200, [], true);
+        } else {
+            return new JsonResponse(['error' => 'No developer found'], 404);
+        }
+    }
+
+
 
 
 
     #[Route('/developer/order', name: 'list_orders_developer')]
     public function orders(UserRepository $userRepository): Response
     {
-
         return $this->render('user/orders/index.html.twig', [
             'title_page' => 'Vos commandes'
         ]);
     }
+
+
+
+
+
     #[Route('/developer/new/invoice', name: 'new_invoice_developer')]
     public function newInvoice(?Order $order = null, UserRepository $userRepository): Response
     {

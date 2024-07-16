@@ -37,9 +37,9 @@ class HomeController extends AbstractController
     {
         // Données pour le carousel sur le home
         // Récupérer le dernier utilisateur avec le rôle ROLE_ENTERPRISE
-        $lastEnterprise = $this->entityManager->getRepository(User::class)->findOneUsersByRole('ROLE_ENTERPRISE');
+        $lastEnterprise = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_ENTERPRISE');
         // Récupérer le dernier utilisateur avec le rôle ROLE_DEVELOPER
-        $lastDeveloper = $this->entityManager->getRepository(User::class)->findOneUsersByRole('ROLE_DEVELOPER');
+        $lastDeveloper = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_DEVELOPER');
         // // Récupérer le dernier service ajouté
         $lastService = $this->entityManager->getRepository(ServiceItem::class)->findOneBy([], ['id' => 'DESC']);
 

@@ -99,12 +99,21 @@ class ImageController extends AbstractController
         return new JsonResponse(['message' => 'Image deleted successfully'], Response::HTTP_OK);
     }
 
-    #[Route('/api/imageUrl/{filename}', name: 'generate_image_url', methods: ['GET'])]
-    public function generateImageUrl(string $filename): JsonResponse
+    #[Route('/api/imageUrl/{filename}/{usertype}', name: 'generate_image_url', methods: ['GET'])]
+    public function generateImageUrl(string $filename, String $usertype,): JsonResponse
     {
         // Récupère le répertoire de téléchargement à partir des paramètres et ( services.yaml )
         $uploadsDirectory = $this->parameters->get('pictures_directory');
-        $uploadsDirectory = $this->parameters->get('developer_pictures_directory');
+
+        if ($usertype === "ROLE_DEVELOPER") {
+            $uploadsDirectory = $this->parameters->get('developer_pictures_directory');
+        } else if ($usertype === "ROLE_CLIENT") {
+            $uploadsDirectory = $this->parameters->get('client_pictures_directory');
+        }
+
+
+       
+
         $filePath = $uploadsDirectory . '/' . $filename;
         // Vérifie si le fichier existe
         if (!file_exists($filePath)) {

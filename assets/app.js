@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 import { Parallax, ParallaxDouble } from './js/components/Parallax';
 import { BestServicesCarousel } from './js/components/carousel/CarouselComponent';
-import LastDeveloperCard from './js/components/LastDeveloperCard';
+import UserCard from './js/components/UserCard';
 
 // Exemple de données des meilleurs services
 const bestServices = [
@@ -27,40 +27,40 @@ const CarouselComponent = ({ services }) => {
     return <BestServicesCarousel services={services} />;
 };
 
-// Composant pour afficher le dernier développeur inscrit
-const LastDeveloper = () => {
-    const [lastDeveloper, setLastDeveloper] = useState(null);
+// Composant pour afficher le dernier utilisateur inscrit
+const LastUser = ({ userType }) => {
+    const [lastUser, setLastUser] = useState(null);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        console.log('Fetching last developer...');
-        fetch('/api/lastDeveloper')
+        console.log(`Fetching last ${userType}...`);
+        fetch(`/api/last/${userType}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response LastDevelopper was not ok ' + response.statusText);
+                    throw new Error(`Network response Last${userType} was not ok ` + response.statusText);
                 }
                 return response.json();
             })
             .then(data => {
                 console.log('Data fetched:', data);
-                setLastDeveloper(data);
+                setLastUser(data);
             })
             .catch(error => {
                 console.error('Fetch error:', error);
                 setError(error);
             });
-    }, []);
+    }, [userType]);
 
     if (error) {
         return <div>Error: {error.message}</div>;
     }
 
-    if (!lastDeveloper) {
+    if (!lastUser) {
         return <div>Loading...</div>;
     }
 
-    return <LastDeveloperCard developer={lastDeveloper} />;
-};
+    return <UserCard user={lastUser} />;
+}
 
 // Vérifier et rendre les composants en fonction des éléments DOM
 document.addEventListener('DOMContentLoaded', () => {
@@ -79,6 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const lastDeveloperRoot = document.getElementById('last-developer-root');
     if (lastDeveloperRoot) {
         const root = createRoot(lastDeveloperRoot);
-        root.render(<LastDeveloper />);
+        root.render(<LastUser userType="ROLE_DEVELOPER" />);
+    }
+    const lastClientRoot = document.getElementById('last-client-root');
+    if (lastClientRoot) {
+        const root = createRoot(lastClientRoot);
+        root.render(<LastUser userType="ROLE_CLIENT"  />);
     }
 });

@@ -21,7 +21,7 @@
 
                             {% if user.picture %}
                             <div class="field ">
-                                <img id="imagePreview" src="{{ asset(user.picture) }}" alt="Image Preview"/>
+                                <img id="imagePreview" src="{{ asset(user.picture) }}" alt="Image Preview" />
                             </div>
                             {% endif %}
 
@@ -75,10 +75,23 @@
                     </div>
                 </div>
 
-                <div class="eight wide column" id="last-developer-root">
-                    {% if lastDeveloper|default %}
+                <div class="eight wide column">
+
+                    {% if is_granted('ROLE_CLIENT') %}
+                    <div class="ui segment" id="last-developer-root">
+                        {% if lastDeveloper|default %}
                         {{ lastDeveloper }}
+                        {% endif %}
+                    </div>
+                    {% elseif is_granted('ROLE_DEVELOPER') %}
+                    <div class="ui segment" id="last-client-root">
+                        {% if lastDeveloper|default %}
+                        {{ lastDeveloper }}
+                        {% endif %}
+                    </div>
                     {% endif %}
+
+
                 </div>
             </div>
         </div>
