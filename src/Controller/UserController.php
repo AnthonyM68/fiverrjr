@@ -134,7 +134,7 @@ class UserController extends AbstractController
 
             // Si une erreur est retournée, afficher un message flash d'erreur
             if (isset($absoluteUrlUser['error'])) {
-                $this->addFlash('orange', 'Image profil non trouvée: ' . $absoluteUrlUser['error']);
+                $this->addFlash('error', 'Image profil non trouvée: ' . $absoluteUrlUser['error']);
                 $absoluteUrlUser['url'] = null;
             }
         }
