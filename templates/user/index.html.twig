@@ -21,7 +21,7 @@
 
                             {% if user.picture %}
                             <div class="field ">
-                                <img id="imagePreview" src="{{ asset(user.picture) }}" alt="Image Preview" />
+                                <img id="imagePreview" src="{% if pictureUrl|default %} {{ asset(pictureUrl) }} {% endif %}" alt="Image Preview profile user" />
                             </div>
                             {% endif %}
 
@@ -74,9 +74,7 @@
                         {{ form_end(form) }}
                     </div>
                 </div>
-
                 <div class="eight wide column">
-
                     {% if is_granted('ROLE_CLIENT') %}
                     <div class="ui segment" id="last-developer-root">
                         {% if lastDeveloper|default %}
@@ -90,8 +88,6 @@
                         {% endif %}
                     </div>
                     {% endif %}
-
-
                 </div>
             </div>
         </div>

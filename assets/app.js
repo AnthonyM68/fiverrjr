@@ -28,16 +28,16 @@ const CarouselComponent = ({ services }) => {
 };
 
 // Composant pour afficher le dernier utilisateur inscrit
-const LastUser = ({ userType }) => {
+const LastUser = ({ role }) => {
     const [lastUser, setLastUser] = useState(null);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        console.log(`Fetching last ${userType}...`);
-        fetch(`/api/last/${userType}`)
+        console.log(`Fetching last ${role}...`);
+        fetch(`/api/last/${role}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`Network response Last${userType} was not ok ` + response.statusText);
+                    throw new Error(`Network response Last${role} was not ok ` + response.statusText);
                 }
                 return response.json();
             })
@@ -49,7 +49,7 @@ const LastUser = ({ userType }) => {
                 console.error('Fetch error:', error);
                 setError(error);
             });
-    }, [userType]);
+    }, [role]);
 
     if (error) {
         return <div>Error: {error.message}</div>;
@@ -79,11 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const lastDeveloperRoot = document.getElementById('last-developer-root');
     if (lastDeveloperRoot) {
         const root = createRoot(lastDeveloperRoot);
-        root.render(<LastUser userType="ROLE_DEVELOPER" />);
+        root.render(<LastUser role="ROLE_DEVELOPER" />);
     }
     const lastClientRoot = document.getElementById('last-client-root');
     if (lastClientRoot) {
         const root = createRoot(lastClientRoot);
-        root.render(<LastUser userType="ROLE_CLIENT"  />);
+        root.render(<LastUser role="ROLE_CLIENT"  />);
     }
 });

@@ -5,6 +5,8 @@
 /* ajoute un espaceur */
 .separator {
   height: 60px;
+  display: block; 
+  margin: 10px 0;
 }
 /* Search motor  */
 .full-width-input {

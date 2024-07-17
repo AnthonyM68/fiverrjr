@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,17 +25,17 @@ class ImageController extends AbstractController
     }
 
     #[Route('/api/uploadImage', name: 'upload_img', methods: ['POST'])]
-    public function uploadImage(Request $request): JsonResponse
+    public function uploadImage(UploadedFile $file, String $role): JsonResponse
     {
-        // Récupère le fichier image de la requête
-        $file = $request->files->get('image');
-        if (!$file) {
-            // Retourne une réponse d'erreur si aucun fichier n'est fourni
-            return new JsonResponse(['error' => 'No image file provided'], Response::HTTP_BAD_REQUEST);
-        }
+        $originalFilename = $file->getClientOriginalName();
+        // Récupère le répertoire de téléchargement à partir des paramètres et ( services.yaml )
+        $uploadsDirectory = $this->parameters->get('pictures_directory');
 
-        // Récupère le répertoire de téléchargement à partir des paramètres
-        $uploadsDirectory = $this->getParameter('uploads_directory');
+        if ($role === "ROLE_DEVELOPER") {
+            $uploadsDirectory = $this->parameters->get('developer_pictures_directory');
+        } else if ($role === "ROLE_CLIENT") {
+            $uploadsDirectory = $this->parameters->get('client_pictures_directory');
+        }
 
         // Génère un nom de fichier unique pour éviter les conflits
         $filename = uniqid() . '.' . $file->guessExtension();
@@ -52,11 +53,16 @@ class ImageController extends AbstractController
     }
 
     #[Route('/api/images/{filename}', name: 'get_image', methods: ['GET'])]
-    public function getImage(string $filename): Response
+    public function getImage(string $filename, String $role): Response
     {
         // Récupère le répertoire de téléchargement à partir des paramètres
         $uploadsDirectory = $this->parameters->get('pictures_directory');
-        $uploadsDirectory = $this->parameters->get('developer_pictures_directory');
+
+        if ($role === "ROLE_DEVELOPER") {
+            $uploadsDirectory = $this->parameters->get('developer_pictures_directory');
+        } else if ($role === "ROLE_CLIENT") {
+            $uploadsDirectory = $this->parameters->get('client_pictures_directory');
+        }
 
         $filePath = $uploadsDirectory . '/' . $filename;
 
@@ -74,10 +80,17 @@ class ImageController extends AbstractController
 
 
     #[Route('/api/deleteImage/{filename}', name: 'delete_image', methods: ['DELETE'])]
-    public function deleteImage(string $filename): JsonResponse
+    public function deleteImage(string $filename, String $role ): JsonResponse
     {
-        // Récupère le répertoire de téléchargement à partir des paramètres
-        $uploadsDirectory = $this->getParameter('uploads_directory');
+        // // Récupère le répertoire de téléchargement à partir des paramètres
+        $uploadsDirectory = $this->parameters->get('pictures_directory');
+
+        if ($role === "ROLE_DEVELOPER") {
+            $uploadsDirectory = $this->parameters->get('developer_pictures_directory');
+        } else if ($role === "ROLE_CLIENT") {
+            $uploadsDirectory = $this->parameters->get('client_pictures_directory');
+        }
+        
         $filePath = $uploadsDirectory . '/' . $filename;
 
         $filesystem = new Filesystem();
@@ -95,24 +108,21 @@ class ImageController extends AbstractController
             return new JsonResponse(['error' => 'Failed to delete image'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        // Retourne un message de succès
+        // // Retourne un message de succès
         return new JsonResponse(['message' => 'Image deleted successfully'], Response::HTTP_OK);
     }
 
     #[Route('/api/imageUrl/{filename}/{usertype}', name: 'generate_image_url', methods: ['GET'])]
-    public function generateImageUrl(string $filename, String $usertype,): JsonResponse
+    public function generateImageUrl(string $filename, String $role): JsonResponse
     {
         // Récupère le répertoire de téléchargement à partir des paramètres et ( services.yaml )
         $uploadsDirectory = $this->parameters->get('pictures_directory');
 
-        if ($usertype === "ROLE_DEVELOPER") {
+        if ($role === "ROLE_DEVELOPER") {
             $uploadsDirectory = $this->parameters->get('developer_pictures_directory');
-        } else if ($usertype === "ROLE_CLIENT") {
+        } else if ($role === "ROLE_CLIENT") {
             $uploadsDirectory = $this->parameters->get('client_pictures_directory');
         }
-
-
-       
 
         $filePath = $uploadsDirectory . '/' . $filename;
         // Vérifie si le fichier existe

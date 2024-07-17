@@ -26,10 +26,10 @@ class ImageUploaderService implements ImageUploaderInterface
                 unlink($currentFilePath);
             }
         }
-    
+
         // on génère un nom de fichier unique pour la nouvelle image
         $newFilename = uniqid() . '.' . $file->guessExtension();
-    
+
         // on définit le répertoire de téléchargement par défaut
         $uploadDirectory = $this->parameters->get('pictures_directory');
 
@@ -39,22 +39,17 @@ class ImageUploaderService implements ImageUploaderInterface
             } elseif (in_array('ROLE_CLIENT', $data->getRoles())) {
                 $uploadDirectory = $this->parameters->get('client_pictures_directory');
             }
-        } elseif ($data instanceof ServiceItem) {
+        } else if ($data instanceof ServiceItem) {
             $uploadDirectory = $this->parameters->get('service_pictures_directory');
         }
-
-
         try {
             $file->move($uploadDirectory, $newFilename);
             // on crée le chemin relatif à partir du répertoire de base des images
             $relativePath = str_replace($this->parameters->get('pictures_directory'), '', $uploadDirectory);
             $url = './img/' . $relativePath . '/' . $newFilename;
             $data->setPicture($url);
-
-            
         } catch (FileException $e) {
             throw new \LogicException('Une erreur s\'est produite lors du téléchargement de l\'image.');
         }
     }
-    
 }

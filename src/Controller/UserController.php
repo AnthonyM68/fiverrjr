@@ -12,22 +12,24 @@ use Psr\Log\LoggerInterface;
 use App\Repository\UserRepository;
 use App\Repository\OrderRepository;
 
-use App\Service\ImageUploaderInterface;
+// use App\Service\ImageUploaderInterface;
 
 
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\SerializerInterface;
 
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UserController extends AbstractController
 {
@@ -96,46 +98,110 @@ class UserController extends AbstractController
     //     return $this->redirectToRoute('list_users');
     // }
 
-
-
     #[Route('/profile/edit/{id}', name: 'profile_edit')]
-    public function edit(?User $user, Request $request, ImageUploaderInterface $imageUploader): Response
+    public function edit(?User $user, Request $request, Security $security): Response
     {
-        // On s'assure que $user est bien une instance de User et qu'il existe
-        if (!$user) {
-            $user = new user();
-        }
+        // Si l'utilisateur n'est pas trouvé, créer un nouvel utilisateur
+        $user = $user ?? new User();
+
+        // Créer le formulaire pour l'utilisateur
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        $orders = $this->orderRepository->findBy(['userId' => $user->getId()]);
+        // Récupérer les rôles de l'utilisateur et définir le rôle principal
+        $roles = $user->getRoles();
+        $role = match (true) {
+            in_array('ROLE_ADMIN', $roles, true) => 'ROLE_ADMIN',
+            in_array('ROLE_CLIENT', $roles, true) => 'ROLE_CLIENT',
+            in_array('ROLE_DEVELOPER', $roles, true) => 'ROLE_DEVELOPER',
+            default => 'ROLE_USER',
+        };
+
+        // Obtenir le nom du fichier de l'image de profil de l'utilisateur
+        $userPictureFilename = $user->getPicture();
+        $absoluteUrlUser = null;
+
+        // Si l'utilisateur a une image de profil, générer l'URL absolue de l'image
+        if ($userPictureFilename) {
+            // Faire une requête à ImageController pour obtenir l'URL de l'image
+            $apiResponseJson = $this->forward('App\Controller\ImageController::generateImageUrl', [
+                'filename' => $userPictureFilename,
+                'role' => $role,
+            ]);
+
+            // Décoder la réponse JSON
+            $absoluteUrlUser = json_decode($apiResponseJson->getContent(), true);
+
+            // Si une erreur est retournée, afficher un message flash d'erreur
+            if (isset($absoluteUrlUser['error'])) {
+                $this->addFlash('orange', 'Image profil non trouvée: ' . $absoluteUrlUser['error']);
+                $absoluteUrlUser['url'] = null;
+            }
+        }
 
         // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
-            // On supprime l'image actuel, upload la nouvelle et persiste la nouvelle url
-            // ( ImageUploaderService )
-            $pictureFile = $form->get('picture')->getData();
+            // Récupérer le fichier téléchargé depuis le formulaire
+            $file = $form->get('picture')->getData();
 
-            if ($pictureFile) {
-                $imageUploader->uploadImage($pictureFile, $user);
+            // Si un fichier est téléchargé, traiter le fichier
+            if ($file instanceof UploadedFile) {
+                try {
+                    // Supprimer l'image actuelle de l'utilisateur
+                    $apiResponse = $this->forward('App\Controller\ImageController::deleteImage', [
+                        'filename' => $userPictureFilename,
+                        'role' => $role,
+                    ]);
+
+                    // Décoder la réponse JSON
+                    $apiResponse = json_decode($apiResponse->getContent(), true);
+
+                    // Si une erreur est retournée, afficher un message flash d'erreur
+                    if (isset($apiResponse['error'])) {
+                        $this->addFlash('error', $apiResponse['error']);
+                    } else {
+                        // Télécharger la nouvelle image
+                        $apiResponse = $this->forward('App\Controller\ImageController::uploadImage', [
+                            'file' => $file,
+                            'role' => $role,
+                        ]);
+
+                        // Décoder la réponse JSON
+                        $apiResponse = json_decode($apiResponse->getContent(), true);
+
+                        // Si une erreur est retournée, afficher un message flash d'erreur
+                        if (isset($apiResponse['error'])) {
+                            $this->addFlash('error', $apiResponse['error']);
+                        } else {
+                            // Mettre à jour l'utilisateur avec le nouveau nom de fichier de l'image
+                            $user->setPicture($apiResponse['filename']);
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // Si une exception est levée, afficher un message flash d'erreur
+                    $this->addFlash('error', 'An error occurred while processing the image: ' . $e->getMessage());
+                }
             }
-            // On enregistre en base de données
+
+            // Persister et sauvegarder l'utilisateur dans la base de données
             $this->entityManager->persist($user);
             $this->entityManager->flush();
-            $this->addFlash('success', 'Votre profil à bien été mis à jour');
-            // On redirige sur le profil avec en paramètre l'id user, l'objet pour affiché 
-            // à nouveau les infos de l'user
+            $this->addFlash('orange', 'Votre profil a bien été mis à jour');
+
+            // Rediriger vers la page de modification du profil
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
 
-        $lastDeveloper = $this->userRepository->findOneUserByRole("ROLE_DEVELOPER");
-        // dd($lastDeveloper);
+        // Rechercher les commandes de l'utilisateur par son ID
+        $orders = $this->orderRepository->findBy(['userId' => $user->getId()]);
+
+        // Rendre la vue du profil utilisateur avec les informations nécessaires
         return $this->render('user/index.html.twig', [
             'title_page' => 'profil',
             'form' => $form->createView(),
             'user' => $user,
             'orders' => $orders,
-            'lastDeveloper' => $lastDeveloper
+            'pictureUrl' => $absoluteUrlUser['url'] ?? null,
         ]);
     }
 
@@ -162,38 +228,42 @@ class UserController extends AbstractController
             'developers' => $users
         ]);
     }
-    #[Route('/api/last/{userType}', name: 'api_lastDeveloper', methods: ['GET'])]
-    public function lastDeveloper(String $userType, SerializerInterface $serializer): JsonResponse
-    {
-        $lastDeveloper = $this->userRepository->findOneUserByRole($userType);
-        $lastDeveloper = $lastDeveloper->getQuery()->getOneOrNullResult();
 
-        if ($lastDeveloper) {
-            $pictureFilename = $lastDeveloper->getPicture();
+
+
+    #[Route('/api/last/{role}', name: 'api_lastDeveloper', methods: ['GET'])]
+    public function lastDeveloper(String $role, SerializerInterface $serializer): JsonResponse
+    {
+        $lastUser = $this->userRepository->findOneUserByRole($role);
+
+        $lastUser = $lastUser->getQuery()->getOneOrNullResult();
+
+        if ($lastUser) {
+            $pictureFilename = $lastUser->getPicture();
 
             // On utilise le controller pour fournir le chemin absolu de l'image ( services.yaml )
             if ($pictureFilename) {
                 $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
                     'filename' => $pictureFilename,
-                    'usertype' => $userType
+                    'role' => $role
                 ]);
                 $pictureUrl = json_decode($pictureUrlResponse->getContent(), true)['url']; // Extract the URL from JSON response
             }
             // On format les données avant de retourner à Javascript
-            $developerData = [
-                'id' => $lastDeveloper->getId(),
-                'firstName' => $lastDeveloper->getFirstName(),
-                'lastName' => $lastDeveloper->getLastName(),
-                'email' => $lastDeveloper->getEmail(),
-                'username' => $lastDeveloper->getUsername(),
+            $lastUserData = [
+                'id' => $lastUser->getId(),
+                'firstName' => $lastUser->getFirstName(),
+                'lastName' => $lastUser->getLastName(),
+                'email' => $lastUser->getEmail(),
+                'username' => $lastUser->getUsername(),
                 'picture' =>  $pictureUrl,
-                'dateRegister' => $lastDeveloper->getDateRegister(),
-                'city' => $lastDeveloper->getCity(),
-                'portfolio' => $lastDeveloper->getPortfolio(),
-                'bio' => $lastDeveloper->getBio(),
+                'dateRegister' => $lastUser->getDateRegister(),
+                'city' => $lastUser->getCity(),
+                'portfolio' => $lastUser->getPortfolio(),
+                'bio' => $lastUser->getBio(),
             ];
 
-            $jsonDeveloperData = $serializer->serialize($developerData, 'json');
+            $jsonDeveloperData = $serializer->serialize($lastUserData, 'json');
 
             return new JsonResponse($jsonDeveloperData, 200, [], true);
         } else {

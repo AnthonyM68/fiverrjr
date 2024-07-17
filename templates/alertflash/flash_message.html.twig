@@ -1,31 +1,10 @@
-{% for flash_message in app.flashes('success') %}
-<div class="ui success message anim">
-    <i class="close icon"></i>
-    <div class="header">
-        {{ flash_message }}
-    </div>
-    {# <p>/p> #}
-</div>
+{% for type, messages in app.flashes %}
+    {% for flash_message in messages %}
+        <div class="ui {{ type }} message anim">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
 {% endfor %}
-
-{% for flash_message in app.flashes('warning') %}
-<div class="ui orange message anim">
-    <i class="close icon"></i>
-    <div class="header">
-        {{ flash_message }}
-    </div>
-    {# <p></p> #}
-</div>
-{% endfor %}
-
-{% for flash_message in app.flashes('error') %}
-<div class="ui negative message anim">
-    <i class="close icon"></i>
-    <div class="header">
-        {{ flash_message }}
-    </div>
-    {# <p></p> #}
-</div>
 
 {% for flash_error in app.flashes('verify_email_error') %}
 <div class="ui negative message anim">
@@ -33,9 +12,6 @@
     <div class="header">
         {{ flash_error }}
     </div>
-    {# <p></p> #}
+
 </div>
-{% endfor %}
-
-
 {% endfor %}
