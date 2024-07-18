@@ -5,6 +5,7 @@ const displayResults = (results, searchTerm) => {
         resultsHtml = '<h2>Aucun résultat</h2>';
     } else {
         resultsHtml += '<h3>Résultats</h3>';
+        // on convertit le terme rechercher en minuscule
         const searchTermLower = searchTerm.toLowerCase();
 
         results.forEach(entityTheme => {
@@ -83,23 +84,21 @@ const displayResults = (results, searchTerm) => {
             }
         });
     }
-    document.getElementById('search-results').innerHTML = resultsHtml;
-
+    document.getElementById('search-results-navbar').innerHTML = resultsHtml;
     // Affiche les résultats avec une animation slide down
     $('#search-results-container').slideDown();
 };
+
+
 // Requête de recherche
 const submitForm = (formElement) => {
     // on récupère les données du formumlaire et on crée un nouveau form
     const formData = new FormData(formElement);
-    console.log(formData);
     // on convertit le formualire en objet JSON
     const jsonData = Object.fromEntries(formData.entries());
+    // console.log(jsonDvvata);
 
     const term = jsonData['search_form[search_term]']
-
-    console.log(jsonData);
-
     fetch(formElement.action, {
         method: 'POST',
         headers: {
@@ -116,12 +115,15 @@ const submitForm = (formElement) => {
         })
         .then(data => {
             console.log(data);
-            console.log(term);
-            displayResults(data, term);
+            $('#search-results-container').slideDown();
+
+
+            // displayResults(data, term);
         })
         .catch(error => {
+
+            $('#search-results-container').slideDown();
             document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
-            $('#search-results-container').slideDown(); // Afficher la div même en cas d'erreur
         });
 }
 /**
@@ -131,29 +133,27 @@ const submitForm = (formElement) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('=> searchMotor.js loaded');
-    // Initialise le modal
-
-    // Gestion Active Link sur les moteur de recherche
+    // Gestion Active Link sur le moteur de recherche 
+    // Facultatif prévus pour fonctionner sur plusieurs moteurs ( input )
     // Sélectionnez tous les éléments de menu (les moteur de recherches, les formulaires)
-    // const menuItems = document.querySelectorAll('.ui.vertical.fluid.menu .item.field');
+    const menuItems = document.querySelectorAll('.ui.vertical.fluid.menu .item.field');
     // Ajoutez un gestionnaire de clic à chaque élément de menu
-    // menuItems.forEach(item => {
-    //     item.addEventListener('click', function () {
-    //         // Supprimez la classe 'active teal' de tous les éléments de menu
-    //         menuItems.forEach(menu => menu.classList.remove('active', 'teal'));
-    //         // Ajoutez la classe 'active teal' à l'élément cliqué
-    //         this.classList.add('active', 'teal');
-    //     });
-    // });
-
-
-    // On sélectionne le formulaire de recherche utilisé pour envois par AJAX
-    const search = document.querySelector('.search.link.icon');
-    // Intercepter la soumission du formulaire (Service-search-motor ou Theme-search-motor)
+    menuItems.forEach(item => {
+        item.addEventListener('click', function () {
+            // Supprimez la classe 'active teal' de tous les éléments de menu
+            menuItems.forEach(menu => menu.classList.remove('active', 'teal'));
+            // Ajoutez la classe 'active teal' à l'élément cliqué
+            this.classList.add('active', 'teal');
+        });
+    });
+    // On sélectionne l'icon search du moteur de la navbar
+    const search = document.querySelector('#search-icon');
+    // au click on intercepter la soumission du formulaire (Service-search-motor ou Theme-search-motor)
     search.addEventListener('click', function (event) {
         event.preventDefault();
         // Récupérer le formulaire parent
         const form = search.closest('form');
+    
         submitForm(form);
     });
 

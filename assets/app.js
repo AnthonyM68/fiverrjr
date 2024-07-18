@@ -86,4 +86,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const root = createRoot(lastClientRoot);
         root.render(<LastUser role="ROLE_CLIENT"  />);
     }
+
+
+
+
+
+
+    // Sélectionne tous les boutons de fermeture
+    const closeButtons = document.querySelectorAll('.close-results');
+            
+    closeButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const container = event.target.closest('.search-results-container');
+            if (container) {
+                container.style.display = 'none';
+            }
+        });
+    });
+
+    // Exemple d'ouverture du conteneur (à appeler lorsque vous voulez afficher les résultats)
+    const openSearchResults = (container) => {
+        container.style.display = 'block';
+    };
+
+    // Sélectionne tous les conteneurs de résultats de recherche
+    const searchResultsContainers = document.querySelectorAll('.search-results-container');
+
+    // Utilisation d'un exemple pour ouvrir un conteneur spécifique
+    // Par exemple, pour ouvrir le premier conteneur :
+    if (searchResultsContainers.length > 0) {
+        openSearchResults(searchResultsContainers[0]);
+    }
+
+    openSearchResults;
 });

@@ -79,7 +79,7 @@
 }
 
 
-/* Lists */
+/* Lists général */
 .folder.icon {
   color: #fff;
 }
@@ -87,43 +87,79 @@
 .ui.list > .item > .content > .header {
   color: #fff !important;
 }
+
+
+
+.ui.list .item .description {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+
+
 .ui.list.login > .item,
 .ui.list.login > .item > .content > .header {
   color: rgba(0, 0, 0, 0.87) !important;
 }
 
+/* Page client (entrepreneur)*/ 
+.ui.list.client > .item,
+.ui.list.client > .item > .folder.icon,
+.ui.list.client > .item > .content,
+.ui.list.client > .item > .content > .header {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+
+
+
+
+/* Page developer (entrepreneur)*/ 
+.ui.list.developer > .item,
+.ui.list.developer > .item > .folder.icon,
+.ui.list.developer > .item > .content,
+.ui.list.developer > .item > .content > .header {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
 
 /* Forms*/ 
 .ui.form label {
   color: #fff !important;
 }
+/* login */
 .ui.form.login label {
   color: rgba(0, 0, 0, 0.87) !important;
 }
+/* register */
 .ui.form.register label {
   color: rgba(0, 0, 0, 0.87) !important;
 }
+/* order */
 .ui.form.order label {
   color: rgba(0, 0, 0, 0.87) !important;
-}
+} 
+/* profil */
 .ui.form.profile label {
   color: rgba(0, 0, 0, 0.87) !important;
 }
-
+/* service profile */
+.ui.form.service label {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+.ui.form.service h1 {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
 
 /* form search */
 .ui.radio.checkbox > label {
   color: rgba(0, 0, 0, 0.87) !important;
 }
+
 /* search results*/
 .ui.container .twelve h3,
 strong {
   color: rgba(0, 0, 0, 0.87) !important;
 }
 
-.ui.list .item .description {
-  color: rgba(0, 0, 0, 0.87) !important;
-}
 .arborescence {
   color: rgba(0, 0, 0, 0.87) !important;
   margin-left: 10px;
@@ -139,11 +175,9 @@ strong {
   text-decoration: none;
   color: rgba(0, 0, 0, 0.87) !important;
 }
-
 .ui.relaxed.divided .item {
   color: rgba(0, 0, 0, 0.87) !important;
 }
-
 .ui.relaxed.divided .item .content a {
   color: rgba(0, 0, 0, 0.87) !important;
 }

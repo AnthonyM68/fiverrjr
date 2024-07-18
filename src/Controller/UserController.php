@@ -9,14 +9,14 @@ use App\Form\UserType;
 use App\Form\OrderType;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
+use App\Form\ServiceItemType;
 use App\Repository\UserRepository;
+
 use App\Repository\OrderRepository;
-
-// use App\Service\ImageUploaderInterface;
-
-
-
+use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ServiceItemRepository;
+
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -98,113 +97,216 @@ class UserController extends AbstractController
     //     return $this->redirectToRoute('list_users');
     // }
 
+    // #[Route('/profile/edit/{id}', name: 'profile_edit')]
+    // public function edit(
+    //     ?User $user = null,
+    //     ?ServiceItem $service = null,
+    //     Request $request
+    // ): Response {
+    //     $errors = null;
+    //     // Si l'utilisateur n'est pas trouvé, créer un nouvel utilisateur
+    //     $user = $user ?? new User();
+    //     $service = $service ?? new ServiceItem();
+    //     // Créer le formulaire pour l'utilisateur
+    //     $formUser = $this->createForm(UserType::class, $user, ['block_name' => 'user_form']);
+    //     $formUser->handleRequest($request);
+    //     // Créer le formulaire pour Service
+    //     $formService = $this->createForm(ServiceItemType::class, $service, ['block_name' => 'service_form']);
+    //     $formService->handleRequest($request);
+
+    //     if ($formService->isSubmitted()) {
+    //         // Si le formulaire est valide, persiste et sauvegarde la Category
+    //         if ($formService->isValid()) {
+
+    //             $subFormData = $formService->get('course')->getData();
+    //             $course = $subFormData['course'] ?? null;
+
+    //             // si on a un résultat dans course
+    //             if ($course) {
+    //                 // On set la sous-categorie au service
+    //                 $service->setCourse($course);
+    //             } else {
+    //                 // Si aucun cours n'est sélectionné, ajouter une erreur de validation
+    //                 $formService->get('course')->addError(new FormError('Veuillez sélectionner un cours.'));
+    //                 // On recherche les erreurs
+    //                 $errors = $formService->get('course')->getErrors(true);
+
+    //                 return $this->render('itemService/index.html.twig', [
+    //                     'title_page' => 'Services',
+    //                     'formAddService' => $formService->createView(),
+    //                     'errors' => $formService->getErrors(true),
+    //                 ]);
+    //             }
+
+    //             // Récupérer le fichier téléchargé depuis le formulaire
+    //             $file = $formUser->get('picture')->getData();
+    //             if ($file instanceof UploadedFile) {
+    //                 try {
+    //                     // Télécharger la nouvelle image
+    //                     $apiResponse = $this->forward('App\Controller\ImageController::uploadImage', [
+    //                         'file' => $file,
+    //                         'role' => 'SERVICE',
+    //                     ]);
+
+    //                     // Décoder la réponse JSON
+    //                     $apiResponse = json_decode($apiResponse->getContent(), true);
+    //                 } catch (\Exception $e) {
+    //                     // Si une exception est levée, afficher un message flash d'erreur
+    //                     $this->addFlash('error', 'An error occurred while processing the image: ' . $e->getMessage());
+    //                 }
+    //             }
+    //             $this->entityManager->persist($service);
+    //             $this->entityManager->flush();
+    //         }
+    //     }
+    //     // Récupérer les rôles de l'utilisateur et définir le rôle principal
+    //     $roles = $user->getRoles();
+    //     $role = match (true) {
+    //         in_array('ROLE_ADMIN', $roles, true) => 'ROLE_ADMIN',
+    //         in_array('ROLE_CLIENT', $roles, true) => 'ROLE_CLIENT',
+    //         in_array('ROLE_DEVELOPER', $roles, true) => 'ROLE_DEVELOPER',
+    //         default => 'ROLE_USER',
+    //     };
+
+    //     // Obtenir le nom du fichier de l'image de profil de l'utilisateur
+    //     $userPictureFilename = $user->getPicture();
+    //     $absoluteUrlUser = null;
+
+    //     // Si l'utilisateur a une image de profil, générer l'URL absolue de l'image
+    //     if ($userPictureFilename) {
+    //         // Faire une requête à ImageController pour obtenir l'URL de l'image
+    //         $apiResponseJson = $this->forward('App\Controller\ImageController::generateImageUrl', [
+    //             'filename' => $userPictureFilename,
+    //             'role' => $role,
+    //         ]);
+
+    //         // Décoder la réponse JSON
+    //         $absoluteUrlUser = json_decode($apiResponseJson->getContent(), true);
+
+    //         // Si une erreur est retournée, afficher un message flash d'erreur
+    //         if (isset($absoluteUrlUser['error'])) {
+    //             $this->addFlash('error', 'Image profil non trouvée: ' . $absoluteUrlUser['error']);
+    //             $absoluteUrlUser['url'] = null;
+    //         }
+    //     }
+
+    //     // Si le formulaire est soumis et valide
+    //     if ($formUser->isSubmitted() && $formUser->isValid()) {
+    //         // Récupérer le fichier téléchargé depuis le formulaire
+    //         $file = $formUser->get('picture')->getData();
+
+    //         // Si un fichier est téléchargé, traiter le fichier
+    //         if ($file instanceof UploadedFile) {
+    //             try {
+    //                 // Supprimer l'image actuelle de l'utilisateur
+    //                 $apiResponse = $this->forward('App\Controller\ImageController::deleteImage', [
+    //                     'filename' => $userPictureFilename,
+    //                     'role' => $role,
+    //                 ]);
+
+    //                 // Décoder la réponse JSON
+    //                 $apiResponse = json_decode($apiResponse->getContent(), true);
+
+    //                 // Si une erreur est retournée, afficher un message flash d'erreur
+    //                 if (isset($apiResponse['error'])) {
+    //                     $this->addFlash('error', $apiResponse['error']);
+    //                 } else {
+    //                     // Télécharger la nouvelle image
+    //                     $apiResponse = $this->forward('App\Controller\ImageController::uploadImage', [
+    //                         'file' => $file,
+    //                         'role' => $role,
+    //                     ]);
+
+    //                     // Décoder la réponse JSON
+    //                     $apiResponse = json_decode($apiResponse->getContent(), true);
+
+    //                     // Si une erreur est retournée, afficher un message flash d'erreur
+    //                     if (isset($apiResponse['error'])) {
+    //                         $this->addFlash('error', $apiResponse['error']);
+    //                     } else {
+    //                         // Mettre à jour l'utilisateur avec le nouveau nom de fichier de l'image
+    //                         $user->setPicture($apiResponse['filename']);
+    //                     }
+    //                 }
+    //             } catch (\Exception $e) {
+    //                 // Si une exception est levée, afficher un message flash d'erreur
+    //                 $this->addFlash('error', 'An error occurred while processing the image: ' . $e->getMessage());
+    //             }
+    //         }
+    //         // Persister et sauvegarder l'utilisateur dans la base de données
+    //         $this->entityManager->persist($user);
+    //         $this->entityManager->flush();
+    //         $this->addFlash('success', 'Votre profil a bien été mis à jour');
+    //         // Rediriger vers la page de modification du profil
+    //         return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
+    //     }
+
+    //     // Rechercher les commandes de l'utilisateur par son ID
+    //     $orders = $this->orderRepository->findBy(['userId' => $user->getId()]);
+
+    //     // Rendre la vue du profil utilisateur avec les informations nécessaires
+    //     return $this->render('user/index.html.twig', [
+    //         'title_page' => 'profil',
+    //         'form' => $formUser->createView(),
+    //         'formAddService' => $formService->createView(),
+    //         'user' => $user,
+    //         'orders' => $orders,
+    //         'pictureUrl' => $absoluteUrlUser['url'] ?? null,
+    //         'errors' => $formService->getErrors(true),
+    //     ]);
+    // }
     #[Route('/profile/edit/{id}', name: 'profile_edit')]
-    public function edit(?User $user, Request $request, Security $security): Response
-    {
-        // Si l'utilisateur n'est pas trouvé, créer un nouvel utilisateur
-        $user = $user ?? new User();
-
-        // Créer le formulaire pour l'utilisateur
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        // Récupérer les rôles de l'utilisateur et définir le rôle principal
-        $roles = $user->getRoles();
-        $role = match (true) {
-            in_array('ROLE_ADMIN', $roles, true) => 'ROLE_ADMIN',
-            in_array('ROLE_CLIENT', $roles, true) => 'ROLE_CLIENT',
-            in_array('ROLE_DEVELOPER', $roles, true) => 'ROLE_DEVELOPER',
-            default => 'ROLE_USER',
-        };
-
-        // Obtenir le nom du fichier de l'image de profil de l'utilisateur
-        $userPictureFilename = $user->getPicture();
-        $absoluteUrlUser = null;
-
-        // Si l'utilisateur a une image de profil, générer l'URL absolue de l'image
-        if ($userPictureFilename) {
-            // Faire une requête à ImageController pour obtenir l'URL de l'image
-            $apiResponseJson = $this->forward('App\Controller\ImageController::generateImageUrl', [
-                'filename' => $userPictureFilename,
-                'role' => $role,
-            ]);
-
-            // Décoder la réponse JSON
-            $absoluteUrlUser = json_decode($apiResponseJson->getContent(), true);
-
-            // Si une erreur est retournée, afficher un message flash d'erreur
-            if (isset($absoluteUrlUser['error'])) {
-                $this->addFlash('error', 'Image profil non trouvée: ' . $absoluteUrlUser['error']);
-                $absoluteUrlUser['url'] = null;
-            }
+    public function edit(
+        int $id,
+        Request $request,
+        UserRepository $userRepository,
+        ServiceItemRepository $serviceItemRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        // Récupérer l'utilisateur par ID
+        $user = $userRepository->find($id);
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé');
         }
-
-        // Si le formulaire est soumis et valide
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer le fichier téléchargé depuis le formulaire
-            $file = $form->get('picture')->getData();
-
-            // Si un fichier est téléchargé, traiter le fichier
-            if ($file instanceof UploadedFile) {
-                try {
-                    // Supprimer l'image actuelle de l'utilisateur
-                    $apiResponse = $this->forward('App\Controller\ImageController::deleteImage', [
-                        'filename' => $userPictureFilename,
-                        'role' => $role,
-                    ]);
-
-                    // Décoder la réponse JSON
-                    $apiResponse = json_decode($apiResponse->getContent(), true);
-
-                    // Si une erreur est retournée, afficher un message flash d'erreur
-                    if (isset($apiResponse['error'])) {
-                        $this->addFlash('error', $apiResponse['error']);
-                    } else {
-                        // Télécharger la nouvelle image
-                        $apiResponse = $this->forward('App\Controller\ImageController::uploadImage', [
-                            'file' => $file,
-                            'role' => $role,
-                        ]);
-
-                        // Décoder la réponse JSON
-                        $apiResponse = json_decode($apiResponse->getContent(), true);
-
-                        // Si une erreur est retournée, afficher un message flash d'erreur
-                        if (isset($apiResponse['error'])) {
-                            $this->addFlash('error', $apiResponse['error']);
-                        } else {
-                            // Mettre à jour l'utilisateur avec le nouveau nom de fichier de l'image
-                            $user->setPicture($apiResponse['filename']);
-                        }
-                    }
-                } catch (\Exception $e) {
-                    // Si une exception est levée, afficher un message flash d'erreur
-                    $this->addFlash('error', 'An error occurred while processing the image: ' . $e->getMessage());
-                }
-            }
-
-            // Persister et sauvegarder l'utilisateur dans la base de données
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-            $this->addFlash('orange', 'Votre profil a bien été mis à jour');
-
-            // Rediriger vers la page de modification du profil
+        // Créer le formulaire pour l'utilisateur
+        $formUser = $this->createForm(UserType::class, $user);
+        $formUser->handleRequest($request);
+    
+        // Créer un nouveau ServiceItem pour le formulaire
+        $service = new ServiceItem();
+        $formService = $this->createForm(ServiceItemType::class, $service);
+        $formService->handleRequest($request);
+    
+        if ($formUser->isSubmitted() && $formUser->isValid()) {
+            // Traiter le formulaire utilisateur
+            $entityManager->persist($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre profil a bien été mis à jour');
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
-
-        // Rechercher les commandes de l'utilisateur par son ID
-        $orders = $this->orderRepository->findBy(['userId' => $user->getId()]);
-
-        // Rendre la vue du profil utilisateur avec les informations nécessaires
+    
+        if ($formService->isSubmitted() && $formService->isValid()) {
+            // Traiter le formulaire de service
+            $service->setUser($user); // Associer le service à l'utilisateur
+            $entityManager->persist($service);
+            $entityManager->flush();
+            $this->addFlash('success', 'Service ajouté avec succès');
+            return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
+        }
+    
+        // Rendre la vue du profil utilisateur avec les formulaires
         return $this->render('user/index.html.twig', [
-            'title_page' => 'profil',
-            'form' => $form->createView(),
+            'title_page' => 'Profil',
+            'form' => $formUser->createView(),
+            'formAddService' => $formService->createView(),
             'user' => $user,
-            'orders' => $orders,
+            'errors' => $formService->getErrors(true),
+            'orders' => '',
             'pictureUrl' => $absoluteUrlUser['url'] ?? null,
+
         ]);
     }
-
+    
 
 
 
@@ -213,7 +315,7 @@ class UserController extends AbstractController
     #[Route('/developer', name: 'home_developer')]
     public function developer(): Response
     {
-        // Récupération les User par le role: ROLE_ENTERPRISE
+        // Récupération les User par le role: ROLE_CLIENT
         $queryBuilder = $this->entityManager->getRepository(User::class)->findUsersByRole("ROLE_DEVELOPER");
         // On filtre par username et l'on trie
         $queryBuilder->orderBy('u.username', 'ASC');
@@ -221,7 +323,7 @@ class UserController extends AbstractController
         $users = $queryBuilder->getQuery()->getResult();
 
         $this->logger->info('UserController:line:98', [
-            'ROLE_ENTERPRISE' => $users
+            'ROLE_CLIENT' => $users
         ]);
         return $this->render('developer/index.html.twig', [
             'title_page' => 'Liste des Développeurs',
@@ -286,7 +388,6 @@ class UserController extends AbstractController
 
 
 
-
     #[Route('/developer/new/invoice', name: 'new_invoice_developer')]
     public function newInvoice(?Order $order = null, UserRepository $userRepository): Response
     {
@@ -312,21 +413,21 @@ class UserController extends AbstractController
 
 
     #[Route('/client', name: 'home_client')]
-    public function enterprise(Request $request): Response
+    public function client(Request $request): Response
     {
-        // Récupération les User par le role: ROLE_ENTERPRISE
-        $queryBuilder = $this->entityManager->getRepository(User::class)->findUsersByRole("ROLE_ENTERPRISE");
+        // Récupération les User par le role: ROLE_CLIENT
+        $queryBuilder = $this->entityManager->getRepository(User::class)->findUsersByRole("ROLE_CLIENT");
         // On filtre par username et l'on trie
         $queryBuilder->orderBy('u.username', 'ASC');
         // On recherche les résultats
         $users = $queryBuilder->getQuery()->getResult();
 
         $this->logger->info('UserController:line:98', [
-            'ROLE_ENTERPRISE' => $users
+            'ROLE_CLIENT' => $users
         ]);
-        return $this->render('enterprise/index.html.twig', [
+        return $this->render('client/index.html.twig', [
             'title_page' => 'Liste des Entreprises',
-            'enterprises' => $users
+            'clients' => $users
         ]);
     }
 

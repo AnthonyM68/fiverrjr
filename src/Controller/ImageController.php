@@ -35,6 +35,8 @@ class ImageController extends AbstractController
             $uploadsDirectory = $this->parameters->get('developer_pictures_directory');
         } else if ($role === "ROLE_CLIENT") {
             $uploadsDirectory = $this->parameters->get('client_pictures_directory');
+        } else if ($role === "SERVICE") {
+            $uploadsDirectory = $this->parameters->get('service_pictures_directory');
         }
 
         // Génère un nom de fichier unique pour éviter les conflits

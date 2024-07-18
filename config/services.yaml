@@ -1,25 +1,37 @@
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
+# Ce fichier est le point d'entrée pour configurer vos propres services.
+# Les fichiers dans le sous-répertoire packages/ configurent vos dépendances.
+
 # Put parameters here that don't need to change on each machine where the app is deployed
+
+# Mettez ici les paramètres qui n'ont pas besoin de changer sur chaque machine où l'application est déployée.
+
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+
 parameters:
-  # paramètres pour chaque type de répertoire
+  # Définition des répertoires pour les images selon le type d'utilisateur ou de service
   pictures_directory: "%kernel.project_dir%/public/img/"
   developer_pictures_directory: "%kernel.project_dir%/public/img/developers"
   client_pictures_directory: "%kernel.project_dir%/public/img/clients"
   service_pictures_directory: "%kernel.project_dir%/public/img/services"
 
 services:
+  # Ensure CSRF protection by defining the CSRF token manager
+  # Assure la protection CSRF en définissant le gestionnaire de jetons CSRF
   Symfony\Component\Security\Csrf\CsrfTokenManagerInterface: "@security.csrf.token_manager"
 
-  # default configuration for services in *this* file
+  # Default configuration for services in this file
+  # Configuration par défaut pour les services dans ce fichier
   _defaults:
-    autowire: true # Automatically injects dependencies in your services.
-    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    autowire: true # Automatically injects dependencies in your services. Injection automatique des dépendances dans vos services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc. Enregistre automatiquement vos services comme commandes, abonnés aux événements, etc.
 
-  # makes classes in src/ available to be used as services
-  # this creates a service per class whose id is the fully-qualified class name
+  # Makes classes in src/ available to be used as services
+  # Rendre les classes dans src/ disponibles pour être utilisées comme services
+  # This creates a service per class whose id is the fully-qualified class name
+  # Cela crée un service par classe dont l'identifiant est le nom de classe entièrement qualifié
   App\:
     resource: "../src/"
     exclude:
@@ -27,42 +39,41 @@ services:
       - "../src/Entity/"
       - "../src/Kernel.php"
 
-  # add more service definitions when explicit configuration is needed
-  # please note that last definitions always *replace* previous ones
+  # Add more service definitions when explicit configuration is needed
+  # Ajoutez plus de définitions de services lorsque des configurations explicites sont nécessaires
+  # Please note that last definitions always *replace* previous ones
+  # Notez que les dernières définitions remplacent toujours les précédentes
 
-
-  # Enregistrement du service CircularReferenceHandler
-  # ndique que le service doit être défini sans avoir besoin de spécifier d'arguments de constructeur ou de propriétés supplémentaires
+  # Register the CircularReferenceHandler service
+  # Enregistrer le service CircularReferenceHandler
   App\Serializer\CircularReferenceHandler: ~
 
-
-  # intercepte le formulaire et créer la date d'enregistrement d'un nouveau User (form RegistrationFormType)
+ # Listener to intercept form submissions and set the registration date for new users (form RegistrationFormType)
+  # Listener pour intercepter les soumissions de formulaire et définir la date d'inscription pour les nouveaux utilisateurs (formulaire RegistrationFormType)
   App\EventListener\UserRegistrationListener:
     tags:
       - { name: doctrine.event_listener, event: prePersist }
 
-
-  # intercepte le formulaire et créer la date de création d'un service (form Service)
+  # Listener to intercept form submissions and set the creation date for a new service (form Service)
+  # Listener pour intercepter les soumissions de formulaire et définir la date de création d'un nouveau service (formulaire Service)
   App\EventListener\AddDateOrderFiledOrderForm:
     tags:
       - { name: doctrine.event_listener, event: prePersist }
 
-
-  # intercepte le formulaire et créer la date de création d'un service (form Service)
+  # Listener to intercept form submissions and set the creation date for a new service (form Service)
+  # Listener pour intercepter les soumissions de formulaire et définir la date de création d'un service (formulaire Service)
   App\EventListener\AddCreateDateFiledServiceForm:
     tags:
       - { name: doctrine.event_listener, event: prePersist }
-  
 
-
-
-
-  # Ajoute l'id User automatiquement au formulaire lors d'un ajout de Service
+  # Add the user ID automatically to the form when adding a Service
+  # Ajouter automatiquement l'ID utilisateur au formulaire lors de l'ajout d'un service
   App\Form\EventListener\AddUserField:
     arguments: ["@security.helper"]
     tags:
       - { name: "kernel.event_subscriber" }
 
-  # Execute une methode getNavBarData() pour alimenter le dropdown de la navigation
+  # Execute a method getNavBarData() to populate the dropdown in the navigation bar
+  # Exécuter une méthode getNavBarData() pour alimenter le menu déroulant dans la barre de navigation
   App\Twig\AppExtension:
     tags: ["twig.extension"]

@@ -29,18 +29,24 @@
     <artcile>
         <div class="separator"></div>
         <div class="ui container">
-            <div class="ui segment" id="search-results-container" style="display: none;">
+
+            
+            
+             <div class="ui segment" id="search-results-container" style="display: none;">
                 <div class="ui grid">
-                    <div class="sixteen wide column search-results"
-                        style="display: flex; justify-content: space-between; align-items: center;">
+
+                    <div class="sixteen wide column search-results" 
+                    style="display: flex; justify-content: space-between; align-items: center;">
                         <h2 id="search-results-title">Résultats de la recherche</h2>
                         <button class="ui button primary" id="close-results">Fermer</button>
                     </div>
+
                     <div class="sixteen wide column search-results">
                         <div id="search-results"></div>
                     </div>
+
                 </div>
-            </div>
+            </div> 
         </div>
         {% block body %} {% endblock %}
     </artcile>

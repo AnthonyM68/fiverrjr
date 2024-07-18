@@ -20,8 +20,11 @@ use App\Repository\CategoryRepository;
 use App\Service\ImageUploaderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ServiceItemRepository;
-use Symfony\Component\HttpFoundation\Request;
+
+
 // Importation correcte pour IsGranted
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,9 +32,16 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\DependencyInjection\Loader\Configurator\services;
 
 class ServiceItemController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
     /**
      * SERVICES
      *
@@ -50,73 +60,68 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
-    #[Route('/serviceItem/{id}', name: 'detail_service')]
-    public function detailService(?Order $order = null, EntityManagerInterface $entityManager, Request $request): Response
-    {
-        if (!$order) {
-            $order = new Order();
-        }
-        // Variable pour stocker les erreurs de validation
-        $errors = null;
-        // Crée et gère le formulaire pour le service
-        $form = $this->createForm(OrderType::class, $order);
-        $form->handleRequest($request);
+    // #[Route('/serviceItem/{id}', name: 'detail_service')]
+    // public function detailService(?Order $order = null, EntityManagerInterface $entityManager, Request $request): Response
+    // {
+    //     if (!$order) {
+    //         $order = new Order();
+    //     }
+    //     // Variable pour stocker les erreurs de validation
+    //     $errors = null;
+    //     // Crée et gère le formulaire pour le service
+    //     $form = $this->createForm(OrderType::class, $order);
+    //     $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            // Si le formulaire est valide, persiste et sauvegarde l'Order
-            if ($form->isValid()) {
-                $entityManager->persist($order);
-                $entityManager->flush();
-                $this->addFlash('success', 'Votre commande sera ajoutée au panier');
-                // Redirige vers la liste des thèmes après sauvegarde
-                return $this->redirectToRoute('profile_edit');
-            }
-        }
-        return $this->render('itemService/index.html.twig', [
-            'title_page' => 'Détail:',
-            'formAddOrder' => $form->createView()
-        ]);
-    }
+    //     if ($form->isSubmitted()) {
+    //         // Si le formulaire est valide, persiste et sauvegarde l'Order
+    //         if ($form->isValid()) {
+    //             $entityManager->persist($order);
+    //             $entityManager->flush();
+    //             $this->addFlash('success', 'Votre commande sera ajoutée au panier');
+    //             // Redirige vers la liste des thèmes après sauvegarde
+    //             return $this->redirectToRoute('profile_edit');
+    //         }
+    //     }
+    //     return $this->render('itemService/index.html.twig', [
+    //         'title_page' => 'Détail:',
+    //         'formAddOrder' => $form->createView()
+    //     ]);
+    // }
+
+
 
     #[Route('/serviceItem/new', name: 'new_service')]
-    #[Route('/serviceItem/edit/{id}', name: 'edit_service')]
+    #[Route('/serviceItem/{id}/edit', name: 'edit_service')]
     // Restreint l'accès aux utilisateurs authentifiés
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function editService(?ServiceItem $service = null, EntityManagerInterface $entityManager, ImageUploaderInterface $imageUploader, Request $request): Response
+    public function editService(?ServiceItem $service = null, EntityManagerInterface $entityManager, Request $request): Response
     {
+
+        // ImageUploaderInterface $imageUploader, 
 
         // Si le service n'existe pas, crée un nouveau service
         if (!$service) {
             $service = new ServiceItem();
         }
-        // Variable pour stocker les erreurs de validation
-        $errors = null;
-        // Crée et gère le formulaire pour le service
+
         $form = $this->createForm(ServiceItemType::class, $service);
-        // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
         $form->handleRequest($request);
 
-        // Pré-remplir les champs non mappés
-        if ($service->getCourse()) {
-            $form->get('course')->get('course')->setData($service->getCourse());
-        }
         // Si le formulaire est soumis
         if ($form->isSubmitted()) {
+          
             // Si le formulaire est valide, persiste et sauvegarde la Category
             if ($form->isValid()) {
-
-                $subFormData = $form->get('course')->getData();
-                $course = $subFormData['course'] ?? null;
-
+        
+                $course = $form->get('course')->get('course')->getData() ?? null;
+                // dd($course);
                 // si on a un résultat dans course
                 if ($course) {
-                    // On set la sous-categorie au service
+                    // on set la sous-categorie au service
                     $service->setCourse($course);
                 } else {
-                    // Si aucun cours n'est sélectionné, ajouter une erreur de validation
+                    // si aucun cours n'est sélectionné, ajouter une erreur de validation
                     $form->get('course')->addError(new FormError('Veuillez sélectionner un cours.'));
-                    // On recherche les erreurs
-                    $errors = $form->get('course')->getErrors(true);
 
                     return $this->render('itemService/index.html.twig', [
                         'title_page' => 'Services',
@@ -125,32 +130,86 @@ class ServiceItemController extends AbstractController
                     ]);
                 }
 
-
-
-
-                $pictureFile = $form->get('picture')->getData();
-                if ($pictureFile) {
-                    $imageUploader->uploadImage($pictureFile, $service->getUser());
-                }
+                // $pictureFile = $form->get('picture')->getData();
+                // if ($pictureFile) {
+                //     $imageUploader->uploadImage($pictureFile, $service->getUser());
+                // }
                 $entityManager->persist($service);
                 $entityManager->flush();
-
-
-
-
-
-
-                
+            }
+        } else {
+            // Pré-remplir les champs non mappés
+            if ($service->getCourse()) {
+                $form->get('course')->get('course')->setData($service->getCourse());
             }
         }
+
         // Rend la vue avec le formulaire
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Services',
             'formAddService' => $form->createView(),
-            'errors' => $errors,
-            'service' => $service
+            'errors' => $form->getErrors(true),
+            // 'service' => $service
         ]);
     }
+
+    #[Route('/get_service_by_user', name: 'services_by_user_id', methods: ['GET'])]
+    public function getServiceByIdUser(ServiceItemRepository $serviceItemRepository): JsonResponse
+    {
+        // récupérer l'utilisateur connecté
+        $user = $this->security->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not authenticated'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+        // vérifie que l'user est une instance de Class User
+        if (!$user instanceof \App\Entity\User) {
+            return new JsonResponse(['error' => 'User not recognized'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+        // récupérer l'ID de l'user
+        $userId = $user->getId();
+        // récupérer les services de l'user
+        $services = $serviceItemRepository->findBy(['user' => $userId]);
+        // format les données pour la réponse JSON
+        $data = [];
+        foreach ($services as $service) {
+            $data[] = [
+                'id' => $service->getId(),
+                'title' => $service->getTitle()
+            ];
+        }
+        // retourner les données en JSON
+        return new JsonResponse($data);
+    }
+
+
+    #[Route('/serviceItem/delete/{serviceId}', name: 'delete_service', methods: ['GET'])]
+    public function deleteServiceItem(int $serviceId, ThemeRepository $themeRepository): JsonResponse
+    {
+        return new JsonResponse("success");
+    }
+    // Récupérer l'utilisateur actuellement connecté
+    // $user = $this->security->getUser();
+    // // $userId = $user->getId();
+    // if (!$user) {
+    //     return new JsonResponse(['error' => 'User not authenticated'], JsonResponse::HTTP_UNAUTHORIZED);
+    // }
+    // Récupère les catégories associées à un thème
+    // $services = $serviceItemRepository->findBy(['userId' => $userId]);
+    // $data = [];
+    // // Pour chaque catégorie, récupère les détails
+    // foreach($services as $service) {
+    //     $data[] = [
+    //         'id' => $service->getId(),
+    //     ];
+    // }
+    // Récupérer l'ID de l'utilisateur
+
+
+
+
+
+
+
 
     /**
      * THEMES
@@ -206,6 +265,8 @@ class ServiceItemController extends AbstractController
             'errors' => $errors
         ]);
     }
+
+
     #[Route('/theme/{id}/detail', name: 'detail_theme')]
     public function detailTheme(?Theme $theme = null): Response
     {

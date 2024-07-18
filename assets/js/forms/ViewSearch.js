@@ -61,39 +61,35 @@ const submitForm = (formElement) => {
  * Gestion du formulaire .assets/js/formsViewSearch.js
  */
 
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('=> searchMotor.js loaded');
-        // Initialise le modal
-        $('.ui.modal.search').modal({
-            transition: 'slide down'
-        }).modal('show');
-        // Gestion Active Link sur les moteur de recherche
-        // Sélectionnez tous les éléments de menu (les moteur de recherches, les formulaires)
-        const menuItems = document.querySelectorAll('.ui.vertical.fluid.menu .item.field');
-        // Ajoutez un gestionnaire de clic à chaque élément de menu
-        menuItems.forEach(item => {
-            item.addEventListener('click', function () {
-                // Supprimez la classe 'active teal' de tous les éléments de menu
-                menuItems.forEach(menu => menu.classList.remove('active', 'teal'));
-                // Ajoutez la classe 'active teal' à l'élément cliqué
-                this.classList.add('active', 'teal');
-            });
-        });
-
-
-        // On sélectionne le formulaire de recherche utilisé pour envois par AJAX
-        const formElement = document.querySelector('.ajax-search-form');
-        // Intercepter la soumission du formulaire (Service-search-motor ou Theme-search-motor)
-        formElement.addEventListener('submit', function (event) {
-            event.preventDefault();
-            submitForm(formElement);
-        });
-
-        // Ajout d'un écouteur d'événement sur les radio buttons pour filtrer par prix
-        const priceFilters = document.querySelectorAll('input[name="price_filter"]');
-        priceFilters.forEach(radio => {
-            radio.addEventListener('change', () => {
-                submitForm(formElement);
-            });
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('=> searchMotor.js loaded');
+    // Gestion Active Link sur les moteur de recherche
+    // Sélectionnez tous les éléments de menu (les moteur de recherches, les formulaires)
+    const menuItems = document.querySelectorAll('.ui.vertical.fluid.menu .item.field');
+    // Ajoutez un gestionnaire de clic à chaque élément de menu
+    menuItems.forEach(item => {
+        item.addEventListener('click', function () {
+            // Supprimez la classe 'active teal' de tous les éléments de menu
+            menuItems.forEach(menu => menu.classList.remove('active', 'teal'));
+            // Ajoutez la classe 'active teal' à l'élément cliqué
+            this.classList.add('active', 'teal');
         });
     });
+
+
+    // On sélectionne le formulaire de recherche utilisé pour envois par AJAX
+    const formElement = document.querySelector('.ajax-search-form');
+    // Intercepter la soumission du formulaire (Service-search-motor ou Theme-search-motor)
+    formElement.addEventListener('submit', function (event) {
+        event.preventDefault();
+        submitForm(formElement);
+    });
+
+    // Ajout d'un écouteur d'événement sur les radio buttons pour filtrer par prix
+    const priceFilters = document.querySelectorAll('input[name="price_filter"]');
+    priceFilters.forEach(radio => {
+        radio.addEventListener('change', () => {
+            submitForm(formElement);
+        });
+    });
+});

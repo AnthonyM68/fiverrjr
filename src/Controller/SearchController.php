@@ -1,23 +1,21 @@
 <?php
 
 namespace App\Controller;
-// Importation des classes nécessaires
-use App\Entity\Theme;
 
+use App\Entity\Theme;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
-
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+
 
 // Controller de la recherche Avancée
 class SearchController extends AbstractController
@@ -25,12 +23,18 @@ class SearchController extends AbstractController
     private $entityManager;
     private $logger;
     private $csrfTokenManager;
+    private $serializer;
 
-    public function __construct(EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager, LoggerInterface $logger)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        SerializerInterface $serializer,
+        LoggerInterface $logger
+    ) {
         $this->entityManager = $entityManager;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->logger = $logger;
+        $this->$serializer = $serializer;
     }
     // Enregistrement des données de la requête dans les logs
     //  $this->logger->info('Received searchResultat form data', []);
@@ -62,7 +66,6 @@ class SearchController extends AbstractController
     // public function searchResultat(Request $request): JsonResponse
     public function searchResultat(Request $request, SerializerInterface $serializer): JsonResponse
     {
-
         // Récupération des donnéesdu formulaire au format JSON et les décodes
         $jsonData = json_decode($request->getContent(), true);
         // s'il y' une valeur dans le champ du token on la sauvegarde
@@ -108,8 +111,14 @@ class SearchController extends AbstractController
         // On sérialise un tableau d'objet complexe
         // on traite également les références circulaire et attribuons
         // un ID unique pour éviter les boucles infinie 
-        $results = $serializer->serialize($serviceItems, JsonEncoder::FORMAT);
-        // Retournez le résultat avec JsonResponse
-        return new JsonResponse($results, 200, [], true);
+        try {
+            $results = $this->serializer->serialize($serviceItems, JsonEncoder::FORMAT);
+            $this->logger->info('Serialized results:', ['results' => $results]);
+            return new JsonResponse($results, 200, [], true);
+            
+        } catch (\Exception $e) {
+            $this->logger->error('Serialization error:', ['exception' => $e]);
+            return new JsonResponse(['error' => 'Serialization error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -3,14 +3,14 @@
 {% block body %}
 <h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
 
-{% if enterprises| default %}
+{% if clients| default %}
 {# On affiche les entrprise touvées #}
-<div class="ui list uk-animation-fade">
-    {% for enterprise in enterprises %}
+<div class="ui list client clientuk-animation-fade">
+    {% for client in clients %}
     <div class="item">
         <i class="folder icon"></i>
         <div class="content">
-            <div class="header">{{ enterprise }}</div>
+            <div class="header">{{ client }}</div>
         </div>
     </div>
     {% endfor %}

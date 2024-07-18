@@ -24,11 +24,11 @@ class ServiceThemeCategoryCourseType extends AbstractType
                 'placeholder' => 'Choisissez un Thème',
                 'mapped' => false, // Non mapped à service
                 'attr' => ['class' => 'ui fluid search dropdown'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez sélectionner un Thème',
-                    ]),
-                ],
+                // 'constraints' => [
+                //     new NotBlank([
+                //         'message' => 'Veuillez sélectionner un Thème',
+                //     ]),
+                // ],
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
@@ -36,11 +36,11 @@ class ServiceThemeCategoryCourseType extends AbstractType
                 'placeholder' => 'Choisissez une Catégorie',
                 'mapped' => false, // Non mapped à service
                 'attr' => ['class' => 'ui fluid search dropdown'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez sélectionner une catégorie',
-                    ]),
-                ],
+                // 'constraints' => [
+                //     new NotBlank([
+                //         'message' => 'Veuillez sélectionner une catégorie',
+                //     ]),
+                // ],
             ])
             // ne pas indiquer de mapped 
             ->add('course', EntityType::class, [
