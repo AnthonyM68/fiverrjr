@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const service_item_course_theme = document.getElementById('service_item_course_theme');
     const service_item_course_category = document.getElementById('service_item_course_category');
     const service_item_course_course = document.getElementById('service_item_course_course');
+    
     const service_item_list = document.getElementById('service_item_list');
 
     if (!service_item_course_theme || !service_item_course_category || !service_item_course_course) {
@@ -79,13 +80,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     const buttonGroup = document.createElement('div');
                     buttonGroup.className = 'ui buttons';
 
-                    // Bouton d'édition
+                    // btn edit 
                     const editButton = document.createElement('a');
                     editButton.className = 'ui-button ui-widget ui-corner-all toggle-edit-service';
                     editButton.innerHTML = '<span class="ui-icon ui-icon-pencil"></span>';
                     editButton.setAttribute('href', "javascript:void(0);");
-                    editButton.setAttribute('data-service-id', service.id); // Ajout de l'attribut data-service-id avec l'ID du service
+                    editButton.setAttribute('data-service-id', service.id); 
                     buttonGroup.appendChild(editButton);
+                    // btn delete
+                    const deleteButton = document.createElement('a');
+                    deleteButton.className = 'ui-button ui-widget ui-corner-all toggle-trash-service';
+                    deleteButton.innerHTML = '<span class="ui-icon ui-icon-trash"></span>';
+                    deleteButton.setAttribute('href', "javascript:void(0);");
+                    deleteButton.setAttribute('data-service-id', service.id); 
+                    buttonGroup.appendChild(deleteButton);
 
                     tdButtons.appendChild(buttonGroup);
                     tr.appendChild(tdButtons);
@@ -110,16 +118,42 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (contentType && contentType.indexOf('application/json') !== -1) {
                                 const data = await req.json();
                                 console.log('Form data for service:', data);
-
-                                if (editService.is(':visible')) {
-                                    editService.slideUp(400, function () {
-                                        document.getElementById('service-form-container').innerHTML = data.formHtml;
-                                    });
-                                } else {
-                                    editService.slideDown(400, function () {
-                                        document.getElementById('service-form-container').innerHTML = data.formHtml;
-                                    });
+                                if (!editService.is(':visible')) {
+                                    editService.slideDown(400);
                                 }
+                                document.getElementById('service-form-container').innerHTML = data.formHtml;
+                            } else {
+                                const text = await req.text();
+                                console.error('Unexpected response format:', text);
+                            }
+                        } catch (error) {
+                            console.error('Failed to fetch or parse JSON for service form:', error);
+                        }
+                    });
+                });
+                 // Ajouter un écouteur d'événement sur chaque bouton d'édition
+                 document.querySelectorAll('.toggle-trash-service').forEach(button => {
+                    button.addEventListener('click', async function () {
+                        try {
+                            const serviceId = this.getAttribute('data-service-id');
+                            const editService = $('.edit-service-container');
+
+                            
+                            const url = `/service/form/generate/${serviceId}`;
+
+                            const req = await fetch(url);
+                            if (!req.ok) {
+                                throw new Error(`HTTP error! Status: ${req.status}`);
+                            }
+                            const contentType = req.headers.get('content-type');
+
+                            if (contentType && contentType.indexOf('application/json') !== -1) {
+                                const data = await req.json();
+                                console.log('Form data for service:', data);
+                                if (!editService.is(':visible')) {
+                                    editService.slideDown(400);
+                                }
+                                document.getElementById('service-form-container').innerHTML = data.formHtml;
                             } else {
                                 const text = await req.text();
                                 console.error('Unexpected response format:', text);
@@ -138,44 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to fetch or parse JSON:', error);
         }
     };
-
-
-    const loadServiceForm = async () => {
-        const url = '/service/form/generate'; // L'URL définie pour obtenir le formulaire
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            console.log(data);
-
-            document.querySelector('#service-form-container').innerHTML = data.formHtml;
-        } catch (error) {
-            console.error('Failed to load the service form:', error);
-        }
-    };
-
-
-
-
-
-
-
-    if (service_item_course_theme) {
-        service_item_course_theme.addEventListener('change', updateCategories);
-    }
-
-    if (service_item_course_category) {
-        service_item_course_category.addEventListener('change', updateCourses);
-    }
-
-
-
-
-
-
 
     // déroule le formulaire de soumission d'un nouveau service de la page profil
     $('.toggle-service-form').on('click', function () {
@@ -220,6 +216,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // EventListener
+
+
+    if (service_item_course_theme) {
+        service_item_course_theme.addEventListener('change', updateCategories);
+    }
+
+    if (service_item_course_category) {
+        service_item_course_category.addEventListener('change', updateCourses);
+    }
     // // Ajoutez un écouteur d'événements pour le bouton de fermeture
     const closeEdit = document.getElementById('close-edit');
     if (closeEdit) {

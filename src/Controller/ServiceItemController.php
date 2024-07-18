@@ -9,6 +9,7 @@ use App\Entity\Category;
 use App\Form\CourseType;
 use App\Form\CategoryType;
 use App\Entity\ServiceItem;
+use Psr\Log\LoggerInterface;
 use App\Form\ServiceItemType;
 use App\Repository\ThemeRepository;
 use App\Repository\CourseRepository;
@@ -27,12 +28,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ServiceItemController extends AbstractController
 {
-    private $security;
+    private $logger;
     private $serializer;
+    private $entityManager;
 
-    public function __construct(Security $security, SerializerInterface $serializer)
-    {
-        $this->security = $security;
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger,
+        SerializerInterface $serializer,
+    ) {
+        $this->entityManager = $entityManager;
+        $this->logger = $logger;
         $this->serializer = $serializer;
     }
     /**
@@ -81,14 +87,20 @@ class ServiceItemController extends AbstractController
     //     ]);
     // }
 
+
+
+
+
+
+
     #[Route('/service/form/generate/{id}', name: 'service_form_generate', methods: ['GET'])]
-    public function getServiceForm(int $id = null, Request $request, ServiceItemRepository $ServiceItemRepository): JsonResponse
+    public function getGenerateServiceForm(int $id = null, Request $request, ServiceItemRepository $ServiceItemRepository): JsonResponse
     {
         try {
             if ($id) {
                 // trouver le service existant par ID
                 $service = $ServiceItemRepository->find($id);
-    
+
                 if (!$service) {
                     throw new \Exception('Service not found');
                 }
@@ -96,7 +108,6 @@ class ServiceItemController extends AbstractController
                 // créer un nouveau ServiceItem
                 $service = new ServiceItem();
             }
-    
             $formAddService = $this->createForm(ServiceItemType::class, $service);
             $formAddService->handleRequest($request);
 
@@ -104,20 +115,40 @@ class ServiceItemController extends AbstractController
             if ($service->getCourse()) {
                 $formAddService->get('course')->get('course')->setData($service->getCourse());
             }
-
             // Rendre le formulaire en HTML
             $formHtml = $this->renderView('itemService/form/form.html.twig', [
                 'formAddService' => $formAddService->createView(),
             ]);
-    
-            // Retourner la réponse JSON avec le HTML du formulaire
-            return new JsonResponse(['formHtml' => $formHtml]);
+            // Retourner la réponse JSON 
+            return new JsonResponse(['formHtml' => $formHtml], Response::HTTP_OK);
         } catch (\Throwable $e) {
             // Retourner une réponse JSON avec une erreur 500 en cas d'exception
-            return new JsonResponse(['error' => 'Failed to load generate service form.'], 500);
+            return new JsonResponse(['error' => 'Failed to load generate service form.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     
+    #[Route('/serviceItem/delete/{serviceId}', name: 'delete_service', methods: ['GET'])]
+    public function deleteServiceItem(int $serviceId, ServiceItemRepository $serviceItemRepository): JsonResponse
+    {
+        $service = $serviceItemRepository->find($serviceId);
+
+        if (!$service) {
+            return new JsonResponse(['error' => 'Service not found'], Response::HTTP_NOT_FOUND);
+        }
+        try {
+            $this->entityManager->remove($service);
+            $this->entityManager->flush();
+            return new JsonResponse(['message' => 'Service deleted successfully']);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Failed to delete service'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+
+
     #[Route('/serviceItem/new', name: 'new_service')]
     #[Route('/serviceItem/{id}/edit', name: 'edit_service')]
     // Restreint l'accès aux utilisateurs authentifiés
@@ -134,10 +165,10 @@ class ServiceItemController extends AbstractController
 
         // Si le formulaire est soumis
         if ($form->isSubmitted()) {
-          
+
             // Si le formulaire est valide, persiste et sauvegarde la Category
             if ($form->isValid()) {
-        
+
                 $course = $form->get('course')->get('course')->getData() ?? null;
                 // dd($course);
                 // si on a un résultat dans course
@@ -179,10 +210,9 @@ class ServiceItemController extends AbstractController
     }
 
     #[Route('/get_service_by_user', name: 'services_by_user_id', methods: ['GET'])]
-    public function getServiceByIdUser(ServiceItemRepository $serviceItemRepository): JsonResponse
+    public function getServiceByIdUser(ServiceItemRepository $serviceItemRepository, Security $security): JsonResponse
     {
-        // récupérer l'utilisateur connecté
-        $user = $this->security->getUser();
+        $user = $security->getUser();
         if (!$user) {
             return new JsonResponse(['error' => 'User not authenticated'], JsonResponse::HTTP_UNAUTHORIZED);
         }
@@ -207,11 +237,13 @@ class ServiceItemController extends AbstractController
     }
 
 
-    #[Route('/serviceItem/delete/{serviceId}', name: 'delete_service', methods: ['GET'])]
-    public function deleteServiceItem(int $serviceId, ThemeRepository $themeRepository): JsonResponse
-    {
-        return new JsonResponse("success");
-    }
+
+
+
+
+
+
+
 
 
     /**
