@@ -86,19 +86,25 @@ class ServiceItemController extends AbstractController
     {
         try {
             if ($id) {
-                // Trouver le service existant par ID
+                // trouver le service existant par ID
                 $service = $ServiceItemRepository->find($id);
     
                 if (!$service) {
                     throw new \Exception('Service not found');
                 }
             } else {
-                // Créer un nouveau ServiceItem
+                // créer un nouveau ServiceItem
                 $service = new ServiceItem();
             }
     
             $formAddService = $this->createForm(ServiceItemType::class, $service);
-    
+            $formAddService->handleRequest($request);
+
+            // Pré-remplir les champs non mappés
+            if ($service->getCourse()) {
+                $formAddService->get('course')->get('course')->setData($service->getCourse());
+            }
+
             // Rendre le formulaire en HTML
             $formHtml = $this->renderView('itemService/form/form.html.twig', [
                 'formAddService' => $formAddService->createView(),
@@ -108,7 +114,7 @@ class ServiceItemController extends AbstractController
             return new JsonResponse(['formHtml' => $formHtml]);
         } catch (\Throwable $e) {
             // Retourner une réponse JSON avec une erreur 500 en cas d'exception
-            return new JsonResponse(['error' => 'Failed to load service form.'], 500);
+            return new JsonResponse(['error' => 'Failed to load generate service form.'], 500);
         }
     }
     
