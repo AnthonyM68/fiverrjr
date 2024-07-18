@@ -2,11 +2,8 @@
 
 namespace App\Controller;
 // Importation des classes nécessaires
-use index;
-use App\Entity\Order;
 use App\Entity\Theme;
 use App\Entity\Course;
-use App\Form\OrderType;
 use App\Form\ThemeType;
 use App\Entity\Category;
 use App\Form\CourseType;
@@ -17,30 +14,26 @@ use App\Repository\ThemeRepository;
 use App\Repository\CourseRepository;
 use Symfony\Component\Form\FormError;
 use App\Repository\CategoryRepository;
-use App\Service\ImageUploaderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ServiceItemRepository;
-
-
-// Importation correcte pour IsGranted
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\DependencyInjection\Loader\Configurator\services;
 
 class ServiceItemController extends AbstractController
 {
     private $security;
+    private $serializer;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, SerializerInterface $serializer)
     {
         $this->security = $security;
+        $this->serializer = $serializer;
     }
     /**
      * SERVICES
@@ -49,7 +42,7 @@ class ServiceItemController extends AbstractController
      * @return Response
      */
     #[Route('/serviceItem', name: 'list_services')]
-    public function index(?ServiceItem $service = null, ServiceItemRepository $ServiceItemRepository): Response
+    public function index(ServiceItemRepository $ServiceItemRepository): Response
     {
         // Récupère tous les service triés par date
         $services = $ServiceItemRepository->findBy([], ["createDate" => "ASC"]);
@@ -88,17 +81,43 @@ class ServiceItemController extends AbstractController
     //     ]);
     // }
 
-
-
+    #[Route('/service/form/generate/{id}', name: 'service_form_generate', methods: ['GET'])]
+    public function getServiceForm(int $id = null, Request $request, ServiceItemRepository $ServiceItemRepository): JsonResponse
+    {
+        try {
+            if ($id) {
+                // Trouver le service existant par ID
+                $service = $ServiceItemRepository->find($id);
+    
+                if (!$service) {
+                    throw new \Exception('Service not found');
+                }
+            } else {
+                // Créer un nouveau ServiceItem
+                $service = new ServiceItem();
+            }
+    
+            $formAddService = $this->createForm(ServiceItemType::class, $service);
+    
+            // Rendre le formulaire en HTML
+            $formHtml = $this->renderView('itemService/form/form.html.twig', [
+                'formAddService' => $formAddService->createView(),
+            ]);
+    
+            // Retourner la réponse JSON avec le HTML du formulaire
+            return new JsonResponse(['formHtml' => $formHtml]);
+        } catch (\Throwable $e) {
+            // Retourner une réponse JSON avec une erreur 500 en cas d'exception
+            return new JsonResponse(['error' => 'Failed to load service form.'], 500);
+        }
+    }
+    
     #[Route('/serviceItem/new', name: 'new_service')]
     #[Route('/serviceItem/{id}/edit', name: 'edit_service')]
     // Restreint l'accès aux utilisateurs authentifiés
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function editService(?ServiceItem $service = null, EntityManagerInterface $entityManager, Request $request): Response
+    public function editService(EntityManagerInterface $entityManager, Request $request, ?ServiceItem $service = null): Response
     {
-
-        // ImageUploaderInterface $imageUploader, 
-
         // Si le service n'existe pas, crée un nouveau service
         if (!$service) {
             $service = new ServiceItem();
@@ -187,28 +206,6 @@ class ServiceItemController extends AbstractController
     {
         return new JsonResponse("success");
     }
-    // Récupérer l'utilisateur actuellement connecté
-    // $user = $this->security->getUser();
-    // // $userId = $user->getId();
-    // if (!$user) {
-    //     return new JsonResponse(['error' => 'User not authenticated'], JsonResponse::HTTP_UNAUTHORIZED);
-    // }
-    // Récupère les catégories associées à un thème
-    // $services = $serviceItemRepository->findBy(['userId' => $userId]);
-    // $data = [];
-    // // Pour chaque catégorie, récupère les détails
-    // foreach($services as $service) {
-    //     $data[] = [
-    //         'id' => $service->getId(),
-    //     ];
-    // }
-    // Récupérer l'ID de l'utilisateur
-
-
-
-
-
-
 
 
     /**
@@ -232,7 +229,7 @@ class ServiceItemController extends AbstractController
     #[Route('/theme/{id}/edit', name: 'edit_theme')]
     // #[IsGranted('ROLE_ADMIN')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]  // Restreint l'accès aux utilisateurs authentifiés
-    public function editTheme(?Theme $theme = null, EntityManagerInterface $entityManager, Request $request): Response
+    public function editTheme(EntityManagerInterface $entityManager, Request $request, ?Theme $theme = null): Response
     {
         // Si le thème n'existe pas, crée un nouveau thème
         if (!$theme) {
@@ -345,7 +342,7 @@ class ServiceItemController extends AbstractController
     #[Route('/category/{id}/edit', name: 'edit_category')]
     // Restreint l'accès aux utilisateurs authentifiés
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function editCategory(?Category $category = null, EntityManagerInterface $entityManager, Request $request): Response
+    public function editCategory(EntityManagerInterface $entityManager, Request $request, ?Category $category = null): Response
     {
         // Si la catégorie n'existe pas, crée une nouvelle catégorie
         if (!$category) {
@@ -432,7 +429,7 @@ class ServiceItemController extends AbstractController
     #[Route('/course/new', name: 'new_course')]
     #[Route('/course/edit/{id}', name: 'edit_course')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]  // Restreint l'accès aux utilisateurs authentifiés
-    public function editCourse(?Course $course = null, EntityManagerInterface $entityManager, Request $request): Response
+    public function editCourse(EntityManagerInterface $entityManager, Request $request, ?Course $course = null): Response
     {
         // Si le cours n'existe pas, crée un nouveau cours
         if (!$course) {
@@ -468,7 +465,7 @@ class ServiceItemController extends AbstractController
     }
 
     #[Route('/course/{id}/detail', name: 'detail_course')]
-    public function detailCourse(?Course $course = null, ServiceItemRepository $ServiceItemRepository, Request $request): Response
+    public function detailCourse(?Course $course = null): Response
     {
         $services = $course->getServiceItems();
         // Rend la vue avec les détails du cours

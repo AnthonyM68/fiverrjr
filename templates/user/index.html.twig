@@ -1,33 +1,37 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
-{% block linkBtn %}
-<script>
-    //  deleteService: "{{ path('delete_service', {'serviceId': 'serviceId'}) }}",
-    const urls = {
-        editService: "{{ path('edit_service', {'id' :'serviceId'}) }}",
-       
-    };
-</script>
-{% endblock %}
+
+{# {% block linkBtn %}
+
+<div class="js-user-list-service" data-is-editService="{{ path('edit_service', {'id' :'serviceId'}) }}"
+    data-user="{{ app.user|serialize(format = 'json') }}">
+</div>
+
+{% endblock %} #}
+
 <div class="custom-container">
     <h1 class="uk-animation-slide-right">Bienvenue sur votre {{ title_page }} {{ app.user }}</h1>
 
     <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
+
+    {# <div class="ui segment" id="edit-service-container" style="display: none;">
+        <div id="service-form-container">
+        </div>
+    </div> #}
+
 </div>
 <div class="custom-container">
     <div class="ui grid equal-height-columns">
-
-
-
         <div class="eight wide column">
             <div class="ui grid equal-height-columns">
 
                 <div class="eight wide column">
                     <div class="ui segment f">
-                        {{ form_start(form, {'attr': {'class': 'ui form profile'}}) }}
+                        {{ form_start(formUser, {'attr': {'class': 'ui form profile'}}) }}
                         <div class="ui form">
 
-                            {% if user.picture %}
+                            {% if formUser.picture %}
                             <div class="field ">
                                 <img id="imagePreview"
                                     src="{% if pictureUrl|default %} {{ asset(pictureUrl) }} {% endif %}"
@@ -36,52 +40,52 @@
                             {% endif %}
 
                             <div class="field">
-                                {{ form_label(form.picture) }}
-                                {{ form_widget(form.picture, {'attr': {'onchange': 'previewImage(event)'}}) }}
-                                {{ form_errors(form.picture) }}
+                                {{ form_label(formUser.picture) }}
+                                {{ form_widget(formUser.picture, {'attr': {'onchange': 'previewImage(event)'}}) }}
+                                {{ form_errors(formUser.picture) }}
                             </div>
                             <div class="field">
-                                {{ form_label(form.date_register) }}
-                                {{ form_widget(form.date_register) }}
-                                {{ form_errors(form.date_register) }}
+                                {{ form_label(formUser.date_register) }}
+                                {{ form_widget(formUser.date_register) }}
+                                {{ form_errors(formUser.date_register) }}
                             </div>
                             <div class="field">
-                                {{ form_label(form.username) }}
-                                {{ form_widget(form.username) }}
-                                {{ form_errors(form.username) }}
+                                {{ form_label(formUser.username) }}
+                                {{ form_widget(formUser.username) }}
+                                {{ form_errors(formUser.username) }}
                             </div>
                             <div class="field">
-                                {{ form_label(form.first_name) }}
-                                {{ form_widget(form.first_name) }}
-                                {{ form_errors(form.first_name) }}
+                                {{ form_label(formUser.first_name) }}
+                                {{ form_widget(formUser.first_name) }}
+                                {{ form_errors(formUser.first_name) }}
                             </div>
                             <div class="field">
-                                {{ form_label(form.last_name) }}
-                                {{ form_widget(form.last_name) }}
-                                {{ form_errors(form.last_name) }}
+                                {{ form_label(formUser.last_name) }}
+                                {{ form_widget(formUser.last_name) }}
+                                {{ form_errors(formUser.last_name) }}
                             </div>
                             <div class="field">
-                                {{ form_label(form.phone_number) }}
-                                {{ form_widget(form.phone_number) }}
-                                {{ form_errors(form.phone_number) }}
+                                {{ form_label(formUser.phone_number) }}
+                                {{ form_widget(formUser.phone_number) }}
+                                {{ form_errors(formUser.phone_number) }}
                             </div>
                             <div class="field">
-                                {{ form_label(form.city) }}
-                                {{ form_widget(form.city) }}
-                                {{ form_errors(form.city) }}
+                                {{ form_label(formUser.city) }}
+                                {{ form_widget(formUser.city) }}
+                                {{ form_errors(formUser.city) }}
                             </div>
                             <div class="field">
-                                {{ form_label(form.portfolio) }}
-                                {{ form_widget(form.portfolio) }}
-                                {{ form_errors(form.portfolio) }}
+                                {{ form_label(formUser.portfolio) }}
+                                {{ form_widget(formUser.portfolio) }}
+                                {{ form_errors(formUser.portfolio) }}
                             </div>
                             <div class="field">
-                                {{ form_label(form.bio) }}
-                                {{ form_widget(form.bio) }}
-                                {{ form_errors(form.bio) }}
+                                {{ form_label(formUser.bio) }}
+                                {{ form_widget(formUser.bio) }}
+                                {{ form_errors(formUser.bio) }}
                             </div>
                         </div>
-                        {{ form_end(form) }}
+                        {{ form_end(formUser) }}
                     </div>
                 </div>
                 <div class="eight wide column">
@@ -156,13 +160,12 @@
                             Liste de mes services
                         </a>
                     </div>
-                    <div class="ui segment service-form" style="display: none;">
 
+                    {# ajouter d'un nouveau service #}
+                    <div class="ui segment service-form" style="display: none;">
                         <h2>Nouveau service</h2>
 
-                        {# formulaire d'ajout d'un nouveau service #}
                         {% if formAddService is defined %}
-
                         {{ form_start(formAddService, {'attr': {'class': 'ui form service-form'}}) }}
                         <div class="field">
                             {{ form_label(formAddService.course.theme) }}
@@ -219,113 +222,40 @@
                         {% endif %}
                         {% endif %}
                     </div>
+                    {# liste des service de l'utilisateur #}
                     <div class="ui segment list-services" style="display: none;">
-
                         <h2>Mes services</h2>
-
                         <table class="ui celled table">
                             <thead>
                                 <tr>
                                     <th>Intitulé du service</th>
                                     <th>Actions</th>
-
                                 </tr>
                             </thead>
-                            <tbody id="service_item_list">
-
-
-
-
-                                <tr>
-                                    <td data-label="service-title">titre</td>
-                                    <td data-label="service-btn">
-                                        <div class="ui buttons">
-                                            <button class="ui-button ui-widget ui-corner-all">
-                                                <span class="ui-icon ui-icon-trash"></span>
-                                            </button>
-                                            <button class="ui-button ui-widget ui-corner-all">
-                                                <span class="ui-icon ui-icon-pencil"></span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                            </tbody>
+                            <tbody id="service_item_list"></tbody>
                         </table>
                     </div>
-
-
-
-
-
+                    {# edition d'un service #}
+                    <div class="ui segment edit-service-container" style="display: none;">
+                        <h2>J'édite mon service</h2>
+                        <div class="ui grid">
+                            <div class="sixteen wide column"
+                                style="display: flex; justify-content: space-between; align-items: center;">
+                                <h2 id=""></h2>
+                                <button class="ui button primary" id="close-edit">Fermer</button>
+                            </div>
+                            <div class="sixteen wide column search-results">
+                                <div id="service-form-container">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                {# <div class="ui container">
-                    <hr>
-                    {% if is_granted('ROLE_DEVELOPER') %}
-                    <a href="{{ path('new_service') }}" class="ui button primary">
-                        Déposer un service
-                    </a>
-                    <a href="" class="ui button primary">
-                        Modifier un service
-                    </a>
 
-                    <a href="" class="ui button primary">
-                        Suprimer un service
-                    </a>
-                    <hr>
-                    <a href="{{ path('list_orders_developer') }}" class="ui button primary">
-                        Mes commandes
-                    </a>
-                    {% elseif is_granted('ROLE_CLIENT') %}
-                    <a href="{{ path('list_orders_developer') }}" class="ui button primary">
-                        Mes factures
-                    </a>
-                    <a href="{{ path('new_order_client') }}" class="ui button primary">
-                        Nouvelle Commande
-                    </a>
-                    {% endif %}
-                </div> #}
             </div>
-
-            <div class="ui segment">
-
-                <div class="ui container">
-                    Button 2...
-                </div>
-                {# <div class="ui container">
-                    <hr>
-                    {% if is_granted('ROLE_DEVELOPER') %}
-                    <a href="{{ path('new_service') }}" class="ui button primary">
-                        Déposer un service
-                    </a>
-                    <a href="" class="ui button primary">
-                        Modifier un service
-                    </a>
-
-                    <a href="" class="ui button primary">
-                        Suprimer un service
-                    </a>
-                    <hr>
-                    <a href="{{ path('list_orders_developer') }}" class="ui button primary">
-                        Mes commandes
-                    </a>
-                    {% elseif is_granted('ROLE_CLIENT') %}
-                    <a href="{{ path('list_orders_developer') }}" class="ui button primary">
-                        Mes factures
-                    </a>
-                    <a href="{{ path('new_order_client') }}" class="ui button primary">
-                        Nouvelle Commande
-                    </a>
-                    {% endif %}
-                </div> #}
-            </div>
-
-
         </div>
     </div>
 </div>
-
-
+      
 {% block javascripts %}
 {{ parent() }}
 {# On inject le script pour la gestion des contenus dynamique des select #}

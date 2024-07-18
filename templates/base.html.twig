@@ -13,7 +13,7 @@
     {{ encore_entry_link_tags('carousel') }}
     {{ encore_entry_link_tags('slick-carousel-css') }}
     {{ encore_entry_link_tags('slick-carousel-theme-css') }}
-    
+
     {# {{ encore_entry_link_tags('semantic_css') }} #}
     {{ encore_entry_link_tags('semantic_less') }}
     {{ encore_entry_link_tags('app_styles') }}
@@ -27,16 +27,11 @@
     </header>
 
     <artcile>
-        <div class="separator"></div>
         <div class="ui container">
-
-            
-            
-             <div class="ui segment" id="search-results-container" style="display: none;">
+            <div class="ui segment" id="search-results-container" style="display: none;">
                 <div class="ui grid">
-
-                    <div class="sixteen wide column search-results" 
-                    style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="sixteen wide column search-results"
+                        style="display: flex; justify-content: space-between; align-items: center;">
                         <h2 id="search-results-title">Résultats de la recherche</h2>
                         <button class="ui button primary" id="close-results">Fermer</button>
                     </div>
@@ -44,9 +39,8 @@
                     <div class="sixteen wide column search-results">
                         <div id="search-results"></div>
                     </div>
-
                 </div>
-            </div> 
+            </div>
         </div>
         {% block body %} {% endblock %}
     </artcile>
@@ -62,11 +56,11 @@
     {{ encore_entry_script_tags('uikit') }}
     {{ encore_entry_script_tags('uikit-icons') }}
     {{ encore_entry_script_tags('slick-carousel') }}
-    
+
     {{ encore_entry_script_tags('messageFlash') }}
     {{ encore_entry_script_tags('HomeCarrousel') }}
     {{ encore_entry_script_tags('StickyFooter') }}
-    
+
     {% endblock %}
 </body>
 

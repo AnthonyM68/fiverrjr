@@ -1,0 +1,54 @@
+
+{{ form_start(formAddService, {'attr': {'class': 'ui form service'}}) }}
+<div class="field">
+    {{ form_label(formAddService.course.theme) }}
+    {{ form_widget(formAddService.course.theme) }}
+    {{ form_errors(formAddService.course.theme) }}
+</div>
+<div class="field">
+    {{ form_label(formAddService.course.category) }}
+    {{ form_widget(formAddService.course.category) }}
+    {{ form_errors(formAddService.course.category) }}
+</div>
+<div class="field">
+    {{ form_label(formAddService.course.course) }}
+    {{ form_widget(formAddService.course.course) }}
+    {{ form_errors(formAddService.course.course) }}
+</div>
+<hr>
+{# Prévisualisation de l'image existante #}
+{% if service.picture|default %}
+<div class="field ">
+    <img id="imagePreview" src="{% if pictureUrl|default %} {{ asset(pictureUrl) }} {% endif %}"
+        alt="Image Preview profile user" />
+</div>
+{% endif %}
+<div class="field">
+    {{ form_label(formAddService.picture) }}
+    {{ form_widget(formAddService.picture, {'attr': {'onchange': 'previewImage(event)'}}) }}
+    {{ form_errors(formAddService.picture) }}
+</div>
+<div class="field">
+    {{ form_label(formAddService.title) }}
+    {{ form_widget(formAddService.title) }}
+    {{ form_errors(formAddService.title) }}
+</div>
+<div class="field">
+    {{ form_label(formAddService.description) }}
+    {{ form_widget(formAddService.description) }}
+    {{ form_errors(formAddService.description) }}
+</div>
+<div class="field">
+    {{ form_label(formAddService.price) }}
+    {{ form_widget(formAddService.price) }}
+    {{ form_errors(formAddService.price) }}
+</div>
+<div class="field">
+    {{ form_label(formAddService.duration) }}
+    {{ form_widget(formAddService.duration) }}
+    {{ form_errors(formAddService.duration) }}
+</div>
+<div class="field">
+    {{ form_row(formAddService.submit) }}
+</div>
+{{ form_end(formAddService) }}

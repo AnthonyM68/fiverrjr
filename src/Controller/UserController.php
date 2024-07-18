@@ -263,50 +263,124 @@ class UserController extends AbstractController
         ServiceItemRepository $serviceItemRepository,
         EntityManagerInterface $entityManager
     ): Response {
+
         // Récupérer l'utilisateur par ID
         $user = $userRepository->find($id);
+
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non trouvé');
         }
+
         // Créer le formulaire pour l'utilisateur
         $formUser = $this->createForm(UserType::class, $user);
         $formUser->handleRequest($request);
-    
+
+
+        // détermine le répertoire de destination de l'image en fonction du role de l'utilisateur
+        // permet de construire l'url
+        $roles = $user->getRoles();
+        $role = match (true) {
+            in_array('ROLE_ADMIN', $roles, true) => 'ROLE_ADMIN',
+            in_array('ROLE_CLIENT', $roles, true) => 'ROLE_CLIENT',
+            in_array('ROLE_DEVELOPER', $roles, true) => 'ROLE_DEVELOPER',
+            default => 'ROLE_USER',
+        };
+
+
+
         // Créer un nouveau ServiceItem pour le formulaire
         $service = new ServiceItem();
         $formService = $this->createForm(ServiceItemType::class, $service);
         $formService->handleRequest($request);
-    
+
         if ($formUser->isSubmitted() && $formUser->isValid()) {
-            // Traiter le formulaire utilisateur
+            // Obtenir le nom du fichier de l'image de profil de l'utilisateur
+            $userPictureFilename = $user->getPicture();
+            // récupérer l'objet file
+            $file = $formUser->get('picture')->getData();
+            // Si un fichier est téléchargé, traiter le fichier
+            // si $file est bien une instance de UploadedFile ( ServiceItemType )
+            if ($file instanceof UploadedFile) {
+                try {
+                    // Supprimer l'image actuelle de l'utilisateur ( User ) si elle existe
+                    $apiResponse = $this->forward('App\Controller\ImageController::deleteImage', [
+                        'filename' => $userPictureFilename,
+                        'role' => $role,
+                    ]);
+
+                    // Décoder la réponse JSON
+                    $apiResponse = json_decode($apiResponse->getContent(), true);
+                    // Si une erreur est retournée, afficher un message flash d'erreur
+                    if (isset($apiResponse['error'])) {
+                        $this->addFlash('error', $apiResponse['error']);
+                    } else {
+                        // Télécharger la nouvelle image
+                        $apiResponse = $this->forward('App\Controller\ImageController::uploadImage', [
+                            'file' => $file,
+                            'role' => $role,
+                        ]);
+
+                        // Décoder la réponse JSON
+                        $apiResponse = json_decode($apiResponse->getContent(), true);
+
+                        // Si une erreur est retournée, afficher un message flash d'erreur
+                        if (isset($apiResponse['error'])) {
+                            $this->addFlash('error', $apiResponse['error']);
+                        } else {
+                            // Mettre à jour l'utilisateur avec le nouveau nom de fichier de l'image
+                            $user->setPicture($apiResponse['filename']);
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // Si une exception est levée, afficher un message flash d'erreur
+                    $this->addFlash('error', 'An error occurred while processing the image: ' . $e->getMessage());
+                }
+            }
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('success', 'Votre profil a bien été mis à jour');
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
-    
+
         if ($formService->isSubmitted() && $formService->isValid()) {
             // Traiter le formulaire de service
             $service->setUser($user); // Associer le service à l'utilisateur
-            $entityManager->persist($service);
-            $entityManager->flush();
+            //$entityManager->persist($service);
+            //$entityManager->flush();
             $this->addFlash('success', 'Service ajouté avec succès');
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
-    
+
+
+
+
+
+        // Récupérer le nom de fichier de l'image de l'utilisateur
+        $pictureFilename = $user->getPicture(); // Assurez-vous que `getPicture()` renvoie le nom du fichier de l'image
+
+        // On utilise le controller pour fournir le chemin absolu de l'image ( config: services.yaml )
+        if ($pictureFilename) {
+            $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
+                'filename' => $pictureFilename,
+                'role' => $role
+            ]);
+            $pictureUrl = json_decode($pictureUrlResponse->getContent(), true);
+        }
+        // dd($pictureUrl);
         // Rendre la vue du profil utilisateur avec les formulaires
         return $this->render('user/index.html.twig', [
             'title_page' => 'Profil',
-            'form' => $formUser->createView(),
+            'formUser' => $formUser->createView(),
+            'errors_form' =>$formUser->getErrors(true),
             'formAddService' => $formService->createView(),
-            'user' => $user,
-            'errors' => $formService->getErrors(true),
+            'errors_formService' => $formService->getErrors(true),
             'orders' => '',
-            'pictureUrl' => $absoluteUrlUser['url'] ?? null,
+            // on rend l'image du profilen chemin absolu
+            'pictureUrl' => $pictureUrl['url'] ?? null,
 
         ]);
     }
-    
+
 
 
 
@@ -378,7 +452,7 @@ class UserController extends AbstractController
 
 
     #[Route('/developer/order', name: 'list_orders_developer')]
-    public function orders(UserRepository $userRepository): Response
+    public function orders(): Response
     {
         return $this->render('user/orders/index.html.twig', [
             'title_page' => 'Vos commandes'
@@ -389,7 +463,7 @@ class UserController extends AbstractController
 
 
     #[Route('/developer/new/invoice', name: 'new_invoice_developer')]
-    public function newInvoice(?Order $order = null, UserRepository $userRepository): Response
+    public function newInvoice(?Order $order = null): Response
     {
         if (!$order) {
             $order = new ServiceItem();
@@ -413,7 +487,7 @@ class UserController extends AbstractController
 
 
     #[Route('/client', name: 'home_client')]
-    public function client(Request $request): Response
+    public function client(): Response
     {
         // Récupération les User par le role: ROLE_CLIENT
         $queryBuilder = $this->entityManager->getRepository(User::class)->findUsersByRole("ROLE_CLIENT");
@@ -432,7 +506,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/client/invoice', name: 'list_invoice_client')]
-    public function invoices(UserRepository $userRepository): Response
+    public function invoices(): Response
     {
         return $this->render('user/invoices/index.html.twig', [
             'title_page' => 'Vos factures'
@@ -440,7 +514,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/client/order/add', name: 'new_order_client')]
-    public function newOrder(?Order $order = null, UserRepository $userRepository, Request $request): Response
+    public function newOrder(Request $request, ?Order $order): Response
     {
         if (!$order) {
             $order = new Order();

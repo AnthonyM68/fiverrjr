@@ -42,7 +42,7 @@ const LastUser = ({ role }) => {
                 return response.json();
             })
             .then(data => {
-                console.log('Data fetched:', data);
+                console.log('Data fetched last User:', data);
                 setLastUser(data);
             })
             .catch(error => {

@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateListeServices = async () => {
+        const userRating = document.querySelector('.js-user-list-service');
         const url = '/get_service_by_user';
         try {
             const req = await fetch(url);
@@ -59,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const contentType = req.headers.get('content-type');
 
             if (contentType && contentType.indexOf('application/json') !== -1) {
-
                 const data = await req.json();
                 console.log('Data all services by userId:', data);
 
@@ -74,24 +74,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     tr.appendChild(tdTitle);
 
                     const tdButtons = document.createElement('td');
-                    tdButtons.setAttribute('data-label', 'btn');
+                    tdButtons.setAttribute('data-label', 'service-btn');
 
                     const buttonGroup = document.createElement('div');
                     buttonGroup.className = 'ui buttons';
 
-                    // Bouton de suppression
-                    // const deleteButton = document.createElement('a');
-                    // deleteButton.className = 'ui button ui-widget ui-corner-all';
-                    // deleteButton.innerHTML = '<i class="trash icon"></i>';
-                    // // Remplacer 'PLACEHOLDER' par l'ID du service
-                    // deleteButton.setAttribute('href', urls.deleteService.replace('PLACEHOLDER', service.id));
-                    // buttonGroup.appendChild(deleteButton);
-
                     // Bouton d'édition
                     const editButton = document.createElement('a');
-                    editButton.className = 'ui button ui-widget ui-corner-all';
-                    editButton.innerHTML = '<i class="pencil icon"></i>';
-                    editButton.setAttribute('href', urls.editService.replace('serviceId', service.id));  // Utilisez l'URL générée pour le nouveau service
+                    editButton.className = 'ui-button ui-widget ui-corner-all toggle-edit-service';
+                    editButton.innerHTML = '<span class="ui-icon ui-icon-pencil"></span>';
+                    editButton.setAttribute('href', "javascript:void(0);");
+                    editButton.setAttribute('data-service-id', service.id); // Ajout de l'attribut data-service-id avec l'ID du service
                     buttonGroup.appendChild(editButton);
 
                     tdButtons.appendChild(buttonGroup);
@@ -99,6 +92,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     service_item_list.appendChild(tr);
                 });
+
+                // Ajouter un écouteur d'événement sur chaque bouton d'édition
+                document.querySelectorAll('.toggle-edit-service').forEach(button => {
+                    button.addEventListener('click', async function () {
+                        try {
+                            const serviceId = this.getAttribute('data-service-id');
+                            const editService = $('.edit-service-container');
+                            const url = `/service/form/generate/${serviceId}`;
+
+                            const req = await fetch(url);
+                            if (!req.ok) {
+                                throw new Error(`HTTP error! Status: ${req.status}`);
+                            }
+                            const contentType = req.headers.get('content-type');
+
+                            if (contentType && contentType.indexOf('application/json') !== -1) {
+                                const data = await req.json();
+                                console.log('Form data for service:', data);
+
+                                if (editService.is(':visible')) {
+                                    editService.slideUp(400, function () {
+                                        document.getElementById('service-form-container').innerHTML = data.formHtml;
+                                    });
+                                } else {
+                                    editService.slideDown(400, function () {
+                                        document.getElementById('service-form-container').innerHTML = data.formHtml;
+                                    });
+                                }
+                            } else {
+                                const text = await req.text();
+                                console.error('Unexpected response format:', text);
+                            }
+                        } catch (error) {
+                            console.error('Failed to fetch or parse JSON for service form:', error);
+                        }
+                    });
+                });
+
             } else {
                 const text = await req.text();
                 console.error('Unexpected response format:', text);
@@ -108,10 +139,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Appeler la fonction updateListeServices
-    if (service_item_list) {
-        updateListeServices();
-    }
+
+    const loadServiceForm = async () => {
+        const url = '/service/form/generate'; // L'URL définie pour obtenir le formulaire
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log(data);
+
+            document.querySelector('#service-form-container').innerHTML = data.formHtml;
+        } catch (error) {
+            console.error('Failed to load the service form:', error);
+        }
+    };
+
+
+
+
 
 
 
@@ -122,6 +170,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (service_item_course_category) {
         service_item_course_category.addEventListener('change', updateCourses);
     }
+
+
+
+
+
 
 
     // déroule le formulaire de soumission d'un nouveau service de la page profil
@@ -149,37 +202,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const listeServices = $('.list-services');
         const serviceForm = $('.service-form');
 
+        updateListeServices();
+
         if (listeServices.is(':visible')) {
             listeServices.slideUp(400, function () {
                 $('.toggle-list-services').text('Liste de mes services');
             });
         } else {
-            // Appeler la fonction pour tester
-            updateListeServices();
+
             listeServices.slideDown(400, function () {
                 $('.toggle-list-services').text('Fermer la liste');
             });
             if (serviceForm.is(':visible')) {
                 serviceForm.slideUp(400, function () {
-
                     $('.toggle-service-form').text('Nouveau service');
                 });
-
-
             }
         }
     });
-    const toggleButtonList = document.querySelector('.toggle-list-services');
-    toggleButtonList.addEventListener('click', () => { });
-
-
-
-
     // // Ajoutez un écouteur d'événements pour le bouton de fermeture
-    // document.getElementById('close-results-service').addEventListener('click', () => {
-    //     $('#new-service-container').slideUp();
-    // });
-
-
+    const closeEdit = document.getElementById('close-edit');
+    if (closeEdit) {
+        closeEdit.addEventListener('click', () => {
+            $('.edit-service-container').slideUp();
+        });
+    }
 });
 
