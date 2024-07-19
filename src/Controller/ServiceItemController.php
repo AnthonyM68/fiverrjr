@@ -17,13 +17,15 @@ use Symfony\Component\Form\FormError;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ServiceItemRepository;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ServiceItemController extends AbstractController
@@ -127,15 +129,22 @@ class ServiceItemController extends AbstractController
         }
     }
 
-    
-    #[Route('/serviceItem/delete/{serviceId}', name: 'delete_service', methods: ['GET'])]
-    public function deleteServiceItem(int $serviceId, ServiceItemRepository $serviceItemRepository): JsonResponse
+    #[Route('/serviceItem/delete/{serviceId}', name: 'delete_service', methods: ['DELETE'])]
+    public function deleteServiceItem(int $serviceId, Request $request, ServiceItemRepository $serviceItemRepository, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
     {
+        $data = json_decode($request->getContent(), true);
+        $csrfToken = new CsrfToken('delete_service' . $serviceId, $data['_token']);
+
+        if (!$csrfTokenManager->isTokenValid($csrfToken)) {
+            return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
+        }
+
         $service = $serviceItemRepository->find($serviceId);
 
         if (!$service) {
             return new JsonResponse(['error' => 'Service not found'], Response::HTTP_NOT_FOUND);
         }
+
         try {
             $this->entityManager->remove($service);
             $this->entityManager->flush();
@@ -144,8 +153,31 @@ class ServiceItemController extends AbstractController
             return new JsonResponse(['error' => 'Failed to delete service'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
+    
+    // #[Route('/serviceItem/delete/{serviceId}', name: 'delete_service', methods: ['DELETE'])]
+    // public function deleteServiceItem(int $serviceId, Request $request, ServiceItemRepository $serviceItemRepository, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
+    // {
+    //     $data = json_decode($request->getContent(), true);
+    //     $csrfToken = new CsrfToken('delete_service' . $serviceId, $data['_token']);
+    
+    //     if (!$csrfTokenManager->isTokenValid($csrfToken)) {
+    //         return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
+    //     }
+    
+    //     $service = $serviceItemRepository->find($serviceId);
+    
+    //     if (!$service) {
+    //         return new JsonResponse(['error' => 'Service not found'], Response::HTTP_NOT_FOUND);
+    //     }
+    
+    //     try {
+    //         $this->entityManager->remove($service);
+    //         $this->entityManager->flush();
+    //         return new JsonResponse(['message' => 'Service deleted successfully']);
+    //     } catch (\Exception $e) {
+    //         return new JsonResponse(['error' => 'Failed to delete service'], Response::HTTP_INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
 
 
