@@ -423,7 +423,7 @@ class UserController extends AbstractController
                     'filename' => $pictureFilename,
                     'role' => $role
                 ]);
-                $pictureUrl = json_decode($pictureUrlResponse->getContent(), true)['url']; // Extract the URL from JSON response
+                $pictureUrl = json_decode($pictureUrlResponse->getContent(), true); 
             }
             // On format les données avant de retourner à Javascript
             $lastUserData = [
@@ -432,7 +432,7 @@ class UserController extends AbstractController
                 'lastName' => $lastUser->getLastName(),
                 'email' => $lastUser->getEmail(),
                 'username' => $lastUser->getUsername(),
-                'picture' =>  $pictureUrl,
+                'picture' =>  $pictureUrl['url'],
                 'dateRegister' => $lastUser->getDateRegister(),
                 'city' => $lastUser->getCity(),
                 'portfolio' => $lastUser->getPortfolio(),

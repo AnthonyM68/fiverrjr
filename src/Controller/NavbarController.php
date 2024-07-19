@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class NavbarController extends AbstractController
 {
@@ -19,7 +20,7 @@ class NavbarController extends AbstractController
         // ( SearchFormType )
         $formTheme = $this->createForm(SearchFormType::class, null, [
             // On change la route par défaut pour la recherche dynamic
-            'action' => $this->generateUrl('search_results'),
+            // 'action' => $this->generateUrl('search_results'),
             // Envisager un changement / Axe d'amélioration du moteur de recherche
             'search_table' => 'theme',
             'search_label' => 'Recherchez votre service',
@@ -32,7 +33,7 @@ class NavbarController extends AbstractController
         // variable pour contenir le nom du formulaire soumis
         $submittedFormName = null;
         // Vérification si le formulaire est soumis et valide
-        if ($formTheme->isSubmitted() && $formTheme->isValid() && $request->request->get('submitted_form_type') === 'service') {
+        if ($formTheme->isSubmitted() && $formTheme->isValid()) {
             // On récupére les données de l'input
             $searchTerm = $formTheme->get('search_term')->getData();
             // Recherche des résultats correspondants au terme de recherche
@@ -50,4 +51,6 @@ class NavbarController extends AbstractController
             'submitted_form' => $submittedFormName,
         ]);
     }
+
+
 }

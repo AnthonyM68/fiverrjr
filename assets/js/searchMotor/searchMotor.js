@@ -1,4 +1,6 @@
 const displayResults = (results, searchTerm) => {
+
+    console.log(results);
     let resultsHtml = '';
 
     if (!results || results.length === 0) {
@@ -7,99 +9,106 @@ const displayResults = (results, searchTerm) => {
         resultsHtml += '<h3>Résultats</h3>';
         // on convertit le terme rechercher en minuscule
         const searchTermLower = searchTerm.toLowerCase();
+        
+        console.log(searchTermLower);
 
         results.forEach(entityTheme => {
             let displayTheme = false;
             let themeHtml = '';
 
             if (entityTheme && entityTheme.nameTheme) {
-                themeHtml += `<div class="ui list arborescence">`;
+                console.log(entityTheme.nameTheme);
 
-                themeHtml += `<div class="item">
-                <i class="folder open outline icon"></i>
-                <div class="content">
-                <div class="header"><strong>Thème : ${entityTheme.nameTheme}</strong></div>
-                </div>
-                </div>`;
 
-                themeHtml += `<div class="ui list arborescence">`;
+                // themeHtml += `<div class="ui list arborescence">`;
 
-                entityTheme.categories.forEach(category => {
-                    let displayCategory = false;
-                    let categoryHtml = '';
+                // themeHtml += `<div class="item">
+                // <i class="folder open outline icon"></i>
+                // <div class="content">
+                // <div class="header"><strong>Thème : ${entityTheme.nameTheme}</strong></div>
+                // </div>
+                // </div>`;
 
-                    categoryHtml += `<div class="item">
-                        <i class="folder open outline icon"></i>
-                        <div class="content">
-                        <div class="header"><strong>Catégorie : ${category.nameCategory}</strong></div>
-                        </div>
-                        </div>`;
+                // themeHtml += `<div class="ui list arborescence">`;
 
-                    categoryHtml += `<div class="ui list arborescence">`;
+                // entityTheme.categories.forEach(category => {
+                //     let displayCategory = false;
+                //     let categoryHtml = '';
 
-                    category.courses.forEach(course => {
-                        let displayCourse = false;
-                        let courseHtml = '';
+                //     categoryHtml += `<div class="item">
+                //         <i class="folder open outline icon"></i>
+                //         <div class="content">
+                //         <div class="header"><strong>Catégorie : ${category.nameCategory}</strong></div>
+                //         </div>
+                //         </div>`;
 
-                        courseHtml += `<div class="item">
-                        <i class="folder open outline icon"></i>
-                        <div class="content">
-                        <div class="header"><strong>Sous-catégorie : ${course.nameCourse}</strong></div>
-                        </div>
-                        </div>`;
+                //     categoryHtml += `<div class="ui list arborescence">`;
 
-                        courseHtml += `<div class="ui list arborescence">`;
+                //     category.courses.forEach(course => {
+                //         let displayCourse = false;
+                //         let courseHtml = '';
 
-                        course.serviceItems.forEach(serviceItem => {
-                            if (serviceItem.title.toLowerCase().includes(searchTermLower) ||
-                                serviceItem.description.toLowerCase().includes(searchTermLower)) {
-                                displayTheme = true;
-                                displayCategory = true;
-                                displayCourse = true;
-                                courseHtml += `<div class="item">
-                                <i class="file icon"></i>
-                                <div class="content">
-                                <div class="header"><a href="/detail_service/${serviceItem.id}">${serviceItem.title}</a> Par: ${serviceItem.user.username}</div>
-                                <div class="description">
-                                ${serviceItem.description}
-                                </div>
-                                </div>
-                                </div>`;
-                            }
-                        });
+                //         courseHtml += `<div class="item">
+                //         <i class="folder open outline icon"></i>
+                //         <div class="content">
+                //         <div class="header"><strong>Sous-catégorie : ${course.nameCourse}</strong></div>
+                //         </div>
+                //         </div>`;
 
-                        if (displayCourse) {
-                            categoryHtml += courseHtml + `</div>`; // sous-catégorie
-                        }
-                    });
+                //         courseHtml += `<div class="ui list arborescence">`;
 
-                    if (displayCategory) {
-                        themeHtml += categoryHtml + `</div>`; // catégorie
-                    }
-                });
+                //         course.serviceItems.forEach(serviceItem => {
+                //             if (serviceItem.title.toLowerCase().includes(searchTermLower) ||
+                //                 serviceItem.description.toLowerCase().includes(searchTermLower)) {
+                //                 displayTheme = true;
+                //                 displayCategory = true;
+                //                 displayCourse = true;
+                //                 courseHtml += `<div class="item">
+                //                 <i class="file icon"></i>
+                //                 <div class="content">
+                //                 <div class="header"><a href="/detail_service/${serviceItem.id}">${serviceItem.title}</a> Par: ${serviceItem.user.username}</div>
+                //                 <div class="description">
+                //                 ${serviceItem.description}
+                //                 </div>
+                //                 </div>
+                //                 </div>`;
+                //             }
+                //         });
 
-                if (displayTheme) {
-                    resultsHtml += themeHtml + `</div>`; // thème
-                }
+                //         if (displayCourse) {
+                //             categoryHtml += courseHtml + `</div>`; // sous-catégorie
+                //         }
+                //     });
+
+                //     if (displayCategory) {
+                //         themeHtml += categoryHtml + `</div>`; // catégorie
+                //     }
+                // });
+
+                // if (displayTheme) {
+                //     resultsHtml += themeHtml + `</div>`; // thème
+                // }
             }
         });
     }
+    // console.log(resultsHtml);
     document.getElementById('search-results-navbar').innerHTML = resultsHtml;
     // Affiche les résultats avec une animation slide down
-    $('#search-results-container').slideDown();
+    // $('#search-results-container').slideDown();
 };
 
 
 // Requête de recherche
-const submitForm = (formElement) => {
+const submitForm = (form) => {
+    console.log(form);
     // on récupère les données du formumlaire et on crée un nouveau form
-    const formData = new FormData(formElement);
+    const formData = new FormData(form);
     // on convertit le formualire en objet JSON
     const jsonData = Object.fromEntries(formData.entries());
-    // console.log(jsonDvvata);
-
+    console.log(jsonData);
     const term = jsonData['search_form[search_term]']
-    fetch(formElement.action, {
+
+    fetch(form.action, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -115,13 +124,11 @@ const submitForm = (formElement) => {
         })
         .then(data => {
             console.log(data);
+            displayResults(data, term);
             $('#search-results-container').slideDown();
-
-
-            // displayResults(data, term);
+            
         })
         .catch(error => {
-
             $('#search-results-container').slideDown();
             document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
         });
@@ -146,6 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
             this.classList.add('active', 'teal');
         });
     });
+
+
+
+
+
+
+
+
     // On sélectionne l'icon search du moteur de la navbar
     const search = document.querySelector('#search-icon');
     // au click on intercepter la soumission du formulaire (Service-search-motor ou Theme-search-motor)
@@ -153,9 +168,15 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         // Récupérer le formulaire parent
         const form = search.closest('form');
-    
         submitForm(form);
     });
+
+
+
+
+
+
+
 
     // Ajout d'un écouteur d'événement sur les radio buttons pour filtrer par prix
     const priceFilters = document.querySelectorAll('input[name="price_filter"]');
@@ -164,6 +185,13 @@ document.addEventListener('DOMContentLoaded', () => {
             submitForm(formElement);
         });
     });
+
+
+
+
+
+
+
     // Ajoutez un écouteur d'événements pour le bouton de fermeture
     document.getElementById('close-results').addEventListener('click', () => {
         $('#search-results-container').slideUp();

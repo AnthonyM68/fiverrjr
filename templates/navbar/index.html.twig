@@ -54,7 +54,7 @@
             </div>
             <div class="right menu">
                 {# Formulaire de recherche avec sélecteur de class spécifique ajax-form#}
-                {{ form_start(form_service, {'attr': {'class': 'ui form ajax-form'}}) }}
+                {{ form_start(form_service, {'attr': {'action': path('search_results'), 'class': 'ui form ajax-form'}}) }}
                 <div class="ui icon input full-width-input">
                     {{ form_widget(form_service.search_term) }}
                     <i class="search link icon" id="search-icon"></i>

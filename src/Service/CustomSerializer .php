@@ -7,7 +7,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 
 // intercepte les appels au sérialiseur par défaut et ajoute des fonctionnalités supplémentaires si nécessaire.
-// #[AsDecorator('serializer')]
+#[AsDecorator('serializer')]
 class CustomSerializer implements SerializerInterface
 {
     public function __construct(private readonly SerializerInterface $serializer)

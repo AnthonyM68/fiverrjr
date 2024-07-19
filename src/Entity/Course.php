@@ -8,18 +8,23 @@ use App\Repository\CourseRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
+
 class Course
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
 
+    // #[Groups(['course' , 'serviceItem'])]
+
+    private ?int $id = null;
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
+    #[Groups(['serviceItem'])]
     private ?string $nameCourse = null;
 
     /**
@@ -27,6 +32,7 @@ class Course
      *
      * @var Collection<int
      */
+     #[Groups(['serviceItem'])]
     #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'course')]
     private Collection $serviceItems;
 
@@ -39,6 +45,7 @@ class Course
      * @var Category|null
      */
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'courses')]
+     #[Groups(['serviceItem'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 

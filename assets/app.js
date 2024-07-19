@@ -5,17 +5,9 @@ import { Parallax, ParallaxDouble } from './js/components/Parallax';
 import { BestServicesCarousel } from './js/components/carousel/CarouselComponent';
 import UserCard from './js/components/UserCard';
 
-// Exemple de données des meilleurs services
-const bestServices = [
-    {
-        image: 'img/services/service.jpg',
-        title: 'Service 1',
-        username: 'User 1',
-        description: 'Description du service 1',
-        reviews: 34
-    },
-    // Ajoutez les autres services...
-];
+
+
+
 
 // Composant pour Parallax
 const ParallaxComponent = () => {
@@ -84,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lastClientRoot = document.getElementById('last-client-root');
     if (lastClientRoot) {
         const root = createRoot(lastClientRoot);
-        root.render(<LastUser role="ROLE_CLIENT"  />);
+        root.render(<LastUser role="ROLE_CLIENT" />);
     }
 
 
@@ -94,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Sélectionne tous les boutons de fermeture
     const closeButtons = document.querySelectorAll('.close-results');
-            
+
     closeButtons.forEach(button => {
         button.addEventListener('click', (event) => {
             const container = event.target.closest('.search-results-container');

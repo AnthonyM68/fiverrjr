@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
-
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
+use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 // Contraintes
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -16,10 +17,12 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+     #[Groups(['serviceItem'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
+     #[Groups(['serviceItem'])]
     private ?string $nameCategory = null;
 
     
@@ -27,6 +30,7 @@ class Category
      * @var Collection<int, Course>
      */
     #[ORM\OneToMany(targetEntity: Course::class, mappedBy: 'category')]
+     #[Groups(['serviceItem'])]
     private Collection $courses;
 
 
@@ -37,6 +41,7 @@ class Category
  */
     #[ORM\ManyToOne(targetEntity: Theme::class, inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
+     #[Groups(['serviceItem'])]
     private ?Theme $theme = null;
 
 

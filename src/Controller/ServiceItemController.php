@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
+
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,12 +37,19 @@ class ServiceItemController extends AbstractController
     public function __construct(
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
-        SerializerInterface $serializer,
+
     ) {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
-        $this->serializer = $serializer;
     }
+
+
+    // #[Route("/serviceItem/search/results", name: "search_results", methods: ['POST'])]
+    // public function searchResult(): JsonResponse
+    // {
+    //     return new JsonResponse(['test' => 'test']);
+    // }
+
     /**
      * SERVICES
      *
@@ -133,7 +140,8 @@ class ServiceItemController extends AbstractController
     public function deleteServiceItem(int $serviceId, Request $request, ServiceItemRepository $serviceItemRepository, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $csrfToken = new CsrfToken('delete_service' . $serviceId, $data['_token']);
+        $csrfToken = new CsrfToken('delete_service_' . $serviceId, $data['_token']);
+
 
         if (!$csrfTokenManager->isTokenValid($csrfToken)) {
             return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
@@ -153,33 +161,6 @@ class ServiceItemController extends AbstractController
             return new JsonResponse(['error' => 'Failed to delete service'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
-    // #[Route('/serviceItem/delete/{serviceId}', name: 'delete_service', methods: ['DELETE'])]
-    // public function deleteServiceItem(int $serviceId, Request $request, ServiceItemRepository $serviceItemRepository, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
-    // {
-    //     $data = json_decode($request->getContent(), true);
-    //     $csrfToken = new CsrfToken('delete_service' . $serviceId, $data['_token']);
-    
-    //     if (!$csrfTokenManager->isTokenValid($csrfToken)) {
-    //         return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
-    //     }
-    
-    //     $service = $serviceItemRepository->find($serviceId);
-    
-    //     if (!$service) {
-    //         return new JsonResponse(['error' => 'Service not found'], Response::HTTP_NOT_FOUND);
-    //     }
-    
-    //     try {
-    //         $this->entityManager->remove($service);
-    //         $this->entityManager->flush();
-    //         return new JsonResponse(['message' => 'Service deleted successfully']);
-    //     } catch (\Exception $e) {
-    //         return new JsonResponse(['error' => 'Failed to delete service'], Response::HTTP_INTERNAL_SERVER_ERROR);
-    //     }
-    // }
-
-
 
     #[Route('/serviceItem/new', name: 'new_service')]
     #[Route('/serviceItem/{id}/edit', name: 'edit_service')]
@@ -242,9 +223,18 @@ class ServiceItemController extends AbstractController
     }
 
     #[Route('/get_service_by_user', name: 'services_by_user_id', methods: ['GET'])]
-    public function getServiceByIdUser(ServiceItemRepository $serviceItemRepository, Security $security): JsonResponse
-    {
+
+    public function getServiceByIdUser(
+        ServiceItemRepository $serviceItemRepository,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        Request $request,
+        Security $security
+
+    ): JsonResponse {
+
+        $token = $request->getSession();
         $user = $security->getUser();
+
         if (!$user) {
             return new JsonResponse(['error' => 'User not authenticated'], JsonResponse::HTTP_UNAUTHORIZED);
         }
@@ -259,9 +249,12 @@ class ServiceItemController extends AbstractController
         // format les données pour la réponse JSON
         $data = [];
         foreach ($services as $service) {
+            $csrfToken = $csrfTokenManager->getToken('delete_service_' . $service->getId())->getValue();
+
             $data[] = [
                 'id' => $service->getId(),
-                'title' => $service->getTitle()
+                'title' => $service->getTitle(),
+                'csrf_token' => $csrfToken
             ];
         }
         // retourner les données en JSON

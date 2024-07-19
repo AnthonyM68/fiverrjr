@@ -1,0 +1,67 @@
+<div class="search-results">
+    {# Afficher un message si aucun résultat n'est trouvé #}
+    {% if results is empty %}
+    <h2>Aucun résultat</h2>
+    {% else %}
+    {# Conversion du terme de recherche en minuscules pour une comparaison insensible à la casse #}
+    {% set search_term_lower = search_term|lower %}
+
+
+
+    {# Boucle à travers les résultats et affichage si le terme de recherche est trouvé #}
+    {% for entityTheme in results %}
+    <ul style="margin-left: 20px;">
+    {# Affiche le thème#}
+    <li><strong>Thème : {{ entityTheme.nameTheme }}</strong></li>
+
+    <ul style="margin-left: 20px;">
+        {# Vérifie si le thème contient des catégories#}
+        {% for category in entityTheme.categories %}
+        {# Vérifie si la catégorie contient des cours/services correspondant au terme de recherche#}
+        {% for course in category.courses %}
+        {% for serviceItem in course.serviceItems %}
+        {% if serviceItem.title|lower matches '/.*' ~ search_term_lower ~ '.*/' or
+        serviceItem.description|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
+        {% set display_category = true %}
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+
+        {# Affiche la catégorie si nécessaire #}
+        <li><strong>Catégorie : {{ category.nameCategory }}</strong></li>
+        <ul style="margin-left: 20px;">
+            {% for course in category.courses %}
+            {# Vérifie si le cours contient des services correspondant au terme de recherche #}
+            {% set display_course = false %}
+            {% for serviceItem in course.serviceItems %}
+            {% if serviceItem.title|lower matches '/.*' ~ search_term_lower ~ '.*/' or
+            serviceItem.description|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
+            {% set display_course = true %}
+            {% endif %}
+            {% endfor %}
+
+            {# Affiche le cours si nécessaire #}
+
+            <li><strong>Sous-catégorie : {{ course.nameCourse }}</strong></li>
+            <ul style="margin-left: 20px;">
+                {% for serviceItem in course.serviceItems %}
+                {% if serviceItem.title|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
+                <li>
+                    <a href="{{ path('detail_service', { 'id': serviceItem.id }) }}">{{
+                        serviceItem.title }}</a>
+                </li>
+                {% endif %}
+
+                {% endfor %}
+            </ul>
+
+            {% endfor %}
+        </ul>
+
+        {% endfor %}
+    </ul>
+
+    {% endfor %}
+   
+    {% endif %}
+</div>

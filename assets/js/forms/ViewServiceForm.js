@@ -89,21 +89,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     editButton.setAttribute('data-service-id', service.id);
                     buttonGroup.appendChild(editButton);
 
+                    // const csrfToken = document.getElementById(`csrf_token_${service.id}`).value; 
+
                     // Bouton de suppression
                     const deleteButton = document.createElement('a');
                     deleteButton.className = 'ui-button ui-widget ui-corner-all toggle-trash-service';
                     deleteButton.innerHTML = '<span class="ui-icon ui-icon-trash"></span>';
                     deleteButton.setAttribute('href', "javascript:void(0);");
                     deleteButton.setAttribute('data-service-id', service.id);
-
-                    // Ajouter l'input caché avec le token CSRF
-                    const csrfTokenInput = document.createElement('input');
-                    csrfTokenInput.type = 'hidden';
-                    csrfTokenInput.id = 'csrf_token';
-                    csrfTokenInput.value = '{{ csrf_token("delete_service") }}'; // Générer le jeton CSRF
+                    deleteButton.setAttribute(`data-token-${service.id}`, service.csrf_token);
 
                     buttonGroup.appendChild(deleteButton);
-                    buttonGroup.appendChild(csrfTokenInput); // Ajouter l'input caché au groupe de boutons
+                    // buttonGroup.appendChild(csrfTokenInput); 
 
                     tdButtons.appendChild(buttonGroup);
                     tr.appendChild(tdButtons);
@@ -119,14 +116,19 @@ document.addEventListener('DOMContentLoaded', () => {
                             const editService = $('.edit-service-container');
                             const url = `/service/form/generate/${serviceId}`;
 
-                            const req = await fetch(url);
+                            /* test requestajax service root */
+                            const req = await fetch('/serviceItem/search/results');
                             if (!req.ok) {
                                 throw new Error(`HTTP error! Status: ${req.status}`);
                             }
+
+
                             const contentType = req.headers.get('content-type');
+
 
                             if (contentType && contentType.indexOf('application/json') !== -1) {
                                 const data = await req.json();
+
                                 console.log('Form data HTML receiver for service:', data);
                                 if (!editService.is(':visible')) {
                                     editService.slideDown(400);
@@ -143,48 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 // Ajouter un écouteur d'événement sur chaque bouton delete
                 document.querySelectorAll('.toggle-trash-service').forEach(button => {
-                    // button.addEventListener('click', async function () {
-                    //     const serviceId = this.getAttribute('data-delete-id');
-                    //     const csrfToken = document.getElementById(`csrf_token_${serviceId}`).value; // Récupérer le jeton CSRF correspondant
-                
-                    //     if (confirm('Confirmez-vous la suppression du service?')) {
-                    //         try {
-                    //             const response = await fetch(`/serviceItem/delete/${serviceId}`, {
-                    //                 method: 'DELETE',
-                    //                 headers: {
-                    //                     'Content-Type': 'application/json',
-                    //                     'X-CSRF-TOKEN': csrfToken // Ajouter le token CSRF dans l'en-tête
-                    //                 },
-                    //                 body: JSON.stringify({ _token: csrfToken }) // Inclure le token CSRF dans le corps de la requête
-                    //             });
-                
-                    //             if (!response.ok) {
-                    //                 throw new Error(`HTTP error! Status: ${response.status}`);
-                    //             }
-                
-                    //             const result = await response.json();
-                    //             console.log(result);
-                
-                    //             if (result.error) {
-                    //                 console.error(`Error: ${result.error}`);
-                    //                 alert(`Error: ${result.error}`);
-                    //             } else {
-                    //                 console.log(result.message);
-                    //                 alert(result.message);
-                    //                 this.closest('tr').remove();
-                    //             }
-                    //         } catch (error) {
-                    //             console.error('Failed to delete service:', error);
-                    //             alert('Failed to delete service');
-                    //         }
-                    //     }
-                    // });
                     button.addEventListener('click', async function () {
-
-                        const service_item_list = document.querySelector('.service-item-list'); // Sélectionner l'élément qui contient les éléments de service
-                        const userTagTwig = document.querySelector('.js-tags-user-twig');
-                        const csrfToken = userTagTwig.getAttribute('data-csrf-token'); // Récupérer le jeton CSRF
                         const serviceId = this.getAttribute('data-service-id');
+                        const csrfToken = this.getAttribute(`data-token-${serviceId}`);
 
 
                         if (confirm('Confirmez-vous la suppression du service?')) {
@@ -193,8 +156,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                     method: 'DELETE',
                                     headers: {
                                         'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': csrfToken // token CSRF
-                                    }
+                                        'X-CSRF-TOKEN': csrfToken // Ajouter le token CSRF dans l'en-tête
+                                    },
+                                    body: JSON.stringify({ _token: csrfToken }) // Inclure le token CSRF dans le corps de la requête
                                 });
 
                                 if (!response.ok) {
@@ -206,8 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 if (result.error) {
                                     console.error(`Error: ${result.error}`);
+                                    alert(`Error: ${result.error}`);
                                 } else {
                                     console.log(result.message);
+                                    alert(result.message);
                                     this.closest('tr').remove();
                                 }
                             } catch (error) {
@@ -217,7 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
                 });
-
             } else {
                 const text = await req.text();
                 console.error('Unexpected response format:', text);
