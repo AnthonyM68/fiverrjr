@@ -1,32 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
 {% block linkForJavascript %}
-<div class="js-tags-user-twig" data-csrf-token="{{ csrf_token('delete_service') }}">
-</div>
+<div class="js-tags-user-twig" data-csrf-token="{{ csrf_token('delete_service') }}"></div>
 {% endblock %}
 
 <div class="custom-container">
     <h1 class="uk-animation-slide-right">Bienvenue sur votre {{ title_page }} {{ app.user }}</h1>
-
     <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
-    {# <div class="ui segment" id="edit-service-container" style="display: none;">
-        <div id="service-form-container">
-        </div>
-    </div> #}
-
 </div>
 <div class="custom-container">
     <div class="ui grid equal-height-columns">
         <div class="eight wide column">
             <div class="ui grid equal-height-columns">
-
                 <div class="eight wide column">
                     <div class="ui segment f">
                         {{ form_start(formUser, {'attr': {'class': 'ui form profile'}}) }}
                         <div class="ui form">
-
                             {% if formUser.picture %}
                             <div class="field ">
                                 <img id="imagePreview"
@@ -34,7 +24,6 @@
                                     alt="Image Preview profile user" />
                             </div>
                             {% endif %}
-
                             <div class="field">
                                 {{ form_label(formUser.picture) }}
                                 {{ form_widget(formUser.picture, {'attr': {'onchange': 'previewImage(event)'}}) }}
@@ -100,17 +89,9 @@
                     {% endif %}
                     <div class="column">
                         <div class="ui segment ">
-
-
-
-
                             <div class="ui container">
                                 Button 3...
                             </div>
-
-
-
-
                         </div>
                     </div>
                 </div>
@@ -136,16 +117,10 @@
                     Button 1...
                 </div>
             </div>
-
             <div class="ui segment">
-
                 <div class="ui container">
-
-
                     {% if is_granted('ROLE_CLIENT') %}
                     <div class="ui segment" id="last-developer-root">
-
-
                     </div>
                     {% elseif is_granted('ROLE_DEVELOPER') %}
                     <div class="container">
@@ -156,7 +131,6 @@
                             Liste de mes services
                         </a>
                     </div>
-
                     {# ajouter d'un nouveau service #}
                     <div class="ui segment service-form" style="display: none;">
                         <h2>Nouveau service</h2>
@@ -231,26 +205,6 @@
                             <tbody id="service_item_list"></tbody>
                         </table>
                     </div>
-                   {# {% for service in services %}
-         <tr>
-    <td data-label="service-title">{{ service.title }}</td>
-    <td data-label="service-btn">
-        <div class="ui buttons">
-            <!-- Bouton d'édition -->
-            <a href="javascript:void(0);" class="ui-button ui-widget ui-corner-all toggle-edit-service" data-service-id="{{ service.id }}">
-                <span class="ui-icon ui-icon-pencil"></span>
-            </a>
-            <!-- Bouton de suppression -->
-            <a href="javascript:void(0);" class="ui-button ui-widget ui-corner-all toggle-trash-service" data-delete-id="{{ service.id }}">
-                <span class="ui-icon ui-icon-trash"></span>
-            </a>
-            <!-- Input caché avec le token CSRF -->
-            <input type="hidden" id="csrf_token_{{ service.id }}" value="{{ csrf_token('delete_service' ~ service.id) }}">
-        </div>
-    </td>
-</tr>
-{% endfor %} #}
-
                     {# edition d'un service #}
                     <div class="ui segment edit-service-container" style="display: none;">
                         <h2>J'édite mon service</h2>
@@ -266,7 +220,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
