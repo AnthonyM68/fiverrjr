@@ -89,8 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     editButton.setAttribute('data-service-id', service.id);
                     buttonGroup.appendChild(editButton);
 
-                    // const csrfToken = document.getElementById(`csrf_token_${service.id}`).value; 
-
                     // Bouton de suppression
                     const deleteButton = document.createElement('a');
                     deleteButton.className = 'ui-button ui-widget ui-corner-all toggle-trash-service';
@@ -98,10 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     deleteButton.setAttribute('href', "javascript:void(0);");
                     deleteButton.setAttribute('data-service-id', service.id);
                     deleteButton.setAttribute(`data-token-${service.id}`, service.csrf_token);
-
                     buttonGroup.appendChild(deleteButton);
-                    // buttonGroup.appendChild(csrfTokenInput); 
-
                     tdButtons.appendChild(buttonGroup);
                     tr.appendChild(tdButtons);
 
@@ -115,17 +110,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             const serviceId = this.getAttribute('data-service-id');
                             const editService = $('.edit-service-container');
                             const url = `/service/form/generate/${serviceId}`;
-
                             /* test requestajax service root */
-                            const req = await fetch('/serviceItem/search/results');
+                            const req = await fetch(url);
                             if (!req.ok) {
                                 throw new Error(`HTTP error! Status: ${req.status}`);
                             }
-
-
                             const contentType = req.headers.get('content-type');
-
-
                             if (contentType && contentType.indexOf('application/json') !== -1) {
                                 const data = await req.json();
 
