@@ -26,7 +26,8 @@
         {{ render(controller('App\\Controller\\NavbarController::index')) }}
     </header>
 
-    <artcile>
+    <article>
+        <div class="separator"></div>
         <div class="ui container">
             <div class="ui segment" id="search-results-container" style="display: none;">
                 <div class="ui grid">
@@ -43,7 +44,7 @@
             </div>
         </div>
         {% block body %} {% endblock %}
-    </artcile>
+    </article>
 
     <footer>{% include 'footer/footer.html.twig' %}</footer>
 

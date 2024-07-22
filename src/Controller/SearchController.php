@@ -70,7 +70,7 @@ class SearchController extends AbstractController
 
         // Sérialisation des entités Theme
         try {
-            $results = $serializer->serialize($queryBuilder, JsonEncoder::FORMAT, ['groups' => 'serviceItem']);
+            $results = $serializer->serialize($queryBuilder->getQuery()->getResult(), JsonEncoder::FORMAT, ['groups' => 'serviceItem']);
 
 
             $this->logger->info('Serialized results:', ['results' => $results]);

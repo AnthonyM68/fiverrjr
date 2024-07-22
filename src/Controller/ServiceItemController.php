@@ -1,9 +1,13 @@
 <?php
 
 namespace App\Controller;
+
+use App\Service\Cart;
 // Importation des classes nécessaires
+use App\Entity\Order;
 use App\Entity\Theme;
 use App\Entity\Course;
+use App\Form\OrderType;
 use App\Form\ThemeType;
 use App\Entity\Category;
 use App\Form\CourseType;
@@ -11,6 +15,7 @@ use App\Form\CategoryType;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use App\Form\ServiceItemType;
+use App\Repository\OrderRepository;
 use App\Repository\ThemeRepository;
 use App\Repository\CourseRepository;
 use Symfony\Component\Form\FormError;
@@ -20,10 +25,10 @@ use App\Repository\ServiceItemRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,7 +48,17 @@ class ServiceItemController extends AbstractController
         $this->logger = $logger;
     }
 
+    #[Route('/cart/product', name: 'cart_product')]
+    public function cartProduct(): Response
+    {
+        $cart = new Cart();
+        $cart = $cart->getCart();
+        dd($cart);
 
+        return $this->render('cart/index.html.twig', [
+            'title_page' => 'Panier',
+        ]);
+    }
     // #[Route("/serviceItem/search/results", name: "search_results", methods: ['POST'])]
     // public function searchResult(): JsonResponse
     // {
@@ -68,36 +83,54 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
-    // #[Route('/serviceItem/{id}', name: 'detail_service')]
-    // public function detailService(?Order $order = null, EntityManagerInterface $entityManager, Request $request): Response
-    // {
-    //     if (!$order) {
-    //         $order = new Order();
-    //     }
-    //     // Variable pour stocker les erreurs de validation
-    //     $errors = null;
-    //     // Crée et gère le formulaire pour le service
-    //     $form = $this->createForm(OrderType::class, $order);
-    //     $form->handleRequest($request);
+    #[Route('/serviceItem/{id}/detail', name: 'detail_service')]
+    public function detailService(
+        OrderRepository $orderRepository,
+        Request $request,
+        ?ServiceItem $service
+        ): Response
+    {
+        // $order = new Order();
 
-    //     if ($form->isSubmitted()) {
-    //         // Si le formulaire est valide, persiste et sauvegarde l'Order
-    //         if ($form->isValid()) {
-    //             $entityManager->persist($order);
-    //             $entityManager->flush();
-    //             $this->addFlash('success', 'Votre commande sera ajoutée au panier');
-    //             // Redirige vers la liste des thèmes après sauvegarde
-    //             return $this->redirectToRoute('profile_edit');
-    //         }
-    //     }
-    //     return $this->render('itemService/index.html.twig', [
-    //         'title_page' => 'Détail:',
-    //         'formAddOrder' => $form->createView()
-    //     ]);
-    // }
+        // Variable pour stocker les erreurs de validation
+        // $errors = null;
+        // Crée et gère le formulaire pour le service
+        // $formAddOrder = $this->createForm(OrderType::class, $order);
+        // $formAddOrder->handleRequest($request);
+
+        // $formDetailService = $this->createForm(OrderType::class, $order);
+        // $formAddOrder->handleRequest($request);
+
+        // if ($formAddOrder->isSubmitted()) {
+        //     // Si le formulaire est valide, persiste et sauvegarde l'Order
+        //     if ($formAddOrder->isValid()) {
+        //         $entityManager->persist($order);
+        //         $entityManager->flush();
+        //         $this->addFlash('success', 'Votre commande sera ajoutée au panier');
+        //         // Redirige vers la liste des thèmes après sauvegarde
+        //         return $this->redirectToRoute('profile_edit');
+        //     }
+        // }
+        return $this->render('itemService/index.html.twig', [
+            'title_page' => 'Détail:',
+            'service' => $service,
+            // 'formAddOrder' => $formAddOrder->createView()
+        ]);
+    }
 
 
-
+    #[Route('/service/bestServices', name: 'service_bestServices', methods: ['GET'])]
+    public function getBestServices(Request $request, OrderRepository $orderRepository): JsonResponse
+    {
+        try {
+            $services = $orderRepository->findBy([], ['' => 'DESC']);
+            // Retourner la réponse JSON 
+            return new JsonResponse(['services' => $services], Response::HTTP_OK);
+        } catch (\Throwable $e) {
+            // Retourner une réponse JSON avec une erreur 500 en cas d'exception
+            return new JsonResponse(['error' => 'Failed to load services.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 

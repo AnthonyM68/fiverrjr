@@ -120,6 +120,9 @@
 .ui.list.developer > .item > .content > .header {
   color: rgba(0, 0, 0, 0.87) !important;
 }
+.ui.list .item .folder.icon {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
 
 /* Forms*/ 
 .ui.form label {
@@ -179,5 +182,8 @@ strong {
   color: rgba(0, 0, 0, 0.87) !important;
 }
 .ui.relaxed.divided .item .content a {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+.uk-animation-slide-left {
   color: rgba(0, 0, 0, 0.87) !important;
 }

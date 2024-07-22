@@ -6,12 +6,14 @@
 
 
     <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
-
+    
+    {% if formAddService is defined %}
+    
     <div class="ui container">
         <div class="ui segment">
 
             {# formulaire d'ajout d'un nouveau service #}
-            {% if formAddService is defined %}
+            
 
             {{ form_start(formAddService, {'attr': {'class': 'ui form service'}}) }}
             <h1 class="uk-animation-slide-right">{{ title_page }}
@@ -75,9 +77,12 @@
                 {{ form_row(formAddService.submit) }}
             </div>
             {{ form_end(formAddService) }}
-            {% endif %}
+           
         </div>
     </div>
+
+    {% endif %}
+
     {# Liste des services #}
     {% if services|default %}
     <div class="ui list">
@@ -96,7 +101,7 @@
 
     {# Détail d'un service #}
     {% if service|default %}
-    <div class="custom-container">
+
         <div class="ui fluid card">
             <div class="content">
                 <div class="header">{{ service.title}}</div>
@@ -108,8 +113,15 @@
                     <p>{{ service.description }}</p>
                 </div>
             </div>
+
+
             <div class="extra content">
                 <div class="left floated author">
+                    
+
+
+
+
                     {% if formAddOrder is defined %}
                     <h1 class="uk-animation-slide-down">{{title_page}}</h1>
                     {{ form_start(formAddOrder, {'attr': {'class': 'ui form order'}}) }}
@@ -124,10 +136,10 @@
                             <span class="ui-icon ui-icon-check"></span>Soumettre
                         </button>
                     </div>
-
-
                     {{ form_end(formAddOrder) }}
                     {% endif %}
+
+
                 </div>
                 <div class="right floated author">
                     <img class="ui avatar image" src="{{ asset(service.user.picture) }}">
@@ -135,7 +147,7 @@
                 </div>
             </div>
         </div>
-    </div>
+
     {# si l'utilisateur est connecter #}
     {% if app.user %}
     {# On s'assure que l'user est l'auteur du service #}

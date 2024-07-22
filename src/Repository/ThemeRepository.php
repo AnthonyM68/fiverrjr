@@ -28,7 +28,7 @@ class ThemeRepository extends ServiceEntityRepository
     // ( prévoir axe d'amélioration)
     public function searchByTermAllChilds($searchTerm)
     {
-        return $this->createQueryBuilder('t')
+        $qb =  $this->createQueryBuilder('t')
             ->leftJoin('t.categories', 'c')
             ->leftJoin('c.courses', 'co')
             ->leftJoin('co.serviceItems', 'si')
@@ -39,7 +39,9 @@ class ThemeRepository extends ServiceEntityRepository
             ->orWhere('si.title LIKE :searchTerm')
             ->orWhere('si.description LIKE :searchTerm')
             ->setParameter('searchTerm', '%' . $searchTerm . '%');
-          }
+
+            return $qb;
+    }
 
     public function countAll()
     {
