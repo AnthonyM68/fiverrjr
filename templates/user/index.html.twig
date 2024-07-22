@@ -120,8 +120,9 @@
             <div class="ui segment">
                 <div class="ui container">
                     {% if is_granted('ROLE_CLIENT') %}
-                    <div class="ui segment" id="last-developer-root">
-                    </div>
+
+                    <div class="ui segment" id="last-developer-root"></div>
+                    
                     {% elseif is_granted('ROLE_DEVELOPER') %}
                     <div class="container">
                         <a href="javascript:void(0);" class="ui button primary toggle-service-form">

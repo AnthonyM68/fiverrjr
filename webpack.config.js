@@ -25,11 +25,13 @@ Encore
     .addStyleEntry('jquery_structure', './node_modules/jquery-ui-dist/jquery-ui.structure.css')
     // semantic-ui
     .addEntry('semantic', './semantic/dist/semantic.js')
-    .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
+
+    // .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
+
     // semantic-themes
     .addStyleEntry('semantic_less', './semantic/src/semantic.less')
     // general
-    .addEntry('jquery_popup', './node_modules/jquery-popup-overlay/jquery.popupoverlay.js') // ou .scss pour Sass
+    .addEntry('jquery_popup', './node_modules/jquery-popup-overlay/jquery.popupoverlay.js')
     // bootstrap 
     .addEntry('bootstrap', './node_modules/bootstrap/dist/js/bootstrap.js')
     .addStyleEntry('bootstrap_css', './node_modules/bootstrap/dist/css/bootstrap.css')
@@ -40,48 +42,53 @@ Encore
     // app
     .addEntry('app', './assets/app.js')
     // Message_flash
-    .addEntry('messageFlash', './assets/js/alert/messageFlash.js') 
+    .addEntry('messageFlash', './assets/js/alert/messageFlash.js')
     // Navbar 
     .addEntry('ViewNavbar', './assets/js/navbar/ViewNavbar.js')
     // Search motor
-    // .addEntry('ViewSearch', './assets/js/forms/ViewSearch.js')
     .addEntry('searchMotor', './assets/js/searchMotor/searchMotor.js')
     // Service add
     .addEntry('ViewServiceForm', './assets/js/forms/ViewServiceForm.js')
     // Dropdown navbar
     .addEntry('ViewNavbarDropdown', './assets/js/dropdown/ViewNavbarDropdown.js')
     // Slick-carousel CSS
-    .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
+
     .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
     .addStyleEntry('carousel', './assets/styles/carousel.css')
-    .addStyleEntry('slick-carousel-theme-css', './node_modules/slick-carousel/slick/slick-theme.css') // Optionnel
-    .addEntry('HomeCarrousel', './assets/js/carousel/HomeCarousel.js') 
+    .addStyleEntry('slick-carousel-theme-css', './node_modules/slick-carousel/slick/slick-theme.css')
 
-    // Preview image FileUpload
-    .addEntry('previewImage', './assets/js/profile/previewImage.js') 
 
-    //React Carousel
+    // REACT ...........................................
+    // Carousel 
     .addStyleEntry('react-responsive-carousel', './node_modules/react-responsive-carousel/lib/styles/carousel.min.css')
     .addStyleEntry('react-multi-carousel', './node_modules/react-multi-carousel/lib/styles.css')
 
-    // assets personnalisés
+    // Assets personnalisés
     .addStyleEntry('app_styles', [
         './assets/styles/sticky.css',
         './assets/styles/navbar.css',
         './assets/styles/dropdown.css',
         './assets/styles/login-register.css',
         './assets/styles/admin.css',
-        './assets/styles/app.css',    
+        './assets/styles/app.css',
         './assets/styles/carousel.css',
         './assets/styles/parallax.css',
         './assets/styles/scss_styles.scss'
     ])
+
+    // Preview image FileUpload
+    .addEntry('previewImage', './assets/js/profile/previewImage.js')
     // REACT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
     .enableReactPreset()
+    // useFetch ( effectue les requete ajax pour react)
+    .addEntry('useFetch', './assets/js/useFetch.jsx')
+    .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
+
+    // .addEntry('HomeCarrousel', './assets/js/carousel/HomeCarousel.js')  // Carousel Semantic non utilisé
     // CarouselComponent React
-    .addEntry('CarouselComponent', './assets/js/components/carousel/CarouselComponent.js')
-    // SticiyFooter React
-    .addEntry('StickyFooter', './assets/js/components/StickyFooter.js')
+    .addEntry('CarouselComponent', './assets/js/components/Carousel/CarouselComponent.jsx')
+    // StickyFooter React
+    .addEntry('StickyFooter', './assets/js/components/Sticky/StickyFooter.jsx')
     // active le code splitting
     // Divise en fragment et charge que lorsque nécessaire, gain performance
     .splitEntryChunks()
@@ -102,7 +109,6 @@ Encore
     .enableSassLoader()
     // traitement des fichiers Less (.less). 
     .enableLessLoader()
-
     // charge jQuery globalement dans tous les fichiers JavaScript 
     // pas d'importation explicite dans les fichiers js.
     .autoProvidejQuery()

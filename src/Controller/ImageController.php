@@ -1,14 +1,11 @@
 <?php
-
 namespace App\Controller;
-
+// Importation des classes nécessaires
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -16,9 +13,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ImageController extends AbstractController
 {
-
     private $parameters;
-
+    
     public function __construct(ParameterBagInterface $parameters)
     {
         $this->parameters = $parameters;
@@ -27,7 +23,7 @@ class ImageController extends AbstractController
     #[Route('/api/uploadImage', name: 'upload_img', methods: ['POST'])]
     public function uploadImage(UploadedFile $file, String $role): JsonResponse
     {
-        $originalFilename = $file->getClientOriginalName();
+        // $originalFilename = $file->getClientOriginalName();
         // Récupère le répertoire de téléchargement à partir des paramètres et ( services.yaml )
         $uploadsDirectory = $this->parameters->get('pictures_directory');
 
