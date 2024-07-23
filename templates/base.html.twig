@@ -18,6 +18,7 @@
     {{ encore_entry_link_tags('semantic_less') }}
     {{ encore_entry_link_tags('app_styles') }}
     {% endblock %}
+    {# <script src="{{ asset('tarteaucitron.js')}}"></script> #}
 </head>
 
 <body>
@@ -43,8 +44,13 @@
                 </div>
             </div>
         </div>
+
+        <!-- Tarteaucitron -->
+        <div id="tarteaucitron"></div>
+
         {% block body %} {% endblock %}
     </article>
+
 
     <footer>{% include 'footer/footer.html.twig' %}</footer>
 
@@ -61,7 +67,36 @@
     {{ encore_entry_script_tags('messageFlash') }}
     {{ encore_entry_script_tags('CarouselComponent') }}
     {{ encore_entry_script_tags('StickyFooter') }}
+    {# {{ encore_entry_script_tags('tarteaucitron') }} #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+   
+            if (typeof tarteaucitron === 'object') {
 
+                tarteaucitron.init({
+                    
+                    "privacyUrl": "", /* URL de la politique de confidentialité */
+                    "hashtag": "#tarteaucitron", /* Ouvrir le panneau avec ce hashtag */
+                    "cookieName": "tarteaucitron", /* Nom du cookie */
+                    "orientation": "bottom", /* Position de la bannière (top - bottom) */
+                    "showAlertSmall": true, /* Montrer la petite bannière en bas à droite */
+                    "cookieslist": true, /* Afficher la liste des cookies */
+                    "adblocker": false, /* Montrer un avertissement si un bloqueur de publicités est détecté */
+                    "AcceptAllCta": true, /* Montrer le bouton accepter tout lorsque highPrivacy est activé */
+                    "highPrivacy": false, /* Désactiver le consentement automatique */
+                    "handleBrowserDNTRequest": false, /* Si Do Not Track == 1, interdire tout */
+                    "removeCredit": false, /* Supprimer le lien de crédit */
+                    "moreInfoLink": true, /* Montrer le lien pour plus d'infos */
+                    "useExternalCss": false, /* Si faux, le fichier tarteaucitron.css sera chargé */
+                    "readmoreLink": "/cookiespolicy" /* Changer le lien de lecture plus par défaut */
+                });
+        
+            } else {
+                console.log('Tarteaucitron is defined');
+            }
+        });
+
+    </script>
     {% endblock %}
 </body>
 

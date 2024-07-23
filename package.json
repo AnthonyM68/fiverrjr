@@ -35,6 +35,7 @@
     "react-responsive-carousel": "^3.2.23",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.5",
+    "tarteaucitronjs": "^1.19.0",
     "uikit": "^3.21.4"
   },
   "devDependencies": {

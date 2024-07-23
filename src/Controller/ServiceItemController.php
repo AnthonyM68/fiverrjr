@@ -23,10 +23,12 @@ use Symfony\Component\Form\FormError;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ServiceItemRepository;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -48,56 +50,174 @@ class ServiceItemController extends AbstractController
         $this->logger = $logger;
     }
 
-    #[Route('/cart/product', name: 'cart_product')]
+
+
+    #[Route('/cart', name: 'cart_product')]
     public function cartProduct(Cart $cart, Request $request): Response
     {
-        $cart = $cart->getCart($request);
+        $fullCart = $cart->getCart($request);
+
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier',
+            'data' => $fullCart['data'],
+            'total' => $fullCart['total'],
+            'nbProducts' => $fullCart['totalServiceItem'],
         ]);
     }
-    #[Route('/cart/add/{id}', name: 'add_service_cart')]
-    public function cartAddProduct(int $id, Request $request, ServiceItemRepository $serviceItemRepository , Cart $cart): Response
+
+
+    #[Route('/cart/totalItemFromCart', name: 'cart_total_item', methods: ['GET'])]
+
+    public function getTotalItemFromCart(Cart $cart, Request $request): JsonResponse
     {
-  
-        $serviceItem = $serviceItemRepository->find($id);
-    
-        if (!$serviceItem) {
-            throw $this->createNotFoundException('The service item does not exist');
+        $fullCart = $cart->getCart($request);
+
+        try {
+            // Retourner la réponse JSON 
+            return new JsonResponse(['totalServiceItem' => $fullCart['totalServiceItem']], Response::HTTP_OK);
+        } catch (\Throwable $e) {
+            // Retourner une réponse JSON avec une erreur 500 en cas d'exception
+            return new JsonResponse(['error' => 'Failed to array_sum serviceItem.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    #[Route('/cart/add/{id}', name: 'add_service_cart')]
+    public function cartAddProduct(int $id, Request $request, ServiceItemRepository $serviceItemRepository, Cart $cart): Response
+    {
+
+
+        $serviceItem = $serviceItemRepository->find($id);
+
+        if (!$serviceItem) {
+            throw $this->createNotFoundException('Le service n\'existe pas');
+        }
 
         $cart->addProduct($serviceItem, $request);
-    
+
+        $fullCart = $cart->getCart($request);
+
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier',
-        ]);
-    }
-    #[Route('/cart/remove/{id}', name: 'remove_service')]
-    public function cartRemoveProduct(Cart $cart, ServiceItem $serviceItem, Request $request): Response
-    {
-        $cart = $cart->removeProduct($serviceItem, $request);
-        return $this->render('cart/index.html.twig', [
-            'title_page' => 'Panier',
+            'data' => $fullCart['data'],
+            'total' => $fullCart['total']
         ]);
     }
 
-    #[Route('/cart/delete/{id}', name: 'delete_service')]
-    public function cartDeleteProduct(Cart $cart, ServiceItem $serviceItem, Request $request): Response
+
+    #[Route('/cart/remove/{id}', name: 'remove_service_cart')]
+    public function cartRemoveProduct(ServiceItem $serviceItem, Request $request, Cart $cart): Response
     {
-        $cart = $cart->deleteProduct($serviceItem, $request);
+        $cart->removeProduct($serviceItem, $request);
+        $fullCart = $cart->getCart($request);
+
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier',
+            'data' => $fullCart['data'],
+            'total' => $fullCart['total']
         ]);
     }
+
+    #[Route('/cart/delete/{id}', name: 'delete_service_cart')]
+    public function cartDeleteProduct(Cart $cart, ServiceItem $serviceItem, Request $request): Response
+    {
+        $cart->deleteProduct($serviceItem, $request);
+        $fullCart = $cart->getCart($request);
+
+        return $this->render('cart/index.html.twig', [
+            'title_page' => 'Panier',
+            'data' => $fullCart['data'],
+            'total' => $fullCart['total']
+        ]);
+    }
+
+
     #[Route('/empty', name: 'empty')]
     public function empty(Cart $cart, Request $request)
     {
-        $cart = $cart->empty($request);
+        $cart->empty($request);
+        $fullCart = $cart->getCart($request);
+
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier',
+            'data' => $fullCart['data'],
+            'total' => $fullCart['total']
         ]);
     }
+
+
+    #[Route('/cart/create/order', name: 'add_order')]
+    public function createOrder(Cart $cart, Request $request, SerializerInterface $serializer): Response
+    {
+        
+
+        $fullCart = $cart->getCart($request);
+        
+        // on sérialize les données et les convertis en JSON
+        $jsonFullCart = $serializer->serialize($fullCart, 'json', ['groups' => 'serviceItem']);
+
+        // Exemple complet avec tous les paramètres
+        $cookie = new Cookie(
+            'cart',          // Nom du cookie
+            $jsonFullCart,         // Valeur du cookie
+            time() + 3600,          // Expire dans une heure
+            '/',                    // Chemin
+            'fiverrJR.fr',          // Domaine
+            true,                   // Secure (HTTPS uniquement)
+            true,                   // HttpOnly
+            false,                  // Raw (non-encodé)
+            Cookie::SAMESITE_LAX,   // SameSite (LAX, STRICT, NONE) lutte contre CSRF
+            true                    // Partitioned
+        );
+       
+        $response = new Response();
+        $response->headers->setCookie($cookie);
+
+        // $cookieExists = false;
+
+
+        // foreach ($setCookies as $setCookie) {
+        //     if ($setCookie->getName() === 'cart') {
+        //         $cookieExists = true;
+        //         break;
+        //     }
+        // }
+
+        // if ($cookieExists) {
+        //     $this->addFlash('success', '');
+        // } else {
+        //     // Le cookie n'a pas été créé
+        //     // Optionnel : gérer l'erreur, enregistrer un log, etc.
+        //     throw new \Exception('Le cookie "cart" n\'a pas été créé.');
+        // }
+
+        
+        return $this->render('cart/index.html.twig', [
+            'title_page' => 'Panier',
+            'data' => $fullCart['data'],
+            'total' => $fullCart['total']
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -121,7 +241,7 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
-    #[Route('/serviceItem/{id}/detail', name: 'detail_service')]
+    #[Route('/serviceItem/detail/{id}', name: 'detail_service')]
     public function detailService(
         OrderRepository $orderRepository,
         Request $request,
@@ -156,11 +276,14 @@ class ServiceItemController extends AbstractController
     }
 
 
+    // Carousel bestServices 
+    // remplacer ServiceItemRepository par OrderRepository
+
     #[Route('/service/bestServices', name: 'service_bestServices', methods: ['GET'])]
-    public function getBestServices(Request $request, OrderRepository $orderRepository): JsonResponse
+    public function getBestServices(ServiceItemRepository $serviceItemRepository): JsonResponse
     {
         try {
-            $services = $orderRepository->findBy([], ['' => 'DESC']);
+            $services = $serviceItemRepository->findBy([], ['id' => 'DESC']);
             // Retourner la réponse JSON 
             return new JsonResponse(['services' => $services], Response::HTTP_OK);
         } catch (\Throwable $e) {

@@ -51,8 +51,9 @@ Encore
     .addEntry('ViewServiceForm', './assets/js/forms/ViewServiceForm.js')
     // Dropdown navbar
     .addEntry('ViewNavbarDropdown', './assets/js/dropdown/ViewNavbarDropdown.js')
+    // Cart
+    .addEntry('cart', './assets/js/cart/cart.js')
     // Slick-carousel CSS
-
     .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
     .addStyleEntry('carousel', './assets/styles/carousel.css')
     .addStyleEntry('slick-carousel-theme-css', './node_modules/slick-carousel/slick/slick-theme.css')
@@ -73,11 +74,15 @@ Encore
         './assets/styles/app.css',
         './assets/styles/carousel.css',
         './assets/styles/parallax.css',
+        './assets/styles/cart.css',
         './assets/styles/scss_styles.scss'
     ])
 
     // Preview image FileUpload
     .addEntry('previewImage', './assets/js/profile/previewImage.js')
+
+    // Tarte au citron
+    .addEntry('tarteaucitron', './node_modules/tarteaucitronjs/tarteaucitron.js')
     // REACT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
     .enableReactPreset()
     // useFetch ( effectue les requete ajax pour react)
@@ -116,8 +121,21 @@ Encore
     .addPlugin(new webpack.ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery',
-        'window.jQuery': 'jquery'
+        'window.jQuery': 'jquery',
+        tarteaucitron: 'tarteaucitronjs' // Ajoutez cette ligne
+
     }))
+    // .addLoader({
+    //     test: /tarteaucitron\.js$/,
+    //     use: [{
+    //         loader: 'exports-loader?tarteaucitron'
+    //     }]
+    // })
+
+ 
+
+
+
     // configuration des options du serveur de développement
     .configureDevServerOptions(options => {
         // rechargement à chaud

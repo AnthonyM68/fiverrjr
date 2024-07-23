@@ -2,11 +2,14 @@
 namespace App\Controller;
 // Importation des classes nécessaires
 use App\Entity\User;
+use App\Service\Cart;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
@@ -23,6 +26,12 @@ class HomeController extends AbstractController
         $this->logger = $logger;
     }
 
+
+
+
+
+
+
     /**
      * Route pour la page d'accueil
      *
@@ -31,7 +40,7 @@ class HomeController extends AbstractController
 
 
     #[Route('/home', name: 'home')]
-    public function index(): Response
+    public function index(Cart $cart, Request $request): Response
     {
         // Récupérer le dernier utilisateur avec le rôle ROLE_ENTERPRISE
         $lastEnterprise = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_ENTERPRISE');
@@ -48,7 +57,11 @@ class HomeController extends AbstractController
             'lastService' => $lastService
         ]);
 
-
+ 
+        $fullCart = $cart->getCart($request);
+        // dd($fullCart);
+        // calcul la sommes des valeurs du tableau
+        // $totalItems = array_sum($fullCart['totalServiceItem']);
 
         return $this->render('home/index.html.twig', [
             // Données pour le carousel sur le home

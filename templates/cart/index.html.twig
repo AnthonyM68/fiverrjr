@@ -4,33 +4,70 @@
 
 {% block body %}
 
+<div class="custom-container">
+    {% if data | default %}
+    <table class="ui four column table">
+        <thead>
+            <tr>
+                <th>Service titre</th>
+                <th>Quantité</th>
+                <th>Prix</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in data %}
+            <tr>
+                <td data-label="title">{{ product.serviceItem.title }}</td>
+                <td>
+                    <div class="ui input">
 
-<table class="ui celled table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Job</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td data-label="Name">James</td>
-            <td data-label="Age">24</td>
-            <td data-label="Job">Engineer</td>
-        </tr>
-        <tr>
-            <td data-label="Name">Jill</td>
-            <td data-label="Age">26</td>
-            <td data-label="Job">Engineer</td>
-        </tr>
-        <tr>
-            <td data-label="Name">Elyse</td>
-            <td data-label="Age">24</td>
-            <td data-label="Job">Designer</td>
-        </tr>
-    </tbody>
-</table>
+                        <input type="text" id="quantity-spinner" data-label="quantity" value="{{ product.quantity }}">
 
+                        <div class="ui mini vertical buttons">
 
+                            {# <a href="{{ path('add_service_cart', {id: product.serviceItem.id}) }}"
+                                class="ui icon button" command="Up">
+                                <i class="up chevron icon"></i>
+                            </a>
+                            <a href="{{ path('remove_service_cart', {id: product.serviceItem.id}) }}"
+                                class="ui icon button" command="Down">
+                                <i class="down chevron icon"></i>
+                            </a> #}
+                        </div>
+                    </div>
+                </td>
+                <td data-label="price">{{ product.serviceItem.price }}</td>
+                <td>
+                    <a href="{{ path('delete_service_cart', {id: product.serviceItem.id}) }}"
+                        class="ui orange message">Supprimer</a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr> 
+
+                <th>{{ total }}</th>
+                <th></th>
+                <th></th>
+                <th>
+                    <a href="{{ path('add_order') }}" class="ui green message">Valider le panier</a>
+                </th>
+                <th></th>
+               
+            </tr>
+        </tfoot>
+    </table>
+
+    {% else %}
+    <div class="ui olive message anim">Aucun panier en cours</div>
+    {% endif %}
+</div>
+
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('cart') }}
+{% endblock %}
 {% endblock %}

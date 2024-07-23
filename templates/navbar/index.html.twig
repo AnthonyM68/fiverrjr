@@ -69,6 +69,9 @@
                 <a href="{{ path('profile_edit', {'id': app.user.id}) }}" class="ui item">Bonjour {{ app.user.username
                     }}</a>
                 <a href="{{ path('logout') }}" class="ui item">Se déconnecter</a>
+
+                <i class="cart arrow down icon"></i><span id="cart-icon"></span>
+                
                 {% else %}
                 <a href="{{ path('login') }}" class="ui item">Se connecter</a>
                 <a href="{{ path('register') }}" class="ui item">S'enregistrer</a>
