@@ -47,16 +47,16 @@ class Cart extends AbstractController
         }
         return compact('data', 'total');
     }
+
     public function addProduct(ServiceItem $serviceItem, Request $request)
     {
-
         $session = $request->getSession();
-        //On récupère l'id du produit
+        // On récupère l'id du produit
         $id = $serviceItem->getId();
-
+    
         // On récupère le panier existant
         $panier = $session->get('cart', []);
-
+    
         // On ajoute le produit dans le panier s'il n'y est pas encore
         // Sinon on incrémente sa quantité
         if (empty($panier[$id])) {
@@ -64,13 +64,9 @@ class Cart extends AbstractController
         } else {
             $panier[$id]++;
         }
-
-        $session->set('panier', $panier);
-
-        //On redirige vers la page du panier
-        return $this->redirectToRoute('cart_product');
+    
+        $session->set('cart', $panier);
     }
-
 
     public function removeProduct(ServiceItem $serviceItem, Request $request)
     {

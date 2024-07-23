@@ -56,10 +56,19 @@ class ServiceItemController extends AbstractController
             'title_page' => 'Panier',
         ]);
     }
-    #[Route('/cart/add', name: 'add_service')]
-    public function cartAddProduct(Cart $cart, ServiceItem $serviceItem, Request $request): Response
+    #[Route('/cart/add/{id}', name: 'add_service_cart')]
+    public function cartAddProduct(int $id, Request $request, ServiceItemRepository $serviceItemRepository , Cart $cart): Response
     {
-        $cart = $cart->addProduct($serviceItem, $request);
+  
+        $serviceItem = $serviceItemRepository->find($id);
+    
+        if (!$serviceItem) {
+            throw $this->createNotFoundException('The service item does not exist');
+        }
+    
+
+        $cart->addProduct($serviceItem, $request);
+    
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier',
         ]);

@@ -120,13 +120,15 @@
                     
 
 
+                {% if service| default %}
+                    <a href="{{ path('add_service_cart', {'id': service.id}) }}" class="ui green message">Ajouter au panier</a>
+                {% endif %}
 
-
-                    {% if formAddOrder is defined %}
+                    {# {% if formAddOrder is defined %}
                     <h1 class="uk-animation-slide-down">{{title_page}}</h1>
-                    {{ form_start(formAddOrder, {'attr': {'class': 'ui form order'}}) }}
+                    {{ form_start(formAddOrder, {'attr': {'class': 'ui form order'}}) }} #}
                     {# la class field pour afficher les erreurs #}
-                    <div class="{{ formAddOrder.serviceId.vars.errors|length > 0 ? 'field error' }}">
+                    {# <div class="{{ formAddOrder.serviceId.vars.errors|length > 0 ? 'field error' }}">
                         {{ form_label(formAddOrder.serviceId) }}
                         {{ form_errors(formAddOrder.serviceId) }}
                         {{ form_widget(formAddOrder.serviceId) }}
@@ -137,7 +139,7 @@
                         </button>
                     </div>
                     {{ form_end(formAddOrder) }}
-                    {% endif %}
+                    {% endif %}  #}
 
 
                 </div>
