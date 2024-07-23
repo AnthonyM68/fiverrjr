@@ -22,6 +22,8 @@ services:
   # Assure la protection CSRF en définissant le gestionnaire de jetons CSRF
   Symfony\Component\Security\Csrf\CsrfTokenManagerInterface: "@security.csrf.token_manager"
 
+  # Symfony\Component\HttpFoundation\Session\SessionInterface: '@session.factory'
+
   # Default configuration for services in this file
   # Configuration par défaut pour les services dans ce fichier
   _defaults:
@@ -77,3 +79,9 @@ services:
   # Exécuter une méthode getNavBarData() pour alimenter le menu déroulant dans la barre de navigation
   App\Twig\AppExtension:
     tags: ["twig.extension"]
+
+  # App\Service\Cart:
+  #   arguments:
+  #     $sessionFactory: '@session.factory'
+  #     $serviceItemRepository: '@App\Repository\ServiceItemRepository'
+  #     $entityManager: '@doctrine.orm.entity_manager'

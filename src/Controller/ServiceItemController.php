@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+// services
 use App\Service\Cart;
 // Importation des classes nécessaires
 use App\Entity\Order;
@@ -36,7 +37,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ServiceItemController extends AbstractController
 {
     private $logger;
-    private $serializer;
     private $entityManager;
 
     public function __construct(
@@ -49,21 +49,50 @@ class ServiceItemController extends AbstractController
     }
 
     #[Route('/cart/product', name: 'cart_product')]
-    public function cartProduct(): Response
+    public function cartProduct(Cart $cart, Request $request): Response
     {
-        $cart = new Cart();
-        $cart = $cart->getCart();
-        dd($cart);
-
+        $cart = $cart->getCart($request);
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier',
         ]);
     }
-    // #[Route("/serviceItem/search/results", name: "search_results", methods: ['POST'])]
-    // public function searchResult(): JsonResponse
-    // {
-    //     return new JsonResponse(['test' => 'test']);
-    // }
+    #[Route('/cart/add', name: 'add_service')]
+    public function cartAddProduct(Cart $cart, ServiceItem $serviceItem, Request $request): Response
+    {
+        $cart = $cart->addProduct($serviceItem, $request);
+        return $this->render('cart/index.html.twig', [
+            'title_page' => 'Panier',
+        ]);
+    }
+    #[Route('/cart/remove/{id}', name: 'remove_service')]
+    public function cartRemoveProduct(Cart $cart, ServiceItem $serviceItem, Request $request): Response
+    {
+        $cart = $cart->removeProduct($serviceItem, $request);
+        return $this->render('cart/index.html.twig', [
+            'title_page' => 'Panier',
+        ]);
+    }
+
+    #[Route('/cart/delete/{id}', name: 'delete_service')]
+    public function cartDeleteProduct(Cart $cart, ServiceItem $serviceItem, Request $request): Response
+    {
+        $cart = $cart->deleteProduct($serviceItem, $request);
+        return $this->render('cart/index.html.twig', [
+            'title_page' => 'Panier',
+        ]);
+    }
+    #[Route('/empty', name: 'empty')]
+    public function empty(Cart $cart, Request $request)
+    {
+        $cart = $cart->empty($request);
+        return $this->render('cart/index.html.twig', [
+            'title_page' => 'Panier',
+        ]);
+    }
+
+
+
+
 
     /**
      * SERVICES
@@ -88,8 +117,7 @@ class ServiceItemController extends AbstractController
         OrderRepository $orderRepository,
         Request $request,
         ?ServiceItem $service
-        ): Response
-    {
+    ): Response {
         // $order = new Order();
 
         // Variable pour stocker les erreurs de validation
