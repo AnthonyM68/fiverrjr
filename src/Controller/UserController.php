@@ -82,7 +82,6 @@ class UserController extends AbstractController
         int $id,
         Request $request,
         UserRepository $userRepository,
-        ServiceItemRepository $serviceItemRepository,
         EntityManagerInterface $entityManager
     ): Response {
 

@@ -5,16 +5,8 @@ import { Parallax, ParallaxDouble } from './js/components/Parallax/Parallax';
 import { BestServicesCarousel } from './js/components/Carousel/CarouselComponent';
 import UserCard from './js/components/Card/UserCard';
 
-import useFetch from './js/useFetch';
-import tarteaucitron from 'tarteaucitronjs';
+// import 'tarteaucitronjs/tarteaucitron';
 
-// import 'tarteaucitronjs/tarteaucitron.js';
-
-// Add your services here
-// tarteaucitron.user.gtagUa = 'UA-XXXXXXXXX-X';
-// tarteaucitron.user.gtagMore = function() { /* add here your optionnal gtag code */ };
-// (tarteaucitron.job = tarteaucitron.job || []).push('gtag');
-// Composant pour le Carousel
 const CarouselComponent = () => {
     const { data: bestServices, error } = useFetch(`/service/bestServices`);
 
@@ -72,6 +64,7 @@ const CarouselComponent = () => {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('=> app.js loaded');
 
+
     fetch('/cart/totalItemFromCart')
         .then(response => {
             // Vérification du statut de la réponse
@@ -82,16 +75,16 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             console.log(data['totalServiceItem']);
-            document.getElementById('cart-icon').innerText = data['totalServiceItem'];
+            //document.getElementById('cart-icon').innerText = data['totalServiceItem'];
 
         })
         .catch(error => {
             throw new Error(error.message);
         });
 
-    const carouselRoot = document.getElementById('bestservices-root');
-    if (carouselRoot) {
-        const root = createRoot(carouselRoot);
-        root.render(<CarouselComponent />);
-    }
+    // const carouselRoot = document.getElementById('bestservices-root');
+    // if (carouselRoot) {
+    //     const root = createRoot(carouselRoot);
+    //     root.render(<CarouselComponent />);
+    // }
 });

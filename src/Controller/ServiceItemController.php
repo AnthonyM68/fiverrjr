@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 // services
-use App\Service\Cart;
-// Importation des classes nécessaires
 use App\Entity\Order;
+// Importation des classes nécessaires
 use App\Entity\Theme;
+use App\Service\Cart;
 use App\Entity\Course;
 use App\Form\OrderType;
 use App\Form\ThemeType;
@@ -23,15 +23,16 @@ use Symfony\Component\Form\FormError;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ServiceItemRepository;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -65,9 +66,7 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
-
     #[Route('/cart/totalItemFromCart', name: 'cart_total_item', methods: ['GET'])]
-
     public function getTotalItemFromCart(Cart $cart, Request $request): JsonResponse
     {
         $fullCart = $cart->getCart($request);
@@ -83,20 +82,9 @@ class ServiceItemController extends AbstractController
 
 
 
-
-
-
-
-
-
-
-
-
     #[Route('/cart/add/{id}', name: 'add_service_cart')]
     public function cartAddProduct(int $id, Request $request, ServiceItemRepository $serviceItemRepository, Cart $cart): Response
     {
-
-
         $serviceItem = $serviceItemRepository->find($id);
 
         if (!$serviceItem) {
@@ -159,49 +147,65 @@ class ServiceItemController extends AbstractController
     #[Route('/cart/create/order', name: 'add_order')]
     public function createOrder(Cart $cart, Request $request, SerializerInterface $serializer): Response
     {
-        
+
 
         $fullCart = $cart->getCart($request);
+
+        $client = HttpClient::create([
+            'headers' => [
+                // set one cookie as a name=value pair
+                'Cookie' => 'flavor=chocolate',
         
+                // you can set multiple cookies at once separating them with a ;
+                'Cookie' => 'flavor=chocolate; size=medium',
+        
+                // if needed, encode the cookie value to ensure that it contains valid characters
+                'Cookie' => sprintf("%s=%s", 'foo', rawurlencode('...')),
+            ],
+        ]);
+        $response = $client->request('GET', 'http://localhost', [
+            // 0 means to not follow any redirect
+            'max_redirects' => 0,
+        ]);
+        dd($response);
         // on sérialize les données et les convertis en JSON
-        $jsonFullCart = $serializer->serialize($fullCart, 'json', ['groups' => 'serviceItem']);
+        // $jsonFullCart = $serializer->serialize($fullCart, 'json', ['groups' => 'serviceItem']);
 
-        // Exemple complet avec tous les paramètres
-        $cookie = new Cookie(
-            'cart',          // Nom du cookie
-            $jsonFullCart,         // Valeur du cookie
-            time() + 3600,          // Expire dans une heure
-            '/',                    // Chemin
-            'fiverrJR.fr',          // Domaine
-            true,                   // Secure (HTTPS uniquement)
-            true,                   // HttpOnly
-            false,                  // Raw (non-encodé)
-            Cookie::SAMESITE_LAX,   // SameSite (LAX, STRICT, NONE) lutte contre CSRF
-            true                    // Partitioned
-        );
-       
-        $response = new Response();
-        $response->headers->setCookie($cookie);
+        // // Exemple complet avec tous les paramètres
+        // $cookie = new Cookie(
+        //     'cart', // Nom du cookie
+        //     $jsonFullCart, // Valeur du cookie
+        //     time() + 3600, // Expire dans une heure
+        //     '/', // Chemin
+        //     'localhost', // Domaine local
+        //     true, // Secure (HTTPS uniquement)
+        //     false, // HttpOnly
+        //    // false, // Raw (non-encodé)
+        //    // Cookie::SAMESITE_LAX, // SameSite (LAX, STRICT, NONE) lutte contre CSRF
+        // );
+        // // dd($cookie);
+        // $response = new Response();
+        // $response->headers->setCookie($cookie);
 
+
+        // Pour vérifier les cookies définis dans les en-têtes
+        // $cookies = $response->headers->getCookies();
         // $cookieExists = false;
-
-
-        // foreach ($setCookies as $setCookie) {
+        // foreach ($cookies as $setCookie) {
         //     if ($setCookie->getName() === 'cart') {
         //         $cookieExists = true;
         //         break;
         //     }
         // }
-
         // if ($cookieExists) {
-        //     $this->addFlash('success', '');
+
+        //     $this->addFlash('success', 'Cookie create');
         // } else {
-        //     // Le cookie n'a pas été créé
-        //     // Optionnel : gérer l'erreur, enregistrer un log, etc.
-        //     throw new \Exception('Le cookie "cart" n\'a pas été créé.');
+        //     // throw new \Exception('Le cookie "cart" n\'a pas été créé.');
         // }
 
-        
+
+
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier',
             'data' => $fullCart['data'],

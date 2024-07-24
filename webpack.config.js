@@ -39,6 +39,12 @@ Encore
     .addEntry('uikit', './node_modules/uikit/dist/js/uikit.js')
     .addEntry('uikit-icons', './node_modules/uikit/dist/js/uikit-icons.js')
     .addStyleEntry('uikit_css', './node_modules/uikit/dist/css/uikit.css')
+
+    // tarteaucitron
+    .addStyleEntry('tarteaucitron_css', './node_modules/tarteaucitronjs/css/tarteaucitron.css')
+    .addEntry('tarteaucitron', './node_modules/tarteaucitronjs/tarteaucitron.js')
+
+
     // app
     .addEntry('app', './assets/app.js')
     // Message_flash
@@ -81,8 +87,9 @@ Encore
     // Preview image FileUpload
     .addEntry('previewImage', './assets/js/profile/previewImage.js')
 
-    // Tarte au citron
-    .addEntry('tarteaucitron', './node_modules/tarteaucitronjs/tarteaucitron.js')
+
+
+
     // REACT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
     .enableReactPreset()
     // useFetch ( effectue les requete ajax pour react)
@@ -122,20 +129,10 @@ Encore
         $: 'jquery',
         jQuery: 'jquery',
         'window.jQuery': 'jquery',
-        tarteaucitron: 'tarteaucitronjs' // Ajoutez cette ligne
+        tarteaucitron: 'tarteaucitronjs/tarteaucitron'
+
 
     }))
-    // .addLoader({
-    //     test: /tarteaucitron\.js$/,
-    //     use: [{
-    //         loader: 'exports-loader?tarteaucitron'
-    //     }]
-    // })
-
- 
-
-
-
     // configuration des options du serveur de développement
     .configureDevServerOptions(options => {
         // rechargement à chaud

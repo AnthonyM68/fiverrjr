@@ -2044,7 +2044,7 @@ var tarteaucitron = {
         "use strict";
 
         var availableLanguages = 'ar,bg,ca,cn,cs,da,de,et,el,en,es,fi,fr,hr,hu,it,ja,kr,lb,lt,lv,nl,no,oc,pl,pt,ro,ru,se,sk,sv,tr,uk,vi,zh',
-            defaultLanguage = 'en';
+            defaultLanguage = 'fr';
 
         if (tarteaucitronForceLanguage !== '') {
             if (availableLanguages.indexOf(tarteaucitronForceLanguage) !== -1) {

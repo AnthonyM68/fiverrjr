@@ -5,6 +5,7 @@
 {% block body %}
 
 <div class="custom-container">
+    <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
     {% if data | default %}
     <table class="ui four column table">
         <thead>
