@@ -18,59 +18,26 @@
 <div id="parallax-root"></div>
 
 
+
+
 <div class="custom-container">
     {# <h2 class="uk-animation-slide-right">Meilleurs services</h2> #}
     <div id="bestservices-root"></div>
 </div>
+<div class="custom-container">
+    {# <h2 class="uk-animation-slide-right">Meilleurs services</h2> #}
+    <div id="last-developers"></div>
+</div>
 
 
-{# <div class="ui container" id="initial-container">
-    <!-- This div will take the height of the viewport -->
-</div> #}
-{# <h2>Derniers inscrits et enregistrements</h2> #}
+
+<div id="parallax-root-2"></div>
 
 
-{# <div class="ui container" id="carousel-container">
-    <div class="carousel-container">
-        <div class="ui segment">
-            <h2>Derniers inscrits et enregistrements</h2>
-            <div class="ui fluid carousel">
-                <div class="ui grid">
-                    <div class="sixteen wide column">
-                        <div class="ui carousel slider">
-                            {% if lastDeveloper %}
-                            <div class="carousel-slide">
-                                <h3>Dernier développeur inscrit</h3>
-                                <img src="{{ asset(lastDeveloper.picture) }}" alt="{{ lastDeveloper.username }}">
-                                <p>{{ lastDeveloper.username }} {{ lastDeveloper.lastname }}</p>
-                                <p></p>
-                            </div>
-                            {% endif %}
 
-                            {% if lastEnterprise %}
-                            <div class="carousel-slide">
-                                <h3>Dernière entreprise inscrite</h3>
-                                <img src="{{ asset(lastEnterprise.picture) }}" alt="{{ lastEnterprise.username }}">
-                                <p>{{ lastEnterprise.username }} {{ lastEnterprise.lastname }}</p>
-                                <p></p>
-                            </div>
-                            {% endif %}
 
-                            {% if lastService %}
-                            <div class="carousel-slide">
-                                <h3>Dernier service enregistré</h3>
-                                <img src="{{ asset(lastService.picture) }}" alt="{{ lastService.title }}">
-                                <p>{{ lastService.title }} {{ lastService.description }}</p>
-                                <p></p>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> #}
+
+
 
 {% block javascripts %}
 {{ parent() }}

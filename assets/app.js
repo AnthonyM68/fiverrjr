@@ -21,7 +21,7 @@ const CarouselComponent = () => {
     }
 
     if (!bestServices) {
-        return <div>Loading...</div>;
+        return <div class="ui active inline loader"></div>
     }
     console.log(bestServices);
 
@@ -37,7 +37,7 @@ const LastUser = ({ role }) => {
     }
 
     if (!lastUser) {
-        return <div>Loading...</div>;
+        return <div class="ui active loader"></div>;
     }
 
     return <UserCard user={lastUser} />;
@@ -69,11 +69,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const root = createRoot(parallaxRoot);
         root.render(<ParallaxComponent />);
     }
+
+    const parallaxRoot2 = document.getElementById('parallax-root-2');
+    if (parallaxRoot2) {
+        const root = createRoot(parallaxRoot2);
+        root.render(<ParallaxComponent />);
+    }
+
+
+
     const carouselRoot = document.getElementById('bestservices-root');
     if (carouselRoot) {
         const root = createRoot(carouselRoot);
         root.render(<CarouselComponent />);
     }
+
+
+
+    const lastDevlRoot = document.getElementById('last-developers');
+    if (lastDevlRoot) {
+        const root = createRoot(lastDevlRoot);
+        root.render(<CarouselComponent />);
+    }
+
+
+
 
 
     const lastDeveloperRoot = document.getElementById('last-developer-root');
