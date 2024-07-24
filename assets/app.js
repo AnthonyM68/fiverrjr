@@ -4,8 +4,14 @@ import { createRoot } from 'react-dom/client';
 import { Parallax, ParallaxDouble } from './js/components/Parallax/Parallax';
 import { BestServicesCarousel } from './js/components/Carousel/CarouselComponent';
 import UserCard from './js/components/Card/UserCard';
+// hook useFetch
+import useFetch from './js/useFetch';
+import config from './js/config'
 
-// import 'tarteaucitronjs/tarteaucitron';
+// Composant pour Parallax
+const ParallaxComponent = () => {
+    return <Parallax />;
+};
 
 const CarouselComponent = () => {
     const { data: bestServices, error } = useFetch(`/service/bestServices`);
@@ -17,54 +23,30 @@ const CarouselComponent = () => {
     if (!bestServices) {
         return <div>Loading...</div>;
     }
+    console.log(bestServices);
 
     return <BestServicesCarousel services={bestServices} />;
 };
 
-// const bestServices = [
-//     {
-//         image: 'img/services/service.jpg',
-//         title: 'Service 1',
-//         username: 'User 1',
-//         description: 'Description du service 1',
-//         reviews: 34
-//     },
-//     {
-//         image: 'img/services/service.jpg',
-//         title: 'Service 2',
-//         username: 'User 2',
-//         description: 'Description du service 2',
-//         reviews: 21
-//     },
-//     {
-//         image: 'img/services/service.jpg',
-//         title: 'Service 3',
-//         username: 'User 3',
-//         description: 'Description du service 3',
-//         reviews: 18
-//     },
-//     {
-//         image: 'img/services/service.jpg',
-//         title: 'Service 4',
-//         username: 'User 4',
-//         description: 'Description du service 4',
-//         reviews: 45
-//     },
-//     {
-//         image: 'img/services/service.jpg',
-//         title: 'Service 5',
-//         username: 'User 5',
-//         description: 'Description du service 5',
-//         reviews: 67
-//     }
-// ];
+// Composant pour afficher le dernier utilisateur inscrit
+const LastUser = ({ role }) => {
+    const { data: lastUser, error } = useFetch(`/last/user/${role}`);
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
+
+    if (!lastUser) {
+        return <div>Loading...</div>;
+    }
+
+    return <UserCard user={lastUser} />;
+};
 
 
 // Vérifier et rendre les composants en fonction des éléments DOM
 document.addEventListener('DOMContentLoaded', () => {
     console.log('=> app.js loaded');
-
-
     fetch('/cart/totalItemFromCart')
         .then(response => {
             // Vérification du statut de la réponse
@@ -82,9 +64,27 @@ document.addEventListener('DOMContentLoaded', () => {
             throw new Error(error.message);
         });
 
-    // const carouselRoot = document.getElementById('bestservices-root');
-    // if (carouselRoot) {
-    //     const root = createRoot(carouselRoot);
-    //     root.render(<CarouselComponent />);
-    // }
+    const parallaxRoot = document.getElementById('parallax-root');
+    if (parallaxRoot) {
+        const root = createRoot(parallaxRoot);
+        root.render(<ParallaxComponent />);
+    }
+    const carouselRoot = document.getElementById('bestservices-root');
+    if (carouselRoot) {
+        const root = createRoot(carouselRoot);
+        root.render(<CarouselComponent />);
+    }
+
+
+    const lastDeveloperRoot = document.getElementById('last-developer-root');
+    if (lastDeveloperRoot) {
+        const root = createRoot(lastDeveloperRoot);
+        root.render(<LastUser role="ROLE_DEVELOPER" />);
+    }
+
+    const lastClientRoot = document.getElementById('last-client-root');
+    if (lastClientRoot) {
+        const root = createRoot(lastClientRoot);
+        root.render(<LastUser role="ROLE_CLIENT" />);
+    }
 });

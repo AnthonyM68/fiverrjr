@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 // Importation des classes nécessaires
 use App\Entity\User;
@@ -27,11 +28,6 @@ class HomeController extends AbstractController
     }
 
 
-
-
-
-
-
     /**
      * Route pour la page d'accueil
      *
@@ -50,6 +46,7 @@ class HomeController extends AbstractController
         $lastService = $this->entityManager->getRepository(ServiceItem::class)->findOneBy([], ['id' => 'DESC']);
 
 
+
         // Enregistrement des données de la requête dans les logs
         $this->logger->info('HomeController: line:49 Résults Search', [
             'lastDeveloper' => $lastDeveloper,
@@ -57,9 +54,37 @@ class HomeController extends AbstractController
             'lastService' => $lastService
         ]);
 
- 
-        $fullCart = $cart->getCart($request);
-        // dd($fullCart);
+        // Récupérer le cookie de la requête
+        $cookieName = 'panier_cookie';
+        $cookieValue = $request->cookies->get($cookieName);
+
+        // dd($cookieValue);
+
+        // Désérialiser les données du panier à partir du cookie
+        // if ($cookieValue) {
+        //     $fullCart = $serializer->deserialize($cookieValue, Cart::class, 'json');
+        // } else {
+        //     $fullCart = $cart->getCart($request);
+        // }
+
+        // Enregistrer le cookie dans les logs pour vérification
+        $this->logger->info('Cookie Info', [
+            'cookieName' => $cookieName,
+            'cookieValue' => $cookieValue
+        ]);
+        // setcookie("TestCookie", "", time() - 3600, "/");
+        // $fullCart = $cart->getCart($request);
+
+        // Récupérer les cookies
+        // $cookieName = 'cart'; // Remplacez par le nom de votre cookie
+        // $cookieValue = $request->cookies->get($cookieName);
+
+        // // Enregistrer le cookie dans les logs pour vérification
+        // $this->logger->info('Cookie Info', [
+        //     'cookieName' => $cookieName,
+        //     'cookieValue' => $cookieValue
+        // ]);
+
         // calcul la sommes des valeurs du tableau
         // $totalItems = array_sum($fullCart['totalServiceItem']);
 
@@ -68,8 +93,6 @@ class HomeController extends AbstractController
             'lastDeveloper' => $lastDeveloper,
             'lastEnterprise' => $lastEnterprise,
             'lastService' => $lastService,
-
-
             'submitted_form' => null,
             'title_page' => 'Accueil'
         ]);

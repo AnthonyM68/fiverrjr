@@ -105,6 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Ajouter un écouteur d'événement sur chaque bouton d'édition
                 document.querySelectorAll('.toggle-edit-service').forEach(button => {
+
+
                     button.addEventListener('click', async function () {
                         try {
                             const serviceId = this.getAttribute('data-service-id');
@@ -122,8 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 console.log('Form data HTML receiver for service:', data);
                                 if (!editService.is(':visible')) {
                                     editService.slideDown(400);
+
+
                                 }
                                 document.getElementById('service-form-container').innerHTML = data.formHtml;
+
+                                console.log(document.getElementById('service-form-container').innerHTM);
+
                             } else {
                                 const text = await req.text();
                                 console.error('Unexpected response format:', text);
@@ -132,6 +139,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             console.error('Failed to fetch or parse JSON for service form:', error);
                         }
                     });
+
+
+
                 });
                 // Ajouter un écouteur d'événement sur chaque bouton delete
                 document.querySelectorAll('.toggle-trash-service').forEach(button => {

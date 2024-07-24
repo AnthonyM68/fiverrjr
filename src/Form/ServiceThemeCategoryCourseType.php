@@ -24,6 +24,7 @@ class ServiceThemeCategoryCourseType extends AbstractType
                 'placeholder' => 'Choisissez un Thème',
                 'mapped' => false, // Non mapped à service
                 'attr' => ['class' => 'ui fluid search dropdown'],
+                'required' => false,
                 // 'constraints' => [
                 //     new NotBlank([
                 //         'message' => 'Veuillez sélectionner un Thème',
@@ -36,6 +37,7 @@ class ServiceThemeCategoryCourseType extends AbstractType
                 'placeholder' => 'Choisissez une Catégorie',
                 'mapped' => false, // Non mapped à service
                 'attr' => ['class' => 'ui fluid search dropdown'],
+                'required' => false,
                 // 'constraints' => [
                 //     new NotBlank([
                 //         'message' => 'Veuillez sélectionner une catégorie',

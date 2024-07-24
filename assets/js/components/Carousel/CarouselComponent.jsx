@@ -4,36 +4,14 @@ import { Card, Icon, Image } from 'semantic-ui-react';
 // import { Carousel } from 'react-responsive-carousel'; // simple
 import Carousel from 'react-multi-carousel'; // multi
 import { useInView } from 'react-intersection-observer';
-
-const CarouselComponent = () => {
-  return (
-    <div className="carousel-wrapper">
-      <Carousel
-        showArrows={false}
-        infiniteLoop={true}
-        showThumbs={false}
-        autoPlay={true}
-        interval={3000}
-        showStatus={false}
-      >
-        <div>
-          <img src="https://via.placeholder.com/600x400" alt="Image 1" />
-
-        </div>
-        <div>
-          <img src="https://via.placeholder.com/600x400" alt="Image 2" />
-
-        </div>
-        <div>
-          <img src="https://via.placeholder.com/600x400" alt="Image 3" />
-        </div>
-      </Carousel>
-    </div>
-  );
-};
+import config from '../../config'
 
 
 const BestServicesCarousel = ({ services = [] }) => {
+
+  console.log('Received services:', services);
+  // const assetBaseUrl = process.env.REACT_APP_ASSET_BASE_URL || '';
+  
   if (services.length === 0) {
     return <div>Aucun service disponible</div>;
   }
@@ -58,35 +36,51 @@ const BestServicesCarousel = ({ services = [] }) => {
   });
   return (
     <div className="best-services-carousel">
-      <h2 ref={ref} className={`module-title ${inView ? 'uk-animation-slide-right' : ''}`}>Meilleurs services</h2>
+      <h2 ref={ref} className={`module-title ${inView ? 'uk-animation-slide-right' : ''}`}>Deniers services</h2>
+
+
       <Carousel responsive={responsive} infinite autoPlay={false}>
-        {services.map((service, index) => (
-          <div key={index}>
-            <Card>
-              <Image src={service.image} wrapped ui={false} />
-              <Card.Content>
-                <Card.Header>{service.title}</Card.Header>
-                <Card.Meta>
-                  <span className="date">Par {service.username}</span>
-                </Card.Meta>
-                <Card.Description>{service.description}</Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <a>
-                  <Icon name="user" />
-                  {service.reviews} Avis
-                </a>
-              </Card.Content>
-            </Card>
-          </div>
-        ))}
+        {services.map((service, index) => {
+          // Log each service to inspect its structure
+          console.log(`Service ${index}:`, service);
+
+          // Check if the service object has the expected properties
+          if (!service.title || !service.picture || !service.description) {
+            console.error(`Service ${index} is missing required properties.`);
+            return <div key={index}>Invalid service data</div>;
+          }
+
+          return (
+            <div key={index}>
+              <Card>
+                <Image src={`${config.ASSET_BASE_URL}/img/services/${service.picture}`} wrapped ui={false} />
+                <Card.Content>
+                  <Card.Header>{service.title}</Card.Header>
+                  <Card.Meta>
+                    <span className="date">Par {service.user.id}</span>
+                  </Card.Meta>
+                  <Card.Description>{service.description}</Card.Description>
+                </Card.Content>
+                <Card.Content extra>
+                  {/* <a>
+                    <Icon name="user" />
+                     Avis
+                  </a> */}
+                </Card.Content>
+              </Card>
+            </div>
+          );
+        })}
       </Carousel>
+
+
+
     </div>
   );
 };
 // Utiliser les paramètres par défaut en JavaScript
-BestServicesCarousel.defaultProps = {
-  services: []
-};
+// BestServicesCarousel.defaultProps = {
+//   services: []
+// };
 
-export { CarouselComponent, BestServicesCarousel };
+export { BestServicesCarousel };

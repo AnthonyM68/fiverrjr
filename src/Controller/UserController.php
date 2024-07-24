@@ -158,15 +158,32 @@ class UserController extends AbstractController
             $this->addFlash('success', 'Votre profil a bien été mis à jour');
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
+
+
+
+
+
+
+
+
         // traite le formulaire de service
         if ($formService->isSubmitted() && $formService->isValid()) {
             // associe le service à l'utilisateur
             $service->setUser($user);
             $entityManager->persist($service);
             $entityManager->flush();
+
+
+
             $this->addFlash('success', 'Service ajouté avec succès');
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
+
+
+
+
+
+
         // récupére le nom de fichier de l'image de l'utilisateur
         $pictureFilename = $user->getPicture();
         // on utilise le controller pour fournir le chemin absolu de l'image ( config: services.yaml )
@@ -177,7 +194,7 @@ class UserController extends AbstractController
             ]);
             $pictureUrl = json_decode($pictureUrlResponse->getContent(), true);
         }
-
+        // dd($pictureUrl);
         return $this->render('user/index.html.twig', [
             'title_page' => 'Profil',
             'formUser' => $formUser->createView(),
@@ -190,6 +207,23 @@ class UserController extends AbstractController
 
         ]);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     #[Route('/developer', name: 'home_developer')]
     public function developer(): Response
     {
@@ -204,46 +238,8 @@ class UserController extends AbstractController
             'developers' => $users
         ]);
     }
-    #[Route('/api/last/{role}', name: 'api_lastDeveloper', methods: ['GET'])]
-    public function lastDeveloper(String $role, SerializerInterface $serializer): JsonResponse
-    {
 
-        // récupère les users par role et trie par dateRegister
-        $lastUser = $this->userRepository->findOneUserByRole($role);
-        // recherche le dernier des users
-        $lastUser = $lastUser->getQuery()->getOneOrNullResult();
-        // s'il existe
-        if ($lastUser) {
-            // on recherche son image de profil
-            $pictureFilename = $lastUser->getPicture();
-            // on utilise le controller pour fournir le chemin absolu de l'image ( services.yaml )
-            if ($pictureFilename) {
-                $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
-                    'filename' => $pictureFilename,
-                    'role' => $role
-                ]);
-                $pictureUrl = json_decode($pictureUrlResponse->getContent(), true);
-            }
-            // On format les données avant de retourner à Javascript
-            $lastUserData = [
-                'id' => $lastUser->getId(),
-                'firstName' => $lastUser->getFirstName(),
-                'lastName' => $lastUser->getLastName(),
-                'email' => $lastUser->getEmail(),
-                'username' => $lastUser->getUsername(),
-                'picture' =>  $pictureUrl['url'],
-                'dateRegister' => $lastUser->getDateRegister(),
-                'city' => $lastUser->getCity(),
-                'portfolio' => $lastUser->getPortfolio(),
-                'bio' => $lastUser->getBio(),
-            ];
-            // on sérialize les données et les convertis en JSON
-            $jsonDeveloperData = $serializer->serialize($lastUserData, 'json');
-            return new JsonResponse($jsonDeveloperData, 200, [], true);
-        } else {
-            return new JsonResponse(['error' => 'No developer found'], 404);
-        }
-    }
+
 
     #[Route('/developer/order', name: 'list_orders_developer')]
     public function orders(): Response
@@ -327,5 +323,50 @@ class UserController extends AbstractController
             'formAddOrder' => $form->createView(),
             'errors' => $form->getErrors(true),
         ]);
+    }
+
+
+    /**
+     * recherche les dernier user inscrit Component React Profil 
+     */
+    
+    #[Route('/last/user/{role}', name: 'api_lastDeveloper', methods: ['GET'])]
+    public function lastDeveloper(String $role, SerializerInterface $serializer): JsonResponse
+    {
+        // récupère les users par role et trie par dateRegister
+        $lastUser = $this->userRepository->findOneUserByRole($role);
+        // recherche le dernier des users
+        $lastUser = $lastUser->getQuery()->getOneOrNullResult();
+        // s'il existe
+        if ($lastUser) {
+            // on recherche son image de profil
+            $pictureFilename = $lastUser->getPicture();
+            // on utilise le controller pour fournir le chemin absolu de l'image ( services.yaml )
+            if ($pictureFilename) {
+                $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
+                    'filename' => $pictureFilename,
+                    'role' => $role
+                ]);
+                $pictureUrl = json_decode($pictureUrlResponse->getContent(), true);
+            }
+            // On format les données avant de retourner à Javascript
+            $lastUserData = [
+                'id' => $lastUser->getId(),
+                'firstName' => $lastUser->getFirstName(),
+                'lastName' => $lastUser->getLastName(),
+                'email' => $lastUser->getEmail(),
+                'username' => $lastUser->getUsername(),
+                'picture' =>  $pictureUrl['url'],
+                'dateRegister' => $lastUser->getDateRegister(),
+                'city' => $lastUser->getCity(),
+                'portfolio' => $lastUser->getPortfolio(),
+                'bio' => $lastUser->getBio(),
+            ];
+            // on sérialize les données et les convertis en JSON
+            $jsonDeveloperData = $serializer->serialize($lastUserData, 'json');
+            return new JsonResponse($jsonDeveloperData, 200, [], true);
+        } else {
+            return new JsonResponse(['error' => 'No developer found'], 404);
+        }
     }
 }

@@ -83,7 +83,7 @@ class ServiceItemController extends AbstractController
 
 
     #[Route('/cart/add/{id}', name: 'add_service_cart')]
-    public function cartAddProduct(int $id, Request $request, ServiceItemRepository $serviceItemRepository, Cart $cart): Response
+    public function cartAddProduct(int $id, Request $request, ServiceItemRepository $serviceItemRepository, Cart $cart, SerializerInterface $serializer): Response
     {
         $serviceItem = $serviceItemRepository->find($id);
 
@@ -94,12 +94,80 @@ class ServiceItemController extends AbstractController
         $cart->addProduct($serviceItem, $request);
 
         $fullCart = $cart->getCart($request);
+        // dd($fullCart);
 
-        return $this->render('cart/index.html.twig', [
+        // on sérialize les données et les convertis en JSON
+        $jsonFullCart = $serializer->serialize($fullCart, 'json', ['groups' => 'cart']);
+
+        // dd($jsonFullCart);
+        // dd($jsonFullCart);
+        //  setcookie('cookie_id', $jsonFullCart, time() + 60*60*24*30, '/');
+
+        // Définir un cookie avec les données du panier
+        $cookieName = 'panier_cookie';
+        $cookie = new Cookie(
+            $cookieName,
+            "jsonFullCart",
+            time() + (2 * 365 * 24 * 60 * 60) // 2 ans
+        );
+
+        $response = new Response();
+        $response->headers->setCookie($cookie);
+        // dd($response);
+        // Récupérer les cookies définis dans les en-têtes
+        // $cookies = $response->headers->getCookies();
+
+        // Ajouter le rendu de la vue à la réponse
+        $response->setContent($this->renderView('home/index.html.twig', [
             'title_page' => 'Panier',
             'data' => $fullCart['data'],
             'total' => $fullCart['total']
-        ]);
+        ]));
+
+        // dd($response);
+
+        return $response;
+        // dd($cookie);
+        // $response = new Response();
+        // $response->headers->setCookie($cookie);
+
+        // Pour vérifier les cookies définis dans les en-têtes
+        // $cookies = $response->headers->getCookies();
+
+        // setcookie('cart', // Nom du cookie
+        // $jsonFullCart, // Valeur du cookie
+        // time() + 3600, // Expire dans une heure
+        // '/', // Chemin
+        // 'localhost', // Domaine local
+        // false, // Secure (HTTPS uniquement)
+        // false, // HttpOnly
+        // false, // Raw (non-encodé)
+        // Cookie::SAMESITE_LAX, // SameSite (LAX, STRICT, NONE) lutte contre CSRF
+        // ) ;
+
+
+
+        // $cookieExists = false;
+        // foreach ($cookies as $setCookie) {
+        //     if ($setCookie->getName() === 'cart') {
+        //         $cookieExists = true;
+        //         break;
+        //     }
+        // }
+        // if ($cookieExists) {
+        //     $this->addFlash('success', 'Cookie create');
+        // } else {
+        //     throw new \Exception('Le cookie "cart" n\'a pas été créé.');
+        // }
+
+        // dd($cookie);
+
+
+        // return $this->render('cart/index.html.twig', [
+        //     'title_page' => 'Panier',
+        //     'data' => $fullCart['data'],
+        //     'total' => $fullCart['total']
+        // ]);
     }
 
 
@@ -147,70 +215,7 @@ class ServiceItemController extends AbstractController
     #[Route('/cart/create/order', name: 'add_order')]
     public function createOrder(Cart $cart, Request $request, SerializerInterface $serializer): Response
     {
-
-
-        $fullCart = $cart->getCart($request);
-
-        $client = HttpClient::create([
-            'headers' => [
-                // set one cookie as a name=value pair
-                'Cookie' => 'flavor=chocolate',
-        
-                // you can set multiple cookies at once separating them with a ;
-                'Cookie' => 'flavor=chocolate; size=medium',
-        
-                // if needed, encode the cookie value to ensure that it contains valid characters
-                'Cookie' => sprintf("%s=%s", 'foo', rawurlencode('...')),
-            ],
-        ]);
-        $response = $client->request('GET', 'http://localhost', [
-            // 0 means to not follow any redirect
-            'max_redirects' => 0,
-        ]);
-        dd($response);
-        // on sérialize les données et les convertis en JSON
-        // $jsonFullCart = $serializer->serialize($fullCart, 'json', ['groups' => 'serviceItem']);
-
-        // // Exemple complet avec tous les paramètres
-        // $cookie = new Cookie(
-        //     'cart', // Nom du cookie
-        //     $jsonFullCart, // Valeur du cookie
-        //     time() + 3600, // Expire dans une heure
-        //     '/', // Chemin
-        //     'localhost', // Domaine local
-        //     true, // Secure (HTTPS uniquement)
-        //     false, // HttpOnly
-        //    // false, // Raw (non-encodé)
-        //    // Cookie::SAMESITE_LAX, // SameSite (LAX, STRICT, NONE) lutte contre CSRF
-        // );
-        // // dd($cookie);
-        // $response = new Response();
-        // $response->headers->setCookie($cookie);
-
-
-        // Pour vérifier les cookies définis dans les en-têtes
-        // $cookies = $response->headers->getCookies();
-        // $cookieExists = false;
-        // foreach ($cookies as $setCookie) {
-        //     if ($setCookie->getName() === 'cart') {
-        //         $cookieExists = true;
-        //         break;
-        //     }
-        // }
-        // if ($cookieExists) {
-
-        //     $this->addFlash('success', 'Cookie create');
-        // } else {
-        //     // throw new \Exception('Le cookie "cart" n\'a pas été créé.');
-        // }
-
-
-
-        return $this->render('cart/index.html.twig', [
-            'title_page' => 'Panier',
-            'data' => $fullCart['data'],
-            'total' => $fullCart['total']
-        ]);
+        return $this->redirectToRoute('home');
     }
 
 
@@ -244,6 +249,67 @@ class ServiceItemController extends AbstractController
             'services' => $services
         ]);
     }
+
+    #[Route('/serviceItem/new', name: 'new_service')]
+    #[Route('/serviceItem/{id}/edit', name: 'edit_service')]
+    // Restreint l'accès aux utilisateurs authentifiés
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function editService(EntityManagerInterface $entityManager, Request $request, ?ServiceItem $service = null): Response
+    {
+        // Si le service n'existe pas, crée un nouveau service
+        if (!$service) {
+            $service = new ServiceItem();
+        }
+
+        $form = $this->createForm(ServiceItemType::class, $service);
+        $form->handleRequest($request);
+
+        // Si le formulaire est soumis
+        if ($form->isSubmitted()) {
+
+            // Si le formulaire est valide, persiste et sauvegarde la Category
+            if ($form->isValid()) {
+
+                $course = $form->get('course')->get('course')->getData() ?? null;
+                // dd($course);
+                // si on a un résultat dans course
+                if ($course) {
+                    // on set la sous-categorie au service
+                    $service->setCourse($course);
+                } else {
+                    // si aucun cours n'est sélectionné, ajouter une erreur de validation
+                    $form->get('course')->addError(new FormError('Veuillez sélectionner un cours.'));
+
+                    return $this->render('itemService/index.html.twig', [
+                        'title_page' => 'Services',
+                        'formAddService' => $form->createView(),
+                        'errors' => $form->getErrors(true),
+                    ]);
+                }
+
+                // $pictureFile = $form->get('picture')->getData();
+                // if ($pictureFile) {
+                //     $imageUploader->uploadImage($pictureFile, $service->getUser());
+                // }
+                $entityManager->persist($service);
+                $entityManager->flush();
+            }
+        } else {
+            // Pré-remplir les champs non mappés
+            if ($service->getCourse()) {
+                $form->get('course')->get('course')->setData($service->getCourse());
+            }
+        }
+
+        // Rend la vue avec le formulaire
+        return $this->render('itemService/index.html.twig', [
+            'title_page' => 'Services',
+            'formAddService' => $form->createView(),
+            'errors' => $form->getErrors(true),
+            // 'service' => $service
+        ]);
+    }
+
 
     #[Route('/serviceItem/detail/{id}', name: 'detail_service')]
     public function detailService(
@@ -284,12 +350,17 @@ class ServiceItemController extends AbstractController
     // remplacer ServiceItemRepository par OrderRepository
 
     #[Route('/service/bestServices', name: 'service_bestServices', methods: ['GET'])]
-    public function getBestServices(ServiceItemRepository $serviceItemRepository): JsonResponse
+    public function getBestServices(ServiceItemRepository $serviceItemRepository, SerializerInterface $serializer): JsonResponse
     {
         try {
             $services = $serviceItemRepository->findBy([], ['id' => 'DESC']);
+
+            
+            $jsonFullCart = $serializer->serialize($services, 'json', ['groups' => 'serviceItem']);
+            $data = json_decode($jsonFullCart, true); // Décoder en tableau associatif
+
             // Retourner la réponse JSON 
-            return new JsonResponse(['services' => $services], Response::HTTP_OK);
+            return new JsonResponse(['services' => $data], Response::HTTP_OK);
         } catch (\Throwable $e) {
             // Retourner une réponse JSON avec une erreur 500 en cas d'exception
             return new JsonResponse(['error' => 'Failed to load services.'], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -359,66 +430,7 @@ class ServiceItemController extends AbstractController
         }
     }
 
-    #[Route('/serviceItem/new', name: 'new_service')]
-    #[Route('/serviceItem/{id}/edit', name: 'edit_service')]
-    // Restreint l'accès aux utilisateurs authentifiés
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function editService(EntityManagerInterface $entityManager, Request $request, ?ServiceItem $service = null): Response
-    {
-        // Si le service n'existe pas, crée un nouveau service
-        if (!$service) {
-            $service = new ServiceItem();
-        }
-
-        $form = $this->createForm(ServiceItemType::class, $service);
-        $form->handleRequest($request);
-
-        // Si le formulaire est soumis
-        if ($form->isSubmitted()) {
-
-            // Si le formulaire est valide, persiste et sauvegarde la Category
-            if ($form->isValid()) {
-
-                $course = $form->get('course')->get('course')->getData() ?? null;
-                // dd($course);
-                // si on a un résultat dans course
-                if ($course) {
-                    // on set la sous-categorie au service
-                    $service->setCourse($course);
-                } else {
-                    // si aucun cours n'est sélectionné, ajouter une erreur de validation
-                    $form->get('course')->addError(new FormError('Veuillez sélectionner un cours.'));
-
-                    return $this->render('itemService/index.html.twig', [
-                        'title_page' => 'Services',
-                        'formAddService' => $form->createView(),
-                        'errors' => $form->getErrors(true),
-                    ]);
-                }
-
-                // $pictureFile = $form->get('picture')->getData();
-                // if ($pictureFile) {
-                //     $imageUploader->uploadImage($pictureFile, $service->getUser());
-                // }
-                $entityManager->persist($service);
-                $entityManager->flush();
-            }
-        } else {
-            // Pré-remplir les champs non mappés
-            if ($service->getCourse()) {
-                $form->get('course')->get('course')->setData($service->getCourse());
-            }
-        }
-
-        // Rend la vue avec le formulaire
-        return $this->render('itemService/index.html.twig', [
-            'title_page' => 'Services',
-            'formAddService' => $form->createView(),
-            'errors' => $form->getErrors(true),
-            // 'service' => $service
-        ]);
-    }
-
+   
     #[Route('/get_service_by_user', name: 'services_by_user_id', methods: ['GET'])]
 
     public function getServiceByIdUser(

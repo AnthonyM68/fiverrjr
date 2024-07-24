@@ -1,16 +1,17 @@
 import React from 'react';
 import { Card, Image } from 'semantic-ui-react';
+import config from '../../config'
 
 const UserCard = ({ user }) => {
 
     const { picture, firstName, lastName, username, dateRegister, bio } = user;
 
     // Utilisation de l'API Intl pour formater la date en format européen
-    const formattedDate = new Intl.DateTimeFormat('fr-FR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    }).format(new Date(dateRegister));
+    // const formattedDate = new Intl.DateTimeFormat('fr-FR', {
+    //     day: '2-digit',
+    //     month: '2-digit',
+    //     year: 'numeric',
+    // }).format(new Date(dateRegister));
 
     return (
         <Card fluid>
@@ -21,7 +22,7 @@ const UserCard = ({ user }) => {
                     <p>{username}</p>
                 </Card.Header>
                 <Card.Meta>
-                    <span className='date'>Date d'inscription: {formattedDate}</span>
+                    <span className='date'>Date d'inscription: </span>
                 </Card.Meta>
                 <Card.Description>{bio}</Card.Description>
             </Card.Content>

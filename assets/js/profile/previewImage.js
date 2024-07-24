@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('=> previewImage.js loaded');
 
-    window.previewImage = function (event) {  
+    window.previewImage = function (event) {
         // au chargement du fichier dans le input file
         let input = event.target;
         // on récupère les infos du fichier pour le nom de fichier
@@ -18,4 +18,5 @@ document.addEventListener('DOMContentLoaded', () => {
         // on sauvegarde l'url de l'image dans le reader
         reader.readAsDataURL(input.files[0]);
     }
+
 });

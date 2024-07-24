@@ -81,6 +81,7 @@ Encore
         './assets/styles/carousel.css',
         './assets/styles/parallax.css',
         './assets/styles/cart.css',
+        './assets/styles/footer.css',
         './assets/styles/scss_styles.scss'
     ])
 
@@ -129,9 +130,6 @@ Encore
         $: 'jquery',
         jQuery: 'jquery',
         'window.jQuery': 'jquery',
-        tarteaucitron: 'tarteaucitronjs/tarteaucitron'
-
-
     }))
     // configuration des options du serveur de développement
     .configureDevServerOptions(options => {

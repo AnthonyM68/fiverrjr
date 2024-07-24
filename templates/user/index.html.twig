@@ -75,17 +75,22 @@
                 </div>
                 <div class="eight wide column">
                     {% if is_granted('ROLE_CLIENT') %}
+
                     <div class="ui segment" id="last-developer-root">
                         {% if lastDeveloper|default %}
                         {{ lastDeveloper }}
                         {% endif %}
                     </div>
+
                     {% elseif is_granted('ROLE_DEVELOPER') %}
+                 
                     <div class="ui segment" id="last-client-root">
                         {% if lastDeveloper|default %}
                         {{ lastDeveloper }}
                         {% endif %}
                     </div>
+
+                    
                     {% endif %}
                     <div class="column">
                         <div class="ui segment ">

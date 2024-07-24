@@ -19,8 +19,15 @@ const useFetch = (url) => {
                     throw new Error(`Network response was not ok: ` + response.statusText);
                 }
                 const data = await response.json();
-                console.log('Data fetched:', data);
-                setData(data);
+                if(data.services) {
+                    // Suppose the API response has a key `services` which is the array we need
+                    setData(data.services || []);
+                    console.log('Data fetched after json:', data.services);
+                } else {
+                    setData(data);
+                    console.log('Data fetched after json:', data);
+                }
+
             } catch (error) {
                 console.error('Fetch error:', error);
                 setError(error);
