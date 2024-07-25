@@ -5,7 +5,12 @@
   margin: 0 auto;
   padding: $container-padding;
 }
-
+.custom-grid-container {
+  max-width: $container-grid-max-width;
+  margin: 0 auto;
+  padding: $container-grid-padding;
+  border:1px solid #000;
+}
 // Padding
 .padding {
   padding: $padding-medium; // Valeur par défaut
@@ -191,6 +196,20 @@ article h1 {
   color: rgba(0, 0, 0, 0.87) !important;
 }
 
+
+
+
 footer .footer-section h3, footer .footer-section h4 {
   color: #fff !important;
+}
+
+.text-center {
+  text-align: center;
+}
+// .ad-banner {
+//   background-color: #1a1a1a !important;
+// }
+.grid.home {
+  height: 700px;
+  overflow: auto; 
 }

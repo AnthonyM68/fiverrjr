@@ -9,6 +9,7 @@
     {% block stylesheets %}
     {{ encore_entry_link_tags('jquery_ui_theme') }}
     {{ encore_entry_link_tags('jquery_structure') }}
+    {# {{ encore_entry_link_tags('bootstrap_css') }} #}
     {{ encore_entry_link_tags('uikit_css') }}
     {{ encore_entry_link_tags('carousel') }}
     {{ encore_entry_link_tags('slick-carousel-css') }}
@@ -54,8 +55,9 @@
     {% block javascripts %}
     {# {{ encore_entry_script_tags('tarteaucitron') }} #}
     {{ encore_entry_script_tags('app') }}
+   
     {{ encore_entry_script_tags('semantic') }}
-
+ {# {{ encore_entry_script_tags('bootstrap') }} #}
     {{ encore_entry_script_tags('jquery_ui') }}
     {{ encore_entry_script_tags('uikit') }}
     {{ encore_entry_script_tags('uikit-icons') }}

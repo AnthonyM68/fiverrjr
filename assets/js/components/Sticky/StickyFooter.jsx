@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sticky } from 'semantic-ui-react';
-
+import ResizeObserver from 'resize-observer-polyfill';
 // Test de compatibilité de la position sticky
 const testSticky = () => {
   console.log('-> StickyFooter.js loaded');
@@ -113,4 +113,4 @@ class StickyParent extends React.Component {
   }
 }
 
-export default StickyParent;
+export default StickyFooter;

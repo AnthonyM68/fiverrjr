@@ -9,7 +9,7 @@ import config from '../../config'
 
 const BestServicesCarousel = ({ services = [] }) => {
 
-  console.log('Received services:', services);
+  // console.log('Received services:', services);
   // const assetBaseUrl = process.env.REACT_APP_ASSET_BASE_URL || '';
   
   if (services.length === 0) {
@@ -42,11 +42,11 @@ const BestServicesCarousel = ({ services = [] }) => {
       <Carousel responsive={responsive} infinite autoPlay={false}>
         {services.map((service, index) => {
           // Log each service to inspect its structure
-          console.log(`Service ${index}:`, service);
+          // console.log(`Service ${index}:`, service);
 
           // Check if the service object has the expected properties
           if (!service.title || !service.picture || !service.description) {
-            console.error(`Service ${index} is missing required properties.`);
+            // console.error(`Service ${index} is missing required properties.`);
             return <div key={index}>Invalid service data</div>;
           }
 

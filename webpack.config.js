@@ -89,7 +89,7 @@ Encore
     .addEntry('previewImage', './assets/js/profile/previewImage.js')
 
 
-
+    .addEntry('home', './assets/js/home/home.js')
 
     // REACT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
     .enableReactPreset()

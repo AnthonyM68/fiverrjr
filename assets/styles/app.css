@@ -46,8 +46,13 @@ label.required::after {
 #close-results {
   margin-left: auto;
 }
+
+
 .custom-container h1, h2 {
   color: rgba(0, 0, 0, 0.87) !important;
 } 
 
-
+.custom-segment {
+  height: 700px;
+  overflow: auto; 
+}

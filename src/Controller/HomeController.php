@@ -39,24 +39,15 @@ class HomeController extends AbstractController
     public function index(Cart $cart, Request $request): Response
     {
         // Récupérer le dernier utilisateur avec le rôle ROLE_ENTERPRISE
-        $lastEnterprise = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_ENTERPRISE');
+        $lastClient = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_CLIENT');
         // Récupérer le dernier utilisateur avec le rôle ROLE_DEVELOPER
         $lastDeveloper = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_DEVELOPER');
         // // Récupérer le dernier service ajouté
         $lastService = $this->entityManager->getRepository(ServiceItem::class)->findOneBy([], ['id' => 'DESC']);
 
-
-
-        // Enregistrement des données de la requête dans les logs
-        $this->logger->info('HomeController: line:49 Résults Search', [
-            'lastDeveloper' => $lastDeveloper,
-            'lastEnterprise' => $lastEnterprise,
-            'lastService' => $lastService
-        ]);
-
         // Récupérer le cookie de la requête
-        $cookieName = 'panier_cookie';
-        $cookieValue = $request->cookies->get($cookieName);
+        // $cookieName = 'panier_cookie';
+        // $cookieValue = $request->cookies->get($cookieName);
 
         // dd($cookieValue);
 
@@ -68,10 +59,10 @@ class HomeController extends AbstractController
         // }
 
         // Enregistrer le cookie dans les logs pour vérification
-        $this->logger->info('Cookie Info', [
-            'cookieName' => $cookieName,
-            'cookieValue' => $cookieValue
-        ]);
+        // $this->logger->info('Cookie Info', [
+        //     'cookieName' => $cookieName,
+        //     'cookieValue' => $cookieValue
+        // ]);
         // setcookie("TestCookie", "", time() - 3600, "/");
         // $fullCart = $cart->getCart($request);
 
@@ -87,11 +78,52 @@ class HomeController extends AbstractController
 
         // calcul la sommes des valeurs du tableau
         // $totalItems = array_sum($fullCart['totalServiceItem']);
+        // dd($lastDeveloper->getQuery()->getSingleResult());
 
+        $developer = $lastDeveloper->getQuery()->getSingleResult();
+        $client = $lastClient->getQuery()->getSingleResult();
+
+        $pictureFilenameDev = $developer->getPicture();
+        $pictureFilenameClient = $developer->getPicture();
+
+
+        $role = $developer->getRoles();
+
+        if (in_array('ROLE_DEVELOPER', $developer->getRoles())) {
+            $role = 'ROLE_DEVELOPER';
+        } else if (in_array('ROLE_CLIENT', $developer->getRoles())) {
+            $role = 'ROLE_CLIENT';
+        }
+
+        if (in_array('ROLE_DEVELOPER', $client->getRoles())) {
+            $role = 'ROLE_DEVELOPER';
+        } else if (in_array('ROLE_CLIENT', $client->getRoles())) {
+            $role = 'ROLE_CLIENT';
+        }
+        $pictureUrl = null;
+
+        // on utilise le controller pour fournir le chemin absolu de l'image ( services.yaml )
+        if ($pictureFilenameDev) {
+            $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
+                'filename' => $pictureFilenameDev,
+                'role' => $role
+            ]);
+            $pictureUrlDev = json_decode($pictureUrlResponse->getContent(), true);
+        }
+        if ($pictureFilenameClient) {
+            $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
+                'filename' => $pictureFilenameClient,
+                'role' => $role
+            ]);
+            $pictureUrlClient = json_decode($pictureUrlResponse->getContent(), true);
+        }
+
+        // dd($pictureUrl);
         return $this->render('home/index.html.twig', [
-            // Données pour le carousel sur le home
-            'lastDeveloper' => $lastDeveloper,
-            'lastEnterprise' => $lastEnterprise,
+            'lastDeveloper' => $developer,
+            'lastDevImg' => $pictureUrlDev['url'],
+            'lastClient' => $lastClient->getQuery()->getSingleResult(),
+            'lastClientImg' => $pictureUrlClient['url'],
             'lastService' => $lastService,
             'submitted_form' => null,
             'title_page' => 'Accueil'

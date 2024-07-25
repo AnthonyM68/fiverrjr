@@ -18,15 +18,19 @@
         background-color: #f9f9f9;
         padding: 20px 0;
     }
+
     .ad-banner img {
         width: 100%;
         height: auto;
     }
+
     .ad-carousel {
-        display:flex;
+        display: flex;
         justify-content: space-around;
     }
-    .slick-prev:before, .slick-next:before {
+
+    .slick-prev:before,
+    .slick-next:before {
         color: #333;
     }
 </style>
@@ -34,55 +38,144 @@
 {# <div id="carousel-root"></div> #}
 <div id="parallax-root"></div>
 
-<div class="ad-banner">
+{# <div id="segment-root">SEGMENT ROOT</div> #}
+<div class="separator"></div>
+
+
+<div class="ad-banner uk-animation-fade">
     <div class="ui container">
         <div class="ad-carousel">
-            <div><img src="ad1.jpg" alt="Ad 1"></div>
-            <div><img src="ad2.jpg" alt="Ad 2"></div>
-            <div><img src="ad3.jpg" alt="Ad 3"></div>
-            <div><img src="ad4.jpg" alt="Ad 4"></div>
+            <div>CodeAlsace</div>
+            <div>TechHautRhin</div>
+            <div>InnoStart Alsace</div>
+            <div>DevFactory Haut-Rhin</div>
+            <div>Alsace Digital Academy</div>
+            <div>StartHub 68</div>
+            <div>InnovIT Haut-Rhin</div>
         </div>
+        <h2 class="ui center aligned icon header">
+            <i class="circular users icon"></i>
+            Friends
+        </h2>
+
+
     </div>
+
 </div>
 
 
 
-<h2 class="ui center aligned icon header">
-    <i class="circular users icon"></i>
-    Friends
-  </h2>
+
 
 <div class="custom-container">
     {# <h2 class="uk-animation-slide-right">Meilleurs services</h2> #}
     <div id="bestservices-root"></div>
 </div>
 
+<div id="parallax-root-2"></div>
+{# <div id="segment-root-2">SEGMENT ROOT</div> #}
 
 
-<div class="ui equal width center aligned padded grid">
-    <div class="row">
-      <div class="olive column">
-        Olive
-      </div>
-      <div class="black column">
-        Black
-      </div>
+
+<div class="custom-container">
+
+    <div class="ui equal width aligned padded grid home">
+
+        <div class="row">
+            <div class="column ">
+
+                <div class="ui centered card leaf" data-animation="fade down in" data-duration="2.5s">
+                    <div class="content">
+                        <div class="header">{{ lastDeveloper.firstName }} {{ lastDeveloper.lastName }}</div>
+                        <div class="meta">
+                            <span class="right floated time">Date d'inscription: {{ lastDeveloper.dateRegister |
+                                date('d/m/Y') }}</span>
+
+
+                            {% if 'ROLE_DEVELOPER' in lastDeveloper.roles %}
+                            <span class="category">Développeur</span>
+                            {% endif %}
+
+                           
+                        </div>
+                        <div class="description">
+                            <p>{{ lastDeveloper.bio }}</p>
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <div class="right floated author">
+                            <img class="ui avatar" src="{{ asset(lastDevImg) }}"> Matt
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column ">
+                <div class="slide" data-animation="slide right in" data-duration="2.5s">
+                    <h2>Nom prenom</h2>
+                    <p>Nous sommes ravis d'accueillir John Doe, notre nouveau développeur sur Fiverrjr ! Expert en
+                        développement
+                        web et mobile, John maîtrise HTML, CSS, JavaScript, React et Node.js. Découvrez son profil et
+                        ses
+                        projets pour voir comment il peut apporter des solutions innovantes à vos besoins. Bienvenue,
+                        John !
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="column text-center uk-animation-fade">
+                <h1>Contactez des Développeurs Front-End maintenant</h1>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="column">
+                <div class="slide" data-animation="slide left in" data-duration="2.5s">
+                    <h2>Nom prenom</h2>
+                    <p>Nous sommes ravis d'accueillir John Doe, notre nouveau développeur sur Fiverrjr ! Expert en
+                        développement
+                        web et mobile, John maîtrise HTML, CSS, JavaScript, React et Node.js. Découvrez son profil et
+                        ses
+                        projets pour voir comment il peut apporter des solutions innovantes à vos besoins. Bienvenue,
+                        John !</p>
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui centered card leaf" data-animation="fade down in" data-duration="2.5s">
+                    <div class="content">
+                        <div class="header">{{ lastClient.firstName }} {{ lastClient.lastName }}</div>
+                        <div class="meta">
+                            <span class="right floated time">Date d'inscription: {{ lastClient.dateRegister | date('d/m/Y') }}</span>
+
+                                {% if 'ROLE_CLIENT' in lastClient.roles %}
+                                <span class="category">Client</span>
+                                {% endif %}
+                        </div>
+                        <div class="description">
+                            <p>{{ lastDeveloper.bio }}</p>
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <div class="right floated author">
+                            <img class="ui avatar image" src="{{ asset(lastClientImg) }}"> Matt
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row" style="background-color: #869D05;color: #FFFFFF;">
-      <div class="column">Custom Row</div>
-    </div>
-    <div class="row">
-      <div class="black column">
-        Black
-      </div>
-      <div class="olive column">
-        Olive
-      </div>
-    </div>
-  </div>
+
+</div>
 
 
-  <div id="parallax-root-2"></div>
+<div id="segment-root-3">SEGMENT ROOT</div>
+
+<div id="parallax-root-2"></div>
 <div class="custom-container">
     {# <h2 class="uk-animation-slide-right">Meilleurs services</h2> #}
     <div id="last-developers"></div>
@@ -90,7 +183,7 @@
 
 
 
-<div id="parallax-root-2"></div>
+
 
 
 
@@ -102,5 +195,6 @@
 {{ parent() }}
 {# {{ encore_entry_script_tags('HomeCarrousel') }} #}
 {{ encore_entry_script_tags('CarouselComponent') }}
+{{ encore_entry_script_tags('home') }}
 {% endblock %}
 {% endblock %}

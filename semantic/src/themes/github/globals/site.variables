@@ -31,7 +31,7 @@
 @secondaryColor: @black;
 
 /* fiverrjr*/
-@pageBackground: #f0f0f0; // Gris clair
+@pageBackground: #fff; // Gris clair
 
 /* Links */
 @linkColor: @primaryColor;

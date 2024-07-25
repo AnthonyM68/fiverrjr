@@ -4,6 +4,9 @@ import { createRoot } from 'react-dom/client';
 import { Parallax, ParallaxDouble } from './js/components/Parallax/Parallax';
 import { BestServicesCarousel } from './js/components/Carousel/CarouselComponent';
 import UserCard from './js/components/Card/UserCard';
+import SegmentComponent from './js/components/Segment/Segment'
+
+import StickyFooter from './js/components/Sticky/StickyFooter'
 // hook useFetch
 import useFetch from './js/useFetch';
 import config from './js/config'
@@ -12,6 +15,15 @@ import config from './js/config'
 const ParallaxComponent = () => {
     return <Parallax />;
 };
+
+
+const SegmentCompo = () => {
+    return <SegmentComponent />;
+};
+
+// const StickyParentComponent = () => {
+//     return <StickyParent />;
+// };
 
 const CarouselComponent = () => {
     const { data: bestServices, error } = useFetch(`/service/bestServices`);
@@ -112,4 +124,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const root = createRoot(lastClientRoot);
         root.render(<LastUser role="ROLE_CLIENT" />);
     }
+
+    const segmentRoot = document.getElementById('segment-root');
+    if (segmentRoot) {
+        const root = createRoot(segmentRoot);
+        root.render(<SegmentCompo />);
+    }
+    const segmentRoot2 = document.getElementById('segment-root-2');
+    if (segmentRoot2) {
+        const root = createRoot(segmentRoot2);
+        root.render(<SegmentCompo />);
+    }
+    const segmentRoot3 = document.getElementById('segment-root-3');
+    if (segmentRoot3) {
+        const root = createRoot(segmentRoot3);
+        root.render(<SegmentCompo />);
+    }
+
+
+    // const stickyRoot = document.getElementById('sticky-root');
+    // if (stickyRoot) {
+    //     const root = createRoot(stickyRoot);
+    //     root.render(<StickyParentComponent />);
+    // }
+
 });
