@@ -12,18 +12,77 @@
     {% else %}<h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
     {% endif %}
 </div> #}
+<style>
+    .ad-banner {
 
+        background-color: #f9f9f9;
+        padding: 20px 0;
+    }
+    .ad-banner img {
+        width: 100%;
+        height: auto;
+    }
+    .ad-carousel {
+        display:flex;
+        justify-content: space-around;
+    }
+    .slick-prev:before, .slick-next:before {
+        color: #333;
+    }
+</style>
 
 {# <div id="carousel-root"></div> #}
 <div id="parallax-root"></div>
 
+<div class="ad-banner">
+    <div class="ui container">
+        <div class="ad-carousel">
+            <div><img src="ad1.jpg" alt="Ad 1"></div>
+            <div><img src="ad2.jpg" alt="Ad 2"></div>
+            <div><img src="ad3.jpg" alt="Ad 3"></div>
+            <div><img src="ad4.jpg" alt="Ad 4"></div>
+        </div>
+    </div>
+</div>
 
 
+
+<h2 class="ui center aligned icon header">
+    <i class="circular users icon"></i>
+    Friends
+  </h2>
 
 <div class="custom-container">
     {# <h2 class="uk-animation-slide-right">Meilleurs services</h2> #}
     <div id="bestservices-root"></div>
 </div>
+
+
+
+<div class="ui equal width center aligned padded grid">
+    <div class="row">
+      <div class="olive column">
+        Olive
+      </div>
+      <div class="black column">
+        Black
+      </div>
+    </div>
+    <div class="row" style="background-color: #869D05;color: #FFFFFF;">
+      <div class="column">Custom Row</div>
+    </div>
+    <div class="row">
+      <div class="black column">
+        Black
+      </div>
+      <div class="olive column">
+        Olive
+      </div>
+    </div>
+  </div>
+
+
+  <div id="parallax-root-2"></div>
 <div class="custom-container">
     {# <h2 class="uk-animation-slide-right">Meilleurs services</h2> #}
     <div id="last-developers"></div>
