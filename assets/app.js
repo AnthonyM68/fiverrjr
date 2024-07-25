@@ -12,9 +12,6 @@ import useFetch from './js/useFetch';
 import config from './js/config'
 
 // Composant pour Parallax
-const ParallaxComponent = () => {
-    return <Parallax />;
-};
 
 
 const SegmentCompo = () => {
@@ -81,19 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
             throw new Error(error.message);
         });
 
-    const parallaxRoot = document.getElementById('parallax-root');
-    if (parallaxRoot) {
-        const root = createRoot(parallaxRoot);
-        root.render(<ParallaxComponent />);
-    }
-
-    const parallaxRoot2 = document.getElementById('parallax-root-2');
-    if (parallaxRoot2) {
-        const root = createRoot(parallaxRoot2);
-        root.render(<ParallaxComponent />);
-    }
-
-
 
     const carouselRoot = document.getElementById('bestservices-root');
     if (carouselRoot) {
@@ -101,17 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
         root.render(<CarouselComponent />);
     }
 
-
-
     const lastDevlRoot = document.getElementById('last-developers');
     if (lastDevlRoot) {
         const root = createRoot(lastDevlRoot);
         root.render(<CarouselComponent />);
     }
-
-
-
-
 
     const lastDeveloperRoot = document.getElementById('last-developer-root');
     if (lastDeveloperRoot) {

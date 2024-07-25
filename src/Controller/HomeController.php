@@ -118,7 +118,7 @@ class HomeController extends AbstractController
             $pictureUrlClient = json_decode($pictureUrlResponse->getContent(), true);
         }
 
-        // dd($pictureUrl);
+        // dd($pictureUrlDev);
         return $this->render('home/index.html.twig', [
             'lastDeveloper' => $developer,
             'lastDevImg' => $pictureUrlDev['url'],

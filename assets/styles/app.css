@@ -5,6 +5,9 @@
 .hidden {
   display: none !important;
 }
+.text-center {
+  text-align: center;
+}
 /* ajoute un espaceur */
 .separator {
   height: 60px;
@@ -55,4 +58,30 @@ label.required::after {
 .custom-segment {
   height: 700px;
   overflow: auto; 
+}
+
+
+
+.grid.home {
+  height: 700px;
+  overflow: auto; 
+}
+
+
+.ad-banner {
+  background-color: #1a1a1a;
+  padding: 20px 0;
+}
+
+.ad-banner img {
+  width: 100%;
+  height: auto;
+}
+
+.ad-carousel {
+  display: flex;
+  justify-content: space-between;
+}
+.ad-carousel div {
+  color:#fff;
 }

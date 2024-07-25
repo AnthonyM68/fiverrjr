@@ -23,11 +23,15 @@
 @disabledOpacity: 0.3;
 
 /* Colors */
-@blue: #80a6cd;
+
+/* @blue: #80a6cd; */
+@blue: #3498db;
 @green: #78cb5b;
 @orange: #d26911;
 @black: #333;
-@primaryColor: @green;
+
+/* @primaryColor: @green; */ 
+@primaryColor: @blue;
 @secondaryColor: @black;
 
 /* fiverrjr*/
