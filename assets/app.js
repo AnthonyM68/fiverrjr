@@ -11,7 +11,6 @@ import StickyFooter from './js/components/Sticky/StickyFooter'
 import useFetch from './js/useFetch';
 import config from './js/config'
 
-// Composant pour Parallax
 
 
 const SegmentCompo = () => {

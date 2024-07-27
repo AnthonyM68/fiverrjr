@@ -3,18 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\Theme;
+use App\Service\Cart;
 use App\Form\SearchFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class NavbarController extends AbstractController
 {
     #[Route('/navbar', name: 'app_navbar')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, 
+    EntityManagerInterface $entityManager, 
+    Cart $cart): Response
     {
         // Création et gestion du formulaire de recherche
         // ( SearchFormType )
@@ -44,11 +47,16 @@ class NavbarController extends AbstractController
             }
             $submittedFormName = 'form_service';
         }
+
+        $fullCart = $cart->getCart($request);
+
+
         return $this->render('navbar/index.html.twig', [
             'form_service' => $formTheme->createView(),
             'results' => $results,
             'search_term' => $searchTerm,
             'submitted_form' => $submittedFormName,
+            'totalServiceItem' => $fullCart['totalServiceItem']
         ]);
     }
 

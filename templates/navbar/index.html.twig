@@ -70,7 +70,7 @@
                     }}</a>
                 <a href="{{ path('logout') }}" class="ui item">Se déconnecter</a>
 
-                <i class="cart arrow down icon"></i><span id="cart-icon"></span>
+                <a href="{{ path('cart_product') }}"><i class="cart arrow down icon"></i><span id="cart-icon">{{ totalServiceItem }}</span></a>
                 
                 {% else %}
                 <a href="{{ path('login') }}" class="ui item">Se connecter</a>

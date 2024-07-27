@@ -1,0 +1,23 @@
+h1 {
+  margin-top: 5%;
+  font-size: 3rem;
+  display: inline-block;
+}
+.fiverr-animate,
+.junior-animate {
+  position: relative;
+  float: left;
+}
+div .fiverr-animate {
+  color: #3498db !important;
+  margin-right: 2rem;
+}
+div .junior-animate {
+  color: #fff !important;
+  margin-right: 2rem;
+}
+p.sub-animate {
+    font-size: 1.5rem;
+    color: gray;
+    text-transform: uppercase;
+}

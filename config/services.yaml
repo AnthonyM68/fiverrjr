@@ -12,10 +12,12 @@
 
 parameters:
   # Définition des répertoires pour les images selon le type d'utilisateur ou de service
-  pictures_directory: "%kernel.project_dir%/public/img/"
-  developer_pictures_directory: "%kernel.project_dir%/public/img/developers"
-  client_pictures_directory: "%kernel.project_dir%/public/img/clients"
-  service_pictures_directory: "%kernel.project_dir%/public/img/services"
+  pictures_directory: "%kernel.project_dir%/public/uploads"
+  developer_pictures_directory: "%kernel.project_dir%/public/uploads/developers"
+  client_pictures_directory: "%kernel.project_dir%/public/uploads/clients"
+  service_pictures_directory: "%kernel.project_dir%/public/uploads/services"
+  stripe_secret_key: 'sk_test_51Pgnb62KkncCu3lU4ayYPA1TrKfd49176UiSUwRQ8R7TDBDjJFPZ88F1LbG7BqlKb6bPM9fnp5mxvwTXYa0lZT8100lUAEBMoG'
+  stripe_public_key: 'pk_test_51Pgnb62KkncCu3lUQiFZy1S3mladFpKQaze4iTCEnD65vyQlGjVSiYYOdt9mg1Hg0jXp540By2jOJiQT6NNhsesp00rnVUf8Ej'  
 
 services:
   # Ensure CSRF protection by defining the CSRF token manager

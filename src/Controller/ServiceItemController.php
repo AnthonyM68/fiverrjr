@@ -57,14 +57,84 @@ class ServiceItemController extends AbstractController
     public function cartProduct(Cart $cart, Request $request): Response
     {
         $fullCart = $cart->getCart($request);
-
+        // dd($fullCart);
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier',
             'data' => $fullCart['data'],
             'total' => $fullCart['total'],
             'nbProducts' => $fullCart['totalServiceItem'],
+            'stripe_public_key' => $this->getParameter('stripe_public_key'),
+            'service_pictures_directory' => $this->getParameter('service_pictures_directory')
         ]);
     }
+
+    #[Route('/cart/add/serviceItem/{id}', name: 'add_service_cart')]
+    public function cartAddProduct(ServiceItem $serviceItem, Request $request, 
+    ServiceItemRepository $serviceItemRepository, 
+    Cart $cart, 
+    SerializerInterface $serializer, 
+    LoggerInterface $logger): Response
+    {
+
+        // Rechercher le service par son ID
+        // $serviceItem = $serviceItemRepository->find($id);
+  
+        if (!$serviceItem) {
+            throw $this->createNotFoundException('Le service n\'existe pas');
+        }
+
+        // Ajouter le produit au panier
+        $cart->addProduct($serviceItem, $request);
+
+        // Obtenir le panier complet
+        $fullCart = $cart->getCart($request);
+        // dd($fullCart);
+        // Sérialiser les données du panier en JSON
+        $jsonFullCart = $serializer->serialize($fullCart, 'json', ['groups' => 'cart']);
+
+        // Log the serialized cart data
+        $logger->info('Serialized cart data: ' . $jsonFullCart);
+
+        // Créer un cookie avec les données du panier
+        $cookieName = 'cart';
+        $cookie = new Cookie(
+            $cookieName,
+            $jsonFullCart, // Utiliser $jsonFullCart plutôt que json_encode($fullCart)
+            time() + (2 * 365 * 24 * 60 * 60), // 2 ans
+            '/', // Path
+            null, // Domain, null pour utiliser le domaine actuel
+            false, // Secure, true si vous utilisez HTTPS
+            true, // HttpOnly
+            false, // Raw
+            'strict' // SameSite, peut être 'lax', 'strict', ou 'none'
+        );
+
+        // dd($fullCart);
+        // Créer la réponse et ajouter le cookie
+        $response = new Response();
+        $response->headers->setCookie($cookie);
+
+        // Log the response headers to verify the cookie
+        $logger->info('Response headers before rendering view: ' . json_encode($response->headers->all()));
+
+        // dd($fullCart);
+        // Ajouter le rendu de la vue à la réponse
+        $content = $this->renderView('cart/index.html.twig', [
+            'title_page' => 'Panier',
+            'data' => $fullCart['data'],
+            'total' => $fullCart['total'],
+            'service_pictures_directory' => $this->getParameter('service_pictures_directory'),
+            'stripe_public_key' => $this->getParameter('stripe_public_key'),
+        ]);
+        $response->setContent($content);
+
+        // Log the final response headers
+        $logger->info('Final response headers: ' . json_encode($response->headers->all()));
+        // dd($response);
+        // Retourner la réponse finale
+        return $response;
+    }
+
 
     #[Route('/cart/totalItemFromCart', name: 'cart_total_item', methods: ['GET'])]
     public function getTotalItemFromCart(Cart $cart, Request $request): JsonResponse
@@ -82,93 +152,9 @@ class ServiceItemController extends AbstractController
 
 
 
-    #[Route('/cart/add/{id}', name: 'add_service_cart')]
-    public function cartAddProduct(int $id, Request $request, ServiceItemRepository $serviceItemRepository, Cart $cart, SerializerInterface $serializer): Response
-    {
-        $serviceItem = $serviceItemRepository->find($id);
-
-        if (!$serviceItem) {
-            throw $this->createNotFoundException('Le service n\'existe pas');
-        }
-
-        $cart->addProduct($serviceItem, $request);
-
-        $fullCart = $cart->getCart($request);
-        // dd($fullCart);
-
-        // on sérialize les données et les convertis en JSON
-        $jsonFullCart = $serializer->serialize($fullCart, 'json', ['groups' => 'cart']);
-
-        // dd($jsonFullCart);
-        // dd($jsonFullCart);
-        //  setcookie('cookie_id', $jsonFullCart, time() + 60*60*24*30, '/');
-
-        // Définir un cookie avec les données du panier
-        $cookieName = 'panier_cookie';
-        $cookie = new Cookie(
-            $cookieName,
-            "jsonFullCart",
-            time() + (2 * 365 * 24 * 60 * 60) // 2 ans
-        );
-
-        $response = new Response();
-        $response->headers->setCookie($cookie);
-        // dd($response);
-        // Récupérer les cookies définis dans les en-têtes
-        // $cookies = $response->headers->getCookies();
-
-        // Ajouter le rendu de la vue à la réponse
-        $response->setContent($this->renderView('home/index.html.twig', [
-            'title_page' => 'Panier',
-            'data' => $fullCart['data'],
-            'total' => $fullCart['total']
-        ]));
-
-        // dd($response);
-
-        return $response;
-        // dd($cookie);
-        // $response = new Response();
-        // $response->headers->setCookie($cookie);
-
-        // Pour vérifier les cookies définis dans les en-têtes
-        // $cookies = $response->headers->getCookies();
-
-        // setcookie('cart', // Nom du cookie
-        // $jsonFullCart, // Valeur du cookie
-        // time() + 3600, // Expire dans une heure
-        // '/', // Chemin
-        // 'localhost', // Domaine local
-        // false, // Secure (HTTPS uniquement)
-        // false, // HttpOnly
-        // false, // Raw (non-encodé)
-        // Cookie::SAMESITE_LAX, // SameSite (LAX, STRICT, NONE) lutte contre CSRF
-        // ) ;
 
 
 
-        // $cookieExists = false;
-        // foreach ($cookies as $setCookie) {
-        //     if ($setCookie->getName() === 'cart') {
-        //         $cookieExists = true;
-        //         break;
-        //     }
-        // }
-        // if ($cookieExists) {
-        //     $this->addFlash('success', 'Cookie create');
-        // } else {
-        //     throw new \Exception('Le cookie "cart" n\'a pas été créé.');
-        // }
-
-        // dd($cookie);
-
-
-        // return $this->render('cart/index.html.twig', [
-        //     'title_page' => 'Panier',
-        //     'data' => $fullCart['data'],
-        //     'total' => $fullCart['total']
-        // ]);
-    }
 
 
     #[Route('/cart/remove/{id}', name: 'remove_service_cart')]
@@ -180,7 +166,8 @@ class ServiceItemController extends AbstractController
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier',
             'data' => $fullCart['data'],
-            'total' => $fullCart['total']
+            'total' => $fullCart['total'],
+            'stripe_public_key' => $this->getParameter('stripe_public_key'),
         ]);
     }
 
@@ -193,9 +180,18 @@ class ServiceItemController extends AbstractController
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier',
             'data' => $fullCart['data'],
-            'total' => $fullCart['total']
+            'total' => $fullCart['total'],
+            'service_pictures_directory' => $this->getParameter('service_pictures_directory')
         ]);
     }
+
+
+
+
+
+
+
+
 
 
     #[Route('/empty', name: 'empty')]
@@ -278,7 +274,7 @@ class ServiceItemController extends AbstractController
                     $service->setCourse($course);
                 } else {
                     // si aucun cours n'est sélectionné, ajouter une erreur de validation
-                    $form->get('course')->addError(new FormError('Veuillez sélectionner un cours.'));
+                    $form->get('course')->addError(new FormError('Veuillez sélectionner une sous-catégorie.'));
 
                     return $this->render('itemService/index.html.twig', [
                         'title_page' => 'Services',
@@ -313,41 +309,31 @@ class ServiceItemController extends AbstractController
 
     #[Route('/serviceItem/detail/{id}', name: 'detail_service')]
     public function detailService(
-        OrderRepository $orderRepository,
         Request $request,
         ?ServiceItem $service
     ): Response {
-        // $order = new Order();
-
-        // Variable pour stocker les erreurs de validation
-        // $errors = null;
-        // Crée et gère le formulaire pour le service
-        // $formAddOrder = $this->createForm(OrderType::class, $order);
-        // $formAddOrder->handleRequest($request);
-
-        // $formDetailService = $this->createForm(OrderType::class, $order);
-        // $formAddOrder->handleRequest($request);
-
-        // if ($formAddOrder->isSubmitted()) {
-        //     // Si le formulaire est valide, persiste et sauvegarde l'Order
-        //     if ($formAddOrder->isValid()) {
-        //         $entityManager->persist($order);
-        //         $entityManager->flush();
-        //         $this->addFlash('success', 'Votre commande sera ajoutée au panier');
-        //         // Redirige vers la liste des thèmes après sauvegarde
-        //         return $this->redirectToRoute('profile_edit');
-        //     }
-        // }
+        
+        // récupére le nom de fichier de l'image de l'utilisateur
+        $pictureFilename = $service->getPicture();
+        // on utilise le controller pour fournir le chemin absolu de l'image ( config: services.yaml )
+        if ($pictureFilename) {
+            $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
+                'filename' => $pictureFilename,
+                'role' => 'SERVICE'
+            ]);
+            $pictureUrl = json_decode($pictureUrlResponse->getContent(), true);
+           
+            if ($pictureUrl && is_string($pictureUrl['url'])) {
+                $service->setPicture($pictureUrl['url']);
+            }
+        }
+        
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Détail:',
             'service' => $service,
-            // 'formAddOrder' => $formAddOrder->createView()
         ]);
     }
 
-
-    // Carousel bestServices 
-    // remplacer ServiceItemRepository par OrderRepository
 
     #[Route('/service/bestServices', name: 'service_bestServices', methods: ['GET'])]
     public function getBestServices(ServiceItemRepository $serviceItemRepository, SerializerInterface $serializer): JsonResponse
@@ -355,7 +341,7 @@ class ServiceItemController extends AbstractController
         try {
             $services = $serviceItemRepository->findBy([], ['id' => 'DESC']);
 
-            
+
             $jsonFullCart = $serializer->serialize($services, 'json', ['groups' => 'serviceItem']);
             $data = json_decode($jsonFullCart, true); // Décoder en tableau associatif
 
@@ -430,7 +416,7 @@ class ServiceItemController extends AbstractController
         }
     }
 
-   
+
     #[Route('/get_service_by_user', name: 'services_by_user_id', methods: ['GET'])]
 
     public function getServiceByIdUser(

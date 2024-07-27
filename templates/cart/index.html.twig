@@ -4,68 +4,86 @@
 
 {% block body %}
 
-<div class="custom-container">
-    <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
+<div class="ui container cart-container">
+    <h1 class="ui header">Mon panier</h1>
     {% if data | default %}
-    <table class="ui four column table">
-        <thead>
-            <tr>
-                <th>Service titre</th>
-                <th>Quantité</th>
-                <th>Prix</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="ui segment">
+        <div class="ui items">
             {% for product in data %}
-            <tr>
-                <td data-label="title">{{ product.serviceItem.title }}</td>
-                <td>
-                    <div class="ui input">
 
-                        <input type="text" id="quantity-spinner" data-label="quantity" value="{{ product.quantity }}">
-
-                        <div class="ui mini vertical buttons">
-
-                            {# <a href="{{ path('add_service_cart', {id: product.serviceItem.id}) }}"
-                                class="ui icon button" command="Up">
-                                <i class="up chevron icon"></i>
-                            </a>
-                            <a href="{{ path('remove_service_cart', {id: product.serviceItem.id}) }}"
-                                class="ui icon button" command="Down">
-                                <i class="down chevron icon"></i>
-                            </a> #}
+            <div class="item">
+                <div class="ui small image">
+                    <img src="{{ product.serviceItem.picture['url'] }}"
+                        alt="Image produits {{ product.serviceItem.title }}">
+                </div>
+                <div class="content">
+                    <a class="header">{{ product.serviceItem.title }}</a>
+                    <div class="meta">
+                        <span class="price">{{ product.serviceItem.price }}€</span>
+                    </div>
+                    {# <div class="description">
+                        <p>{{ product.serviceItem.description }}</p>
+                    </div> #}
+                    <div class="extra">
+                        <div class="ui right floated">
+                            <div class="ui labeled input">
+                                <div class="ui label">Quantité</div>
+                                <input type="number" value="{{ product.quantity }}">
+                            </div>
+                            <a href="{{ path('delete_service_cart', {id: product.serviceItem.id}) }}"
+                                class="ui primary button">Supprimer</a>
                         </div>
                     </div>
-                </td>
-                <td data-label="price">{{ product.serviceItem.price }}</td>
-                <td>
-                    <a href="{{ path('delete_service_cart', {id: product.serviceItem.id}) }}"
-                        class="ui orange message">Supprimer</a>
-                </td>
-
-            </tr>
+                </div>
+            </div>
             {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr> 
+        </div>
 
-                <th>{{ total }}</th>
-                <th></th>
-                <th></th>
-                <th>
-                    <a href="{{ path('add_order') }}" class="ui green message">Valider le panier</a>
-                </th>
-                <th></th>
-               
-            </tr>
-        </tfoot>
-    </table>
-
-    {% else %}
-    <div class="ui olive message anim">Aucun panier en cours</div>
+        <div class="cart-total">
+            <h3>Total: {{ total }}€</h3>
+            {% if stripe_public_key| default %}
+            <button class="ui button green" id="checkout-button" data-public-key="{{ stripe_public_key }}"
+                data-create-checkout="{{ path('app_stripe_charge') }}">Payer</button>
+            {% endif %}
+        </div>
+    </div>
     {% endif %}
 </div>
+
+
+{#
+<script src="https://js.stripe.com/v3/"></script> #}
+{#
+<script>
+    const checkout = document.getElementById('checkout-button');
+    const public_key = checkout.dataset.publicKey
+    const stripe = Stripe(public_key);
+
+    checkout.addEventListener('click', () => {
+
+        fetch(checkout.dataset.createCheckout, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(session => {
+                console.log(session);
+                //return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(result => {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
+</script> #}
+
 
 {% block javascripts %}
 {{ parent() }}

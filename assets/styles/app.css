@@ -68,20 +68,3 @@ label.required::after {
 }
 
 
-.ad-banner {
-  background-color: #1a1a1a;
-  padding: 20px 0;
-}
-
-.ad-banner img {
-  width: 100%;
-  height: auto;
-}
-
-.ad-carousel {
-  display: flex;
-  justify-content: space-between;
-}
-.ad-carousel div {
-  color:#fff;
-}

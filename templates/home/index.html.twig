@@ -13,7 +13,68 @@
     {% endif %}
 </div> #}
 <style>
+    .text-box {
+        height: 100vh;
+        color: white;
+        font-family: 'Lato', sans-serif;
+        font-size: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backface-visibility: hidden;
 
+        .text-primary,
+        .text-sub {
+            display: block;
+            text-align: center;
+        }
+
+        .text-primary {
+            text-transform: uppercase;
+            letter-spacing: 35px;
+            font-size: 2em;
+            animation: moveLeft 1.5s ease-in;
+        }
+
+        .text-sub {
+            letter-spacing: 15px;
+            font-size: 1em;
+            animation: moveRight 1.5s ease-in;
+            text-shadow: 0 0 5px white;
+        }
+    }
+
+    @keyframes moveLeft {
+        0% {
+            opacity: 0;
+            transform: translatex(-100px);
+        }
+
+        80% {
+            transform: translatex(10px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translatex(0);
+        }
+    }
+
+    @keyframes moveRight {
+        0% {
+            opacity: 0;
+            transform: translatex(100px);
+        }
+
+        80% {
+            transform: translatex(-10px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translatex(0);
+        }
+    }
 </style>
 
 {# <div id="carousel-root"></div> #}
@@ -32,9 +93,12 @@
     {# <h2 class="uk-animation-slide-right">Meilleurs services</h2> #}
     <div id="bestservices-root"></div>
 </div>
+<div class="separator"></div>
 
-<div id="parallax-root-2"></div>
-{# <div id="segment-root-2">SEGMENT ROOT</div> #}
+
+
+
+
 
 
 
@@ -57,10 +121,10 @@
                             <span class="category">Développeur</span>
                             {% endif %}
 
-                           
+
                         </div>
                         <div class="description">
-                            <p>{{ lastDeveloper.bio }}</p>
+                            <p>{{ lastClient.bio|slice(0, 150) ~ '...' }}</p>
                         </div>
                     </div>
                     <div class="extra content">
@@ -73,13 +137,16 @@
 
             <div class="column ">
                 <div class="slide" data-animation="slide right in" data-duration="2.5s">
-                    <h2>Nom prenom</h2>
-                    <p>Nous sommes ravis d'accueillir John Doe, notre nouveau développeur sur Fiverrjr ! Expert en
+                    <h2>{{ lastDeveloper.username }}</h2>
+                    <p>Nous sommes ravis d'accueillir {{ lastDeveloper.username }}, notre nouveau développeur sur
+                        Fiverrjr ! Expert en
                         développement
-                        web et mobile, John maîtrise HTML, CSS, JavaScript, React et Node.js. Découvrez son profil et
-                        ses
-                        projets pour voir comment il peut apporter des solutions innovantes à vos besoins. Bienvenue,
-                        John !
+                        web et mobile, {{ lastDeveloper.firstName }} maîtrise HTML, CSS, JavaScript, React et Node.js.
+                    </p>
+                    <p>
+                        Découvrez son <a href="">profil</a> et ses projets pour voir comment il peut apporter des
+                        solutions innovantes à vos besoins. Bienvenue,
+                        {{ lastDeveloper.firstName }} !
                     </p>
                 </div>
             </div>
@@ -87,22 +154,29 @@
 
 
         <div class="row">
-            <div class="column text-center uk-animation-fade">
+            <div class="column text-center leaf" data-animation="fade in" data-duration="2.5s">
                 <h1>Contactez des Développeurs Front-End maintenant</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim omnis doloribus quo deserunt optio! Tempora fugiat, harum ipsa alias magnam neque! Maiores dolores molestias magnam ipsum at accusantium, commodi a.</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim omnis doloribus quo deserunt optio!
+                    Tempora fugiat, harum ipsa alias magnam neque! Maiores dolores molestias magnam ipsum at
+                    accusantium, commodi a.</p>
             </div>
         </div>
 
         <div class="row">
             <div class="column">
                 <div class="slide" data-animation="slide left in" data-duration="2.5s">
-                    <h2>Nom prenom</h2>
-                    <p>Nous sommes ravis d'accueillir John Doe, notre nouveau développeur sur Fiverrjr ! Expert en
-                        développement
-                        web et mobile, John maîtrise HTML, CSS, JavaScript, React et Node.js. Découvrez son profil et
-                        ses
-                        projets pour voir comment il peut apporter des solutions innovantes à vos besoins. Bienvenue,
-                        John !</p>
+                    <h2>{{ lastClient.username }}</h2>
+                    <p>
+                        Nous sommes ravis d'annoncer l'arrivée de {{ lastClient.firstName }} {{ lastClient.lastName }}
+                        sur notre plateforme ! En tant
+                        qu'entreprise innovante et en pleine croissance, {{ lastClient.username }} est en quête de
+                        jeunes
+                        développeurs talentueux pour renforcer leur équipe dynamique.
+                    </p>
+                    <p>Ils offrent des opportunités
+                        passionnantes dans le développement web et mobile, avec un accent sur des technologies telles
+                        que HTML, CSS, JavaScript, React et Node.js.
+                    </p>
                 </div>
             </div>
             <div class="column">
@@ -110,14 +184,15 @@
                     <div class="content">
                         <div class="header">{{ lastClient.firstName }} {{ lastClient.lastName }}</div>
                         <div class="meta">
-                            <span class="right floated time">Date d'inscription: {{ lastClient.dateRegister | date('d/m/Y') }}</span>
+                            <span class="right floated time">Date d'inscription: {{ lastClient.dateRegister |
+                                date('d/m/Y') }}</span>
 
-                                {% if 'ROLE_CLIENT' in lastClient.roles %}
-                                <span class="category">Client</span>
-                                {% endif %}
+                            {% if 'ROLE_CLIENT' in lastClient.roles %}
+                            <span class="category">Client</span>
+                            {% endif %}
                         </div>
                         <div class="description">
-                            <p>{{ lastDeveloper.bio }}</p>
+                            <p>{{ lastClient.bio|slice(0, 150) ~ '...' }}</p>
                         </div>
                     </div>
                     <div class="extra content">
@@ -133,9 +208,14 @@
 </div>
 
 
-<div id="segment-root-3">SEGMENT ROOT</div>
+{# <div id="segment-root-3">SEGMENT ROOT</div> #}
 
-<div id="parallax-root-2"></div>
+
+
+
+
+
+
 <div class="custom-container">
     {# <h2 class="uk-animation-slide-right">Meilleurs services</h2> #}
     <div id="last-developers"></div>
@@ -150,7 +230,7 @@
 
 
 
-
+<div id="parallax-root-2"></div>
 {% block javascripts %}
 {{ parent() }}
 {# {{ encore_entry_script_tags('HomeCarrousel') }} #}

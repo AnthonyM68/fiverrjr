@@ -1,16 +1,12 @@
-table {
-    width: 100%;
-    border-collapse: collapse;
+.cart-container {
+    margin: 20px;
+    display: flex;
+    justify-content: flex-end; /* Aligns the cart to the right */
 }
-th, td {
-    padding: 8px;
-    text-align: center;
+.cart-content {
+    width: 400px; /* Adjust the width as needed */
 }
-th a {
-    display: inline-block;
-    padding: 5px 10px;
-    text-decoration: none;
-}
-th a:hover {
-    text-decoration: none;
+.cart-total {
+    margin-top: 20px;
+    text-align: right;
 }

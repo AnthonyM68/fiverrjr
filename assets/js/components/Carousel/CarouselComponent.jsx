@@ -57,7 +57,7 @@ const BestServicesCarousel = ({ services = [] }) => {
                 <Card.Content>
                   <Card.Header>{service.title}</Card.Header>
                   <Card.Meta>
-                    <span className="date">Par {service.user.id}</span>
+                    <span className="date">Par {service.user.firstName} {service.user.lastName}</span>
                   </Card.Meta>
                   <Card.Description>{service.description}</Card.Description>
                 </Card.Content>

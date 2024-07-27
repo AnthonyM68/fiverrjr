@@ -28,14 +28,15 @@
 @blue: #3498db;
 @green: #78cb5b;
 @orange: #d26911;
-@black: #333;
+/* @black: #333; */
+@black: #1a1a1a;
 
 /* @primaryColor: @green; */ 
 @primaryColor: @blue;
 @secondaryColor: @black;
 
 /* fiverrjr*/
-@pageBackground: #fff; // Gris clair
+@pageBackground: #fff; 
 
 /* Links */
 @linkColor: @primaryColor;

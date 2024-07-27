@@ -82,7 +82,9 @@ Encore
         './assets/styles/parallax.css',
         './assets/styles/cart.css',
         './assets/styles/footer.css',
-        './assets/styles/scss_styles.scss'
+        './assets/styles/home.css',
+        './assets/styles/itemService.css',
+        // './assets/styles/scss_styles.scss'
     ])
 
     // Preview image FileUpload

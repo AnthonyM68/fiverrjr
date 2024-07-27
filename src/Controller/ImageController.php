@@ -1,6 +1,9 @@
 <?php
 namespace App\Controller;
 // Importation des classes nécessaires
+use App\Entity\ServiceItem;
+use Psr\Log\LoggerInterface;
+use App\Repository\ServiceItemRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,10 +17,11 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class ImageController extends AbstractController
 {
     private $parameters;
-    
-    public function __construct(ParameterBagInterface $parameters)
+    private $logger;
+    public function __construct(ParameterBagInterface $parameters,  LoggerInterface $logger)
     {
         $this->parameters = $parameters;
+        $this->logger = $logger;
     }
 
     #[Route('/api/uploadImage', name: 'upload_img', methods: ['POST'])]
@@ -60,6 +64,8 @@ class ImageController extends AbstractController
             $uploadsDirectory = $this->parameters->get('developer_pictures_directory');
         } else if ($role === "ROLE_CLIENT") {
             $uploadsDirectory = $this->parameters->get('client_pictures_directory');
+        } else if ($role === "SERVICE") {
+            $uploadsDirectory = $this->parameters->get('service_pictures_directory');
         }
 
         $filePath = $uploadsDirectory . '/' . $filename;
@@ -87,6 +93,8 @@ class ImageController extends AbstractController
             $uploadsDirectory = $this->parameters->get('developer_pictures_directory');
         } else if ($role === "ROLE_CLIENT") {
             $uploadsDirectory = $this->parameters->get('client_pictures_directory');
+        } else if ($role === "SERVICE") {
+            $uploadsDirectory = $this->parameters->get('service_pictures_directory');
         }
         
         $filePath = $uploadsDirectory . '/' . $filename;
@@ -111,18 +119,23 @@ class ImageController extends AbstractController
     }
 
     #[Route('/api/imageUrl/{filename}/{usertype}', name: 'generate_image_url', methods: ['GET'])]
-    public function generateImageUrl(string $filename, String $role): JsonResponse
+    public function generateImageUrl(string $filename, String $usertype): JsonResponse
     {
+        $this->logger->info('filename: ' . $filename);
         // Récupère le répertoire de téléchargement à partir des paramètres et ( services.yaml )
+        // par défaut si usertype n'est pas connu
         $uploadsDirectory = $this->parameters->get('pictures_directory');
 
-        if ($role === "ROLE_DEVELOPER") {
+        if ($usertype === "ROLE_DEVELOPER") {
             $uploadsDirectory = $this->parameters->get('developer_pictures_directory');
-        } else if ($role === "ROLE_CLIENT") {
+        } else if ($usertype === "ROLE_CLIENT") {
             $uploadsDirectory = $this->parameters->get('client_pictures_directory');
+        } else if ($usertype === "SERVICE") {
+            $uploadsDirectory = $this->parameters->get('service_pictures_directory');
         }
 
         $filePath = $uploadsDirectory . '/' . $filename;
+        $this->logger->info('filePath: ' . $filePath);
         // Vérifie si le fichier existe
         if (!file_exists($filePath)) {
             // Retourne une réponse d'erreur si le fichier n'existe pas
@@ -130,7 +143,31 @@ class ImageController extends AbstractController
         }
         // Retourne le chemin relatif à partir du répertoire public
         $relativeUrl = str_replace($this->getParameter('kernel.project_dir') . '/public', '', $filePath);
+
         // Retourne l'URL dans la réponse
         return new JsonResponse(['url' => $relativeUrl], Response::HTTP_OK);
     }
+
+    // #[Route('/product/image/{id}', name: 'product_image')]
+    // public function productImage(int $id, ServiceItemRepository $serviceItemRepository): Response
+    // {
+    //     $product = $serviceItemRepository->find($id);
+
+    //     if (!$product) {
+    //         throw $this->createNotFoundException('Product not found');
+    //     }
+
+    //     $imagePath = $this->getParameter('service_pictures_directory') . '/' . $product->getPicture();
+
+    //     if (!file_exists($imagePath)) {
+    //         throw $this->createNotFoundException('Image not found');
+    //     }
+
+    //     $image = file_get_contents($imagePath);
+
+    //     return new Response($image, 200, [
+    //         'Content-Type' => mime_content_type($imagePath),
+    //         'Content-Disposition' => 'inline; filename="'.$product->getPicture().'"'
+    //     ]);
+    // }
 }

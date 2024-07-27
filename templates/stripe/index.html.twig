@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+
+<div class="separator"></div>
+<form action="" method="POST">
+    <script
+        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="pk_test_HxZzNHy8LImKK9LDtgMDRBwd"
+        data-amount="999"
+        data-description="Widget"
+        data-locale="auto">
+    </script>
+</form>
+{# <div class="separator"></div>
+<div class="ui container text-center">
+
+    <div class="ui card">
+        <div class="card-body">
+            {% for message in app.flashes('success') %}
+            <div style="color: green;
+                                border: 2px green solid;
+                                text-align: center;
+                                padding: 5px;margin-bottom: 10px;">
+                {{ message }}
+            </div>
+            {% endfor %}
+
+            <form id='checkout-form'  class="ui form" method='post' action="{{ path('app_stripe_charge') }}">
+                <input type='hidden' name='stripeToken' id='stripe-token-id'>
+                <div id="card-element"></div>
+                <button id='pay-btn' class="positive ui fluid button" onclick="createToken()">Payer</button>
+            <form>
+        </div>
+    </div>
+
+</div> #}
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe("{{stripe_key}}");
+    var elements = stripe.elements();
+    var cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+
+    function createToken() {
+        document.getElementById("pay-btn").disabled = true;
+        stripe.createToken(cardElement).then(function (result) {
+
+
+            if (typeof result.error != 'undefined') {
+                document.getElementById("pay-btn").disabled = false;
+                alert(result.error.message);
+            }
+
+            // creating token success
+            if (typeof result.token != 'undefined') {
+                document.getElementById("stripe-token-id").value = result.token.id;
+                document.getElementById('checkout-form').submit();
+            }
+        });
+    }
+</script>
+{% endblock %}
