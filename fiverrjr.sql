@@ -119,12 +119,32 @@ CREATE TABLE IF NOT EXISTS `order` (
   PRIMARY KEY (`id`),
   KEY `IDX_F5299398A76ED395` (`user_id`),
   CONSTRAINT `FK_F5299398A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.order : ~2 rows (environ)
+-- Listage des données de la table fiverrjr.order : ~22 rows (environ)
 INSERT INTO `order` (`id`, `user_id`, `service_id`, `date_order`, `status`, `date_delivery`, `title`) VALUES
 	(1, 1, 1, '2024-07-15 13:15:07', '[]', NULL, 'Création de site vitrine professionnel'),
-	(2, 1, 2, '2024-07-15 16:34:58', '[]', NULL, 'Développement de blog personnalisé');
+	(2, 2, 2, '2024-07-15 16:34:58', '[]', NULL, 'Développement de blog personnalisé'),
+	(3, 1, 101, '2024-07-01 10:00:00', '{"status": "pending"}', '2024-07-05 10:00:00', 'Order 1'),
+	(4, 1, 102, '2024-07-02 11:00:00', '{"status": "completed"}', '2024-07-06 11:00:00', 'Order 2'),
+	(5, 1, 103, '2024-07-03 12:00:00', '{"status": "pending"}', '2024-07-07 12:00:00', 'Order 3'),
+	(6, 1, 104, '2024-07-04 13:00:00', '{"status": "completed"}', '2024-07-08 13:00:00', 'Order 4'),
+	(7, 1, 105, '2024-07-05 14:00:00', '{"status": "pending"}', '2024-07-09 14:00:00', 'Order 5'),
+	(8, 1, 106, '2024-07-06 15:00:00', '{"status": "completed"}', '2024-07-10 15:00:00', 'Order 6'),
+	(9, 1, 107, '2024-07-07 16:00:00', '{"status": "pending"}', '2024-07-11 16:00:00', 'Order 7'),
+	(10, 1, 108, '2024-07-08 17:00:00', '{"status": "completed"}', '2024-07-12 17:00:00', 'Order 8'),
+	(11, 1, 109, '2024-07-09 18:00:00', '{"status": "pending"}', '2024-07-13 18:00:00', 'Order 9'),
+	(12, 1, 110, '2024-07-10 19:00:00', '{"status": "completed"}', '2024-07-14 19:00:00', 'Order 10'),
+	(13, 2, 201, '2024-07-01 10:00:00', '{"status": "pending"}', '2024-07-05 10:00:00', 'Order 1'),
+	(14, 2, 202, '2024-07-02 11:00:00', '{"status": "completed"}', '2024-07-06 11:00:00', 'Order 2'),
+	(15, 2, 203, '2024-07-03 12:00:00', '{"status": "pending"}', '2024-07-07 12:00:00', 'Order 3'),
+	(16, 2, 204, '2024-07-04 13:00:00', '{"status": "completed"}', '2024-07-08 13:00:00', 'Order 4'),
+	(17, 2, 205, '2024-07-05 14:00:00', '{"status": "pending"}', '2024-07-09 14:00:00', 'Order 5'),
+	(18, 2, 206, '2024-07-06 15:00:00', '{"status": "completed"}', '2024-07-10 15:00:00', 'Order 6'),
+	(19, 2, 207, '2024-07-07 16:00:00', '{"status": "pending"}', '2024-07-11 16:00:00', 'Order 7'),
+	(20, 2, 208, '2024-07-08 17:00:00', '{"status": "completed"}', '2024-07-12 17:00:00', 'Order 8'),
+	(21, 2, 209, '2024-07-09 18:00:00', '{"status": "pending"}', '2024-07-13 18:00:00', 'Order 9'),
+	(22, 2, 210, '2024-07-10 19:00:00', '{"status": "completed"}', '2024-07-14 19:00:00', 'Order 10');
 
 -- Listage de la structure de table fiverrjr. reset_password_request
 CREATE TABLE IF NOT EXISTS `reset_password_request` (
@@ -173,9 +193,9 @@ INSERT INTO `service_item` (`id`, `course_id`, `user_id`, `order_id`, `title`, `
 	(7, 7, 2, NULL, 'Développement HTML/CSS/JavaScript', 'Nous offrons des services de développement front-end en HTML, CSS et JavaScript pour des sites web interactifs.', 1000, 20, '2024-07-10 20:00:05', 'bureautique.png'),
 	(8, 8, 2, NULL, 'Utilisation de frameworks front-end', 'Nous utilisons des frameworks front-end comme React, Angular et Vue.js pour créer des applications web modernes.', 1500, 25, '2024-07-10 20:00:05', 'front-end.png'),
 	(9, 9, 1, NULL, 'Optimisation des performances front-end', 'Nous optimisons les performances front-end de votre site pour garantir une expérience utilisateur fluide et rapide.', 800, 15, '2024-07-10 20:00:05', 'microsoft.png'),
-	(10, 10, 1, NULL, 'Développement avec Node.js', 'Nous développons des applications back-end robustes et évolutives avec Node.js.', 1800, 30, '2024-07-10 20:00:05', 'developer.jpg'),
-	(11, 11, 1, NULL, 'Développement avec Python/Django', 'Nous offrons des services de développement avec Python et Django pour des applications web performantes.', 2000, 35, '2024-07-10 20:00:05', 'developer.jpg'),
-	(12, 12, 1, NULL, 'Utilisation de PHP et frameworks', 'Nous utilisons PHP et des frameworks comme Laravel et Symfony pour créer des applications web puissantes.', 1700, 30, '2024-07-10 20:00:05', 'developer.jpg'),
+	(10, 10, 1, NULL, 'Développement avec Node.js', 'Nous développons des applications back-end robustes et évolutives avec Node.js.', 1800, 30, '2024-07-10 20:00:05', 'developer.webp'),
+	(11, 11, 1, NULL, 'Développement avec Python/Django', 'Nous offrons des services de développement avec Python et Django pour des applications web performantes.', 2000, 35, '2024-07-10 20:00:05', 'developer.webp'),
+	(12, 12, 1, NULL, 'Utilisation de PHP et frameworks', 'Nous utilisons PHP et des frameworks comme Laravel et Symfony pour créer des applications web puissantes.', 1700, 30, '2024-07-10 20:00:05', 'developer.webp'),
 	(13, 13, 1, NULL, 'Projets MERN', 'Nous réalisons des projets MERN (MongoDB, Express, React, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'gestion.png'),
 	(14, 14, 1, NULL, 'Projets MEAN', 'Nous développons des projets MEAN (MongoDB, Express, Angular, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'marketing.png'),
 	(15, 15, 1, NULL, 'Projets LAMP', 'Nous proposons des services de développement LAMP (Linux, Apache, MySQL, PHP) pour des solutions web robustes.', 1800, 30, '2024-07-10 20:00:05', 'gestion.png'),
@@ -191,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `theme` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.theme : ~6 rows (environ)
+-- Listage des données de la table fiverrjr.theme : ~7 rows (environ)
 INSERT INTO `theme` (`id`, `name_theme`) VALUES
 	(1, 'Développement Web'),
 	(2, 'Développement Mobile'),
@@ -219,12 +239,32 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_IDENTIFIER_EMAIL` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.user : ~2 rows (environ)
+-- Listage des données de la table fiverrjr.user : ~22 rows (environ)
 INSERT INTO `user` (`id`, `email`, `roles`, `password`, `first_name`, `last_name`, `phone_number`, `date_register`, `picture`, `city`, `portfolio`, `bio`, `is_verified`, `username`) VALUES
 	(1, 'client@gmail.com', '["ROLE_CLIENT"]', '$2y$13$030uvowwY4st0yG1THvBuuC5vjemI9k4kUMluwi.IBH32YCV.uVl2', 'Elan', 'Formation', '330760000000', '2024-06-20 00:00:00', 'client.webp', 'Thann', NULL, 'En tant qu\'entreprise innovante et en pleine croissance, nous sommes constamment à la recherche de jeunes développeurs talentueux pour rejoindre notre équipe dynamique. Nous offrons des opportunités passionnantes dans le développement web et mobile, et nous cherchons des professionnels créatifs et motivés maîtrisant des technologies telles que HTML, CSS, JavaScript, React et Node.js. Si vous êtes prêt à relever des défis stimulants et à contribuer à des projets captivants, explorez notre profil et découvrez comment vous pouvez collaborer avec nous. Nous avons hâte de découvrir vos talents et de travailler ensemble pour réaliser des projets ambitieux !', 0, 'Elan-formation'),
-	(2, 'developer@gmail.com', '["ROLE_DEVELOPER"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Anthony', 'Montmirail', '330760000000', '2024-06-27 00:00:00', 'moi.jpg', 'Thann', NULL, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim omnis doloribus quo deserunt optio! Tempora fugiat, harum ipsa alias magnam neque! Maiores dolores molestias magnam ipsum at accusantium, commodi a.', 0, 'Anthony');
+	(2, 'developer@gmail.com', '["ROLE_DEVELOPER"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Anthony', 'Montmirail', '330760000000', '2024-06-27 00:00:00', '66a8ca10a2b25.png', 'Thann', NULL, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim omnis doloribus quo deserunt optio! Tempora fugiat, harum ipsa alias magnam neque! Maiores dolores molestias magnam ipsum at accusantium, commodi a.', 0, 'Anthony'),
+	(3, 'enterprise1@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Un', '1234567890', '2024-07-29 17:11:34', 'client.webp', 'Paris', 'http://portfolio1.example.com', 'Nous sommes une grande entreprise.', 1, 'enterprise1'),
+	(4, 'enterprise2@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Deux', '1234567891', '2024-07-29 17:11:34', 'client.webp', 'Lyon', 'http://portfolio2.example.com', 'Nous sommes une entreprise innovante.', 1, 'enterprise2'),
+	(5, 'enterprise3@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Trois', '1234567892', '2024-07-29 17:11:34', 'client.webp', 'Marseille', 'http://portfolio3.example.com', 'Nous offrons des services divers.', 1, 'enterprise3'),
+	(6, 'enterprise4@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Quatre', '1234567893', '2024-07-29 17:11:34', 'client.webp', 'Toulouse', 'http://portfolio4.example.com', 'Spécialistes en technologie.', 1, 'enterprise4'),
+	(7, 'enterprise5@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Cinq', '1234567894', '2024-07-29 17:11:34', 'client.webp', 'Nice', 'http://portfolio5.example.com', 'Expertise en développement.', 1, 'enterprise5'),
+	(8, 'enterprise6@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Six', '1234567895', '2024-07-29 17:11:34', 'client.webp', 'Nantes', 'http://portfolio6.example.com', 'Nous faisons la différence.', 1, 'enterprise6'),
+	(9, 'enterprise7@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Sept', '1234567896', '2024-07-29 17:11:34', 'client.webp', 'Strasbourg', 'http://portfolio7.example.com', 'Entreprise de premier plan.', 1, 'enterprise7'),
+	(10, 'enterprise8@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Huit', '1234567897', '2024-07-29 17:11:34', 'client.webp', 'Montpellier', 'http://portfolio8.example.com', 'Solutions adaptées.', 1, 'enterprise8'),
+	(11, 'enterprise9@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Neuf', '1234567898', '2024-07-29 17:11:34', 'client.webp', 'Bordeaux', 'http://portfolio9.example.com', 'Innovation continue.', 1, 'enterprise9'),
+	(12, 'enterprise10@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Dix', '1234567899', '2024-07-29 17:11:34', 'client.webp', 'Rennes', 'http://portfolio10.example.com', 'Leaders en qualité.', 1, 'enterprise10'),
+	(13, 'developer1@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Un', '0987654321', '2024-07-29 17:11:34', 'developer.webp', 'Paris', 'http://portfolio1.example.com', 'Développeur web avec 5 ans d\'expérience.', 1, 'developer1'),
+	(14, 'developer2@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Deux', '0987654322', '2024-07-29 17:11:34', 'developer.webp', 'Lyon', 'http://portfolio2.example.com', 'Spécialiste en JavaScript et React.', 1, 'developer2'),
+	(15, 'developer3@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Trois', '0987654323', '2024-07-29 17:11:34', 'developer.webp', 'Marseille', 'http://portfolio3.example.com', 'Expert en Node.js et MongoDB.', 1, 'developer3'),
+	(16, 'developer4@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Quatre', '0987654324', '2024-07-29 17:11:34', 'developer.webp', 'Toulouse', 'http://portfolio4.example.com', 'Développeur front-end avec une passion pour le design.', 1, 'developer4'),
+	(17, 'developer5@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Cinq', '0987654325', '2024-07-29 17:11:34', 'developer.webp', 'Nice', 'http://portfolio5.example.com', 'Développeur full-stack avec expertise en Python.', 1, 'developer5'),
+	(18, 'developer6@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Six', '0987654326', '2024-07-29 17:11:34', 'developer.webp', 'Nantes', 'http://portfolio6.example.com', 'Développeur web avec une expérience en Vue.js.', 1, 'developer6'),
+	(19, 'developer7@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Sept', '0987654327', '2024-07-29 17:11:34', 'developer.webp', 'Strasbourg', 'http://portfolio7.example.com', 'Développeur mobile avec expérience en Flutter.', 1, 'developer7'),
+	(20, 'developer8@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Huit', '0987654328', '2024-07-29 17:11:34', 'developer.webp', 'Montpellier', 'http://portfolio8.example.com', 'Développeur backend avec compétences en Ruby on Rails.', 1, 'developer8'),
+	(21, 'developer9@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Neuf', '0987654329', '2024-07-29 17:11:34', 'developer.webp', 'Bordeaux', 'http://portfolio9.example.com', 'Développeur avec une forte expérience en PHP.', 1, 'developer9'),
+	(22, 'developer10@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Dix', '0987654330', '2024-07-29 17:11:34', 'developer.webp', 'Rennes', 'http://portfolio10.example.com', 'Développeur freelance avec expertise en CMS.', 1, 'developer10');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
