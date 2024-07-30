@@ -86,7 +86,7 @@ class UserController extends AbstractController
 
 
     #[Route('/profile/edit/{id}', name: 'profile_edit')]
-    #[Route('/profile/edit/{id}/{page}', name: 'profile_pagination')]
+    #[Route('/profile/edit/{id}', name: 'profile_pagination')]
     public function edit(
         int $id,
         Request $request,
@@ -94,21 +94,18 @@ class UserController extends AbstractController
         EntityManagerInterface $entityManager,
         SerializerInterface $serializer,
         PaginatorInterface $paginator,
-        int $page = null
+
     ): Response {
-
-        if (!$page) {
-
-            if (!is_int($page) || $page < 1) {
-                $page = 1;
-            }
-        }
+        $page = $request->get('page');
         // Récupérer l'utilisateur par ID
         $user = $userRepository->find($id);
         // s'il y'a une action AJAX sur la pagination 
         if ($request->isXmlHttpRequest()) {
-            $limit = 6;
-            $orders = $this->entityManager->getRepository(Order::class)->findBy(['userId' => $id]);
+            $limit = 5;
+
+            $status = 'pending';
+            $orders = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
+
             $pagination = $paginator->paginate(
                 $orders,
                 $page,
@@ -217,25 +214,46 @@ class UserController extends AbstractController
         $lastClientData = $serializer->serialize($client, 'json', ['groups' => 'user']);
         $dataClient = json_decode($lastClientData, true);
 
-        $limit = 6;
-        // Récupérer les dernieres Commandes Order ajoutés
-        $orders = $this->entityManager->getRepository(Order::class)->findby(['userId' => $id]);
-        //  dd($orders);
-        $pagination = $paginator->paginate(
-            $orders,
+        $limit = 5;
+
+        $status = 'pending';
+        $ordersPending = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
+
+        $paginationPending = $paginator->paginate(
+            $ordersPending,
             $page,
             $limit
         );
 
+        $formHtmlPending = $this->renderView('/user/order/index.html.twig', [
+            'orders' => $paginationPending,
+            'pagination' => $paginationPending,
+        ]);
 
+
+        $status = 'completed';
+        $ordersCompleted = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
+
+        $paginationCompleted = $paginator->paginate(
+            $ordersCompleted,
+            $page,
+            $limit
+        );
+        $formHtmlCompleted = $this->renderView('/user/order/index.html.twig', [
+            'orders' => $paginationCompleted,
+            'pagination' => $paginationCompleted,
+        ]);
+        dd($formHtmlPending);
         return $this->render('user/index.html.twig', [
             'title_page' => 'Profil',
             'formUser' => $formUser->createView(),
             'errorsFormUser' => $formUser->getErrors(true),
             'formAddService' => $formService->createView(),
             'errorsFormService' => $formService->getErrors(true),
-            'orders' => $pagination,
-            'pagination' => $pagination,
+            'orders_pending' => $formHtmlPending,
+            // 'pagination_pending' => $paginationPending,
+            'orders_completed' => $formHtmlCompleted,
+            // 'pagination_completed' => $paginationCompleted,
             'lastDeveloper' => $dataDeveloper,
             'lastClient' => $dataClient
 

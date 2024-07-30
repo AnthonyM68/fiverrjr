@@ -50,7 +50,8 @@
 
         <div class="eight wide column">
             <div class="ui segment">
-                <h2>Commandes en cours (Order)</h2>
+
+                {{ orders_pending }}
                 {# liste des commandes #}
                 <div id="orders-container">{% include "/user/order/index.html.twig" %}</div>
             </div>
@@ -71,7 +72,7 @@
                     </div>
 
                     {# ajouter d'un nouveau service #}
-                    <div id="service-form" class="ui segment service-form" styles="{{ formAddService.vars.errors|length > 0 ? 'display:block' : 'display:none' }}">
+                    <div id="service-form" class="ui segment service-form" style="{{ formAddService.vars.errors|length > 0 ? 'display:block' : 'display:none' }}">
                         <h2>Nouveau service</h2>
                         {% include "itemService/form/form.html.twig" %}  
                     </div>

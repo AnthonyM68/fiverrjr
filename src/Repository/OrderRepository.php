@@ -17,10 +17,21 @@ class OrderRepository extends ServiceEntityRepository
     }
     public function countAll()
     {
-        return $this->createQueryBuilder('t')
-            ->select('count(t.id)')
+        return $this->createQueryBuilder('o')
+            ->select('count(o.id)')
             ->getQuery()
             ->getSingleScalarResult();
+    }
+    public function findByUserIdAndStatus(int $userId, string $status)
+    {
+        // Rechercher une correspondance avec LIKE pour les données JSON
+        return $this->createQueryBuilder('o')
+            ->where('o.userId = :userId')
+            ->andWhere('o.status LIKE :status')
+            ->setParameter('userId', $userId)
+            ->setParameter('status', '%"status": "' . $status . '"%')
+            ->getQuery()
+            ->getResult();
     }
     //    /**
     //     * @return Order[] Returns an array of Order objects
