@@ -22,11 +22,6 @@ class SearchFormType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Rechercher',
                 ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez sélectionner un Thème',
-                    ]),
-                ]
             ]);
     }
 

@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OrderRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -18,25 +19,31 @@ class Order
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['order'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?int $serviceId = null;
 
     #[ORM\Column]
+     #[Groups(['order'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?int $userId = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+     #[Groups(['order'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?\DateTimeInterface $dateOrder = null;
 
     #[ORM\Column]
+     #[Groups(['order'])]
     #[ORM\JoinColumn(nullable: false)]
     private array $status = [];
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+     #[Groups(['order'])]
     private ?\DateTimeInterface $dateDelivery = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
+     #[Groups(['order'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 

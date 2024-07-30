@@ -20,6 +20,7 @@
   "dependencies": {
     "@miyuki333/jquery.popup": "^1.2.0",
     "@symfony/webpack-encore": "^4.0.0",
+    "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "core-js": "^3.37.1",
     "fomantic-ui": "^2.9.4-beta.60",
@@ -33,6 +34,7 @@
     "react-intersection-observer": "^9.13.0",
     "react-multi-carousel": "^2.8.5",
     "react-responsive-carousel": "^3.2.23",
+    "recharts": "^2.13.0-alpha.4",
     "resize-observer-polyfill": "^1.5.1",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.5",

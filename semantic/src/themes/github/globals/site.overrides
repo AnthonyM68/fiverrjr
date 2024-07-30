@@ -2,18 +2,3 @@
          Site Overrides
 *******************************/
 // Utilisation de la variable pour modifier l'arrière-plan
-
-/*body {
-    background-color: @primaryColor;
-}
-
-h1, h2, h3 {
-    color:@bodyFontColorH1;
-}
-
-a {
-    color: @linkColor;
-}
-a:hover {
-    color: @linkHoverColor;
-}*/

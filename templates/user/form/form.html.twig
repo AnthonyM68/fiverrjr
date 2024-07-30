@@ -1,0 +1,61 @@
+{% block user_form %}
+{% if formUser | default %}
+    {{ form_start(formUser, {'attr': {'class': 'ui form profile', 'novalidate': 'novalidate'}}) }}
+    <div class="ui form">
+        <div class="field">
+            <img id="imagePreview" src="{{ formUser.vars.data.picture }}" alt="Image Preview profile user" />
+        </div>
+        <div class="{{ formUser.picture.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_errors(formUser.picture) }}
+            {{ form_label(formUser.picture) }}
+            {{ form_widget(formUser.picture, {'attr': {'onchange': 'previewImage(event)'}}) }}
+        </div>
+        <div class="{{ formUser.date_register.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_errors(formUser.date_register) }}
+            {{ form_label(formUser.date_register) }}
+            {{ form_widget(formUser.date_register) }}
+        </div>
+        <div class="{{ formUser.username.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_errors(formUser.username) }}
+            {{ form_label(formUser.username) }}
+            {{ form_widget(formUser.username) }}
+        </div>
+        <div class="{{ formUser.first_name.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_errors(formUser.first_name) }}
+            {{ form_label(formUser.first_name) }}
+            {{ form_widget(formUser.first_name) }}
+        </div>
+        <div class="{{ formUser.last_name.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_errors(formUser.last_name) }}
+            {{ form_label(formUser.last_name) }}
+            {{ form_widget(formUser.last_name) }}
+        </div>
+        <div class="{{ formUser.phone_number.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_errors(formUser.phone_number) }}
+            {{ form_label(formUser.phone_number) }}
+            {{ form_widget(formUser.phone_number) }}
+        </div>
+        <div class="{{ formUser.city.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_errors(formUser.city) }}
+            {{ form_label(formUser.city) }}
+            {{ form_widget(formUser.city) }}
+        </div>
+        <div class="{{ formUser.portfolio.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_errors(formUser.portfolio) }}
+            {{ form_label(formUser.portfolio) }}
+            {{ form_widget(formUser.portfolio) }}
+        </div>
+        <div class="{{ formUser.bio.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_errors(formUser.bio) }}
+            {{ form_label(formUser.bio) }}
+            {{ form_widget(formUser.bio) }}
+        </div>
+        <div class="field">
+            <button type="submit" class="ui-button ui-widget ui-corner-all">
+                <span class="ui-icon ui-icon-check"></span> Valider
+            </button>
+        </div>
+    </div>
+    {{ form_end(formUser) }}
+{% endif %}
+{% endblock user_form %}

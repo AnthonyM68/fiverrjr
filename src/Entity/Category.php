@@ -21,7 +21,7 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: "Choisissez une Catégorie")]
      #[Groups(['serviceItem'])]
     private ?string $nameCategory = null;
 

@@ -16,6 +16,7 @@ use App\Form\CategoryType;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use App\Form\ServiceItemType;
+use App\Service\ImageService;
 use App\Repository\OrderRepository;
 use App\Repository\ThemeRepository;
 use App\Repository\CourseRepository;
@@ -33,6 +34,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,192 +43,67 @@ class ServiceItemController extends AbstractController
 {
     private $logger;
     private $entityManager;
+    private $imageService;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
+        ImageService $imageService
 
     ) {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
+        $this->imageService = $imageService;
     }
-
-
-
-    #[Route('/cart', name: 'cart_product')]
-    public function cartProduct(Cart $cart, Request $request): Response
+    #[Route('/api/uploadImage', name: 'upload_img', methods: ['POST'])]
+    public function uploadImage(UploadedFile $file, string $role): JsonResponse
     {
-        $fullCart = $cart->getCart($request);
-        // dd($fullCart);
-        return $this->render('cart/index.html.twig', [
-            'title_page' => 'Panier',
-            'data' => $fullCart['data'],
-            'total' => $fullCart['total'],
-            'nbProducts' => $fullCart['totalServiceItem'],
-            'stripe_public_key' => $this->getParameter('stripe_public_key'),
-            'service_pictures_directory' => $this->getParameter('service_pictures_directory')
-        ]);
-    }
-
-    #[Route('/cart/add/serviceItem/{id}', name: 'add_service_cart')]
-    public function cartAddProduct(ServiceItem $serviceItem, Request $request, 
-    ServiceItemRepository $serviceItemRepository, 
-    Cart $cart, 
-    SerializerInterface $serializer, 
-    LoggerInterface $logger): Response
-    {
-
-        // Rechercher le service par son ID
-        // $serviceItem = $serviceItemRepository->find($id);
-  
-        if (!$serviceItem) {
-            throw $this->createNotFoundException('Le service n\'existe pas');
-        }
-
-        // Ajouter le produit au panier
-        $cart->addProduct($serviceItem, $request);
-
-        // Obtenir le panier complet
-        $fullCart = $cart->getCart($request);
-        // dd($fullCart);
-        // Sérialiser les données du panier en JSON
-        $jsonFullCart = $serializer->serialize($fullCart, 'json', ['groups' => 'cart']);
-
-        // Log the serialized cart data
-        $logger->info('Serialized cart data: ' . $jsonFullCart);
-
-        // Créer un cookie avec les données du panier
-        $cookieName = 'cart';
-        $cookie = new Cookie(
-            $cookieName,
-            $jsonFullCart, // Utiliser $jsonFullCart plutôt que json_encode($fullCart)
-            time() + (2 * 365 * 24 * 60 * 60), // 2 ans
-            '/', // Path
-            null, // Domain, null pour utiliser le domaine actuel
-            false, // Secure, true si vous utilisez HTTPS
-            true, // HttpOnly
-            false, // Raw
-            'strict' // SameSite, peut être 'lax', 'strict', ou 'none'
-        );
-
-        // dd($fullCart);
-        // Créer la réponse et ajouter le cookie
-        $response = new Response();
-        $response->headers->setCookie($cookie);
-
-        // Log the response headers to verify the cookie
-        $logger->info('Response headers before rendering view: ' . json_encode($response->headers->all()));
-
-        // dd($fullCart);
-        // Ajouter le rendu de la vue à la réponse
-        $content = $this->renderView('cart/index.html.twig', [
-            'title_page' => 'Panier',
-            'data' => $fullCart['data'],
-            'total' => $fullCart['total'],
-            'service_pictures_directory' => $this->getParameter('service_pictures_directory'),
-            'stripe_public_key' => $this->getParameter('stripe_public_key'),
-        ]);
-        $response->setContent($content);
-
-        // Log the final response headers
-        $logger->info('Final response headers: ' . json_encode($response->headers->all()));
-        // dd($response);
-        // Retourner la réponse finale
-        return $response;
-    }
-
-
-    #[Route('/cart/totalItemFromCart', name: 'cart_total_item', methods: ['GET'])]
-    public function getTotalItemFromCart(Cart $cart, Request $request): JsonResponse
-    {
-        $fullCart = $cart->getCart($request);
-
         try {
-            // Retourner la réponse JSON 
-            return new JsonResponse(['totalServiceItem' => $fullCart['totalServiceItem']], Response::HTTP_OK);
-        } catch (\Throwable $e) {
-            // Retourner une réponse JSON avec une erreur 500 en cas d'exception
-            return new JsonResponse(['error' => 'Failed to array_sum serviceItem.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            $filename = $this->imageService->uploadImage($file, $role);
+            return new JsonResponse(['filename' => $filename], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-
-
-
-
-
-
-
-    #[Route('/cart/remove/{id}', name: 'remove_service_cart')]
-    public function cartRemoveProduct(ServiceItem $serviceItem, Request $request, Cart $cart): Response
+    #[Route('/api/images/{filename}', name: 'get_image', methods: ['GET'])]
+    public function getImage(string $filename, string $role): Response
     {
-        $cart->removeProduct($serviceItem, $request);
-        $fullCart = $cart->getCart($request);
+        try {
+            $filePath = $this->imageService->getImagePath($filename, $role);
 
-        return $this->render('cart/index.html.twig', [
-            'title_page' => 'Panier',
-            'data' => $fullCart['data'],
-            'total' => $fullCart['total'],
-            'stripe_public_key' => $this->getParameter('stripe_public_key'),
-        ]);
+            if (!file_exists($filePath)) {
+                throw $this->createNotFoundException('Image not found');
+            }
+
+            $mimeType = mime_content_type($filePath);
+            return new Response(file_get_contents($filePath), Response::HTTP_OK, ['Content-Type' => $mimeType]);
+        } catch (\Exception $e) {
+            throw $this->createNotFoundException($e->getMessage());
+        }
     }
 
-    #[Route('/cart/delete/{id}', name: 'delete_service_cart')]
-    public function cartDeleteProduct(Cart $cart, ServiceItem $serviceItem, Request $request): Response
+    #[Route('/api/deleteImage/{filename}', name: 'delete_image', methods: ['DELETE'])]
+    public function deleteImage(string $filename, string $role): JsonResponse
     {
-        $cart->deleteProduct($serviceItem, $request);
-        $fullCart = $cart->getCart($request);
-
-        return $this->render('cart/index.html.twig', [
-            'title_page' => 'Panier',
-            'data' => $fullCart['data'],
-            'total' => $fullCart['total'],
-            'service_pictures_directory' => $this->getParameter('service_pictures_directory')
-        ]);
+        try {
+            $this->imageService->deleteImage($filename, $role);
+            return new JsonResponse(['message' => 'Image deleted successfully'], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-
-
-
-
-
-
-
-
-
-    #[Route('/empty', name: 'empty')]
-    public function empty(Cart $cart, Request $request)
+    #[Route('/api/imageUrl/{filename}/{role}', name: 'generate_image_url', methods: ['GET'])]
+    public function generateImageUrl(string $filename, string $role): JsonResponse
     {
-        $cart->empty($request);
-        $fullCart = $cart->getCart($request);
-
-        return $this->render('cart/index.html.twig', [
-            'title_page' => 'Panier',
-            'data' => $fullCart['data'],
-            'total' => $fullCart['total']
-        ]);
+        try {
+            $url = $this->imageService->generateImageUrl($filename, $role);
+            return new JsonResponse(['url' => $url], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_NOT_FOUND);
+        }
     }
-
-
-    #[Route('/cart/create/order', name: 'add_order')]
-    public function createOrder(Cart $cart, Request $request, SerializerInterface $serializer): Response
-    {
-        return $this->redirectToRoute('home');
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * SERVICES
@@ -312,7 +189,7 @@ class ServiceItemController extends AbstractController
         Request $request,
         ?ServiceItem $service
     ): Response {
-        
+
         // récupére le nom de fichier de l'image de l'utilisateur
         $pictureFilename = $service->getPicture();
         // on utilise le controller pour fournir le chemin absolu de l'image ( config: services.yaml )
@@ -322,12 +199,12 @@ class ServiceItemController extends AbstractController
                 'role' => 'SERVICE'
             ]);
             $pictureUrl = json_decode($pictureUrlResponse->getContent(), true);
-           
+
             if ($pictureUrl && is_string($pictureUrl['url'])) {
                 $service->setPicture($pictureUrl['url']);
             }
         }
-        
+
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Détail:',
             'service' => $service,
@@ -339,16 +216,39 @@ class ServiceItemController extends AbstractController
     public function getBestServices(ServiceItemRepository $serviceItemRepository, SerializerInterface $serializer): JsonResponse
     {
         try {
-            $services = $serviceItemRepository->findBy([], ['id' => 'DESC']);
+            $services = $serviceItemRepository->findBy([], ['id' => 'DESC'], 10);
 
+            $this->logger->info('findBy services', ['count' => count($services)]);
+
+            foreach ($services as $service) {
+                $pictureFilename = $service->getPicture();
+                $this->logger->info('Processing service', ['service' => $service->getTitle(), 'pictureFilename' => $pictureFilename]);
+
+                if ($pictureFilename) {
+                    try {
+                        $pictureUrl = $this->imageService->generateImageUrl($pictureFilename, 'SERVICE');
+                        $this->logger->info('Generated picture URL', [
+                            'service' => $service->getTitle(),
+                            'pictureUrl' => $pictureUrl
+                        ]);
+                        $service->setPicture($pictureUrl);
+                    } catch (\Exception $e) {
+                        $this->logger->error('Failed to generate picture URL', [
+                            'service' => $service->getTitle(),
+                            'error' => $e->getMessage()
+                        ]);
+                        throw $e;
+                    }
+                }
+            }
+            $this->logger->info('All services processed', ['services' => $services]);
 
             $jsonFullCart = $serializer->serialize($services, 'json', ['groups' => 'serviceItem']);
-            $data = json_decode($jsonFullCart, true); // Décoder en tableau associatif
+            $data = json_decode($jsonFullCart, true);
 
-            // Retourner la réponse JSON 
             return new JsonResponse(['services' => $data], Response::HTTP_OK);
         } catch (\Throwable $e) {
-            // Retourner une réponse JSON avec une erreur 500 en cas d'exception
+            $this->logger->error('Failed to load services', ['error' => $e->getMessage()]);
             return new JsonResponse(['error' => 'Failed to load services.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

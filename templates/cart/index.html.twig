@@ -1,9 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{title_page}}{% endblock %}
+{# {% block title %}{{title_page}}{% endblock %} #}
 
 {% block body %}
-
+<div class="custom-container">
+    <h1 class="uk-animation-slide-right">Bienvenue sur votre {{ title_page }} {{ app.user }}</h1>
+    <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
+</div>
 <div class="ui container cart-container">
     <h1 class="ui header">Mon panier</h1>
     {% if data | default %}

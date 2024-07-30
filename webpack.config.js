@@ -15,26 +15,29 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     // Ajouts des entrées
+    .addEntry('axios', './node_modules/axios/dist/axios.js') // Facultatif 
     // Jquery 
     .addEntry('jquery', './node_modules/jquery/dist/jquery.js')
-    //jQuery UI
-    .addEntry('jquery_ui', './node_modules/jquery-ui-dist/jquery-ui.js')
+    // Jquery-popup
+    .addEntry('jquery_popup', './node_modules/jquery-popup-overlay/jquery.popupoverlay.js')
+    // jQuery UI
+    .addStyleEntry('jquery_ui_css', './assets/styles/jquery-ui/jquery-ui.css')
     // Jquery theme
-    .addStyleEntry('jquery_ui_theme', './node_modules/jquery-ui/dist/themes/blitzer/theme.css')
+    .addStyleEntry('jquery_ui_theme', './assets/styles/jquery-ui/jquery-ui.theme.css')
     // Jquery structure
-    .addStyleEntry('jquery_structure', './node_modules/jquery-ui-dist/jquery-ui.structure.css')
+    .addStyleEntry('jquery_ui_structure', './assets/styles/jquery-ui/jquery-ui.structure.css')
+    // Jquery-ui.js
+    .addEntry('jquery_ui_js', './assets/js/jquery-ui/jquery-ui.js')
+
     // semantic-ui
     .addEntry('semantic', './semantic/dist/semantic.js')
-
     // .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
-
     // semantic-themes
     .addStyleEntry('semantic_less', './semantic/src/semantic.less')
-    // general
-    .addEntry('jquery_popup', './node_modules/jquery-popup-overlay/jquery.popupoverlay.js')
+
     // bootstrap 
-    .addEntry('bootstrap', './node_modules/bootstrap/dist/js/bootstrap.js')
-    .addStyleEntry('bootstrap_css', './node_modules/bootstrap/dist/css/bootstrap.css')
+    // .addEntry('bootstrap', './node_modules/bootstrap/dist/js/bootstrap.js')
+    // .addStyleEntry('bootstrap_css', './node_modules/bootstrap/dist/css/bootstrap.css')
     // uikit 
     .addEntry('uikit', './node_modules/uikit/dist/js/uikit.js')
     .addEntry('uikit-icons', './node_modules/uikit/dist/js/uikit-icons.js')
@@ -44,7 +47,29 @@ Encore
     .addStyleEntry('tarteaucitron_css', './node_modules/tarteaucitronjs/css/tarteaucitron.css')
     .addEntry('tarteaucitron', './node_modules/tarteaucitronjs/tarteaucitron.js')
 
+    // Slick-carousel CSS
+    .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
+    .addStyleEntry('slick-carousel-theme-css', './node_modules/slick-carousel/slick/slick-theme.css')
+    // REACT ....Carousel 
+    .addStyleEntry('react-responsive-carousel', './node_modules/react-responsive-carousel/lib/styles/carousel.min.css')
+    .addStyleEntry('react-multi-carousel', './node_modules/react-multi-carousel/lib/styles.css')
 
+    // Assets personnalisés
+    .addStyleEntry('app_styles', [
+        './assets/styles/sticky.css',
+        './assets/styles/navbar.css',
+        './assets/styles/dropdown.scss',
+        './assets/styles/login-register.css',
+        './assets/styles/admin.css',
+        './assets/styles/app.css',
+        './assets/styles/cart.css',
+        './assets/styles/footer.css',
+        './assets/styles/home.css',
+        './assets/styles/itemService.css',
+        './assets/styles/scss_styles.scss',
+        './assets/styles/paralax.scss',
+        './assets/styles/client.scss'
+    ])
     // app
     .addEntry('app', './assets/app.js')
     // Message_flash
@@ -53,55 +78,33 @@ Encore
     .addEntry('ViewNavbar', './assets/js/navbar/ViewNavbar.js')
     // Search motor
     .addEntry('searchMotor', './assets/js/searchMotor/searchMotor.js')
-    // Service add
-    .addEntry('ViewServiceForm', './assets/js/forms/ViewServiceForm.js')
+
     // Dropdown navbar
     .addEntry('ViewNavbarDropdown', './assets/js/dropdown/ViewNavbarDropdown.js')
+    // Slick-carousel
+    .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
+    // Preview image FileUpload
+    .addEntry('previewImage', './assets/js/preview/previewImage.js')
+    // Service add
+    .addEntry('Service', './assets/js/forms/Service.js')
+    // User edit
+    .addEntry('User', './assets/js/profile/User.js')
     // Cart
     .addEntry('cart', './assets/js/cart/cart.js')
-    // Slick-carousel CSS
-    .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
-    .addStyleEntry('carousel', './assets/styles/carousel.css')
-    .addStyleEntry('slick-carousel-theme-css', './node_modules/slick-carousel/slick/slick-theme.css')
-
-
-    // REACT ...........................................
-    // Carousel 
-    .addStyleEntry('react-responsive-carousel', './node_modules/react-responsive-carousel/lib/styles/carousel.min.css')
-    .addStyleEntry('react-multi-carousel', './node_modules/react-multi-carousel/lib/styles.css')
-
-    // Assets personnalisés
-    .addStyleEntry('app_styles', [
-        './assets/styles/sticky.css',
-        './assets/styles/navbar.css',
-        './assets/styles/dropdown.css',
-        './assets/styles/login-register.css',
-        './assets/styles/admin.css',
-        './assets/styles/app.css',
-        './assets/styles/carousel.css',
-        './assets/styles/parallax.css',
-        './assets/styles/cart.css',
-        './assets/styles/footer.css',
-        './assets/styles/home.css',
-        './assets/styles/itemService.css',
-        // './assets/styles/scss_styles.scss'
-    ])
-
-    // Preview image FileUpload
-    .addEntry('previewImage', './assets/js/profile/previewImage.js')
-
 
     .addEntry('home', './assets/js/home/home.js')
-
     // REACT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
     .enableReactPreset()
     // useFetch ( effectue les requete ajax pour react)
     .addEntry('useFetch', './assets/js/useFetch.jsx')
-    .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
-
-    // .addEntry('HomeCarrousel', './assets/js/carousel/HomeCarousel.js')  // Carousel Semantic non utilisé
+    // Paralax
+    .addEntry('Parallax', './assets/js/components/Parallax/Parallax.jsx')
+    // UserCard
+    .addEntry('UserCard', './assets/js/components/Card/UserCard.jsx')
     // CarouselComponent React
     .addEntry('CarouselComponent', './assets/js/components/Carousel/CarouselComponent.jsx')
+    // HomePage
+    .addEntry('Homepage', './assets/js/components/HomePage/HomePage.jsx')
     // StickyFooter React
     .addEntry('StickyFooter', './assets/js/components/Sticky/StickyFooter.jsx')
     // active le code splitting
@@ -132,6 +135,7 @@ Encore
         $: 'jquery',
         jQuery: 'jquery',
         'window.jQuery': 'jquery',
+        axio: 'axios'
     }))
     // configuration des options du serveur de développement
     .configureDevServerOptions(options => {

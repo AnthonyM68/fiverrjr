@@ -17,24 +17,20 @@ class Theme
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-     #[Groups(['serviceItem'])]
+    #[Groups(['serviceItem'])]
     private ?int $id = null;
 
-
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank]
-     #[Groups(['serviceItem'])]
+    #[Assert\NotBlank(message: "Choisissez un thème")]
+    #[Groups(['serviceItem'])]
     private ?string $nameTheme = null;
-
 
     /**
      * @var Collection<int, Category>
      */
     #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'theme')]
-     #[Groups(['serviceItem'])]
+    #[Groups(['serviceItem'])]
     private Collection $categories;
-
-
 
     public function __construct()
     {
@@ -62,11 +58,6 @@ class Theme
 
         return $this;
     }
-
-
-
-
-
 
     /**
      * @return Collection<int, Category>
@@ -97,16 +88,6 @@ class Theme
 
         return $this;
     }
-
-
-
-
-
-
-
-
-
-
 
     public function __toString()
     {

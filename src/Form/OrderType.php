@@ -40,21 +40,6 @@ class OrderType extends AbstractType
                     'style' => 'display:none', // Masquer le champ 
                 ]
             ])
-            // ->add('userId', IntegerType::class, [
-            //     'label' => 'Utilisateur Id',
-            //     'attr' => [
-            //         'class' => 'ui fluid input'
-            //     ]
-            // ])
-            // ->add('dateOrder', DateType::class, [
-            //     'widget' => 'single_text',
-            //     'required' => false, // Non requis
-            //     'attr' => [
-            //         'style' => 'display:none', // Masquer le champ 
-            //     ],
-            //     'label' => false, // masquer le label
-            //     'mapped' => false, // Ne pas mapper ce champ avec les données du formulaire
-            // ])
             // Écouteur pour ajouter l'ID utilisateur avant de persister
             ->addEventSubscriber(new AddUserField($this->security))
             // Écouteur pour ajouter la date de création avant de persister

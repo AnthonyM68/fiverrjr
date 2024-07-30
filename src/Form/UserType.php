@@ -66,13 +66,13 @@ class UserType extends AbstractType
             ->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur',
                 'label_attr' => []
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Soumettre',
-                'attr' => [
-                    'class' => 'ui-button ui-widget ui-corner-all'
-                ]
             ]);
+            // ->add('submit', SubmitType::class, [
+            //     'label' => 'Soumettre',
+            //     'attr' => [
+            //         'class' => 'ui-button ui-widget ui-corner-all'
+            //     ]
+            // ]);
 
     }
 

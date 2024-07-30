@@ -1,13 +1,16 @@
 $primary: #3498db;
 $secondary: #1a1a1a;
+$white: #fff;
 $pageBackground: #fff;
 $transparent: transparent;
 
 $linkColor: $primary;
 
+$container-max-width: 1600px;
+$container-padding: 10px;
 
-
-
+$container-grid-max-width: 1800px;
+$container-grid-padding: 10px;
 
 $padding-small: 5px;
 $padding-medium: 10px;
@@ -16,11 +19,3 @@ $padding-large: 15px;
 $margin-small: 5px;
 $margin-medium: 10px;
 $margin-large: 15px;
-
-
-$container-max-width: 1600px;
-$container-padding: 10px;
-
-$container-grid-max-width: 1200px;
-$container-grid-padding: 10px;
-

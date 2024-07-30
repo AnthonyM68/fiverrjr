@@ -1,20 +1,46 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
+<div class="separator"></div>
+<div class="custom-container">
 
-{% if clients| default %}
-{# On affiche les entrprise touvées #}
-<div class="ui list client clientuk-animation-fade">
-    {% for client in clients %}
-    <div class="item">
-        <i class="folder icon"></i>
-        <div class="content">
-            <div class="header">{{ client }}</div>
+    <h1 class="uk-animation-slide-bottom">{{ title_page }}</h1>
+
+    {% if users|default([]) %}
+    <div class="ui three stackable cards uk-animation-fade">
+        {% for enterprise in users %}
+        <div class="ui card custom-card">
+            <div class="custom-image-client">
+                <img src="{{ enterprise.picture }}" alt="{{ enterprise.username }}">
+            </div>
+            <div class="content custom-card-content">
+                <div class="header">{{ enterprise.username }}</div>
+                <div class="meta">
+                    <span class="date">Inscrit le {{ enterprise.dateRegister|date('d-m-Y') }}</span>
+                </div>
+                <div class="description">
+                    {{ enterprise.bio|slice(0, 100) }}...
+                </div>
+            </div>
+            <div class="extra content">
+                <a href="">
+                    Plus d'infos
+                </a>
+            </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
-{% endif %}
 
+    <div class="ui pagination menu centered custom-margin-top">
+         {% for page in range(1, pagination.pageCount) %}
+        <a class="item{% if page == pagination.currentPageNumber %} active{% endif %}"
+            href="{{ path('list_user_type', {'role': role, 'page': page }) }}">
+            {{ page }}
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Aucune entreprise trouvée.</p>
+    {% endif %}
+</div>
 {% endblock %}

@@ -47,7 +47,7 @@ INSERT INTO `category` (`id`, `name_category`, `theme_id`) VALUES
 -- Listage de la structure de table fiverrjr. course
 CREATE TABLE IF NOT EXISTS `course` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `category_id` int DEFAULT NULL,
+  `category_id` int NOT NULL,
   `name_course` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_169E6FB912469DE2` (`category_id`),
@@ -85,7 +85,11 @@ CREATE TABLE IF NOT EXISTS `doctrine_migration_versions` (
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
--- Listage des données de la table fiverrjr.doctrine_migration_versions : ~1 rows (environ)
+-- Listage des données de la table fiverrjr.doctrine_migration_versions : ~2 rows (environ)
+INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
+	('DoctrineMigrations\\Version20240715131353', '2024-07-15 13:15:02', 46),
+	('DoctrineMigrations\\Version20240715142815', '2024-07-15 14:28:29', 24);
+
 -- Listage de la structure de table fiverrjr. messenger_messages
 CREATE TABLE IF NOT EXISTS `messenger_messages` (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -110,13 +114,17 @@ CREATE TABLE IF NOT EXISTS `order` (
   `service_id` int NOT NULL,
   `date_order` datetime NOT NULL,
   `status` json NOT NULL,
-  `date_delivery` datetime NOT NULL,
+  `date_delivery` datetime DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_F5299398A76ED395` (`user_id`),
   CONSTRAINT `FK_F5299398A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.order : ~0 rows (environ)
+-- Listage des données de la table fiverrjr.order : ~2 rows (environ)
+INSERT INTO `order` (`id`, `user_id`, `service_id`, `date_order`, `status`, `date_delivery`, `title`) VALUES
+	(1, 1, 1, '2024-07-15 13:15:07', '[]', NULL, 'Création de site vitrine professionnel'),
+	(2, 1, 2, '2024-07-15 16:34:58', '[]', NULL, 'Développement de blog personnalisé');
 
 -- Listage de la structure de table fiverrjr. reset_password_request
 CREATE TABLE IF NOT EXISTS `reset_password_request` (
@@ -152,29 +160,29 @@ CREATE TABLE IF NOT EXISTS `service_item` (
   CONSTRAINT `FK_D15891F2591CC992` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
   CONSTRAINT `FK_D15891F28D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
   CONSTRAINT `FK_D15891F2A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table fiverrjr.service_item : ~19 rows (environ)
 INSERT INTO `service_item` (`id`, `course_id`, `user_id`, `order_id`, `title`, `description`, `price`, `duration`, `create_date`, `picture`) VALUES
-	(1, 1, 1, NULL, 'Création de site vitrine professionnel', 'Nous développons des sites vitrines professionnels pour mettre en avant votre entreprise et vos services.', 1500, 30, '2024-07-10 19:54:03', 'vitrine.jpg'),
-	(2, 2, 1, NULL, 'Développement de blog personnalisé', 'Nous offrons des services de développement de blogs personnalisés avec des fonctionnalités avancées.', 1200, 25, '2024-07-10 19:54:03', 'blog.jpg'),
-	(3, 3, 1, NULL, 'Création de portfolio en ligne', 'Nous créons des portfolios en ligne élégants pour présenter vos travaux et compétences.', 800, 20, '2024-07-10 19:54:03', 'portfolio.jpg'),
-	(4, 4, 2, NULL, 'Boutique en ligne avec Shopify', 'Nous développons des boutiques en ligne performantes et sécurisées avec Shopify.', 2500, 40, '2024-07-10 19:54:03', 'shopify.jpg'),
-	(5, 5, 1, NULL, 'Développement de boutiques WooCommerce', 'Nous développons des boutiques en ligne performantes avec WooCommerce, adaptées à vos besoins.', 2000, 35, '2024-07-10 20:00:05', 'woocommerce.jpg'),
-	(6, 6, 1, NULL, 'Intégration de systèmes de paiement', 'Nous intégrons des systèmes de paiement sécurisés comme Stripe, PayPal, etc., pour votre site web.', 500, 10, '2024-07-10 20:00:05', 'payment.jpg'),
-	(7, 7, 1, NULL, 'Développement HTML/CSS/JavaScript', 'Nous offrons des services de développement front-end en HTML, CSS et JavaScript pour des sites web interactifs.', 1000, 20, '2024-07-10 20:00:05', 'html_css_js.jpg'),
-	(8, 8, 1, NULL, 'Utilisation de frameworks front-end', 'Nous utilisons des frameworks front-end comme React, Angular et Vue.js pour créer des applications web modernes.', 1500, 25, '2024-07-10 20:00:05', 'frontend_frameworks.jpg'),
-	(9, 9, 1, NULL, 'Optimisation des performances front-end', 'Nous optimisons les performances front-end de votre site pour garantir une expérience utilisateur fluide et rapide.', 800, 15, '2024-07-10 20:00:05', 'performance_optimization.jpg'),
-	(10, 10, 1, NULL, 'Développement avec Node.js', 'Nous développons des applications back-end robustes et évolutives avec Node.js.', 1800, 30, '2024-07-10 20:00:05', 'nodejs.jpg'),
-	(11, 11, 1, NULL, 'Développement avec Python/Django', 'Nous offrons des services de développement avec Python et Django pour des applications web performantes.', 2000, 35, '2024-07-10 20:00:05', 'python_django.jpg'),
-	(12, 12, 1, NULL, 'Utilisation de PHP et frameworks', 'Nous utilisons PHP et des frameworks comme Laravel et Symfony pour créer des applications web puissantes.', 1700, 30, '2024-07-10 20:00:05', 'php_frameworks.jpg'),
-	(13, 13, 1, NULL, 'Projets MERN', 'Nous réalisons des projets MERN (MongoDB, Express, React, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'mern.jpg'),
-	(14, 14, 1, NULL, 'Projets MEAN', 'Nous développons des projets MEAN (MongoDB, Express, Angular, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'mean.jpg'),
-	(15, 15, 1, NULL, 'Projets LAMP', 'Nous proposons des services de développement LAMP (Linux, Apache, MySQL, PHP) pour des solutions web robustes.', 1800, 30, '2024-07-10 20:00:05', 'lamp.jpg'),
-	(16, 16, 1, NULL, 'Développement de thèmes et plugins WordPress', 'Nous développons des thèmes et plugins WordPress personnalisés pour répondre à vos besoins spécifiques.', 1200, 25, '2024-07-10 20:00:05', 'wordpress_themes_plugins.jpg'),
-	(17, 17, 1, NULL, 'Développement avec Joomla et Drupal', 'Nous offrons des services de développement avec Joomla et Drupal pour des sites web performants et sécurisés.', 1500, 30, '2024-07-10 20:00:05', 'joomla_drupal.jpg'),
-	(18, 18, 1, NULL, 'Développement d\'API RESTful', 'Nous développons des API RESTful pour faciliter la communication entre vos différentes applications.', 1000, 20, '2024-07-10 20:00:05', 'api_restful.jpg'),
-	(19, 19, 1, NULL, 'Intégration de services tiers', 'Nous intégrons des services tiers comme Stripe, PayPal, etc., pour enrichir les fonctionnalités de votre site web.', 700, 15, '2024-07-10 20:00:05', './img/services/service.png');
+	(1, 1, 1, NULL, 'Création de site vitrine professionnel', 'Nous développons des sites vitrines professionnels pour mettre en avant votre entreprise et vos services.', 1500, 30, '2024-07-10 19:54:03', 'informatique.jpg'),
+	(2, 2, 1, NULL, 'Développement de blog personnalisé', 'Nous offrons des services de développement de blogs personnalisés avec des fonctionnalités avancées.', 1200, 25, '2024-07-10 19:54:03', 'marketing.png'),
+	(3, 3, 1, NULL, 'Création de portfolio en ligne', 'Nous créons des portfolios en ligne élégants pour présenter vos travaux et compétences.', 800, 20, '2024-07-10 19:54:03', 'Informatique.png'),
+	(4, 4, 2, NULL, 'Boutique en ligne avec Shopify', 'Nous développons des boutiques en ligne performantes et sécurisées avec Shopify.', 4500, 40, '2024-07-10 19:54:03', 'microsoft.png'),
+	(5, 5, 2, NULL, 'Développement de boutiques WooCommerce', 'Nous développons des boutiques en ligne performantes avec WooCommerce, adaptées à vos besoins.', 2000, 35, '2024-07-10 20:00:05', 'bureautique.png'),
+	(6, 6, 2, NULL, 'Intégration de systèmes de paiement', 'Nous intégrons des systèmes de paiement sécurisés comme Stripe, PayPal, etc., pour votre site web.', 500, 10, '2024-07-10 20:00:05', 'front-end.png'),
+	(7, 7, 2, NULL, 'Développement HTML/CSS/JavaScript', 'Nous offrons des services de développement front-end en HTML, CSS et JavaScript pour des sites web interactifs.', 1000, 20, '2024-07-10 20:00:05', 'bureautique.png'),
+	(8, 8, 2, NULL, 'Utilisation de frameworks front-end', 'Nous utilisons des frameworks front-end comme React, Angular et Vue.js pour créer des applications web modernes.', 1500, 25, '2024-07-10 20:00:05', 'front-end.png'),
+	(9, 9, 1, NULL, 'Optimisation des performances front-end', 'Nous optimisons les performances front-end de votre site pour garantir une expérience utilisateur fluide et rapide.', 800, 15, '2024-07-10 20:00:05', 'microsoft.png'),
+	(10, 10, 1, NULL, 'Développement avec Node.js', 'Nous développons des applications back-end robustes et évolutives avec Node.js.', 1800, 30, '2024-07-10 20:00:05', 'developer.jpg'),
+	(11, 11, 1, NULL, 'Développement avec Python/Django', 'Nous offrons des services de développement avec Python et Django pour des applications web performantes.', 2000, 35, '2024-07-10 20:00:05', 'developer.jpg'),
+	(12, 12, 1, NULL, 'Utilisation de PHP et frameworks', 'Nous utilisons PHP et des frameworks comme Laravel et Symfony pour créer des applications web puissantes.', 1700, 30, '2024-07-10 20:00:05', 'developer.jpg'),
+	(13, 13, 1, NULL, 'Projets MERN', 'Nous réalisons des projets MERN (MongoDB, Express, React, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'gestion.png'),
+	(14, 14, 1, NULL, 'Projets MEAN', 'Nous développons des projets MEAN (MongoDB, Express, Angular, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'marketing.png'),
+	(15, 15, 1, NULL, 'Projets LAMP', 'Nous proposons des services de développement LAMP (Linux, Apache, MySQL, PHP) pour des solutions web robustes.', 1800, 30, '2024-07-10 20:00:05', 'gestion.png'),
+	(16, 16, 1, NULL, 'Développement de thèmes et plugins WordPress', 'Nous développons des thèmes et plugins WordPress personnalisés pour répondre à vos besoins spécifiques.', 1200, 25, '2024-07-10 20:00:05', 'marketing.png'),
+	(17, 17, 1, NULL, 'Développement avec Joomla et Drupal', 'Nous offrons des services de développement avec Joomla et Drupal pour des sites web performants et sécurisés.', 1500, 30, '2024-07-10 20:00:05', 'group3.jpg'),
+	(18, 18, 1, NULL, 'Développement d\'API RESTful', 'Nous développons des API RESTful pour faciliter la communication entre vos différentes applications.', 1000, 20, '2024-07-10 20:00:05', 'group2.jpg'),
+	(19, 19, 1, NULL, 'Intégration de services tiers', 'Nous intégrons des services tiers comme Stripe, PayPal, etc., pour enrichir les fonctionnalités de votre site web.', 700, 15, '2024-07-10 20:00:05', 'group.jpg');
 
 -- Listage de la structure de table fiverrjr. theme
 CREATE TABLE IF NOT EXISTS `theme` (
@@ -183,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `theme` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.theme : ~7 rows (environ)
+-- Listage des données de la table fiverrjr.theme : ~6 rows (environ)
 INSERT INTO `theme` (`id`, `name_theme`) VALUES
 	(1, 'Développement Web'),
 	(2, 'Développement Mobile'),
@@ -215,8 +223,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- Listage des données de la table fiverrjr.user : ~2 rows (environ)
 INSERT INTO `user` (`id`, `email`, `roles`, `password`, `first_name`, `last_name`, `phone_number`, `date_register`, `picture`, `city`, `portfolio`, `bio`, `is_verified`, `username`) VALUES
-	(1, 'enterprise@gmail.com', '["ROLE_ENTERPRISE"]', '$2y$13$030uvowwY4st0yG1THvBuuC5vjemI9k4kUMluwi.IBH32YCV.uVl2', 'Elan', 'Formation', '330760000000', '2024-06-20 06:48:38', './img/enterprises/enterprise.webp', 'Thann', NULL, NULL, 0, 'jad67tony'),
-	(2, 'developer@gmail.com', '["ROLE_DEVELOPER"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Anthony', 'Montmirail', '330760000000', '2024-06-27 00:00:00', './img/developers/668e00e3b6f2c.png', 'Thann', NULL, 'Test update', 0, 'Anthony');
+	(1, 'client@gmail.com', '["ROLE_CLIENT"]', '$2y$13$030uvowwY4st0yG1THvBuuC5vjemI9k4kUMluwi.IBH32YCV.uVl2', 'Elan', 'Formation', '330760000000', '2024-06-20 00:00:00', 'client.webp', 'Thann', NULL, 'En tant qu\'entreprise innovante et en pleine croissance, nous sommes constamment à la recherche de jeunes développeurs talentueux pour rejoindre notre équipe dynamique. Nous offrons des opportunités passionnantes dans le développement web et mobile, et nous cherchons des professionnels créatifs et motivés maîtrisant des technologies telles que HTML, CSS, JavaScript, React et Node.js. Si vous êtes prêt à relever des défis stimulants et à contribuer à des projets captivants, explorez notre profil et découvrez comment vous pouvez collaborer avec nous. Nous avons hâte de découvrir vos talents et de travailler ensemble pour réaliser des projets ambitieux !', 0, 'Elan-formation'),
+	(2, 'developer@gmail.com', '["ROLE_DEVELOPER"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Anthony', 'Montmirail', '330760000000', '2024-06-27 00:00:00', 'moi.jpg', 'Thann', NULL, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim omnis doloribus quo deserunt optio! Tempora fugiat, harum ipsa alias magnam neque! Maiores dolores molestias magnam ipsum at accusantium, commodi a.', 0, 'Anthony');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

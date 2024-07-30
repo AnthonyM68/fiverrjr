@@ -24,31 +24,32 @@ class ServiceItem
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-     #[Groups(['serviceItem'])]
+    #[Groups(['serviceItem'])]
+    #[Assert\NotBlank(message: "Donnez un titre à votre service.")]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank]
-     #[Groups(['serviceItem'])]
+    #[Groups(['serviceItem'])]
+    #[Assert\NotBlank(message: "Donnez une déscription à votre service.")]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::FLOAT)]
-    #[Assert\NotBlank]
-     #[Groups(['serviceItem'])]
+    #[Groups(['serviceItem'])]
+    #[Assert\NotBlank(message: "Donnez un prix à votre service.")]
     private ?float $price = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank]
-     #[Groups(['serviceItem'])]
+    #[Groups(['serviceItem'])]
+    #[Assert\NotBlank(message: "Donnez une durée en minutes.")]
     private ?int $duration = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-     #[Groups(['serviceItem'])]
+    #[Groups(['serviceItem'])]
     private ?\DateTimeInterface $createDate = null;
 
     #[ORM\Column(length: 255, nullable: false)]
-     #[Groups(['serviceItem'])]
+    #[Groups(['serviceItem'])]
+    #[Assert\NotBlank(message: "Donnez une url d'image.")]
     private ?string $picture = null;
 
     /**
@@ -58,7 +59,7 @@ class ServiceItem
      */
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'serviceItems')]
     #[ORM\JoinColumn(nullable: false)]
-     #[Groups(['serviceItem'])]
+    #[Groups(['serviceItem'])]
     private ?Course $course = null;
     /**
      * Undocumented User
@@ -67,7 +68,7 @@ class ServiceItem
      */
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'serviceitems')]
     #[ORM\JoinColumn(nullable: false)]
-     #[Groups(['serviceItem'])]
+    #[Groups(['serviceItem'])]
     private ?User $user = null;
     /**
      * Undocumented Order
@@ -75,7 +76,7 @@ class ServiceItem
      * @var Order|null
      */
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'serviceitems')]
-     #[Groups(['serviceItem'])]
+    #[Groups(['serviceItem'])]
     private ?Order $order = null;
 
 
@@ -222,7 +223,7 @@ class ServiceItem
 
 
 
-    
+
     public function __toString()
     {
         return $this->title;

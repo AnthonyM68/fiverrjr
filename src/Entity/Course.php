@@ -23,8 +23,8 @@ class Course
 
     private ?int $id = null;
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank]
     #[Groups(['serviceItem'])]
+    #[Assert\NotBlank(message: "Choisissez une sous-catégorie")]
     private ?string $nameCourse = null;
 
     /**

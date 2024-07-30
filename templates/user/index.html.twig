@@ -1,6 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+<script>
+    // User.js
+    window.__INITIAL_DATA__ = {
+        lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
+        lastClient: {{ lastClient | json_encode() | raw }}
+        };
+</script>
+
 {% block linkForJavascript %}
 <div class="js-tags-user-twig" data-csrf-token="{{ csrf_token('delete_service') }}"></div>
 {% endblock %}
@@ -10,88 +19,24 @@
     <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
 </div>
 <div class="custom-container">
+
     <div class="ui grid equal-height-columns">
         <div class="eight wide column">
             <div class="ui grid equal-height-columns">
                 <div class="eight wide column">
-                    <div class="ui segment f">
-                        {{ form_start(formUser, {'attr': {'class': 'ui form profile'}}) }}
-                        <div class="ui form">
-                            {% if formUser.picture %}
-                            <div class="field ">
-                                <img id="imagePreview"
-                                    src="{% if pictureUrl|default %} {{ asset(pictureUrl) }} {% endif %}"
-                                    alt="Image Preview profile user" />
-                            </div>
-                            {% endif %}
-                            <div class="field">
-                                {{ form_label(formUser.picture) }}
-                                {{ form_widget(formUser.picture, {'attr': {'onchange': 'previewImage(event)'}}) }}
-                                {{ form_errors(formUser.picture) }}
-                            </div>
-                            <div class="field">
-                                {{ form_label(formUser.date_register) }}
-                                {{ form_widget(formUser.date_register) }}
-                                {{ form_errors(formUser.date_register) }}
-                            </div>
-                            <div class="field">
-                                {{ form_label(formUser.username) }}
-                                {{ form_widget(formUser.username) }}
-                                {{ form_errors(formUser.username) }}
-                            </div>
-                            <div class="field">
-                                {{ form_label(formUser.first_name) }}
-                                {{ form_widget(formUser.first_name) }}
-                                {{ form_errors(formUser.first_name) }}
-                            </div>
-                            <div class="field">
-                                {{ form_label(formUser.last_name) }}
-                                {{ form_widget(formUser.last_name) }}
-                                {{ form_errors(formUser.last_name) }}
-                            </div>
-                            <div class="field">
-                                {{ form_label(formUser.phone_number) }}
-                                {{ form_widget(formUser.phone_number) }}
-                                {{ form_errors(formUser.phone_number) }}
-                            </div>
-                            <div class="field">
-                                {{ form_label(formUser.city) }}
-                                {{ form_widget(formUser.city) }}
-                                {{ form_errors(formUser.city) }}
-                            </div>
-                            <div class="field">
-                                {{ form_label(formUser.portfolio) }}
-                                {{ form_widget(formUser.portfolio) }}
-                                {{ form_errors(formUser.portfolio) }}
-                            </div>
-                            <div class="field">
-                                {{ form_label(formUser.bio) }}
-                                {{ form_widget(formUser.bio) }}
-                                {{ form_errors(formUser.bio) }}
-                            </div>
-                        </div>
-                        {{ form_end(formUser) }}
+                    {# formualire édition profil utilisateur #}
+                    <div class="ui segment">
+                        <h2>Informations Profil</h2>
+                        <div id="user-form" >{% include "user/form/form.html.twig" %}</div>
                     </div>
                 </div>
+                {# On affiche le dernier développeur et le dernier client inscrit  #}
                 <div class="eight wide column">
-                    {% if is_granted('ROLE_CLIENT') %}
-
-                    <div class="ui segment" id="last-developer-root">
-                        {% if lastDeveloper|default %}
-                        {{ lastDeveloper }}
-                        {% endif %}
-                    </div>
-
-                    {% elseif is_granted('ROLE_DEVELOPER') %}
-                 
-                    <div class="ui segment" id="last-client-root">
-                        {% if lastDeveloper|default %}
-                        {{ lastDeveloper }}
-                        {% endif %}
-                    </div>
-
-                    
-                    {% endif %}
+                    {# {% if is_granted('ROLE_CLIENT') %} #}
+                    <div class="ui segment" id="last-developer-profile"></div>
+                    {# {% elseif is_granted('ROLE_DEVELOPER') %} #}
+                    <div class="ui segment" id="last-client-profile"></div>
+                    {# {% endif %} #}
                     <div class="column">
                         <div class="ui segment ">
                             <div class="ui container">
@@ -102,32 +47,19 @@
                 </div>
             </div>
         </div>
+
         <div class="eight wide column">
             <div class="ui segment">
                 <h2>Commandes en cours (Order)</h2>
-                {% if orders is iterable %}
-                <div class="ui relaxed divided list">
-                    {% for order in orders %}
-                    <div class="item">
-                        <i class="large middle aligned history icon"></i>
-                        <div class="content">
-                            <a class="header">{{ order.title}}</a>
-                            <div class="description">{{ order.dateOrder|date("d/m/Y H:i") }}</div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-                <div class="ui container">
-                    Button 1...
-                </div>
+                {# liste des commandes #}
+                <div id="orders-container">{% include "/user/order/index.html.twig" %}</div>
             </div>
+
             <div class="ui segment">
                 <div class="ui container">
+
                     {% if is_granted('ROLE_CLIENT') %}
 
-                    <div class="ui segment" id="last-developer-root"></div>
-                    
                     {% elseif is_granted('ROLE_DEVELOPER') %}
                     <div class="container">
                         <a href="javascript:void(0);" class="ui button primary toggle-service-form">
@@ -137,66 +69,11 @@
                             Liste de mes services
                         </a>
                     </div>
+
                     {# ajouter d'un nouveau service #}
-                    <div class="ui segment service-form" style="display: none;">
+                    <div id="service-form" class="ui segment service-form" styles="{{ formAddService.vars.errors|length > 0 ? 'display:block' : 'display:none' }}">
                         <h2>Nouveau service</h2>
-
-                        {% if formAddService is defined %}
-                        {{ form_start(formAddService, {'attr': {'class': 'ui form service-form'}}) }}
-                        <div class="field">
-                            {{ form_label(formAddService.course.theme) }}
-                            {{ form_widget(formAddService.course.theme) }}
-                            {{ form_errors(formAddService.course.theme) }}
-                        </div>
-                        <div class="field">
-                            {{ form_label(formAddService.course.category) }}
-                            {{ form_widget(formAddService.course.category) }}
-                            {{ form_errors(formAddService.course.category) }}
-                        </div>
-                        <div class="field">
-                            {{ form_label(formAddService.course.course) }}
-                            {{ form_widget(formAddService.course.course) }}
-                            {{ form_errors(formAddService.course.course) }}
-                        </div>
-                        <hr>
-                        {# Prévisualisation de l'image existante #}
-                        {% if service|default %}
-                        <img id="imagePreview" src="{{ asset(service.picture) }}" alt="Image Preview"
-                            style="max-width: 200px; max-height: 200px;" />
-                        {% endif %}
-
-                        <div class="field">
-                            {{ form_label(formAddService.picture) }}
-                            {{ form_widget(formAddService.picture, {'attr': {'onchange':
-                            'previewImage(event)'}}) }}
-                            {{ form_errors(formAddService.picture) }}
-                        </div>
-                        <div class="field">
-                            {{ form_label(formAddService.title) }}
-                            {{ form_widget(formAddService.title) }}
-                            {{ form_errors(formAddService.title) }}
-                        </div>
-                        <div class="field">
-                            {{ form_label(formAddService.description) }}
-                            {{ form_widget(formAddService.description) }}
-                            {{ form_errors(formAddService.description) }}
-                        </div>
-                        <div class="field">
-                            {{ form_label(formAddService.price) }}
-                            {{ form_widget(formAddService.price) }}
-                            {{ form_errors(formAddService.price) }}
-                        </div>
-                        <div class="field">
-                            {{ form_label(formAddService.duration) }}
-                            {{ form_widget(formAddService.duration) }}
-                            {{ form_errors(formAddService.duration) }}
-                        </div>
-                        <div class="field">
-                            {{ form_row(formAddService.submit) }}
-                        </div>
-                        {{ form_end(formAddService) }}
-                        {% endif %}
-                        {% endif %}
+                        {% include "itemService/form/form.html.twig" %}  
                     </div>
                     {# liste des service de l'utilisateur #}
                     <div class="ui segment list-services" style="display: none;">
@@ -225,17 +102,22 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
-      
+
 {% block javascripts %}
 {{ parent() }}
-{# On inject le script pour la gestion des contenus dynamique des select #}
-{{ encore_entry_script_tags('ViewServiceForm') }}
-{# On inject le script pour la prévisualisation de l'image avant upload (enregistrement) #}
+
+{# Service.js #}
+{{ encore_entry_script_tags('Service') }}
+{# User.js #}
+{{ encore_entry_script_tags('User') }}
+{# preview.js #}
 {{ encore_entry_script_tags('previewImage') }}
+
 {% endblock %}
 {% endblock %}

@@ -31,9 +31,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         min: 5,
         minMessage: "Votre email doit comporter au moins {{ limit }} caractères.",
         max: 180,
-        maxMessage: "Votre email ne peut pas comporter plus de {{ limit }} caractères.")]
+        maxMessage: "Votre email ne peut pas comporter plus de {{ limit }} caractères."
+    )]
     #[ORM\Column(length: 180)]
-    #[Groups(['serviceItem'])]
     private ?string $email = null;
 
     /**
@@ -41,45 +41,82 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
 
     #[ORM\Column(type: 'json')]
-    #[Groups(['serviceItem'])]
+    #[Groups(['user', 'serviceItem'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
+
+    #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 12,
+        minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: "/[a-z]/",
+        message: "Le mot de passe doit contenir au moins une lettre minuscule."
+    )]
+    #[Assert\Regex(
+        pattern: "/[A-Z]/",
+        message: "Le mot de passe doit contenir au moins une lettre majuscule."
+    )]
+    #[Assert\Regex(
+        pattern: "/\d/",
+        message: "Le mot de passe doit contenir au moins un chiffre."
+    )]
+    #[Assert\Regex(
+        pattern: "/\W/",
+        message: "Le mot de passe doit contenir au moins un caractère spécial."
+    )]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $password = null;
 
+
+    #[Assert\NotBlank(message: "Veuillez indiquer votre prénom.")]
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['serviceItem'])]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $firstName = null;
 
+    #[Assert\NotBlank(message: "Veuillez indiquer votre nom.")]
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['serviceItem'])]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $lastName = null;
 
+    #[Assert\NotBlank(message: "Le numéro de téléphone ne peut pas être vide.")]
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $phoneNumber = null;
 
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['user', 'serviceItem'])]
     private ?\DateTimeInterface $dateRegister = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $picture = null;
 
+    #[Assert\NotBlank(message: "Veuillez indiquer votre ville.")]
     #[ORM\Column(length: 100, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $portfolio = null;
 
+    #[Assert\NotBlank(message: "La bio ne peut pas être vide.")]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $bio = null;
 
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[Assert\NotBlank(message: "Le nom d'utilisateur ne peut pas être vide.")]
     #[ORM\Column(length: 100)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $username = null;
 
     /**

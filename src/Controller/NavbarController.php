@@ -19,6 +19,8 @@ class NavbarController extends AbstractController
     EntityManagerInterface $entityManager, 
     Cart $cart): Response
     {
+        // On vérifie si un panier existe en session
+        $fullCart = $cart->getCart($request);
         // Création et gestion du formulaire de recherche
         // ( SearchFormType )
         $formTheme = $this->createForm(SearchFormType::class, null, [
@@ -47,10 +49,6 @@ class NavbarController extends AbstractController
             }
             $submittedFormName = 'form_service';
         }
-
-        $fullCart = $cart->getCart($request);
-
-
         return $this->render('navbar/index.html.twig', [
             'form_service' => $formTheme->createView(),
             'results' => $results,

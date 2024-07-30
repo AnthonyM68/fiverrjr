@@ -1,3 +1,61 @@
+/* .text-box {
+  height: 100vh;
+  color: white;
+  font-family: "Lato", sans-serif;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backface-visibility: hidden;
+  } */
+
+  /* .text-primary {
+    text-transform: uppercase;
+    letter-spacing: 35px;
+    font-size: 2em;
+    animation: moveLeft 1.5s ease-in;
+  } */
+
+  /* .text-sub {
+    letter-spacing: 15px;
+    font-size: 1em;
+    animation: moveRight 1.5s ease-in;
+    text-shadow: 0 0 5px white;
+  } */
+
+
+@keyframes moveLeft {
+  0% {
+    opacity: 0;
+    transform: translatex(-100px);
+  }
+
+  80% {
+    transform: translatex(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translatex(0);
+  }
+}
+
+@keyframes moveRight {
+  0% {
+    opacity: 0;
+    transform: translatex(100px);
+  }
+
+  80% {
+    transform: translatex(-10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translatex(0);
+  }
+}
+
 h1 {
   margin-top: 5%;
   font-size: 3rem;
@@ -17,7 +75,30 @@ div .junior-animate {
   margin-right: 2rem;
 }
 p.sub-animate {
-    font-size: 1.5rem;
-    color: gray;
-    text-transform: uppercase;
+  font-size: 1.5rem;
+  color: gray;
+  text-transform: uppercase;
+}
+
+
+
+
+
+
+
+.uk-animation-scale-up {
+  animation: uk-scale-up 0.6s ease-in-out;
+}
+.uk-animation-scale-up.slow {
+  animation-duration: 1s;
+}
+@keyframes uk-scale-up {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

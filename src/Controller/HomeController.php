@@ -6,25 +6,30 @@ use App\Entity\User;
 use App\Service\Cart;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
+use App\Service\ImageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
 {
     private $entityManager;
     private $logger;
+    private $imageService;
 
     // Constructeur pour injecter l'EntityManager
     public function __construct(
         EntityManagerInterface $entityManager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ImageService $imageService
     ) {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
+        $this->imageService = $imageService;
     }
 
 
@@ -36,97 +41,73 @@ class HomeController extends AbstractController
 
 
     #[Route('/home', name: 'home')]
-    public function index(Cart $cart, Request $request): Response
+    public function index(Cart $cart, Request $request,  SerializerInterface $serializer): Response
     {
         // Récupérer le dernier utilisateur avec le rôle ROLE_ENTERPRISE
         $lastClient = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_CLIENT');
         // Récupérer le dernier utilisateur avec le rôle ROLE_DEVELOPER
         $lastDeveloper = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_DEVELOPER');
         // // Récupérer le dernier service ajouté
-        $lastService = $this->entityManager->getRepository(ServiceItem::class)->findOneBy([], ['id' => 'DESC']);
-
-        // Récupérer le cookie de la requête
-        // $cookieName = 'panier_cookie';
-        // $cookieValue = $request->cookies->get($cookieName);
-
-        // dd($cookieValue);
-
-        // Désérialiser les données du panier à partir du cookie
-        // if ($cookieValue) {
-        //     $fullCart = $serializer->deserialize($cookieValue, Cart::class, 'json');
-        // } else {
-        //     $fullCart = $cart->getCart($request);
-        // }
-
-        // Enregistrer le cookie dans les logs pour vérification
-        // $this->logger->info('Cookie Info', [
-        //     'cookieName' => $cookieName,
-        //     'cookieValue' => $cookieValue
-        // ]);
-        // setcookie("TestCookie", "", time() - 3600, "/");
-        // $fullCart = $cart->getCart($request);
-
-        // Récupérer les cookies
-        // $cookieName = 'cart'; // Remplacez par le nom de votre cookie
-        // $cookieValue = $request->cookies->get($cookieName);
-
-        // // Enregistrer le cookie dans les logs pour vérification
-        // $this->logger->info('Cookie Info', [
-        //     'cookieName' => $cookieName,
-        //     'cookieValue' => $cookieValue
-        // ]);
-
-        // calcul la sommes des valeurs du tableau
-        // $totalItems = array_sum($fullCart['totalServiceItem']);
-        // dd($lastDeveloper->getQuery()->getSingleResult());
+        $lastService = $this->entityManager->getRepository(ServiceItem::class)->findby([], ['id' => 'DESC'], 10);
 
         $developer = $lastDeveloper->getQuery()->getSingleResult();
+        $this->imageService->setPictureUrl($developer, 'ROLE_DEVELOPER');
+        $lastDeveloperData = $serializer->serialize($developer, 'json', ['groups' => 'user']);
+        $dataDeveloper = json_decode($lastDeveloperData, true);
+       
+        $client = $lastClient->getQuery()->getSingleResult();
+        $this->imageService->setPictureUrl($client, 'ROLE_CLIENT');
+        $lastClientData = $serializer->serialize($client, 'json', ['groups' => 'user']);
+        $dataClient = json_decode($lastClientData, true);
+
+        // Définir les URL des images pour chaque service
+        foreach ($lastService as $service) {
+            $this->imageService->setPictureUrl($service, 'SERVICE');
+        }
+        $lastServiceData = $serializer->serialize($lastService, 'json', ['groups' => 'serviceItem']);
+        $dataService = json_decode($lastServiceData, true);
+
+        return $this->render('home/index.html.twig', [
+            'lastDeveloper' => $dataDeveloper,
+            'lastClient' => $dataClient,
+            'lastService' => $dataService,
+            'submitted_form' => null,
+            'title_page' => 'Accueil',
+        ]);
+    }
+
+    #[Route('/api/lastDeveloper', name: 'api_last_developer')]
+    public function getLastDeveloper(SerializerInterface $serializer): JsonResponse
+    {
+        $lastDeveloper = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_DEVELOPER');
+        $developer = $lastDeveloper->getQuery()->getSingleResult();
+
+        $pictureFilename = $developer->getPicture();
+        if ($pictureFilename) {
+            $pictureUrl = $this->imageService->generateImageUrl($pictureFilename, 'ROLE_DEVELOPER');
+            $developer->setPicture($pictureUrl);
+        }
+        $jsonFullCart = $serializer->serialize($developer, 'json', ['groups' => 'serviceItem']);
+        $this->logger->info('developer', [
+            'developer' => $jsonFullCart
+        ]);
+        return new JsonResponse($developer, JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/api/lastClient', name: 'api_last_client')]
+    public function getLastClient(): JsonResponse
+    {
+        $lastClient = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_CLIENT');
         $client = $lastClient->getQuery()->getSingleResult();
 
-        $pictureFilenameDev = $developer->getPicture();
-        $pictureFilenameClient = $developer->getPicture();
-
-
-        $role = $developer->getRoles();
-
-        if (in_array('ROLE_DEVELOPER', $developer->getRoles())) {
-            $role = 'ROLE_DEVELOPER';
-        } else if (in_array('ROLE_CLIENT', $developer->getRoles())) {
-            $role = 'ROLE_CLIENT';
+        $pictureFilename = $client->getPicture();
+        if ($pictureFilename) {
+            $pictureUrl = $this->imageService->generateImageUrl($pictureFilename, 'ROLE_CLIENT');
+            $client->setPicture($pictureUrl);
         }
-
-        if (in_array('ROLE_DEVELOPER', $client->getRoles())) {
-            $role = 'ROLE_DEVELOPER';
-        } else if (in_array('ROLE_CLIENT', $client->getRoles())) {
-            $role = 'ROLE_CLIENT';
-        }
-        $pictureUrl = null;
-
-        // on utilise le controller pour fournir le chemin absolu de l'image ( services.yaml )
-        if ($pictureFilenameDev) {
-            $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
-                'filename' => $pictureFilenameDev,
-                'role' => $role
-            ]);
-            $pictureUrlDev = json_decode($pictureUrlResponse->getContent(), true);
-        }
-        if ($pictureFilenameClient) {
-            $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
-                'filename' => $pictureFilenameClient,
-                'role' => $role
-            ]);
-            $pictureUrlClient = json_decode($pictureUrlResponse->getContent(), true);
-        }
-
-        // dd($pictureUrlDev);
-        return $this->render('home/index.html.twig', [
-            'lastDeveloper' => $developer,
-            'lastDevImg' => $pictureUrlDev['url'],
-            'lastClient' => $lastClient->getQuery()->getSingleResult(),
-            'lastClientImg' => $pictureUrlClient['url'],
-            'lastService' => $lastService,
-            'submitted_form' => null,
-            'title_page' => 'Accueil'
+        $this->logger->info('client', [
+            'client' => $client
         ]);
+        return new JsonResponse($client, JsonResponse::HTTP_OK);
     }
 }

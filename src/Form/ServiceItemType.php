@@ -81,12 +81,12 @@ class ServiceItemType extends AbstractType
                 'label' => false, // masquer le label
                 'mapped' => false, // Ne pas mapper ce champ avec les données du formulaire
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Soumettre',
-                'attr' => [
-                    'class' => 'ui-button ui-widget ui-corner-all'
-                ]
-            ])
+            // ->add('submit', SubmitType::class, [
+            //     'label' => 'Soumettre',
+            //     'attr' => [
+            //         'class' => 'ui-button ui-widget ui-corner-all'
+            //     ]
+            // ])
             // Écouteur pour ajouter l'ID utilisateur avant de persister
             ->addEventSubscriber(new AddUserField($this->security))
             // Écouteur pour ajouter la date de création avant de persister
