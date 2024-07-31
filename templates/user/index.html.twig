@@ -4,6 +4,7 @@
 
 <script>
     // User.js
+    // Données des derniers inscrits
     window.__INITIAL_DATA__ = {
         lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
         lastClient: {{ lastClient | json_encode() | raw }}
@@ -78,6 +79,7 @@
                         <h2>Nouveau service</h2>
                         {% include "itemService/form/form.html.twig" %}  
                     </div>
+
                     {# liste des service de l'utilisateur #}
                     <div class="ui segment list-services" style="display: none;">
                         <h2>Mes services</h2>
@@ -91,6 +93,7 @@
                             <tbody id="service_item_list"></tbody>
                         </table>
                     </div>
+                    
                     {# edition d'un service #}
                     <div class="ui segment edit-service-container" style="display: none;">
                         <h2>J'édite mon service</h2>
@@ -115,6 +118,8 @@
 {% block javascripts %}
 {{ parent() }}
 
+{# Order.js #}
+{{ encore_entry_script_tags('Order') }}
 {# Service.js #}
 {{ encore_entry_script_tags('Service') }}
 {# User.js #}

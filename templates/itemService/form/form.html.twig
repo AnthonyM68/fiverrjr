@@ -1,7 +1,8 @@
 {% block form_service %}
+
 {% if formAddService| default %}
-{{ form_start(formAddService, {'attr': {'class': 'ui form service-form', 'novalidate' :
-'novalidate'}}) }}
+
+{{ form_start(formAddService, {'attr': {'class': 'ui form service-form', 'novalidate' :'novalidate'}}) }}
 
 <div class="{{ formAddService.course.vars.errors|length > 0 ? 'field error' }}">
     {{ form_errors(formAddService.course.theme) }}
@@ -12,46 +13,44 @@
     {{ form_errors(formAddService.course.category) }}
     {{ form_label(formAddService.course.category) }}
     {{ form_widget(formAddService.course.category) }}
-
 </div>
 
 <div class="{{ formAddService.course.vars.errors|length > 0 ? 'field error' }}">
     {{ form_errors(formAddService.course.course) }}
     {{ form_label(formAddService.course.course) }}
     {{ form_widget(formAddService.course.course) }}
-
 </div>
 <hr>
 <div class="{{ formAddService.picture.vars.errors|length > 0 ? 'field error' }}">
     {{ form_errors(formAddService.picture) }}
     {{ form_label(formAddService.picture) }}
     {{ form_widget(formAddService.picture, {'attr': {'onchange': 'previewImage(event)'}}) }}
-
 </div>
 <div class="{{ formAddService.title.vars.errors|length > 0 ? 'field error' }}">
     {{ form_errors(formAddService.title) }}
     {{ form_label(formAddService.title) }}
     {{ form_widget(formAddService.title) }}
-
 </div>
 <div class="{{ formAddService.description.vars.errors|length > 0 ? 'field error' }}">
     {{ form_errors(formAddService.description) }}
     {{ form_label(formAddService.description) }}
     {{ form_widget(formAddService.description) }}
-
 </div>
 <div class="{{ formAddService.price.vars.errors|length > 0 ? 'field error' }}">
     {{ form_errors(formAddService.price) }}
     {{ form_label(formAddService.price) }}
     {{ form_widget(formAddService.price) }}
-
 </div>
 <div class="{{ formAddService.duration.vars.errors|length > 0 ? 'field error' }}">
     {{ form_errors(formAddService.duration) }}
     {{ form_label(formAddService.duration) }}
     {{ form_widget(formAddService.duration) }}
-
 </div>
+
+
+{# Token #}
+<input type="hidden" name="_token" value="{{ csrf_token('edit_service') }}">
+
 <div class="field">
     <button type="submit" class="ui-button ui-widget ui-corner-all">
         <span class="ui-icon ui-icon-check"></span> Valider

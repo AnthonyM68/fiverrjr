@@ -78,12 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     const buttonGroup = document.createElement('div');
                     buttonGroup.className = 'ui buttons';
 
-                    // btn edit 
+                    // Bouton edit 
                     const editButton = document.createElement('a');
                     editButton.className = 'ui-button ui-widget ui-corner-all toggle-edit-service';
                     editButton.innerHTML = '<span class="ui-icon ui-icon-pencil"></span>';
                     editButton.setAttribute('href', "javascript:void(0);");
-                    editButton.setAttribute('data-service-id', service.id);
+                    editButton.setAttribute('data-service-id', service.id);// service ID
+                    editButton.setAttribute(`data-token-${service.id}`, service.csrf_token); // TOken
                     editButton.setAttribute('title', 'Editer Service'); // Tooltip text
                     buttonGroup.appendChild(editButton);
 
@@ -92,8 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     deleteButton.className = 'ui-button ui-widget ui-corner-all toggle-trash-service';
                     deleteButton.innerHTML = '<span class="ui-icon ui-icon-trash"></span>';
                     deleteButton.setAttribute('href', "javascript:void(0);");
-                    deleteButton.setAttribute('data-service-id', service.id);
-                    deleteButton.setAttribute(`data-token-${service.id}`, service.csrf_token);
+                    deleteButton.setAttribute('data-service-id', service.id);// service ID
+                    deleteButton.setAttribute(`data-token-${service.id}`, service.csrf_token); // TOken
                     deleteButton.setAttribute('title', 'Supprimer Service'); // Tooltip text
                     buttonGroup.appendChild(deleteButton);
                     tdButtons.appendChild(buttonGroup);
@@ -103,23 +104,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Ajouter un écouteur d'événement sur chaque bouton d'édition
                     document.querySelectorAll('.toggle-edit-service').forEach(button => {
+
                         button.addEventListener('click', async function () {
                             try {
                                 const serviceId = this.getAttribute('data-service-id');
+                                const csrfToken = this.getAttribute(`data-token-${serviceId}`);
+
                                 const editService = $('.edit-service-container');
+
                                 const url = `/service/form/generate/${serviceId}`;
 
-                                const req = await fetch(url);
+                                const response = await fetch(url, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken // Ajouter le token CSRF dans l'en-tête
+                                    },
+                                    // Inclure le token CSRF dans le corps de la requête
+                                    body: JSON.stringify({ _token: csrfToken })
+                                });
 
-                                if (!req.ok) {
-                                    throw new Error(`HTTP error! Status: ${req.status}`);
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
                                 }
-
                                 const contentType = req.headers.get('content-type');
+                                console.log(contentType);
 
                                 if (contentType && contentType.indexOf('application/json') !== -1) {
-                                    const data = await req.json();
-
+                                    const data = await response.json();
                                     console.log('Form data HTML receiver for service:', data);
                                     if (!editService.is(':visible')) {
                                         editService.slideDown(400);
@@ -143,8 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         button.addEventListener('click', async function () {
                             const serviceId = this.getAttribute('data-service-id');
                             const csrfToken = this.getAttribute(`data-token-${serviceId}`);
-
-
+                            // Confirmation JS (prévoir custom)
                             if (confirm('Confirmez-vous la suppression du service?')) {
                                 try {
                                     const response = await fetch(`/serviceItem/delete/${serviceId}`, {
@@ -153,13 +164,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                             'Content-Type': 'application/json',
                                             'X-CSRF-TOKEN': csrfToken // Ajouter le token CSRF dans l'en-tête
                                         },
-                                        body: JSON.stringify({ _token: csrfToken }) // Inclure le token CSRF dans le corps de la requête
+                                        // Inclure le token CSRF dans le corps de la requête
+                                        body: JSON.stringify({ _token: csrfToken })
                                     });
 
                                     if (!response.ok) {
                                         throw new Error(`HTTP error! Status: ${response.status}`);
                                     }
-
                                     const result = await response.json();
                                     console.log(result);
 
@@ -216,17 +227,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // En cas d'erreur ajuster le text du bouton
     if (serviceForm) {
-        console.log(serviceForm);
         if (serviceForm.style.display == 'block') {
             $('.toggle-service-form').text('Fermer le formulaire');
         }
     }
-
     // ouvre et referme la liste des services
     $('.toggle-list-services').on('click', function () {
         const listeServices = $('.list-services');
         const serviceForm = $('.service-form');
-
+        // on mets a jour la liste des services
         updateListeServices();
 
         if (listeServices.is(':visible')) {
@@ -246,60 +255,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // EventListener
+    // EventListener sur le select Thème
     if (service_item_course_theme) {
         service_item_course_theme.addEventListener('change', updateCategories);
     }
-
+    // EventListener sur le select Catégories
     if (service_item_course_category) {
         service_item_course_category.addEventListener('change', updateCourses);
     }
-    // // Ajoutez un écouteur d'événements pour le bouton de fermeture
+    // Ajoutez un écouteur d'événements pour le bouton de fermeture
     const closeEdit = document.getElementById('close-edit');
     if (closeEdit) {
         closeEdit.addEventListener('click', () => {
             $('.edit-service-container').slideUp();
         });
     }
-
-
-
-
-
-    // Pagination Orders Commandes Profil
-    function attachPaginationOrdersEventListeners() {
-
-        document.querySelectorAll('.pagination.menu .item').forEach(function (link) {
-            
-            link.addEventListener('click', async function (event) {
-                event.preventDefault();
-                try {
-                    const url = this.getAttribute('href');
-                    fetch(url, {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            const ordersContainer = document.querySelector(`#${data.type_order}`);
-                            ordersContainer.innerHTML = data.orders;
-                            attachPaginationOrdersEventListeners(); // Re-attach event listeners for the new pagination links
-                        })
-                        .catch(error => {
-                            console.error('Error during fetch operation:', error);
-                        });
-                } catch (error) {
-                    console.error('Failed to fetch or parse JSON for service form:', error);
-                }
-            });
-        });
-    };
-    attachPaginationOrdersEventListeners();
 });
 

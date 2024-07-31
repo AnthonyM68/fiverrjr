@@ -216,9 +216,9 @@ class ServiceItemController extends AbstractController
     public function getBestServices(ServiceItemRepository $serviceItemRepository, SerializerInterface $serializer): JsonResponse
     {
         try {
+            // PRévoir nouveau critère de recherche (meilleurs)
             $services = $serviceItemRepository->findBy([], ['id' => 'DESC'], 10);
-
-            $this->logger->info('findBy services', ['count' => count($services)]);
+            $this->logger->info('findBy id DESC services', ['count' => count($services)]);
 
             foreach ($services as $service) {
                 $pictureFilename = $service->getPicture();
@@ -247,7 +247,7 @@ class ServiceItemController extends AbstractController
             $data = json_decode($jsonFullCart, true);
 
             return new JsonResponse(['services' => $data], Response::HTTP_OK);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $this->logger->error('Failed to load services', ['error' => $e->getMessage()]);
             return new JsonResponse(['error' => 'Failed to load services.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -256,43 +256,44 @@ class ServiceItemController extends AbstractController
 
 
 
-    #[Route('/service/form/generate/{id}', name: 'service_form_generate', methods: ['GET'])]
-    public function getGenerateServiceForm(int $id = null, Request $request, ServiceItemRepository $ServiceItemRepository): JsonResponse
+    #[Route('/service/form/generate/{id}', name: 'service_form_generate', methods: ['POST'])]
+    public function getGenerateServiceForm(int $id = null, Request $request, ServiceItemRepository $ServiceItemRepository, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
     {
-        try {
-            if ($id) {
-                // trouver le service existant par ID
-                $service = $ServiceItemRepository->find($id);
+        $service = $ServiceItemRepository->find($id);
 
-                if (!$service) {
-                    throw new \Exception('Service not found');
-                }
-            } else {
-                // créer un nouveau ServiceItem
-                $service = new ServiceItem();
-            }
-            $formAddService = $this->createForm(ServiceItemType::class, $service);
-            $formAddService->handleRequest($request);
+        // on décode le contenu de la réponse
+        $data = json_decode($request->getContent(), true);
+        $csrfToken = new CsrfToken('delete_service_' . $id, $data['_token']);
 
-            // Pré-remplir les champs non mappés
-            if ($service->getCourse()) {
-                $formAddService->get('course')->get('course')->setData($service->getCourse());
-            }
-            // Rendre le formulaire en HTML
-            $formHtml = $this->renderView('itemService/form/form.html.twig', [
-                'formAddService' => $formAddService->createView(),
-            ]);
-            // Retourner la réponse JSON 
-            return new JsonResponse(['formHtml' => $formHtml], Response::HTTP_OK);
-        } catch (\Throwable $e) {
-            // Retourner une réponse JSON avec une erreur 500 en cas d'exception
-            return new JsonResponse(['error' => 'Failed to load generate service form.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+
+        if (!$csrfTokenManager->isTokenValid($csrfToken)) {
+            return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
         }
+
+        
+
+        if (!$service) {
+            return new JsonResponse(['error' => 'Service not found'], Response::HTTP_NOT_FOUND);
+        }
+        $formAddService = $this->createForm(ServiceItemType::class, $service);
+        $formAddService->handleRequest($request);
+
+        // Pré-remplir les champs non mappés
+        if ($service->getCourse()) {
+            $formAddService->get('course')->get('course')->setData($service->getCourse());
+        }
+        // Rendre le formulaire en HTML
+        $formHtml = $this->renderView('itemService/form/form.html.twig', [
+            'formAddService' => $formAddService->createView(),
+        ]);
+        // Retourner la réponse JSON 
+        return new JsonResponse(['formHtml' => $formHtml], Response::HTTP_OK);
     }
 
     #[Route('/serviceItem/delete/{serviceId}', name: 'delete_service', methods: ['DELETE'])]
     public function deleteServiceItem(int $serviceId, Request $request, ServiceItemRepository $serviceItemRepository, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
     {
+        // on décode le contenu de la réponse
         $data = json_decode($request->getContent(), true);
         $csrfToken = new CsrfToken('delete_service_' . $serviceId, $data['_token']);
 
@@ -355,6 +356,25 @@ class ServiceItemController extends AbstractController
         // retourner les données en JSON
         return new JsonResponse($data);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

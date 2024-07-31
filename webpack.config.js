@@ -85,8 +85,10 @@ Encore
     .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
     // Preview image FileUpload
     .addEntry('previewImage', './assets/js/preview/previewImage.js')
+    // Orders list pending / completed
+    .addEntry('Order', './assets/js/profile/Order.js')
     // Service add
-    .addEntry('Service', './assets/js/forms/Service.js')
+    .addEntry('Service', './assets/js/profile/Service.js')
     // User edit
     .addEntry('User', './assets/js/profile/User.js')
     // Cart
