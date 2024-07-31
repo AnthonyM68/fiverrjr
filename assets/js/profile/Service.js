@@ -113,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const editService = $('.edit-service-container');
 
                                 const url = `/service/form/generate/${serviceId}`;
-
                                 const response = await fetch(url, {
                                     method: 'POST',
                                     headers: {
@@ -128,14 +127,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                     throw new Error(`HTTP error! Status: ${response.status}`);
                                 }
                                 const contentType = req.headers.get('content-type');
-                                console.log(contentType);
-
+                                // s'il y' a un contenu et de type json dans le header
                                 if (contentType && contentType.indexOf('application/json') !== -1) {
+                                    // on decode le contenu
                                     const data = await response.json();
                                     console.log('Form data HTML receiver for service:', data);
                                     if (!editService.is(':visible')) {
                                         editService.slideDown(400);
                                     }
+                                    // on inject le résultat
                                     document.getElementById('service-form-container').innerHTML = data.formHtml;
 
                                 } else {
@@ -146,9 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 console.error('Failed to fetch or parse JSON for service form:', error);
                             }
                         });
-
-
-
                     });
                     // Ajouter un écouteur d'événement sur chaque bouton delete
                     document.querySelectorAll('.toggle-trash-service').forEach(button => {

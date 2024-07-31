@@ -270,8 +270,6 @@ class ServiceItemController extends AbstractController
             return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
         }
 
-        
-
         if (!$service) {
             return new JsonResponse(['error' => 'Service not found'], Response::HTTP_NOT_FOUND);
         }

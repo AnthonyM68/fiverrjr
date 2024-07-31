@@ -1,141 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<style>
-    .product-container {
-        margin: 20px;
-    }
 
-    .product-content {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: stretch;
-    }
-
-    .product-image {
-        flex: 1;
-        max-width: 500px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-    }
-
-    .product-image img {
-        max-width: 100%;
-        height: auto;
-    }
-
-    .product-details {
-        flex: 2;
-        margin-left: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        /* Center content vertically */
-        height: 100%;
-        /* Ensure it takes the full height */
-    }
-
-    .product-details .ui.segment {
-        min-height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        /* Center content vertically within the segment */
-    }
-
-    .product-details h1 {
-        margin-bottom: 10px;
-    }
-
-    .product-details p {
-        margin-bottom: 15px;
-    }
-
-    .add-to-cart-btn {
-        margin-top: 20px;
-    }
-</style>
 <div class="ui container">
-
-
     <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
 
     {% if formAddService is defined %}
-
     <div class="ui container">
         <div class="ui segment">
-
             {# formulaire d'ajout d'un nouveau service #}
-
-
-            {{ form_start(formAddService, {'attr': {'class': 'ui form service'}}) }}
-            <h1 class="uk-animation-slide-right">{{ title_page }}
-                {# <span>
-                    {% if service|default and service.title is not null %}
-                    {{ service.title }}
-                    {% endif %}
-                </span> #}
-            </h1>
-
-            <div class="field">
-                {{ form_label(formAddService.course.theme) }}
-                {{ form_widget(formAddService.course.theme) }}
-                {{ form_errors(formAddService.course.theme) }}
-            </div>
-            <div class="field">
-                {{ form_label(formAddService.course.category) }}
-                {{ form_widget(formAddService.course.category) }}
-                {{ form_errors(formAddService.course.category) }}
-            </div>
-            <div class="field">
-                {{ form_label(formAddService.course.course) }}
-                {{ form_widget(formAddService.course.course) }}
-                {{ form_errors(formAddService.course.course) }}
-            </div>
-            <hr>
-            {# Prévisualisation de l'image existante #}
-            {% if service.picture|default %}
-            <div class="field ">
-                <img id="imagePreview" src="{% if pictureUrl|default %} {{ asset(pictureUrl) }} {% endif %}"
-                    alt="Image Preview profile user" />
-            </div>
-            {% endif %}
-
-            <div class="field">
-                {{ form_label(formAddService.picture) }}
-                {{ form_widget(formAddService.picture, {'attr': {'onchange': 'previewImage(event)'}}) }}
-                {{ form_errors(formAddService.picture) }}
-            </div>
-            <div class="field">
-                {{ form_label(formAddService.title) }}
-                {{ form_widget(formAddService.title) }}
-                {{ form_errors(formAddService.title) }}
-            </div>
-            <div class="field">
-                {{ form_label(formAddService.description) }}
-                {{ form_widget(formAddService.description) }}
-                {{ form_errors(formAddService.description) }}
-            </div>
-            <div class="field">
-                {{ form_label(formAddService.price) }}
-                {{ form_widget(formAddService.price) }}
-                {{ form_errors(formAddService.price) }}
-            </div>
-            <div class="field">
-                {{ form_label(formAddService.duration) }}
-                {{ form_widget(formAddService.duration) }}
-                {{ form_errors(formAddService.duration) }}
-            </div>
-            <div class="field">
-                {{ form_row(formAddService.submit) }}
-            </div>
-            {{ form_end(formAddService) }}
-
+            <h2>Nouveau service</h2> {% include "itemService/form/form.html.twig" %}  
         </div>
     </div>
-
     {% endif %}
 
     {# Liste des services #}
@@ -174,20 +50,18 @@
                         <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
                         <p><strong>Créé le: </strong>{{ service.createDate|date('d/m/Y') }}</p>
                         <p><strong>Réf: </strong>{{ service.id }}</p>
-                        <a href="{{ path('add_service_cart', {'id': service.id}) }}" class="ui primary button add-to-cart-btn">Ajouter au panier</a>
+                        <a href="{{ path('add_service_cart', {'id': service.id}) }}"
+                            class="ui primary button add-to-cart-btn">Ajouter au panier</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     {# si l'utilisateur est connecter #}
     {% if app.user %}
     {# On s'assure que l'user est l'auteur du service #}
     {% if service.user.id == app.user.id %}
-    {# <a href="" class="ui button primary">
-        Suprimer un service
-    </a> #}
     {% endif %}
     {% endif %}
 
@@ -197,7 +71,7 @@
     {# On a besoin de ces scripts uniquement si nous créons ou éditons un Service #}
     {% if formAddService is defined %}
     {# On inject le script pour la gestion des contenus dynamique des select #}
-    {{ encore_entry_script_tags('ViewServiceForm') }}
+    {{ encore_entry_script_tags('Service') }}
     {# On inject le script pour la prévisualisation de l'image avant upload (enregistrement) #}
     {{ encore_entry_script_tags('previewImage') }}
     {% endif %}

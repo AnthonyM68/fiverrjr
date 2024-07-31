@@ -1,13 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     console.log('=> Order.js loaded');
-
-
     // Pagination Orders Commandes Profil
     function attachPaginationOrdersEventListeners() {
-
         document.querySelectorAll('.pagination.menu .item').forEach(function (link) {
-            
+
             link.addEventListener('click', async function (event) {
                 event.preventDefault();
                 try {

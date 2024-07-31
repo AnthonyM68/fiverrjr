@@ -67,13 +67,7 @@ class UserController extends AbstractController
             'users' => $users
         ]);
     }
-    #[Route('/user/edit/{id}', name: 'edit_user')]
-    public function editUser(): Response
-    {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
+
     #[Route('/user/detail/{id}', name: 'edit_user')]
     public function detailsUser(): Response
     {
@@ -81,8 +75,6 @@ class UserController extends AbstractController
             'controller_name' => 'UserController',
         ]);
     }
-
-
 
 
     #[Route('/profile/edit/{id}', name: 'profile_edit')]
@@ -97,6 +89,10 @@ class UserController extends AbstractController
     ): Response {
 
         $page = $request->get('page');
+
+        if(!$page) {
+            $page = 1;
+        }
         // Récupérer l'utilisateur par ID
         $user = $userRepository->find($id);
         // s'il y'a une action AJAX sur la pagination 
@@ -192,8 +188,6 @@ class UserController extends AbstractController
             $this->addFlash('success', 'Service ajouté avec succès');
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
-
-
         /**
          * REACT COMPONENT
          */
@@ -217,6 +211,7 @@ class UserController extends AbstractController
         $lastClientData = $serializer->serialize($client, 'json', ['groups' => 'user']);
         $dataClient = json_decode($lastClientData, true);
 
+        // recherche des commandes nouvelles
         $limit = 3;
 
         $status = 'pending';
@@ -228,12 +223,7 @@ class UserController extends AbstractController
             $limit
         );
 
-        // $formHtmlPending = $this->renderView('/user/order/pending.html.twig', [
-        //     'orders' => $paginationPending,
-        //     'pagination' => $paginationPending,
-        // ]);
-
-
+        // recherche des commandes complètes
         $status = 'completed';
         $ordersCompleted = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
 
@@ -242,13 +232,6 @@ class UserController extends AbstractController
             $page,
             $limit
         );
-        // $formHtmlCompleted = $this->renderView('/user/order/pending.html.twig', [
-        //     'orders' => $paginationCompleted,
-        //     'pagination' => $paginationCompleted,
-        // ]);
-
-
-        // dd($paginationPending->getItems());
 
         return $this->render('user/index.html.twig', [
             'title_page' => 'Profil',
@@ -262,12 +245,13 @@ class UserController extends AbstractController
             'pagination_completed' => $paginationCompleted,
             'lastDeveloper' => $dataDeveloper,
             'lastClient' => $dataClient
-
         ]);
     }
 
 
-
+    /**
+     * Affiche la liste des Développeurs ou des Client suivant le $role en argument
+     */
     #[Route('/usertype/list/{role}/{page}', name: 'list_user_type')]
     public function listUserType(String $role, int $page, Request $request, PaginatorInterface $paginator, SerializerInterface $serializer): Response
     {
@@ -282,6 +266,7 @@ class UserController extends AbstractController
         $this->logger->info('List Clients', [
             $role => $users
         ]);
+
         $pagination = $paginator->paginate(
             $users,
             $page,
@@ -290,7 +275,8 @@ class UserController extends AbstractController
 
         foreach ($users as $user) {
             $pictureFilename = $user->getPicture();
-            $this->logger->info('Processing user', ['user' => $user->getUsername(), 'pictureFilename' => $pictureFilename]);
+
+            $this->logger->info('Processing picture user', ['user' => $user->getUsername(), 'Original Filename' => $pictureFilename]);
             if ($pictureFilename) {
                 try {
                     $pictureUrl = $this->imageService->generateImageUrl($pictureFilename, $role);
@@ -301,93 +287,19 @@ class UserController extends AbstractController
                     $user->setPicture($pictureUrl);
                 } catch (\Exception $e) {
                     $this->logger->error('Failed to generate picture URL', [
-                        'service' => $user->getUsername(),
                         'error' => $e->getMessage()
                     ]);
                     throw $e;
                 }
             }
         }
-
-        // Définir le titre de la page selon le rôle
-        $titlePage = ($role === 'ROLE_DEVELOPER') ? 'Liste des Développeurs' : 'Liste des Entreprises';
-
         return $this->render('client/index.html.twig', [
             'users' => $pagination,
             'pagination' => $pagination,
-            'title_page' => $titlePage,
+            'title_page' => 'Liste des utilisateurs',
             'role' => $role
         ]);
     }
-
-
-    #[Route('/developer/order', name: 'list_orders_developer')]
-    public function orders(): Response
-    {
-        return $this->render('user/orders/index.html.twig', [
-            'title_page' => 'Vos commandes'
-        ]);
-    }
-
-    #[Route('/developer/new/invoice', name: 'new_invoice_developer')]
-    public function newInvoice(?Order $order = null): Response
-    {
-        if (!$order) {
-            $order = new ServiceItem();
-        }
-        // Variable pour stocker les erreurs de validation
-        $errors = null;
-        // Crée et gère le formulaire pour le service
-        $form = $this->createForm(OrderType::class, $order);
-
-        if ($form->isSubmitted()) {
-            // Si le formulaire est valide, persiste et sauvegarde la Category
-            if ($form->isValid()) {
-            }
-        }
-        return $this->render('user/invoice/index.html.twig', [
-            'title_page' => 'Créer une facture'
-        ]);
-    }
-
-
-    #[Route('/client/invoice', name: 'list_invoice_client')]
-    public function invoices(): Response
-    {
-        return $this->render('user/invoices/index.html.twig', [
-            'title_page' => 'Vos factures'
-        ]);
-    }
-
-    #[Route('/client/order/add', name: 'new_order_client')]
-    public function newOrder(Request $request, ?Order $order): Response
-    {
-        if (!$order) {
-            $order = new Order();
-        }
-        // Variable pour stocker les erreurs de validation
-        $errors = null;
-        // Crée et gère le formulaire pour le service
-        $form = $this->createForm(OrderType::class, $order);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            // Si le formulaire est valide, persiste et sauvegarde l'Order
-            if ($form->isValid()) {
-                $this->entityManager->persist($order);
-                $this->entityManager->flush();
-                $this->addFlash('success', 'Votre commande sera ajoutée au panier');
-                // Redirige vers la liste des thèmes après sauvegarde
-                return $this->redirectToRoute('list_services');
-            }
-        }
-        return $this->render('user/orders/index.html.twig', [
-            'title_page' => 'Nouvelle commande',
-            'formAddOrder' => $form->createView(),
-            'errors' => $form->getErrors(true),
-        ]);
-    }
-
 
     /**
      * recherche les dernier user inscrit Component React Profil 
