@@ -66,7 +66,7 @@
 
                 {# Si l'utilisateur est connecté #}
                 {% if app.user %}
-                <a href="{{ path('profile_edit', {'id': app.user.id, 'page' : '1'}) }}" class="ui item">Bonjour {{ app.user.username
+                <a href="{{ path('profile_edit', {'id': app.user.id}) }}" class="ui item">Bonjour {{ app.user.username
                     }}</a>
                 <a href="{{ path('logout') }}" class="ui item">Se déconnecter</a>
 

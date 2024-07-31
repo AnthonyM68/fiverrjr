@@ -50,10 +50,12 @@
 
         <div class="eight wide column">
             <div class="ui segment">
-
-                {{ orders_pending }}
                 {# liste des commandes #}
-                <div id="orders-container">{% include "/user/order/index.html.twig" %}</div>
+                <div id="orders_pending">{% include "/user/order/pending.html.twig" %}</div>
+            </div>
+            <div class="ui segment">
+                {# liste des commandes #}
+                <div id="orders_completed">{% include "/user/order/completed.html.twig" %}</div>
             </div>
 
             <div class="ui segment">

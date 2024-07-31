@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     console.log('=> Service.js loaded');
     const service_item_course_theme = document.getElementById('service_item_course_theme');
     const service_item_course_category = document.getElementById('service_item_course_category');
@@ -267,9 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Pagination Orders Commandes Profil
-    function attachPaginationEventListeners() {
+    function attachPaginationOrdersEventListeners() {
 
         document.querySelectorAll('.pagination.menu .item').forEach(function (link) {
+            
             link.addEventListener('click', async function (event) {
                 event.preventDefault();
                 try {
@@ -286,9 +287,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             return response.json();
                         })
                         .then(data => {
-                            const ordersContainer = document.querySelector('#orders-container');
-                            ordersContainer.innerHTML = data.formHtml;
-                            attachPaginationEventListeners(); // Re-attach event listeners for the new pagination links
+                            const ordersContainer = document.querySelector(`#${data.type_order}`);
+                            ordersContainer.innerHTML = data.orders;
+                            attachPaginationOrdersEventListeners(); // Re-attach event listeners for the new pagination links
                         })
                         .catch(error => {
                             console.error('Error during fetch operation:', error);
@@ -299,6 +300,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     };
-    attachPaginationEventListeners();
+    attachPaginationOrdersEventListeners();
 });
 

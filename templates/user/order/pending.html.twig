@@ -1,0 +1,33 @@
+{# pending.html.twig #}
+
+{% block pending_orders %}
+<h2>Commandes en cours...</h2>
+    {% if orders_pending %}
+        <div class="ui relaxed divided list">
+            {% for order in orders_pending %}
+                <div class="item">
+                    <i class="large middle aligned history icon"></i>
+                    <div class="content">
+                        <a class="header">{{ order.title }}</a>
+                        <div class="description">{{ order.dateOrder|date("d/m/Y H:i") }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if pagination_pending.pageCount > 1 %}
+            <div class="ui pagination menu centered custom-margin-top">
+                {% for page in range(1, pagination_pending.pageCount) %}
+                    <a class="item{% if page == pagination_pending.currentPageNumber %} active{% endif %}"
+                       href="{{ path('profile_edit', {'id' : app.user.id, 'status': 'pending', 'page': page }) }}">
+                        {{ page }}
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% else %}
+        <p>No pending orders found.</p>
+    {% endif %}
+{% endblock %}
+
+

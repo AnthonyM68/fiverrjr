@@ -86,7 +86,6 @@ class UserController extends AbstractController
 
 
     #[Route('/profile/edit/{id}', name: 'profile_edit')]
-    #[Route('/profile/edit/{id}', name: 'profile_pagination')]
     public function edit(
         int $id,
         Request $request,
@@ -96,14 +95,17 @@ class UserController extends AbstractController
         PaginatorInterface $paginator,
 
     ): Response {
+
         $page = $request->get('page');
         // Récupérer l'utilisateur par ID
         $user = $userRepository->find($id);
         // s'il y'a une action AJAX sur la pagination 
         if ($request->isXmlHttpRequest()) {
-            $limit = 5;
 
-            $status = 'pending';
+            $status = $request->get('status');
+    
+            $limit = 3;
+
             $orders = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
 
             $pagination = $paginator->paginate(
@@ -112,12 +114,13 @@ class UserController extends AbstractController
                 $limit
             );
             // On rends juste la liste des Orders avec pagination
-            $formHtml = $this->renderView('/user/order/index.html.twig', [
-                'orders' => $pagination,
-                'pagination' => $pagination,
+            $formHtml = $this->renderView('/user/order/' . $status . '.html.twig', [
+                'orders_' . $status =>  $pagination->getItems(),
+                'pagination_' . $status => $pagination
             ]);
+            
             // Retourner la réponse JSON 
-            return new JsonResponse(['formHtml' => $formHtml], Response::HTTP_OK);
+            return new JsonResponse(['orders' => $formHtml, 'type_order' => 'orders_' . $status ], Response::HTTP_OK);
         }
 
         if (!$user) {
@@ -214,7 +217,7 @@ class UserController extends AbstractController
         $lastClientData = $serializer->serialize($client, 'json', ['groups' => 'user']);
         $dataClient = json_decode($lastClientData, true);
 
-        $limit = 5;
+        $limit = 3;
 
         $status = 'pending';
         $ordersPending = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
@@ -225,10 +228,10 @@ class UserController extends AbstractController
             $limit
         );
 
-        $formHtmlPending = $this->renderView('/user/order/index.html.twig', [
-            'orders' => $paginationPending,
-            'pagination' => $paginationPending,
-        ]);
+        // $formHtmlPending = $this->renderView('/user/order/pending.html.twig', [
+        //     'orders' => $paginationPending,
+        //     'pagination' => $paginationPending,
+        // ]);
 
 
         $status = 'completed';
@@ -239,21 +242,24 @@ class UserController extends AbstractController
             $page,
             $limit
         );
-        $formHtmlCompleted = $this->renderView('/user/order/index.html.twig', [
-            'orders' => $paginationCompleted,
-            'pagination' => $paginationCompleted,
-        ]);
-        dd($formHtmlPending);
+        // $formHtmlCompleted = $this->renderView('/user/order/pending.html.twig', [
+        //     'orders' => $paginationCompleted,
+        //     'pagination' => $paginationCompleted,
+        // ]);
+
+
+        // dd($paginationPending->getItems());
+
         return $this->render('user/index.html.twig', [
             'title_page' => 'Profil',
             'formUser' => $formUser->createView(),
             'errorsFormUser' => $formUser->getErrors(true),
             'formAddService' => $formService->createView(),
             'errorsFormService' => $formService->getErrors(true),
-            'orders_pending' => $formHtmlPending,
-            // 'pagination_pending' => $paginationPending,
-            'orders_completed' => $formHtmlCompleted,
-            // 'pagination_completed' => $paginationCompleted,
+            'orders_pending' =>  $paginationPending->getItems(),
+            'pagination_pending' => $paginationPending,
+            'orders_completed' => $paginationCompleted->getItems(),
+            'pagination_completed' => $paginationCompleted,
             'lastDeveloper' => $dataDeveloper,
             'lastClient' => $dataClient
 
