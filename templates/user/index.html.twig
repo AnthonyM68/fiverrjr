@@ -7,7 +7,7 @@
     // Données des derniers inscrits
     window.__INITIAL_DATA__ = {
         lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
-        lastClient: {{ lastClient | json_encode() | raw }}
+    lastClient: {{ lastClient | json_encode() | raw }}
         };
 </script>
 
@@ -28,10 +28,10 @@
                     {# formualire édition profil utilisateur #}
                     <div class="ui segment">
                         <h2>Informations Profil</h2>
-                        <div id="user-form" >{% include "user/form/form.html.twig" %}</div>
+                        <div id="user-form">{% include "user/form/form.html.twig" %}</div>
                     </div>
                 </div>
-                {# On affiche le dernier développeur et le dernier client inscrit  #}
+                {# On affiche le dernier développeur et le dernier client inscrit #}
                 <div class="eight wide column">
                     {# {% if is_granted('ROLE_CLIENT') %} #}
                     <div class="ui segment" id="last-developer-profile"></div>
@@ -75,9 +75,11 @@
                     </div>
 
                     {# ajouter d'un nouveau service #}
-                    <div id="service-form" class="ui segment service-form" style="{{ formAddService.vars.errors|length > 0 ? 'display:block' : 'display:none' }}">
+                    <div id="service-form" class="ui segment service-form"
+
+                        style="{{ formAddService.vars.errors|length > 0 ? 'display:block' : 'display:none' }}">
                         <h2>Nouveau service</h2>
-                        {% include "itemService/form/form.html.twig" %}  
+                        {% include "itemService/form/form.html.twig" %}
                     </div>
 
                     {# liste des service de l'utilisateur #}
@@ -90,10 +92,10 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="service_item_list"></tbody>
+                            <tbody id="service_item_list" class="parent-container"></tbody>
                         </table>
                     </div>
-                    
+
                     {# edition d'un service #}
                     <div class="ui segment edit-service-container" style="display: none;">
                         <h2>J'édite mon service</h2>

@@ -6,31 +6,22 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Order;
 use App\Form\UserType;
-use App\Form\OrderType;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use App\Form\ServiceItemType;
 use App\Service\ImageService;
-
 use App\Repository\UserRepository;
 use App\Repository\OrderRepository;
-use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
-
-use App\Repository\ServiceItemRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\SecurityBundle\Security;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class UserController extends AbstractController
 {
@@ -77,7 +68,7 @@ class UserController extends AbstractController
     }
 
 
-    #[Route('/profile/edit/{id}', name: 'profile_edit')]
+    #[Route('/profile/edit/{id}/{service}', name: 'profile_edit')]
     public function edit(
         int $id,
         Request $request,
@@ -85,12 +76,15 @@ class UserController extends AbstractController
         EntityManagerInterface $entityManager,
         SerializerInterface $serializer,
         PaginatorInterface $paginator,
+        ?ServiceItem $service = null
 
     ): Response {
 
+        $limit = 3;
+
         $page = $request->get('page');
 
-        if(!$page) {
+        if (!$page) {
             $page = 1;
         }
         // Récupérer l'utilisateur par ID
@@ -99,8 +93,8 @@ class UserController extends AbstractController
         if ($request->isXmlHttpRequest()) {
 
             $status = $request->get('status');
-    
-            $limit = 3;
+
+
 
             $orders = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
 
@@ -114,9 +108,9 @@ class UserController extends AbstractController
                 'orders_' . $status =>  $pagination->getItems(),
                 'pagination_' . $status => $pagination
             ]);
-            
+
             // Retourner la réponse JSON 
-            return new JsonResponse(['orders' => $formHtml, 'type_order' => 'orders_' . $status ], Response::HTTP_OK);
+            return new JsonResponse(['orders' => $formHtml, 'type_order' => 'orders_' . $status], Response::HTTP_OK);
         }
 
         if (!$user) {
@@ -134,7 +128,7 @@ class UserController extends AbstractController
         // obtenir le nom du fichier de l'image de profil de l'utilisateur
         $originalFilename = $user->getPicture();
 
-        $this->logger->info('Processing fetch user curent', ['user' => $user, 'role' => $role, 'originalFilename' => $originalFilename]);
+        $this->logger->info('Processing generateImageUrl user curent', ['user' => $user, 'role' => $role, 'originalFilename' => $originalFilename]);
 
         if ($originalFilename) {
             try {
@@ -175,16 +169,54 @@ class UserController extends AbstractController
         }
 
         // créer un nouveau formulaire ServiceItem
-        $service = new ServiceItem();
-        $formService = $this->createForm(ServiceItemType::class, $service);
+        // $service = new ServiceItem();
+        if (!$service) {
+            $service = new ServiceItem();
+        }
+
+        // obtenir le nom du fichier de l'image de profil de l'utilisateur
+        $originalFilename = $service->getPicture();
+
+        $this->logger->info('Processing generateImageUrl user curent', ['user' => $user, 'role' => $role, 'originalFilename' => $originalFilename]);
+
+        if ($originalFilename) {
+            try {
+                $pictureUrl = $this->imageService->generateImageUrl($originalFilename, $role);
+                $service->setPicture($pictureUrl);
+            } catch (\Exception $e) {
+                throw $e;
+            }
+        }
+
+        $formService = $this->createForm(ServiceItemType::class, $service, [
+            'action' => $this->generateUrl('service_form_update', ['id' => $user->getId(), 'serviceId' => $service->getId()]),
+        ]);
+
         $formService->handleRequest($request);
 
         // // traite le formulaire de service
         if ($formService->isSubmitted() && $formService->isValid()) {
+            // récupérer l'objet file
+            $file = $formService->get('picture')->getData();
+            // si un fichier est téléchargé, traiter le fichier
+            // si $file est bien une instance de UploadedFile ( ServiceItemType )
+            if ($file instanceof UploadedFile) {
+                try {
+                    // On supprime l'image actuelle
+                    $this->imageService->deleteImage($originalFilename, $role);
+                    // On déplace la nouvelle et récupère son nom et extention
+                    $fileName = $this->imageService->uploadImage($file, $role);
+                    // On set a l'user
+                    $user->setPicture($fileName);
+                } catch (\Exception $e) {
+                    // si une exception est levée, afficher un message flash d'erreur
+                    $this->addFlash('error', 'Une erreur s\'est produite lors du traitement de l\'image: ' . $e->getMessage());
+                }
+            }
             // associe le service à l'utilisateur
             $service->setUser($user);
-            // $entityManager->persist($service);
-            // $entityManager->flush();
+            $entityManager->persist($service);
+            $entityManager->flush();
             $this->addFlash('success', 'Service ajouté avec succès');
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
@@ -212,8 +244,6 @@ class UserController extends AbstractController
         $dataClient = json_decode($lastClientData, true);
 
         // recherche des commandes nouvelles
-        $limit = 3;
-
         $status = 'pending';
         $ordersPending = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
 
@@ -238,6 +268,7 @@ class UserController extends AbstractController
             'formUser' => $formUser->createView(),
             'errorsFormUser' => $formUser->getErrors(true),
             'formAddService' => $formService->createView(),
+            'serviceId' => $service->getId(),
             'errorsFormService' => $formService->getErrors(true),
             'orders_pending' =>  $paginationPending->getItems(),
             'pagination_pending' => $paginationPending,

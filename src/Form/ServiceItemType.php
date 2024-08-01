@@ -91,6 +91,9 @@ class ServiceItemType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ServiceItem::class,
+            // 'csrf_protection' => true,
+            // 'csrf_field_name' => '_token',
+            // 'csrf_token_id'   => 'service_form'
         ]);
     }
 }

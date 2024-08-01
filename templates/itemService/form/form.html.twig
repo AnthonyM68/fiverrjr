@@ -1,57 +1,67 @@
-{% block form_service %}
+{# {% block form_service %} #}
 
 {% if formAddService| default %}
 
-{{ form_start(formAddService, {'attr': {'class': 'ui form service-form', 'novalidate' :'novalidate'}}) }}
+    {{ form_start(formAddService, {'attr': {'class': 'ui form service-form', 'novalidate' :'novalidate'}}) }}
 
-<div class="{{ formAddService.course.vars.errors|length > 0 ? 'field error' }}">
-    {{ form_errors(formAddService.course.theme) }}
-    {{ form_label(formAddService.course.theme) }}
-    {{ form_widget(formAddService.course.theme) }}
-</div>
-<div class="{{ formAddService.course.vars.errors|length > 0 ? 'field error' }}">
-    {{ form_errors(formAddService.course.category) }}
-    {{ form_label(formAddService.course.category) }}
-    {{ form_widget(formAddService.course.category) }}
-</div>
+    <div class="{{ formAddService.course.vars.errors|length > 0 ? 'field error' }}">
+        {{ form_errors(formAddService.course.theme) }}
+        {{ form_label(formAddService.course.theme) }}
+        {{ form_widget(formAddService.course.theme) }}
+    </div>
+    <div class="{{ formAddService.course.vars.errors|length > 0 ? 'field error' }}">
+        {{ form_errors(formAddService.course.category) }}
+        {{ form_label(formAddService.course.category) }}
+        {{ form_widget(formAddService.course.category) }}
+    </div>
 
-<div class="{{ formAddService.course.vars.errors|length > 0 ? 'field error' }}">
-    {{ form_errors(formAddService.course.course) }}
-    {{ form_label(formAddService.course.course) }}
-    {{ form_widget(formAddService.course.course) }}
-</div>
-<hr>
-<div class="{{ formAddService.picture.vars.errors|length > 0 ? 'field error' }}">
-    {{ form_errors(formAddService.picture) }}
-    {{ form_label(formAddService.picture) }}
-    {{ form_widget(formAddService.picture, {'attr': {'onchange': 'previewImage(event)'}}) }}
-</div>
-<div class="{{ formAddService.title.vars.errors|length > 0 ? 'field error' }}">
-    {{ form_errors(formAddService.title) }}
-    {{ form_label(formAddService.title) }}
-    {{ form_widget(formAddService.title) }}
-</div>
-<div class="{{ formAddService.description.vars.errors|length > 0 ? 'field error' }}">
-    {{ form_errors(formAddService.description) }}
-    {{ form_label(formAddService.description) }}
-    {{ form_widget(formAddService.description) }}
-</div>
-<div class="{{ formAddService.price.vars.errors|length > 0 ? 'field error' }}">
-    {{ form_errors(formAddService.price) }}
-    {{ form_label(formAddService.price) }}
-    {{ form_widget(formAddService.price) }}
-</div>
-<div class="{{ formAddService.duration.vars.errors|length > 0 ? 'field error' }}">
-    {{ form_errors(formAddService.duration) }}
-    {{ form_label(formAddService.duration) }}
-    {{ form_widget(formAddService.duration) }}
-</div>
+    <div class="{{ formAddService.course.vars.errors|length > 0 ? 'field error' }}">
+        {{ form_errors(formAddService.course.course) }}
+        {{ form_label(formAddService.course.course) }}
+        {{ form_widget(formAddService.course.course) }}
+    </div>
 
-<div class="field">
-    <button type="submit" class="ui-button ui-widget ui-corner-all">
-        <span class="ui-icon ui-icon-check"></span> Valider
-    </button>
-</div>
-{{ form_end(formAddService) }}
+    <hr>
+    <div class="image-container">
+        <img src="{{ formAddService.vars.data.picture }}" alt="Image Preview"
+            class="image-preview {% if formAddService.vars.data.picture %}img-visible{% else %}img-hidden{% endif %}">
+
+        <div class="{{ formAddService.picture.vars.errors|length > 0 ? 'field error' }}">
+            {{ form_errors(formAddService.picture) }}
+            {{ form_label(formAddService.picture) }}
+            {{ form_widget(formAddService.picture, {'attr': {'onchange': 'previewImage(event)'}}) }}
+        </div>
+    </div>
+
+    <div class="{{ formAddService.title.vars.errors|length > 0 ? 'field error' }}">
+        {{ form_errors(formAddService.title) }}
+        {{ form_label(formAddService.title) }}
+        {{ form_widget(formAddService.title) }}
+    </div>
+    <div class="{{ formAddService.description.vars.errors|length > 0 ? 'field error' }}">
+        {{ form_errors(formAddService.description) }}
+        {{ form_label(formAddService.description) }}
+        {{ form_widget(formAddService.description) }}
+    </div>
+    <div class="{{ formAddService.price.vars.errors|length > 0 ? 'field error' }}">
+        {{ form_errors(formAddService.price) }}
+        {{ form_label(formAddService.price) }}
+        {{ form_widget(formAddService.price) }}
+    </div>
+    <div class="{{ formAddService.duration.vars.errors|length > 0 ? 'field error' }}">
+        {{ form_errors(formAddService.duration) }}
+        {{ form_label(formAddService.duration) }}
+        {{ form_widget(formAddService.duration) }}
+    </div>
+
+    {# <input type="hidden" name="_token" value="{{ csrf_token('service_form') }}"> #}
+
+    <div class="field">
+        <button name="serviceForm" type="submit" class="ui-button ui-widget ui-corner-all">
+            <span class="ui-icon ui-icon-check"></span> Valider
+        </button>
+    </div>
+    {{ form_end(formAddService) }}
+
 {% endif %}
-{% endblock form_service %}
+{# {% endblock form_service %} #}

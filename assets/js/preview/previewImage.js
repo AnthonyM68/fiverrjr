@@ -11,12 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
             let reader = new FileReader();
             reader.onload = function () {
                 console.log('FileReader onload event:', reader.result);
-                let imagePreview = document.getElementById('imagePreview ');
+                // Trouver l'élément d'aperçu d'image correspondant
+                let imagePreview = input.closest('.image-container').querySelector('.image-preview');
+
                 if (imagePreview) {
                     imagePreview.src = reader.result;
                     imagePreview.style.display = 'block';
                 } else {
-                    console.error('Element with id "imagePreview" not found.');
+                    console.error('Element with class "image-preview" not found.');
                 }
             };
 
