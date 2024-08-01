@@ -1,7 +1,6 @@
 {# {% block form_service %} #}
 
-{% if formAddService| default %}
-
+{% if formAddService is defined %}
     {{ form_start(formAddService, {'attr': {'class': 'ui form service-form', 'novalidate' :'novalidate'}}) }}
 
     <div class="{{ formAddService.course.vars.errors|length > 0 ? 'field error' }}">

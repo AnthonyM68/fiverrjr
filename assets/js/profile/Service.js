@@ -1,5 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
+import { showAlert } from './../alert/messageFlash.js';
 
+document.addEventListener('DOMContentLoaded', () => {
     console.log('=> Service.js loaded');
     const service_item_course_theme = document.getElementById('service_item_course_theme');
     const service_item_course_category = document.getElementById('service_item_course_category');
@@ -83,8 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     editButton.className = 'ui-button ui-widget ui-corner-all toggle-edit-service';
                     editButton.innerHTML = '<span class="ui-icon ui-icon-pencil"></span>';
                     editButton.setAttribute('href', "javascript:void(0);");
-                    editButton.setAttribute('data-service', JSON.stringify(service));
-                    // editButton.setAttribute(`data-token-${service.id}`, service.csrf_token); // TOken
+                    editButton.setAttribute('data-service-id', service.id);
+                    editButton.setAttribute(`data-token-${service.id}`, service.csrf_token);
                     editButton.setAttribute('title', 'Editer Service'); // Tooltip text
                     buttonGroup.appendChild(editButton);
 
@@ -94,10 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     deleteButton.innerHTML = '<span class="ui-icon ui-icon-trash"></span>';
                     deleteButton.setAttribute('href', "javascript:void(0);");
                     deleteButton.setAttribute('href', "javascript:void(0);");
-                    deleteButton.setAttribute('data-service', JSON.stringify(service));
+                    deleteButton.setAttribute('data-service-id', service.id);
+                    deleteButton.setAttribute(`data-token-${service.id}`, service.csrf_token);
                     deleteButton.setAttribute('title', 'Supprimer Service'); // Tooltip text
+
                     buttonGroup.appendChild(deleteButton);
+
                     tdButtons.appendChild(buttonGroup);
+
                     tr.appendChild(tdButtons);
 
                     service_item_list.appendChild(tr);
@@ -118,10 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (target.classList.contains('toggle-edit-service')) {
             try {
-                const service = JSON.parse(target.getAttribute('data-service'));
-                const csrfToken = service.csrf_token;
-                const editService = document.querySelector('.edit-service-container');
-
+                // on récupère l'id du service depuis le lien
+                const serviceId = target.getAttribute('data-service-id');
+                // on récupère le token du lien
+                const csrfToken = target.getAttribute(`data-token-${serviceId}`);
                 const url = `/fetch/service/form/generate`;
 
                 const response = await fetch(url, {
@@ -132,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     // Inclure le token CSRF dans le corps de la requête
                     // et le service (title, id)
-                    body: JSON.stringify({ service, _token: csrfToken })
+                    body: JSON.stringify({ serviceId, _token: csrfToken })
                 });
 
                 if (!response.ok) {
@@ -145,6 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     // on décode le contenu
                     const data = await response.json();
                     console.log('Form data HTML received for service:', data);
+
+                    const editService = document.querySelector('.edit-service-container');
+
                     if (!editService.style.display || editService.style.display === 'none') {
                         editService.style.display = 'block';
                     }
@@ -160,12 +168,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else if (target.classList.contains('toggle-trash-service')) {
 
+            // on récupère l'id du service depuis le lien
             const serviceId = target.getAttribute('data-service-id');
+            // console.log('Id service:', serviceId);
+            // on récupère le token du lien
             const csrfToken = target.getAttribute(`data-token-${serviceId}`);
             // Confirmation JS (prévoir custom)
+            // console.log('token:', csrfToken);
             if (confirm('Confirmez-vous la suppression du service?')) {
                 try {
-                    const response = await fetch(`/serviceItem/delete/${serviceId}`, {
+                    const response = await fetch(`/fetch/service/delete`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',
@@ -173,30 +185,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         },
                         // Inclure le token CSRF dans le corps de la requête
                         // body: JSON.stringify({ _token: csrfToken })
-                        body: JSON.stringify({ service, _token: csrfToken })
+                        body: JSON.stringify({ serviceId, _token: csrfToken })
                     });
-
-
-
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
-
-
                     const result = await response.json();
-                    console.log(result);
-
+                    // console.log(result);
                     if (result.error) {
                         console.error(`Error: ${result.error}`);
-                        alert(`Error: ${result.error}`);
+                        // alert(`Error: ${result.error}`);
                     } else {
                         console.log(result.message);
-                        alert(result.message);
+                        // alert(result.message);
                         target.closest('tr').remove();
                     }
                 } catch (error) {
                     console.error('Failed to delete service:', error);
-                    alert('Failed to delete service');
+                    // alert('Failed to delete service');
                 }
             }
         }
@@ -281,8 +287,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.location.pathname.startsWith('/profile/edit')) {
                 // Sélectionnez le formulaire par ID
                 const form = document.getElementById('serviceForm');
-                // on récupère l'id du service et l'id de l'utilisateur
-                const serviceId = form.getAttribute('data-serviceid');
+                // on récupère l'id du service depuis le lien
+                const serviceId = form.getAttribute('data-service-id');
                 // si le form existe bien
                 if (form) {
                     // on écoute la soumission du form
@@ -292,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const formData = new FormData(form);
                         // on ajoute l'id du service et au formulaire
                         formData.append('service_id', serviceId);
-                        // console.log([...formData]);
+                        console.log([...formData]);
                         // Préparez l'appel AJAX
                         const response = await fetch(form.action, {
                             method: 'POST',
@@ -302,17 +308,18 @@ document.addEventListener('DOMContentLoaded', () => {
                                 'X-Requested-With': 'XMLHttpRequest'
                             }
                         })
+                            .then(response => response.json())
+                            .then(data => {
+                                // Traitez la réponse
+                                console.log('Succès:', data);
 
-                        .then(response => response.json())
-                        .then(data => {
-                            // Traitez la réponse
-                            console.log('Succès:', data);
-                            // Afficher un message de succès ou rediriger si nécessaire
-                        })
-                        .catch(error => {
-                            console.error('Erreur:', error);
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        });
+                                showAlert('positive', data.message);
+                                // Afficher un message de succès ou rediriger si nécessaire
+                            })
+                            .catch(error => {
+                                console.error('Erreur:', error);
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            });
 
                     });
                 }

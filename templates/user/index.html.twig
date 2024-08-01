@@ -7,17 +7,17 @@
     // Données des derniers inscrits
     window.__INITIAL_DATA__ = {
         lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
-    lastClient: {{ lastClient | json_encode() | raw }}
+        lastClient: {{ lastClient | json_encode() | raw }}
         };
 </script>
 
-{% block linkForJavascript %}
+{# {% block linkForJavascript %}
 <div class="js-tags-user-twig" data-csrf-token="{{ csrf_token('delete_service') }}"></div>
-{% endblock %}
+{% endblock %} #}
 
 <div class="custom-container">
-    <h1 class="uk-animation-slide-right">Bienvenue sur votre {{ title_page }} {{ app.user }}</h1>
-    <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
+    <h1 class="uk-animation-slide-right padding-top-large">Bienvenue sur votre {{ title_page }} {{ app.user }}</h1>
+    <div class="separator" id="alert-javascript">{% include "alertflash/flash_message.html.twig" %}</div>
 </div>
 <div class="custom-container">
 

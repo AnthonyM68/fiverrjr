@@ -94,8 +94,6 @@ class UserController extends AbstractController
 
             $status = $request->get('status');
 
-
-
             $orders = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
 
             $pagination = $paginator->paginate(

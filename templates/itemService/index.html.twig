@@ -3,13 +3,18 @@
 {% block body %}
 
 <div class="ui container">
+    <div class="separator"></div>
+    <h1 class="uk-animation-slide-right">{{ title_page }}</h1>
     <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
+</div>
 
+
+<div class="ui container">
     {% if formAddService is defined %}
     <div class="ui container">
         <div class="ui segment">
             {# formulaire d'ajout d'un nouveau service #}
-            <h2>Nouveau service</h2> {% include "itemService/form/form.html.twig" %}  
+            {% include "itemService/form/form.html.twig" %}  
         </div>
     </div>
     {% endif %}

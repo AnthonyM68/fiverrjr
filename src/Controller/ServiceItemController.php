@@ -2,14 +2,10 @@
 
 namespace App\Controller;
 
-// services
-use App\Entity\User;
 // Importation des classes nécessaires
-use App\Entity\Order;
+use App\Entity\User;
 use App\Entity\Theme;
-use App\Service\Cart;
 use App\Entity\Course;
-use App\Form\OrderType;
 use App\Form\ThemeType;
 use App\Entity\Category;
 use App\Form\CourseType;
@@ -17,7 +13,6 @@ use App\Form\CategoryType;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use App\Form\ServiceItemType;
-
 use App\Service\ImageService;
 use App\Repository\ThemeRepository;
 use App\Repository\CourseRepository;
@@ -27,12 +22,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ServiceItemRepository;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Cookie;
-// Depérécier
 use Symfony\Component\HttpFoundation\Request;
+// Depérécier
 use Symfony\Component\Security\Core\Security;
-// pour générer des token
 use Symfony\Component\HttpFoundation\Response;
-// pour récupérer l'utilisateur courent plutôt que security (deprecier)
+// pour générer des token
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,7 +34,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-// use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+// pour récupérer l'utilisateur courent plutôt que security (deprecier)
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -117,28 +111,22 @@ class ServiceItemController extends AbstractController
         }
     }
     /**
-     * Recherche les service d'un utilisateur
+     * Recherche les service d'un utilisateur depuis la page profil
      *
      * @param ServiceItemRepository $serviceItemRepository
      * @param CsrfTokenManagerInterface $csrfTokenManager
-     * @param Request $request
-     * @param Security $security
      * @return JsonResponse
      */
     #[Route('/fetch/get_service', name: 'services_by_user_id', methods: ['GET'])]
     public function getServiceByIdUser(
         ServiceItemRepository $serviceItemRepository,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        Request $request,
-        Security $security
+        CsrfTokenManagerInterface $csrfTokenManager
 
     ): JsonResponse {
-
-        $token = $request->getSession();
-        $user = $security->getUser();
-
-        if (!$user) {
-            return new JsonResponse(['error' => 'User not authenticated'], JsonResponse::HTTP_UNAUTHORIZED);
+        $user = $this->tokenStorage->getToken()->getUser();
+        // on vérifie que user est une instance
+        if (!$user instanceof User) {
+            return new JsonResponse(['error' => 'Utilisateur non trouvé'], Response::HTTP_UNAUTHORIZED);
         }
         // récupérer l'ID de l'user
         $userId = $user->getId();
@@ -150,16 +138,16 @@ class ServiceItemController extends AbstractController
             $csrfToken = $csrfTokenManager->getToken('token_' . $service->getId())->getValue();
 
             $data[] = [
-                'id' => $service->getId(),
+                'id' => $service->getId(), // permet de passer l'argument à javascript
                 'title' => $service->getTitle(),
-                'csrf_token' => $csrfToken
+                'csrf_token' => $csrfToken // on inclus un token à chaque service
             ];
         }
         // retourner les données en JSON
         return new JsonResponse($data);
     }
     /**
-     * Génére le formulaire d'édition d'un service pré-remplis
+     *  Génére le formulaire d'édition d'un service pré-remplis
      *
      * @param Request $request
      * @param ServiceItemRepository $serviceItemRepository
@@ -169,22 +157,24 @@ class ServiceItemController extends AbstractController
     #[Route('/fetch/service/form/generate', name: 'service_form_generate', methods: ['POST'])]
     public function getGenerateServiceForm(Request $request, ServiceItemRepository $serviceItemRepository, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
     {
-        // on décode le contenu de la réponse
+        // on décode le contenu de la requête
         $body = json_decode($request->getContent(), true);
         $this->logger->info('service_form_generate', ['json_decode' => $body]);
-        // On récupère le service depuis javascript
-        $id = $body['service']['id'];
-
+        // On récupère l'id du service envoyer par javascript 
+        $id = $body['serviceId'];
+        // on recherche les données du service correspondant
         $service = $serviceItemRepository->find($id);
-        // si le service n'a pas été trouvé
+        // si le service n'est pas trouvé
         if (!$service) {
             return new JsonResponse(['error' => 'Service not found'], Response::HTTP_NOT_FOUND);
         }
 
-        // // Validation du token CSRF
+        // Validation du token CSRF
+        // on récupère le token envoyer par javascript
         $csrfToken = new CsrfToken('token_' . $id, $body['_token']);
-
+        // on vérfie le token
         if (!$csrfTokenManager->isTokenValid($csrfToken)) {
+            // s'il n'est pas valide
             return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
         }
         // obtenir le nom du fichier de l'image du service 
@@ -200,11 +190,7 @@ class ServiceItemController extends AbstractController
                 throw $e;
             }
         }
-        // $user = $this->tokenStorage->getToken()->getUser();
-        // // on vérifie que user est une instance
-        // if (!$user instanceof User) {
-        //     return new JsonResponse(['error' => 'Utilisateur non trouvé'], Response::HTTP_UNAUTHORIZED);
-        // }
+
         // on créer le formulaire avec une action personnalisée
         $formAddService = $this->createForm(ServiceItemType::class, $service, [
             // permet la redirection du formulaire par javascript 
@@ -212,30 +198,41 @@ class ServiceItemController extends AbstractController
             'attr' => [
                 // Permet l'interception du formulaire par javascript Service.js
                 'id' => 'serviceForm',
-                'data-serviceid' => $service->getId(),
+                'data-service-id' => $service->getId(),
             ]
         ]);
 
         $formAddService->handleRequest($request);
-        // Rendre le formulaire en HTML
+        // on prepare le formulaire en HTML
         $formHtml = $this->renderView('itemService/form/form.html.twig', [
             'serviceId' => $id,
+            'errorsFormService' => $formAddService->getErrors(true),
             'formAddService' => $formAddService->createView(),
 
         ]);
-        // Retourner la réponse JSON 
+        // on rend le formulaire par la réponse JSON 
         return new JsonResponse(['formHtml' => $formHtml], Response::HTTP_OK);
     }
 
-
-
+    /**
+     * Mise à jour d'un service depuis AJAX et la page profil pour développeur
+     *
+     * @param Request $request
+     * @param ServiceItemRepository $serviceItemRepository
+     * @param CsrfTokenManagerInterface $csrfTokenManager
+     * @return JsonResponse
+     */
     #[Route('/fetch/service/form/update', name: 'service_form_update', methods: ['POST'])]
-    public function updateServiceForm(Request $request, ServiceItemRepository $serviceItemRepository, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
+    public function updateServiceForm(Request $request, ServiceItemRepository $serviceItemRepository): JsonResponse
     {
-        // Extraire l'id du service depuis le formData javascript
-        $id = $request->request->get('service_id');
+        // Récupération des données du formulaire
+        $formData = $request->request->all();
+
+        $this->logger->info('service_form_update', ['json_decode' => $formData]);
+        // // on récupère l'id du service depuis javascript
+        $serviceId = $formData['service_id'];
         // Rechercher le service correspondant
-        $service = $serviceItemRepository->find($id);
+        $service = $serviceItemRepository->find($serviceId);
 
         if (!$service instanceof ServiceItem) {
             return new JsonResponse(['error' => 'Service non trouvé'], Response::HTTP_NOT_FOUND);
@@ -273,15 +270,14 @@ class ServiceItemController extends AbstractController
                         // On set a l'user
                         $service->setPicture($fileName);
                     } catch (\Exception $e) {
-                        // si une exception est levée, afficher un message flash d'erreur
-                        $this->addFlash('error', 'Une erreur s\'est produite lors du traitement de l\'image: ' . $e->getMessage());
+                        return new JsonResponse(['success' => false, 'errors' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
                     }
                 }
                 // Si le formulaire est valide, persister les modifications
                 $this->entityManager->persist($service);
                 $this->entityManager->flush();
 
-                return new JsonResponse(['success' => true], Response::HTTP_OK);
+                return new JsonResponse(['success' => true, 'message' => 'Le service a bien été mis à jour'], Response::HTTP_OK);
             } else {
                 // Si le formulaire n'est pas valide, récupérer les erreurs par champ
                 foreach ($formService->all() as $fieldName => $field) {
@@ -297,22 +293,49 @@ class ServiceItemController extends AbstractController
                 return new JsonResponse(['success' => false, 'errors' => $errors], Response::HTTP_BAD_REQUEST);
             }
         }
-
         return new JsonResponse(['success' => false, 'errors' => ['form' => 'Formulaire non soumis']], Response::HTTP_BAD_REQUEST);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @param ServiceItemRepository $serviceItemRepository
+     * @param CsrfTokenManagerInterface $csrfTokenManager
+     * @return JsonResponse
+     */
+    #[Route('/fetch/service/delete', name: 'delete_service', methods: ['DELETE'])]
+    public function deleteServiceItem(
+        Request $request,
+        ServiceItemRepository $serviceItemRepository,
+        CsrfTokenManagerInterface $csrfTokenManager
+    ): JsonResponse {
+        // on décode le contenu de la réponse
+        $body = json_decode($request->getContent(), true);
+        $this->logger->info('delete_service', ['json_decode' => $body]);
+        // // on récupère l'id du service depuis javascript
+        $serviceId = $body['serviceId'];
+        // // on récupère le token depuis javascript
+        $csrfToken = new CsrfToken('token_' . $serviceId, $body['_token']);
+        // // on vérifie que le token soit valide
+        if (!$csrfTokenManager->isTokenValid($csrfToken)) {
+            return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
+        }
+        // on recherche le service corespondant
+        $service = $serviceItemRepository->find($serviceId);
 
+        if (!$service instanceof ServiceItem) {
+            return new JsonResponse(['error' => 'Service non trouvé'], Response::HTTP_NOT_FOUND);
+        }
 
-
-
-
-
-
-
-
-
-
-
+        try {
+            $this->entityManager->remove($service);
+            $this->entityManager->flush();
+            return new JsonResponse(['message' => 'Service deleted successfully']);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Failed to delete service'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
     /**
@@ -339,87 +362,85 @@ class ServiceItemController extends AbstractController
      */
     #[Route('/service/new', name: 'new_service')]
     #[Route('/service/edit/{id}', name: 'edit_service')]
-    // Restreint l'accès aux utilisateurs authentifiés
+    // restreint l'accès aux utilisateurs authentifiés
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function editService(EntityManagerInterface $entityManager, Request $request, ?ServiceItem $service = null): Response
-    {
+    // on restreint cette route au client du site (pour l'interface plein écran simple)
+
+    // #[IsGranted('ROLE_CLIENT')]
+
+    public function editService(
+        EntityManagerInterface $entityManager,
+        Request $request,
+        ?ServiceItem $service = null
+
+    ): Response {
+        $title_page = 'Modification du service';
         // Si le service n'existe pas, crée un nouveau service
         if (!$service) {
             $service = new ServiceItem();
+            $title_page = 'Nouveau service';
         }
+        // On vérifie que service est bien une instance
+        if (!$service instanceof ServiceItem) {
+            return new JsonResponse(['error' => 'Service non trouvé'], Response::HTTP_NOT_FOUND);
+        }
+        // on passe l'id du service au formulaire
+        $formService = $this->createForm(ServiceItemType::class, $service, [
+            'attr' => [
+                'id' => 'serviceForm',
+                'data-serviceid' => $service->getId(),
+            ]
+        ]);
 
-        $formService = $this->createForm(ServiceItemType::class, $service);
         $formService->handleRequest($request);
+        // Si le formulaire est soumis et valide 
+        if ($formService->isSubmitted() && $formService->isValid()) {
+            // on recherche la valeur de la sous catégorie
+            $course = $formService->get('course')->get('course')->getData() ?? null;
+            // si on apas  de résultat dans course
+            if (!$course) {
+                // si aucun cours n'est sélectionné, ajouter une erreur de validation
+                $formService->get('course')->addError(new FormError('Veuillez sélectionner une sous-catégorie.'));
 
-        // Si le formulaire est soumis
-        if ($formService->isSubmitted()) {
-
-            // Si le formulaire est valide, persiste et sauvegarde la Category
-            if ($formService->isValid()) {
-
-                $course = $formService->get('course')->get('course')->getData() ?? null;
-                // dd($course);
-                // si on a un résultat dans course
-                if (!$course) {
-                    // si aucun cours n'est sélectionné, ajouter une erreur de validation
-                    $formService->get('course')->addError(new FormError('Veuillez sélectionner une sous-catégorie.'));
-
-                    return $this->render('itemService/index.html.twig', [
-                        'title_page' => 'Services',
-                        'formAddService' => $formService->createView(),
-                        'errors' => $formService->getErrors(true),
-                    ]);
+                return $this->render('itemService/index.html.twig', [
+                    'title_page' => $title_page,
+                    'formAddService' => $formService->createView(),
+                    'errors' => $formService->getErrors(true),
+                ]);
+            }
+            // on set la sous-categorie au service
+            $service->setCourse($course);
+            // récupérer l'objet file
+            $file = $formService->get('picture')->getData();
+            // si un fichier est téléchargé, traiter le fichier
+            // si $file est bien une instance de UploadedFile ( ServiceItemType )
+            if ($file instanceof UploadedFile) {
+                try {
+                    $originalFilename = $service->getPicture();
+                    // On supprime l'image actuelle
+                    $this->imageService->deleteImage($originalFilename, 'SERVICE');
+                    // On déplace la nouvelle et récupère son nom et extention
+                    $fileName = $this->imageService->uploadImage($file, 'SERVICE');
+                    // On set a l'user
+                    $service->setPicture($fileName);
+                } catch (\Exception $e) {
+                    // si une exception est levée, afficher un message flash d'erreur
+                    $this->addFlash('error', 'Une erreur s\'est produite lors du traitement de l\'image: ' . $e->getMessage());
                 }
-                // on set la sous-categorie au service
-                $service->setCourse($course);
-
-
-                //  // obtenir le nom du fichier de l'image de profil de l'utilisateur
-                //  $originalFilename = $service->getPicture();
-
-                //  $this->logger->info('Processing generateImageUrl service', ['service' => $service, 'originalFilename' => $originalFilename]);
-
-                //  if ($originalFilename) {
-                //      try {
-                //          $pictureUrl = $this->imageService->generateImageUrl($originalFilename, 'SERVICE');
-                //          $service->setPicture($pictureUrl);
-                //      } catch (\Exception $e) {
-                //          throw $e;
-                //      }
-                //  }
-
-                // // récupérer l'objet file
-                // $file = $formService->get('picture')->getData();
-                // // si un fichier est téléchargé, traiter le fichier
-                // // si $file est bien une instance de UploadedFile ( ServiceItemType )
-                // if ($file instanceof UploadedFile) {
-                //     try {
-                //         // On supprime l'image actuelle
-                //         $this->imageService->deleteImage($originalFilename, $role);
-                //         // On déplace la nouvelle et récupère son nom et extention
-                //         $fileName = $this->imageService->uploadImage($file, 'SERVICE');
-                //         // On set a l'user
-                //         $service->setPicture($fileName);
-                //     } catch (\Exception $e) {
-                //         // si une exception est levée, afficher un message flash d'erreur
-                //         $this->addFlash('error', 'Une erreur s\'est produite lors du traitement de l\'image: ' . $e->getMessage());
-                //     }
-                // }
-
-
-                $entityManager->persist($service);
-                $entityManager->flush();
             }
-        } else {
-            // Pré-remplir les champs non mappés
-            if ($service->getCourse()) {
-                $formService->get('course')->get('course')->setData($service->getCourse());
-            }
+            $entityManager->persist($service);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('edit_service', ['id' => $service->getId()]);
+        }
+        // Pré-remplir les champs non mappés
+        if ($service->getCourse()) {
+            $formService->get('course')->get('course')->setData($service->getCourse());
         }
         // obtenir le nom du fichier de l'image de profil de l'utilisateur
         $originalFilename = $service->getPicture();
-        $this->logger->info('Processing generateImageUrl', ['originalFilename' => $originalFilename]);
 
+        $this->logger->info('Processing generateImageUrl', ['originalFilename' => $originalFilename]);
         if ($originalFilename) {
             try {
                 $pictureUrl = $this->imageService->generateImageUrl($originalFilename, 'SERVICE');
@@ -428,42 +449,38 @@ class ServiceItemController extends AbstractController
                 throw $e;
             }
         }
-        // Rend la vue avec le formulaire
         return $this->render('itemService/index.html.twig', [
-            'title_page' => 'Services',
+            'title_page' => $title_page,
             'formAddService' => $formService->createView(),
-            'errors' => $formService->getErrors(true),
         ]);
     }
 
 
-    #[Route('/serviceItem/detail/{id}', name: 'detail_service')]
+    /**
+     * 
+     * Affiche le détail d'un service
+     */
+    #[Route('/service/detail/{id}', name: 'detail_service')]
     public function detailService(
         Request $request,
         ?ServiceItem $service
     ): Response {
-
         // récupére le nom de fichier de l'image de l'utilisateur
-        $pictureFilename = $service->getPicture();
-        // on utilise le controller pour fournir le chemin absolu de l'image ( config: services.yaml )
-        if ($pictureFilename) {
-            $pictureUrlResponse = $this->forward('App\Controller\ImageController::generateImageUrl', [
-                'filename' => $pictureFilename,
-                'role' => 'SERVICE'
-            ]);
-            $pictureUrl = json_decode($pictureUrlResponse->getContent(), true);
-
-            if ($pictureUrl && is_string($pictureUrl['url'])) {
-                $service->setPicture($pictureUrl['url']);
+        $originalFilename = $service->getPicture();
+        $this->logger->info('Processing generateImageUrl', ['originalFilename' => $originalFilename]);
+        if ($originalFilename) {
+            try {
+                $pictureUrl = $this->imageService->generateImageUrl($originalFilename, 'SERVICE');
+                $service->setPicture($pictureUrl);
+            } catch (\Exception $e) {
+                throw $e;
             }
         }
-
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Détail:',
             'service' => $service,
         ]);
     }
-
 
     #[Route('/service/bestServices', name: 'service_bestServices', methods: ['GET'])]
     public function getBestServices(ServiceItemRepository $serviceItemRepository, SerializerInterface $serializer): JsonResponse
@@ -505,79 +522,6 @@ class ServiceItemController extends AbstractController
             return new JsonResponse(['error' => 'Failed to load services.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-    #[Route('/serviceItem/delete/{serviceId}', name: 'delete_service', methods: ['DELETE'])]
-    public function deleteServiceItem(int $serviceId, Request $request, ServiceItemRepository $serviceItemRepository, CsrfTokenManagerInterface $csrfTokenManager): JsonResponse
-    {
-        // on décode le contenu de la réponse
-        $data = json_decode($request->getContent(), true);
-        $csrfToken = new CsrfToken('delete_service_' . $serviceId, $data['_token']);
-
-
-        if (!$csrfTokenManager->isTokenValid($csrfToken)) {
-            return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
-        }
-
-        $service = $serviceItemRepository->find($serviceId);
-
-        if (!$service) {
-            return new JsonResponse(['error' => 'Service not found'], Response::HTTP_NOT_FOUND);
-        }
-
-        try {
-            $this->entityManager->remove($service);
-            $this->entityManager->flush();
-            return new JsonResponse(['message' => 'Service deleted successfully']);
-        } catch (\Exception $e) {
-            return new JsonResponse(['error' => 'Failed to delete service'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

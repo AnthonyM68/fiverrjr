@@ -5,22 +5,23 @@ namespace App\Form;
 use App\Entity\ServiceItem;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use App\Form\EventListener\AddUserField;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Form\ServiceThemeCategoryCourseType;
 use Symfony\Component\Form\FormBuilderInterface;
-use App\Form\EventListener\AddUserField;
 use App\EventListener\AddCreateDateFiledServiceForm;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Form\DataTransformer\FloatToNullTransformer;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class ServiceItemType extends AbstractType
 {
@@ -81,6 +82,7 @@ class ServiceItemType extends AbstractType
                 'label' => false, // masquer le label
                 'mapped' => false, // Ne pas mapper ce champ avec les données du formulaire
             ])
+
             // Écouteur pour ajouter l'ID utilisateur avant de persister
             ->addEventSubscriber(new AddUserField($this->security))
             // Écouteur pour ajouter la date de création avant de persister
@@ -91,6 +93,8 @@ class ServiceItemType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ServiceItem::class,
+            // Ajout de la 3ème option avec une valeur par défaut
+            'title_form' => null, 
             // 'csrf_protection' => true,
             // 'csrf_field_name' => '_token',
             // 'csrf_token_id'   => 'service_form'

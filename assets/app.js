@@ -10,6 +10,10 @@ import StickyFooter from './js/components/Sticky/StickyFooter'
 // hook useFetch
 import useFetch from './js/useFetch';
 
+
+
+
+
 // const StickyParentComponent = () => {
 //     return <StickyParent />;
 // };
@@ -36,11 +40,11 @@ const LastUser = ({ role }) => {
 
     if (!lastUser) {
         return <div className="ui segment">
-        <div className="ui active inverted dimmer">
-          <div className="ui text loader">Loading</div>
-        </div>
-        <p></p>
-      </div>;
+            <div className="ui active inverted dimmer">
+                <div className="ui text loader">Loading</div>
+            </div>
+            <p></p>
+        </div>;
     }
 
     return <UserCard user={lastUser} />;
