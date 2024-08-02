@@ -12,9 +12,9 @@
 
 @emSize: 13px;
 @fontSize: 13px;
-@fontName: "Arial";
-@importGoogleFonts: false;
-@importFonts: false;
+@fontName: "Merriweather";
+@importGoogleFonts: true;
+@importFonts: true;
 
 @h1: 2.25em;
 

@@ -18,12 +18,6 @@ class ThemeType extends AbstractType
         $builder
             ->add('nameTheme', TextType::class, [
                 'label' => 'Nom de Thême'
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Soumettre',
-                'attr' => [
-                    'class' => 'ui-button ui-widget ui-corner-all'
-                ]
             ]);
     }
 

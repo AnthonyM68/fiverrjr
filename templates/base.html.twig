@@ -8,7 +8,7 @@
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
     {% block stylesheets %}
-   
+
     {{ encore_entry_link_tags('jquery_ui_css') }}
     {{ encore_entry_link_tags('jquery_ui_theme') }}
     {{ encore_entry_link_tags('jquery_ui_structure') }}
@@ -31,7 +31,7 @@
     </header>
 
     <article>
-        <div class="separator"></div>
+        <div class="separator-base"></div>
         <div class="ui container">
             <div class="ui segment" id="search-results-container" style="display: none;">
                 <div class="ui grid">
@@ -41,10 +41,16 @@
                         <button class="ui button primary" id="close-results">Fermer</button>
                     </div>
                     <div class="sixteen wide column search-results">
-                        <div id="search-results-navbar"></div>
+                        <div id="search-results"></div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="custom-container">
+            <h1 class="uk-animation-slide-right padding-top-large">Bienvenue sur votre {{ title_page }}
+            </h1>
+            <div class="separator" id="alert-javascript">{% include "alertflash/flash_message.html.twig" %}</div>
         </div>
         {% block body %} {% endblock %}
         <div id="tarteaucitron"></div>
@@ -56,14 +62,14 @@
     {{ encore_entry_script_tags('messageFlash') }}
     {{ encore_entry_script_tags('app') }}
     {{ encore_entry_script_tags('jquery_ui_js') }}
-    
+
     {{ encore_entry_script_tags('semantic') }}
 
     {{ encore_entry_script_tags('uikit') }}
     {{ encore_entry_script_tags('uikit-icons') }}
     {# {{ encore_entry_script_tags('slick-carousel') }} #}
-   
-   {#  {{ encore_entry_script_tags('CarouselComponent') }}
+
+    {# {{ encore_entry_script_tags('CarouselComponent') }}
     {{ encore_entry_script_tags('StickyFooter') }}
     {{ encore_entry_script_tags('Homepage') }} #}
 

@@ -15,13 +15,20 @@ class SearchFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        // ne pouvant pas modifier l'id par symfony
+        // on modifie le nom de champ de façon unique
+        // pour avoir deux form rendu en même temps sans confusion
+        // et pour garder le mode desktop /  mobile
+        $key = 'search_term_' . $options['id_suffix'];
         $builder
             // term a rechercher
-            ->add('search_term', TextType::class, [
+            ->add($key, TextType::class, [
                 'required' => true,
                 'attr' => [
                     'placeholder' => 'Rechercher',
+                    'class' => 'prompt ' . $options['id_suffix']
                 ],
+                'label' => false
             ]);
     }
 
@@ -29,10 +36,11 @@ class SearchFormType extends AbstractType
     {
         $resolver->setDefaults([
             'search_label' => null,
-            'search_table' => null,
-            'csrf_protection' => true,
-            'csrf_field_name' => '_token',
-            'csrf_token_id'   => 'search_item'
+            'search_table' => 'theme',
+            // 'csrf_protection' => true,
+            // 'csrf_field_name' => '_token',
+            // 'csrf_token_id'   => 'search_item',
+            'id_suffix' => 'default'
         ]);
     }
 }

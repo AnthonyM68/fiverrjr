@@ -1,31 +1,12 @@
 @import "variables";
 
-/* dropdown navbar */
-.ui.dropdown .item a {
+
+/* couleur lien dropdown interne */
+.ui.fixed.borderless.huge.menu .left.menu .menu a {
   list-style-type: none;
   text-decoration: none;
-  color: $secondary;
-}
-.ui.dropdown.item {
-  position: relative;
-  cursor: pointer;
+  color:$secondary ;
 }
 .ui.fluid.dropdown {
   width: auto !important; 
-}
-.ui.dropdown.item > .menu {
-  display: none;
-  position: absolute;
-  background-color: $white;
-  z-index: 10;
-  top: 100%;
-}
-.ui.dropdown.item > .menu > .item > .menu {
-  position: absolute;
-  left: 100%;
-  margin-left: -1px;
-  width:auto;
-}
-.ui.dropdown.item > .menu > .item > .menu > .item {
-  height: auto;
 }

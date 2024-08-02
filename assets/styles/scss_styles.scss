@@ -1,4 +1,11 @@
 @import "variables";
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
 
 .custom-container {
   max-width: $container-max-width;
@@ -22,19 +29,46 @@
 .custom-margin-bottom {
   margin-bottom: 30px !important;
 }
+.visible {
+  display: block !important;
+}
+.hidden {
+  display: none !important;
+}
 
+/* img preview */
+.img-visible {
+  display: block;
+}
+.img-hidden {
+  display: none;
+}
+.text-center {
+  text-align: center;
+}
+/* ajoute un espaceur */
+.separator-base {
+  height: $separator-base;
+  display: block;
+  margin: 10px 0;
+}
+.separator {
+  height: $separator;
+  display: block;
+  margin: 10px 0;
+}
 // Padding
-// .padding {
-//   padding: $padding-medium; // Valeur par défaut
-// }
+.padding {
+  padding: $padding-medium; // Valeur par défaut
+}
 
-// .padding-small {
-//   padding: $padding-small;
-// }
+.padding-small {
+  padding: $padding-small;
+}
 
-// .padding-large {
-//   padding: $padding-large;
-// }
+.padding-large {
+  padding: $padding-large;
+}
 
 .padding-top {
   padding-top: $padding-medium;
@@ -95,7 +129,6 @@
 //   margin-bottom: $margin-large;
 // }
 
-
 // /* Lists général */
 // .folder.icon {
 //   color: #fff;
@@ -105,20 +138,16 @@
 //   color: #fff !important;
 // }
 
-
-
 // .ui.list .item .description {
 //   color: rgba(0, 0, 0, 0.87) !important;
 // }
-
-
 
 // .ui.list.login > .item,
 // .ui.list.login > .item > .content > .header {
 //   color: rgba(0, 0, 0, 0.87) !important;
 // }
 
-// /* Page client (entrepreneur)*/ 
+// /* Page client (entrepreneur)*/
 // .ui.list.client > .item,
 // .ui.list.client > .item > .folder.icon,
 // .ui.list.client > .item > .content,
@@ -126,7 +155,7 @@
 //   color: rgba(0, 0, 0, 0.87) !important;
 // }
 
-// /* Page developer (entrepreneur)*/ 
+// /* Page developer (entrepreneur)*/
 // .ui.list.developer > .item,
 // .ui.list.developer > .item > .folder.icon,
 // .ui.list.developer > .item > .content,
@@ -137,7 +166,7 @@
 //   color: rgba(0, 0, 0, 0.87) !important;
 // }
 
-// /* Forms*/ 
+// /* Forms*/
 // .ui.form label {
 //   color: #fff !important;
 // }
@@ -152,7 +181,7 @@
 // /* order */
 // .ui.form.order label {
 //   color: rgba(0, 0, 0, 0.87) !important;
-// } 
+// }
 // /* profil */
 // .ui.form.profile label {
 //   color: rgba(0, 0, 0, 0.87) !important;
@@ -207,3 +236,50 @@
 // body {
 //   background:$primary;
 // }
+/* rend un élément visible */
+
+/* Search motor  */
+.full-width-input {
+  width: 100% !important; /* Prend toute la largeur disponible */
+  box-sizing: border-box;
+}
+/* On masque les * des required des moteur de recherche */
+label.required::after {
+  content: "";
+  display: none !important;
+}
+
+#search-results-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  z-index: 1000;
+  overflow-y: auto;
+}
+.search-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+#close-results {
+  margin-left: auto;
+}
+
+.custom-container h1,
+h2 {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+.custom-segment {
+  height: 700px;
+  overflow: auto;
+}
+
+.grid.home {
+  height: 700px;
+  overflow: auto;
+}

@@ -1,0 +1,197 @@
+@import "variables";
+
+/* Styles pour le formulaire de recherche desktop */
+.desktop-search-form .ui.icon.input {
+  /* vos styles ici */
+}
+
+/* Styles pour le formulaire de recherche mobile */
+.mobile-search-form .ui.icon.input {
+  /* vos styles ici */
+}
+
+
+
+/* Couleur des liens navigation à gauche */
+// .ui.fixed.borderless.huge.menu .left.menu a {
+//   color: $secondary;
+// }
+
+// /* Couleur des liens navigation à droite */
+// .ui.fixed.borderless.huge.menu .right.menu a {
+//   color: $secondary;
+// }
+
+// /* Couleur de l'icône panier */
+// .ui.fixed.borderless.huge.menu .right.menu a .cart.arrow.down.icon {
+//   color: $linkColor;
+// }
+
+// /* Couleur du texte Thèmes */
+// .ui.dropdown .theme {
+//   color: $linkColor;
+// }
+
+/* Mobile */
+/* Couleur de l'entête et du bouton icône en mode mobile */
+// .tablet.mobile.only .header, .ui.icon.button {
+//   color: $secondary;
+// }
+
+// .tablet.mobile.only .header:hover {
+//   color: $secondary !important;
+//   border-bottom: 1px solid #fff;
+// }
+
+/* Flexbox pour aligner les éléments dans la rangée mobile */
+// .tablet.mobile.only.row {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   width: 100%;
+// }
+
+/* Style pour le container flexbox */
+// .tablet.mobile.only.row .ui.container {
+//   display: flex !important;
+//   justify-content: space-between !important;
+//   align-items: center !important;
+//   width: 100% !important;
+//   background-color: red; /* Pour le débogage, à enlever ou ajuster */
+// }
+
+/* Assurer l'alignement du bouton burger à droite */
+// .burger-button {
+//   margin-left: auto !important;
+// }
+
+/* Style de l'accordéon vertical, masqué par défaut */
+// .ui.vertical.accordion.menu {
+//   display: none;
+// }
+
+// .ui.vertical.accordion.menu.visible {
+//   display: block;
+// }
+
+/* Autres styles potentiellement inutilisés ou à vérifier */
+// .ui.message {
+//   background-color: rgba(238, 238, 238);
+//   box-shadow: none;
+//   padding: 5em 4em;
+// }
+
+// .ui.message h1.ui.header {
+//   font-size: 4.5em;
+//   color: #4A008A;
+// }
+
+// .ui.message p.lead {
+//   font-size: 1.3em;
+//   color: #333333;
+//   line-height: 1.4;
+//   font-weight: 300;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Décommenter ou ajuster les styles suivants selon les besoins */
+/*
+.tablet.mobile.only .header, .ui.icon.button > .icon {
+  color: #fff;
+}
+
+.tablet.mobile.only .header:hover {
+  background-color: #6311aa !important;
+  color: #fff !important;
+  border-bottom: 1px solid #fff;
+}
+
+.ui.basic.button:hover {
+  background: #6311aa !important;
+  color: #fff !important;
+  border-bottom: 1px solid #fff;
+}
+
+.ui.vertical.menu {
+  display: none;
+  border: none;
+  box-shadow: none;
+  background-color: #4a008a;
+}
+
+.ui.vertical.menu > .item {
+  padding-left: 1.428em;
+  color: #fff;
+}
+
+.ui.vertical.menu > .item.active {
+  padding-left: 1.428em;
+  background-color: #00ba49 !important;
+  color: #fff !important;
+  border-bottom: 1px solid #fff;
+}
+
+.ui.vertical.menu > .item:hover {
+  padding-left: 1.428em;
+  background-color: #6311aa !important;
+  color: #fff !important;
+  border-bottom: 1px solid #fff;
+}
+
+.ui.vertical.menu .item .title {
+  color: #fff;
+}
+
+.ui.vertical.menu .item .title .dropdown.icon {
+  float: none;
+  color: #fff;
+}
+
+.ui.vertical.menu .item .content .item {
+  padding: 0.5em 1em;
+  color: #fff;
+}
+
+.ui.vertical.menu .item .content .item:hover {
+  padding: 0.5em 1em;
+  background-color: #4a008a !important;
+  color: #fff !important;
+  border-bottom: 1px solid #fff;
+}
+
+.ui.vertical.menu .item .content .item.active {
+  padding: 0.5em 1em;
+  background-color: #00ba49 !important;
+  color: #fff !important;
+  border-bottom: 1px solid #fff;
+}
+
+.ui.vertical.menu .header.item {
+  text-transform: uppercase;
+  color: #fff;
+}
+*/

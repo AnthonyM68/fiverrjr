@@ -531,15 +531,24 @@ class ServiceItemController extends AbstractController
      */
 
     #[Route('/theme', name: 'list_themes')]
-    public function listThemes(ThemeRepository $themeRepository): Response
+    public function listThemes(ThemeRepository $themeRepository, ?Theme $theme = null): Response
     {
-        // Récupère tous les thèmes triés par nom
+
+        // Récupère les détails du thème en fonction de l'ID
+        // $categories = $theme->getCategories();
+        // // Rend la vue avec les détails du thème
+        // return $this->render('theme/index.html.twig', [
+        //     'title_page' => $theme->getNameTheme(),
+        //     'categories' => $categories,
+        // ]);
+
+        // // Récupère tous les thèmes triés par nom
         $themes = $themeRepository->findBy([], ["nameTheme" => "ASC"]);
 
         // Rend la vue avec les thèmes récupérés
         return $this->render('theme/index.html.twig', [
             'title_page' => 'Liste des Thèmes',
-            'themes' => $themes
+            'liste_themes' => $themes
         ]);
     }
 
@@ -593,6 +602,18 @@ class ServiceItemController extends AbstractController
             'categories' => $categories,
         ]);
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     #[Route('/categories_and_courses_by_theme/{themeId}', name: 'categories_by_theme', methods: ['GET'])]
     public function getCategoriesAndCoursesByTheme(int $themeId, CategoryRepository $categoryRepository): JsonResponse

@@ -57,30 +57,30 @@ Encore
     // Assets personnalisés
     .addStyleEntry('app_styles', [
         './assets/styles/sticky.css',
-        './assets/styles/navbar.css',
+        './assets/styles/login-register.scss',
+        './assets/styles/cart.scss',
+        './assets/styles/footer.scss',
+        './assets/styles/home.scss',
+        './assets/styles/navbar.scss',
         './assets/styles/dropdown.scss',
-        './assets/styles/login-register.css',
-        './assets/styles/admin.css',
-        './assets/styles/app.css',
-        './assets/styles/cart.css',
-        './assets/styles/footer.css',
-        './assets/styles/home.css',
-        './assets/styles/itemService.css',
         './assets/styles/scss_styles.scss',
         './assets/styles/paralax.scss',
         './assets/styles/client.scss'
     ])
     // app
     .addEntry('app', './assets/app.js')
+    // AJAX 
+    .addEntry('ajax', './assets/js/ajax/postData.js')
     // Message_flash
     .addEntry('messageFlash', './assets/js/alert/messageFlash.js')
+    // DisplayResults 
+    .addEntry('displayResults', './assets/js/search/display/displayResults.js')
     // Navbar 
-    .addEntry('ViewNavbar', './assets/js/navbar/ViewNavbar.js')
+    .addEntry('navbar', './assets/js/navbar/navbar.js')
     // Search motor
     .addEntry('searchMotor', './assets/js/searchMotor/searchMotor.js')
-
     // Dropdown navbar
-    .addEntry('ViewNavbarDropdown', './assets/js/dropdown/ViewNavbarDropdown.js')
+    .addEntry('dropdown', './assets/js/dropdown/dropdown.js')
     // Slick-carousel
     .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
     // Preview image FileUpload
@@ -95,6 +95,9 @@ Encore
     .addEntry('cart', './assets/js/cart/cart.js')
 
     .addEntry('home', './assets/js/home/home.js')
+
+
+
     // REACT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
     .enableReactPreset()
     // useFetch ( effectue les requete ajax pour react)

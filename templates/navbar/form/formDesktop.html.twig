@@ -1,0 +1,11 @@
+{# Formulaire Desktop #}
+{{ form_start(formServiceDesktop, {'attr': {'action': path('search_results'), 'class': 'ajax-form'}}) }}
+<div class="ui right aligned category search">
+    <div class="ui icon input">
+        {{ form_widget(formServiceDesktop.search_term_desktop) }} 
+        <i class="search link icon "></i>
+    </div>
+    <div class="results"></div>
+</div>
+{{ form_end(formServiceDesktop) }}
+

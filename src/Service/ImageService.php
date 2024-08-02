@@ -70,7 +70,7 @@ class ImageService
         $filePath = $this->getImagePath($filename, $role);
 
         if (!file_exists($filePath)) {
-            throw new \Exception('Image not found');
+            throw new \Exception('Image not found' . $filePath);
         }
 
         return str_replace($this->parameters->get('kernel.project_dir') . '/public', '', $filePath);

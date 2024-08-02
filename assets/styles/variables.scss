@@ -1,21 +1,27 @@
+/* couleurs */
 $primary: #3498db;
 $secondary: #1a1a1a;
 $white: #fff;
 $pageBackground: #fff;
 $transparent: transparent;
-
 $linkColor: $primary;
-
-$container-max-width: 1600px;
+/* font-size */
+$font-size-navbar:12px;
+/* Separators */
+$separator-base:80px;
+$separator:20px;
+/* custom-container */
+$container-max-width: 1400px;
 $container-padding: 10px;
-
+/* grid */
 $container-grid-max-width: 1800px;
 $container-grid-padding: 10px;
 
+/* padding */
 $padding-small: 5px;
 $padding-medium: 10px;
 $padding-large: 25px;
-
+/* margin*/
 $margin-small: 5px;
 $margin-medium: 10px;
 $margin-large: 25px;
