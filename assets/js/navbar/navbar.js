@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('=> navbar.js loaded');
 
     function handleSearch(event, element) {
+        showAlert('negative', 'Une erreur est survenue lors de la recherche.');
         event.preventDefault();
         const form = element.closest('form');
         // console.log(form);
@@ -43,14 +44,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // On sélectionne toutes les icônes de recherche de la navbar
     const searchIcons = document.querySelectorAll('.ui.icon.input .search.icon');
-    // Ajouter un écouteur d'événement à chaque icône de recherche
+    // ajouter un écouteur d'événement à chaque icône de recherche
     searchIcons.forEach((searchIcon) => {
         searchIcon.addEventListener('click', function (event) {
-            handleSearch(event, searchIcon);
+            // handleSearch(event, searchIcon);
+            showAlert('positive', 'Une erreur est survenue lors de la recherche.');
         });
     });
     const searchFields = document.querySelectorAll('input[name="search_form[search_term_desktop]"], input[name="search_form[search_term_mobile]"]');
-
+    // ajouter un écouteur d'événement sur la touche enter
     searchFields.forEach((searchField) => {
         searchField.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {

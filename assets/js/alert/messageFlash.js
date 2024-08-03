@@ -19,8 +19,10 @@ export function clean() {
  * @param {string} type - Le type d'alerte ('positive', 'negative', 'warning').
  * @param {string} message - Le message à afficher.
  */
-export function showAlert(type, message) {
-    const container = document.getElementById('alert-javascript');
+export const showAlert = (type, message) => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const containerId = isMobile ? 'alert-javascript-mobile' : 'alert-javascript-desktop';
+    const container = document.getElementById(containerId);
 
     // Définir les classes CSS pour chaque type d'alerte
     const alertClasses = {
@@ -29,7 +31,7 @@ export function showAlert(type, message) {
         warning: 'ui warning message anim'
     };
 
-    // construire le HTML 
+    // Construire le HTML 
     const alertHtml = `
         <div class="${alertClasses[type]}">
             <i class="close icon"></i>
@@ -38,27 +40,30 @@ export function showAlert(type, message) {
             </div>
         </div>
     `;
-    // ajout de l'alerte au conteneur
+    // Ajouter l'alerte au conteneur
     container.innerHTML = alertHtml;
-    // ajout d'un gestionnaire d'événement pour fermer les alertes
+
+    // Ajouter un gestionnaire d'événement pour fermer les alertes
     const closeButtons = container.querySelectorAll('.close.icon');
     closeButtons.forEach(button => {
         button.addEventListener('click', () => {
             button.parentElement.remove();
         });
     });
+
     // Si déjà tout en haut, ne rien faire et l'on quitte
     if (window.scrollY === 0) {
         clean();
         return;
     }
 
-    // sinon on déplace le scrool et l'on remonte tout en haut
+    // Sinon on déplace le scroll et l'on remonte tout en haut
     container.scrollIntoView({
         behavior: 'smooth',
         block: 'start'  // début
     });
-    // ajout d'un décalage de 50px après un petit délai
+
+    // Ajout d'un décalage de 50px après un petit délai
     setTimeout(() => {
         const offset = 50;
         const elementPosition = container.getBoundingClientRect().top - window.scrollY;
@@ -67,6 +72,7 @@ export function showAlert(type, message) {
             behavior: 'smooth'
         });
     }, 100);
-    // on recherche les alert et les referme
+
+    // On recherche les alertes et les referme
     clean();
-}
+};

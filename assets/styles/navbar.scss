@@ -1,13 +1,30 @@
 @import "variables";
 
-/* Styles pour le formulaire de recherche desktop */
-.desktop-search-form .ui.icon.input {
-  /* vos styles ici */
+/* Masquer les alertes mobiles par défaut */
+#alert-javascript-mobile {
+  display: none;
 }
 
-/* Styles pour le formulaire de recherche mobile */
+/* Afficher les alertes mobiles en mode responsive */
+@media (max-width: 768px) {
+  #alert-javascript-desktop {
+      display: none;
+  }
+
+  #alert-javascript-mobile {
+      display: block;
+  }
+}
+
+
+
+.desktop-search-form .ui.icon.input {
+
+}
+
+
 .mobile-search-form .ui.icon.input {
-  /* vos styles ici */
+
 }
 
 

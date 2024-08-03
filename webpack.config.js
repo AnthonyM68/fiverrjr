@@ -14,8 +14,10 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
-    // Ajouts des entrées
-    .addEntry('axios', './node_modules/axios/dist/axios.js') // Facultatif 
+    // Ajax xios method
+    // .addEntry('axios', './node_modules/axios/dist/axios.js') // Facultatif 
+    // AJAX Fetch method
+    .addEntry('ajax', './assets/js/ajax/postData.js')
     // Jquery 
     .addEntry('jquery', './node_modules/jquery/dist/jquery.js')
     // Jquery-popup
@@ -29,24 +31,20 @@ Encore
     // Jquery-ui.js
     .addEntry('jquery_ui_js', './assets/js/jquery-ui/jquery-ui.js')
 
-    // semantic-ui
-    .addEntry('semantic', './semantic/dist/semantic.js')
-    // .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
     // semantic-themes
+    // .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
+    // semantic-source-theme
     .addStyleEntry('semantic_less', './semantic/src/semantic.less')
 
-    // bootstrap 
+    // bootstrap non utilisé
     // .addEntry('bootstrap', './node_modules/bootstrap/dist/js/bootstrap.js')
     // .addStyleEntry('bootstrap_css', './node_modules/bootstrap/dist/css/bootstrap.css')
     // uikit 
-    .addEntry('uikit', './node_modules/uikit/dist/js/uikit.js')
-    .addEntry('uikit-icons', './node_modules/uikit/dist/js/uikit-icons.js')
-    .addStyleEntry('uikit_css', './node_modules/uikit/dist/css/uikit.css')
 
+    .addStyleEntry('uikit_css', './node_modules/uikit/dist/css/uikit.css')
     // tarteaucitron
     .addStyleEntry('tarteaucitron_css', './node_modules/tarteaucitronjs/css/tarteaucitron.css')
-    .addEntry('tarteaucitron', './node_modules/tarteaucitronjs/tarteaucitron.js')
-
+    // .addEntry('tarteaucitron', './node_modules/tarteaucitronjs/tarteaucitron.js')
     // Slick-carousel CSS
     .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
     .addStyleEntry('slick-carousel-theme-css', './node_modules/slick-carousel/slick/slick-theme.css')
@@ -69,8 +67,12 @@ Encore
     ])
     // app
     .addEntry('app', './assets/app.js')
-    // AJAX 
-    .addEntry('ajax', './assets/js/ajax/postData.js')
+    // semantic-ui Framework
+    .addEntry('semantic', './semantic/dist/semantic.js')
+    // uikit Framework
+    .addEntry('uikit', './node_modules/uikit/dist/js/uikit.js')
+    .addEntry('uikit-icons', './node_modules/uikit/dist/js/uikit-icons.js')
+
     // Message_flash
     .addEntry('messageFlash', './assets/js/alert/messageFlash.js')
     // DisplayResults 

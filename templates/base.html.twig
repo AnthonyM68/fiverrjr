@@ -28,16 +28,22 @@
     <header>
         {# On utilise un controller pour rendre un form search dans la navbar #}
         {{ render(controller('App\\Controller\\NavbarController::index')) }}
+        <div class="separator" id="alert-javascript-desktop ui message">{% include "alertflash/flash_message.html.twig" %}</div>
     </header>
 
     <article>
+
+        <div class="custom-container">
+            <div class="separator"></div>
+            
+        </div>
+
+
         <div class="separator-base"></div>
         <div class="ui container">
             <div class="ui segment" id="search-results-container" style="display: none;">
                 <div class="ui grid">
-                    <div class="sixteen wide column search-results"
-                        style="display: flex; justify-content: space-between; align-items: center;">
-                        <h2 id="search-results-title">Résultats de la recherche avancée</h2>
+                    <div class="sixteen wide column search-results">
                         <button class="ui button primary" id="close-results">Fermer</button>
                     </div>
                     <div class="sixteen wide column search-results">
@@ -47,15 +53,11 @@
             </div>
         </div>
 
-        <div class="custom-container">
-            <h1 class="uk-animation-slide-right padding-top-large">Bienvenue sur votre {{ title_page }}
-            </h1>
-            <div class="separator" id="alert-javascript">{% include "alertflash/flash_message.html.twig" %}</div>
-        </div>
+
         {% block body %} {% endblock %}
         <div id="tarteaucitron"></div>
     </article>
-
+  
     <footer>{% include 'footer/footer.html.twig' %}</footer>
 
     {% block javascripts %}

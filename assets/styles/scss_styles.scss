@@ -6,7 +6,11 @@
   padding: 0;
   margin: 0;
 }
-
+.search-results {
+  display: flex!important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
 .custom-container {
   max-width: $container-max-width;
   margin: 0 auto;
