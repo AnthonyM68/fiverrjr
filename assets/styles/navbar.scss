@@ -1,197 +1,90 @@
 @import "variables";
 
+@function hex-to-rgba($hex, $alpha: 1) {
+  // Vérifie que la couleur est bien en hexadécimal
+  @if not (type-of($hex) == color) {
+    @error "Le paramètre doit être une couleur hexadécimale.";
+  }
+  // Convertit la couleur hexadécimale en couleur RGBA avec l'alpha spécifié
+  @return rgba($hex, $alpha);
+}
+
 .custom-container-navbar {
   width: $container-navbar-max-width !important;
 }
-
-.desktop-search-form .ui.icon.input {
+.ui.fixed.borderless.huge.menu {
+  background-color: $secondary;
+}
+// Couleur des liens gauche
+.computer.only.row .left.menu a {
+  color: $link-navbar;
+}
+// Couleur des liens  à droite
+.ui.fixed.borderless.huge.menu .right.menu a {
+  color: $link-navbar;
+}
+// Couleur de l'icône panier
+.ui.fixed.borderless.huge.menu .right.menu a .cart.arrow.down.icon {
+  color: $linkColor;
+}
+// Couleur du texte Thèmes 
+.ui.dropdown .theme {
+  color: $linkColor;
+}
+// Mobile
+//Couleur de l'entête et du bouton icône en mode mobile
+.tablet.mobile.only .header,
+.ui.icon.button {
+  color: $secondary;
+}
+.tablet.mobile.only .header {
+  color: $link-navbar;
 
 }
-
-.mobile-search-form .ui.icon.input {
-
-}
-
-/* Couleur des liens navigation à gauche */
-// .ui.fixed.borderless.huge.menu .left.menu a {
-//   color: $secondary;
-// }
-
-// /* Couleur des liens navigation à droite */
-// .ui.fixed.borderless.huge.menu .right.menu a {
-//   color: $secondary;
-// }
-
-// /* Couleur de l'icône panier */
-// .ui.fixed.borderless.huge.menu .right.menu a .cart.arrow.down.icon {
-//   color: $linkColor;
-// }
-
-// /* Couleur du texte Thèmes */
-// .ui.dropdown .theme {
-//   color: $linkColor;
-// }
-
-/* Mobile */
-/* Couleur de l'entête et du bouton icône en mode mobile */
-// .tablet.mobile.only .header, .ui.icon.button {
-//   color: $secondary;
-// }
-
-// .tablet.mobile.only .header:hover {
-//   color: $secondary !important;
-//   border-bottom: 1px solid #fff;
-// }
-
-/* Flexbox pour aligner les éléments dans la rangée mobile */
-// .tablet.mobile.only.row {
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   width: 100%;
-// }
-
-/* Style pour le container flexbox */
-// .tablet.mobile.only.row .ui.container {
-//   display: flex !important;
-//   justify-content: space-between !important;
-//   align-items: center !important;
-//   width: 100% !important;
-//   background-color: red; /* Pour le débogage, à enlever ou ajuster */
-// }
-
-/* Assurer l'alignement du bouton burger à droite */
-// .burger-button {
-//   margin-left: auto !important;
-// }
-
-/* Style de l'accordéon vertical, masqué par défaut */
-// .ui.vertical.accordion.menu {
-//   display: none;
-// }
-
-// .ui.vertical.accordion.menu.visible {
-//   display: block;
-// }
-
-/* Autres styles potentiellement inutilisés ou à vérifier */
-// .ui.message {
-//   background-color: rgba(238, 238, 238);
-//   box-shadow: none;
-//   padding: 5em 4em;
-// }
-
-// .ui.message h1.ui.header {
-//   font-size: 4.5em;
-//   color: #4A008A;
-// }
-
-// .ui.message p.lead {
-//   font-size: 1.3em;
-//   color: #333333;
-//   line-height: 1.4;
-//   font-weight: 300;
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Décommenter ou ajuster les styles suivants selon les besoins */
-/*
-.tablet.mobile.only .header, .ui.icon.button > .icon {
-  color: #fff;
-}
-
 .tablet.mobile.only .header:hover {
-  background-color: #6311aa !important;
-  color: #fff !important;
-  border-bottom: 1px solid #fff;
+  color: $primary;
+}
+// Génére un format rgba a partir de la couleur variable
+$primary-color-rgba: hex-to-rgba($primary, $alpha-navbar-mobile);
+
+/* Styles pour le menu mobile */
+.ui.vertical.accordion.menu {
+  display: none; 
+  position: fixed; 
+  top: 0; 
+  right: 0;
+  width: 100%; 
+  max-width: 300px; // Largeur maximale du menu 
+  height: 100%; 
+  overflow-y: auto; // Permet le défilement vertical 
+  background-color: $primary-color-rgba; // résultat de la convertion par function
+  z-index: 998;
+  box-shadow: 0 2px 5px $primary-color-rgba; // Ombre avec couleur rgba 
+  font-size: $font-size-navbar-mobile;
 }
 
-.ui.basic.button:hover {
-  background: #6311aa !important;
-  color: #fff !important;
-  border-bottom: 1px solid #fff;
-}
+// Style du bouton burger
+.ui.animated.icon.button > .content > .icon,
+.ui.icon.buttons .button > .icon,
+.ui.icon.button {
+  background-color: transparent;
+  color: $link-navbar;
+  font-size: $font-size-burger;
 
-.ui.vertical.menu {
-  display: none;
-  border: none;
-  box-shadow: none;
-  background-color: #4a008a;
+  transition: color 0.3s ease; 
 }
+.ui.animated.icon.button > .content > .icon,
+.ui.icon.buttons .button > .icon,
+.ui.icon.button:hover{
+  background-color: transparent;
+  color: $link-navbar;
+  font-size: $font-size-burger;
 
-.ui.vertical.menu > .item {
-  padding-left: 1.428em;
-  color: #fff;
+  transition: color 0.3s ease; 
 }
-
-.ui.vertical.menu > .item.active {
-  padding-left: 1.428em;
-  background-color: #00ba49 !important;
-  color: #fff !important;
-  border-bottom: 1px solid #fff;
+// Changement de couleur au survol
+.ui.animated.icon.button > .content > .icon:hover,
+.ui.icon.buttons .button > .icon:hover,
+.ui.icon.button > .icon:hover {
+  color: $primary;
 }
-
-.ui.vertical.menu > .item:hover {
-  padding-left: 1.428em;
-  background-color: #6311aa !important;
-  color: #fff !important;
-  border-bottom: 1px solid #fff;
-}
-
-.ui.vertical.menu .item .title {
-  color: #fff;
-}
-
-.ui.vertical.menu .item .title .dropdown.icon {
-  float: none;
-  color: #fff;
-}
-
-.ui.vertical.menu .item .content .item {
-  padding: 0.5em 1em;
-  color: #fff;
-}
-
-.ui.vertical.menu .item .content .item:hover {
-  padding: 0.5em 1em;
-  background-color: #4a008a !important;
-  color: #fff !important;
-  border-bottom: 1px solid #fff;
-}
-
-.ui.vertical.menu .item .content .item.active {
-  padding: 0.5em 1em;
-  background-color: #00ba49 !important;
-  color: #fff !important;
-  border-bottom: 1px solid #fff;
-}
-
-.ui.vertical.menu .header.item {
-  text-transform: uppercase;
-  color: #fff;
-}
-*/

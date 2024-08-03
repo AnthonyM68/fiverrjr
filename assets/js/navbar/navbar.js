@@ -6,7 +6,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
     console.log('=> navbar.js loaded');
+    // Initialise l'Accordion
+    $('.ui.vertical.accordion.menu').accordion({
+        exclusive: false // Permet d'avoir plusieurs sections ouvertes en même temps
+    });
 
+    // Ajouter un événement de clic pour ouvrir/fermer le menu
+    $('#burger-menu').on('click', function () {
+
+        const menu = $('#mobile-menu');
+
+        if (menu.hasClass('active')) {
+            menu.removeClass('active');
+            menu.slideUp(); // Optionnel : animation de fermeture
+        } else {
+            menu.addClass('active');
+            menu.slideDown(); // Optionnel : animation d'ouverture
+        }
+    });
+
+    
     function handleSearch(event, element) {
         showAlert('negative', 'Une erreur est survenue lors de la recherche.');
         event.preventDefault();
