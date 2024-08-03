@@ -1,33 +1,16 @@
 @import "variables";
 
-/* Masquer les alertes mobiles par défaut */
-#alert-javascript-mobile {
-  display: none;
+.custom-container-navbar {
+  width: $container-navbar-max-width !important;
 }
-
-/* Afficher les alertes mobiles en mode responsive */
-@media (max-width: 768px) {
-  #alert-javascript-desktop {
-      display: none;
-  }
-
-  #alert-javascript-mobile {
-      display: block;
-  }
-}
-
-
 
 .desktop-search-form .ui.icon.input {
 
 }
 
-
 .mobile-search-form .ui.icon.input {
 
 }
-
-
 
 /* Couleur des liens navigation à gauche */
 // .ui.fixed.borderless.huge.menu .left.menu a {

@@ -28,17 +28,9 @@
     <header>
         {# On utilise un controller pour rendre un form search dans la navbar #}
         {{ render(controller('App\\Controller\\NavbarController::index')) }}
-        <div class="separator" id="alert-javascript-desktop ui message">{% include "alertflash/flash_message.html.twig" %}</div>
     </header>
 
     <article>
-
-        <div class="custom-container">
-            <div class="separator"></div>
-            
-        </div>
-
-
         <div class="separator-base"></div>
         <div class="ui container">
             <div class="ui segment" id="search-results-container" style="display: none;">
@@ -53,7 +45,7 @@
             </div>
         </div>
 
-
+>
         {% block body %} {% endblock %}
         <div id="tarteaucitron"></div>
     </article>

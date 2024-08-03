@@ -1,0 +1,62 @@
+@import "variables";
+/* par defaut  */
+#alert-javascript-mobile {
+  display: none;
+}
+/* Media queries pour responsive */
+@media (max-width: 768px) {
+  #alert-javascript-desktop {
+    display: none;
+  }
+  #alert-javascript-mobile {
+    display: block;
+  }
+}
+/* Alert styles */
+.ui.message.anim {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  font-size: $font-size-alert;
+  position: absolute; /* position absolute pour un flottement */
+  top: $top-alert;
+  right: 0; // reste aligner au container right
+  max-width: $max-width-alert;
+  z-index: 1000; /* pour être sur que l'alert soit visible par dessus tout */
+  padding: 10px;
+}
+/* ANIMATION */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Slide-in animation */
+.ui.message.anim.show {
+  display: block;
+  opacity: 1;
+  animation: slide-in-right 0.5s forwards;
+}
+
+/* Slide-out animation */
+.ui.message.anim.hide,
+.ui.message.anim.closing {
+  animation: slide-out-right 0.5s forwards;
+}

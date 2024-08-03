@@ -55,6 +55,7 @@ Encore
     // Assets personnalisés
     .addStyleEntry('app_styles', [
         './assets/styles/sticky.css',
+        './assets/styles/alert.scss',
         './assets/styles/login-register.scss',
         './assets/styles/cart.scss',
         './assets/styles/footer.scss',

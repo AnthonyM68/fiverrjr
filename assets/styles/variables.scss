@@ -7,9 +7,22 @@ $transparent: transparent;
 $linkColor: $primary;
 /* font-size */
 $font-size-navbar:12px;
+
+/* alert */
+$font-size-alert: 12px;
+$top-alert: 30px;
+$right-alert: 30px;
+$max-width-alert: 300px;
+
 /* Separators */
 $separator-base:80px;
 $separator:20px;
+
+/* container navbar */
+$container-navbar-max-width:1400px;
+/* container navbar */
+$container-body-max-width:1400px;
+
 /* custom-container */
 $container-max-width: 1400px;
 $container-padding: 10px;
@@ -25,3 +38,4 @@ $padding-large: 25px;
 $margin-small: 5px;
 $margin-medium: 10px;
 $margin-large: 25px;
+

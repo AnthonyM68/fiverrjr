@@ -1,28 +1,26 @@
 {# Définir un tableau de mappage pour convertir les types de messages #}
 {% set typeMapping = {
-    'orange': 'warning',
-    'negative': 'error',
-    'positive': 'success',
-
+    'positive': 'ui positive message anim show',
+    'orange': 'ui warning message anim show',
+    'negative': 'ui negative message anim show'
 } %}
 
 {# Boucle sur chaque type de message flash et ses messages associés #}
 {% for type, messages in app.flashes %}
-    {# Convertir le type de message à l'aide du tableau de mappage #}
-    {% set mappedType = typeMapping[type] ?? type %}
-    {# Boucle sur chaque message du type courant #}
-    {% for flash_message in messages %}
-        {# Affiche un div pour chaque message flash #}
-        <div class="ui {{ mappedType }} message anim">
-            {{ flash_message }}
-        </div>
-    {% endfor %}
+{# Convertir le type de message à l'aide du tableau de mappage #}
+{% set mappedType = typeMapping[type] ?? type %}
+{# Boucle sur chaque message du type courant #}
+{% for flash_message in messages %}
+{# Affiche un div pour chaque message flash #}
+<div class="ui {{ mappedType }}">
+    {{ flash_message }}
+</div>
+{% endfor %}
 {% endfor %}
 
 
 {% for flash_error in app.flashes('verify_email_error') %}
 <div class="ui negative message anim">
-    <i class="close icon"></i>
     <div class="header">
         {{ flash_error }}
     </div>

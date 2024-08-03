@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         // console.log(form);
         // Récupérer les données du formulaire
         const formData = new FormData(form);
-
         const termDesktop = formData.get('search_form[search_term_desktop]');
         const termMobile = formData.get('search_form[search_term_mobile]');
         const term = termDesktop || termMobile;
@@ -23,9 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             showAlert('warning', "Vous n'avez pas indiqué de mot clé de recherche");
             return;
         }
-
-        console.log('Term:', term);
-
+        // console.log('Term:', term);
         // Envoyer les données avec postData et gérer la réponse
         postData(form.action, formData).then(({ data, error }) => {
             if (error) {

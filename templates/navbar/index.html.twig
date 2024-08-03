@@ -1,10 +1,11 @@
 {% block navbar %}
 
 <div class="ui fixed borderless huge menu">
-    <div class="ui container grid">
+    <div class="ui container custom-container-navbar grid">
 
         <!--Start: Desktop Nav-->
         <div class="computer only row">
+
             <a href="{{ path('home') }}" class="item">Accueil</a>
             <a href="{{ path('list_user_type', {'role': 'ROLE_CLIENT', 'page' : '1' }) }}"
                 class="item">Entrepreneurs</a>
@@ -45,131 +46,136 @@
                     </div>
                     {% endfor %}
                 </div>
+
             </div>
-
+            <div class="container-alert" id="alert-javascript-desktop">
+                {% include "alertflash/flash_message.html.twig" %}
+            </div> 
             <div class="right menu">
-                <!-- Start: Search -->
-                <!-- Formulaire Desktop -->
-                {# <div class="ui right aligned category search">
-                    <div class="ui icon input">
-                        <input class="prompt" type="text" placeholder="Search animals...">
-                        <i class="search icon"></i>
-                    </div>
-                    <div class="results"></div>
-                </div> #}
-                {% include './navbar/form/formDesktop.html.twig' with { 'attr': { 'class': 'desktop-search-form' } }
-                %}
+            <!-- Start: Search -->
+            <!-- Formulaire Desktop -->
+            {# <div class="ui right aligned category search">
+                <div class="ui icon input">
+                    <input class="prompt" type="text" placeholder="Search animals...">
+                    <i class="search icon"></i>
+                </div>
+                <div class="results"></div>
+            </div> #}
+            {% include './navbar/form/formDesktop.html.twig' with { 'attr': { 'class': 'desktop-search-form' } }
+            %}
 
 
 
-                <!-- End: Search -->
-                <a href="{{ path('search') }}" class="item">Avancées</a>
-                {% if app.user %}
-                <a href="{{ path('profile_edit', {'id': app.user.id}) }}" class="ui item">Bonjour {{ app.user.username
-                    }}</a>
-                <a href="{{ path('logout') }}" class="ui item">Se déconnecter</a>
-                {% else %}
-                <a href="{{ path('login') }}" class="ui item">Se connecter</a>
-                <a href="{{ path('register') }}" class="ui item">S'enregistrer</a>
-                {% endif %}
+            <!-- End: Search -->
+            <a href="{{ path('search') }}" class="item">Avancées</a>
+            {% if app.user %}
+            <a href="{{ path('profile_edit', {'id': app.user.id}) }}" class="ui item">Bonjour {{ app.user.username
+                }}</a>
+            <a href="{{ path('logout') }}" class="ui item">Se déconnecter</a>
+            {% else %}
+            <a href="{{ path('login') }}" class="ui item">Se connecter</a>
+            <a href="{{ path('register') }}" class="ui item">S'enregistrer</a>
+            {% endif %}
+            <a href="{{ path('cart_product') }}" class="ui item">
+                <i class="cart arrow down icon"></i>
+            </a>
+            {# {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin') }}" class="ui item">Tableau de bord</a>
+            {% endif %} #}
+
+        </div>
+    </div>
+    <!--End: Desktop Nav-->
+
+    <!--Start: Mobile Nav-->
+    <div class="tablet mobile only row">
+        <a class="header item"> Fiverr Junior</a>
+
+        <div class="right menu">
+            <a class="menu item">
+                <div class="ui basic icon toggle button">
+                    <i class="content icon"></i>
+                </div>
+            </a>
+        </div>
+
+        <div class="ui vertical accordion borderless fluid menu">
+
+            {# alert mode mobile #}
+            {# si l'alert est javascript, include est écrasé,
+            Si l'alert est php on include l'alert depuis la view #}
+            <div id="alert-javascript-mobile">{% include "alertflash/flash_message.html.twig" %}</div>
+            {# cart icon #}
+            <div class="item">
                 <a href="{{ path('cart_product') }}" class="ui item">
                     <i class="cart arrow down icon"></i>
                 </a>
-                {# {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('admin') }}" class="ui item">Tableau de bord</a>
-                {% endif %} #}
-
             </div>
-        </div>
-        <!--End: Desktop Nav-->
+            <!-- Start: Search -->
+            <!-- Formulaire Mobile -->
+            {% include './navbar/form/formMobile.html.twig' with { 'attr': { 'class': 'mobile-search-form' } }
+            %}
+            <!-- End: Search -->
+            <a href="{{ path('home') }}" class="item">Accueil</a>
+            <a href="{{ path('list_user_type', {'role': 'ROLE_CLIENT', 'page' : '1' }) }}"
+                class="item">Entrepreneurs</a>
+            <a href="{{ path('list_user_type', {'role': 'ROLE_DEVELOPER', 'page' : '1'}) }}"
+                class="item">Développeurs</a>
 
-        <!--Start: Mobile Nav-->
-        <div class="tablet mobile only row">
-            <a class="header item"> Fiverr Junior</a>
 
-            <div class="right menu">
-                <a class="menu item">
-                    <div class="ui basic icon toggle button">
-                        <i class="content icon"></i>
-                    </div>
-                </a>
-            </div>
-            
-            <div class="ui vertical accordion borderless fluid menu">
-
-                {# alert mode mobile #}
-                <div class="separator ui message" id="alert-javascript-mobile">{% include "alertflash/flash_message.html.twig" %}</div>
-                {# cart icon #}
-                <div class="item">
-                    <a href="{{ path('cart_product') }}" class="ui item">
-                        <i class="cart arrow down icon"></i>
-                    </a>
+            <div class="item">
+                <div class="title">
+                    Thèmes<i class="dropdown icon"></i>
                 </div>
-                <!-- Start: Search -->
-                <!-- Formulaire Mobile -->
-                {% include './navbar/form/formMobile.html.twig' with { 'attr': { 'class': 'mobile-search-form' } }
-                %}
-                <!-- End: Search -->
-                <a href="{{ path('home') }}" class="item">Accueil</a>
-                <a href="{{ path('list_user_type', {'role': 'ROLE_CLIENT', 'page' : '1' }) }}"
-                    class="item">Entrepreneurs</a>
-                <a href="{{ path('list_user_type', {'role': 'ROLE_DEVELOPER', 'page' : '1'}) }}"
-                    class="item">Développeurs</a>
-
-
-                <div class="item">
-                    <div class="title">
-                        Thèmes<i class="dropdown icon"></i>
-                    </div>
-                    <div class="content">
-                        {% for theme in get_navbar_data() %}
-                        <div class="item">
-                            <div class="title">
-                                <i class="dropdown icon"></i>
-                                {{ theme.name }}
-                            </div>
-                            <div class="content">
-                                {% for category in theme.categories %}
-                                <div class="item">
-                                    <div class="title">
-                                        <i class="dropdown icon"></i>
-                                        {{ category.name }}
-                                    </div>
-                                    <div class="content">
-                                        {% for course in category.courses %}
-                                        <div class="item">
-                                            <a href="{{ path('detail_course', { 'id': course.id }) }}">{{ course.name
-                                                }}</a>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
+                <div class="content">
+                    {% for theme in get_navbar_data() %}
+                    <div class="item">
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            {{ theme.name }}
                         </div>
-                        {% endfor %}
-
-
+                        <div class="content">
+                            {% for category in theme.categories %}
+                            <div class="item">
+                                <div class="title">
+                                    <i class="dropdown icon"></i>
+                                    {{ category.name }}
+                                </div>
+                                <div class="content">
+                                    {% for course in category.courses %}
+                                    <div class="item">
+                                        <a href="{{ path('detail_course', { 'id': course.id }) }}">{{ course.name
+                                            }}</a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
+                    {% endfor %}
+
+
                 </div>
-                <div class="ui divider"></div>
-                {% if app.user %}
-                <a href="{{ path('profile_edit', {'id': app.user.id}) }}" class="ui item">Bonjour {{ app.user.username
-                    }}</a>
-                <a href="{{ path('logout') }}" class="ui item">Se déconnecter</a>
-                {% else %}
-                <a href="{{ path('login') }}" class="ui item">Se connecter</a>
-                <a href="{{ path('register') }}" class="ui item">S'enregistrer</a>
-                {% endif %}
-
-                {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('admin') }}" class="ui item">Tableau de bord</a>
-                {% endif %}
-
             </div>
+            <div class="ui divider"></div>
+            {% if app.user %}
+            <a href="{{ path('profile_edit', {'id': app.user.id}) }}" class="ui item">Bonjour {{ app.user.username
+                }}</a>
+            <a href="{{ path('logout') }}" class="ui item">Se déconnecter</a>
+            {% else %}
+            <a href="{{ path('login') }}" class="ui item">Se connecter</a>
+            <a href="{{ path('register') }}" class="ui item">S'enregistrer</a>
+            {% endif %}
+
+            {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('admin') }}" class="ui item">Tableau de bord</a>
+            {% endif %}
+
         </div>
-        <!--End: Mobile Nav-->
     </div>
+    <!--End: Mobile Nav-->
+</div>
 </div>
 {% block js_navbar %}
 {{ encore_entry_script_tags('jquery_ui_js') }}
