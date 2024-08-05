@@ -3,50 +3,50 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+<div class="fiverr-container">
+    <div class="ui middle aligned center aligned grid ">
 
-<div class="ui middle aligned center aligned grid ">
+        <div class="ui segment login-register uk-animation-fade" style="width:350px">
 
-    <div class="ui segment login-register uk-animation-fade" style="width:350px">
+            <h2 class="ui header uk-animation-slide-right">Connection</h2>
 
-        <h2 class="ui header uk-animation-slide-right">Connection</h2>
-
-        <form class="ui large form login" method="post">
-            <div class="ui stacked segment">
-                <div class={% if error %}"field"{% endif %}>
-                    {% if error %}{{ error.messageKey|trans(error.messageData, 'security') }}{% endif %}
-                    <div class="ui right icon input floating-label fluid">
-                        <i class="envelope icon"></i>
-                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class=""
-                            autocomplete="email" required autofocus>
-                        <label for="inputEmail">Email</label>
-                    </div>
-                </div>
-                <div class={% if error %}"field"{% endif %}>
-                    {% if error %}{{ error.messageKey|trans(error.messageData, 'security') }}{% endif %}
-                    <div class="ui right icon input floating-label fluid">
-                        <i class="lock icon"></i>
-                        <input type="password" name="password" id="inputPassword" class=""
-                            autocomplete="current-password" required>
-                        <label for="inputPassword">Password</label>
-                    </div>
-                </div>
-                <div class="field">
-                    <button class="ui fluid button primary">Se connecter</button>
-                </div>
-
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                <div class="ui message field center aligned">
-                    <div class="ui list login">
-                        <div class="item">Pas encore inscrit? <a href="{{ path('register') }}">Enregistrez-vous</a>
+            <form class="ui large form login" method="post">
+                <div class="ui stacked segment">
+                    <div class={% if error %}"field"{% endif %}>
+                        {% if error %}{{ error.messageKey|trans(error.messageData, 'security') }}{% endif %}
+                        <div class="ui right icon input floating-label fluid">
+                            <i class="envelope icon"></i>
+                            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class=""
+                                autocomplete="email" required autofocus>
+                            <label for="inputEmail">Email</label>
                         </div>
-                        <div class="item">Mot de passe oubliez? <a
-                                href="{{ path('app_forgot_password_request') }}">Réinitialisez</a></div>
+                    </div>
+                    <div class={% if error %}"field"{% endif %}>
+                        {% if error %}{{ error.messageKey|trans(error.messageData, 'security') }}{% endif %}
+                        <div class="ui right icon input floating-label fluid">
+                            <i class="lock icon"></i>
+                            <input type="password" name="password" id="inputPassword" class=""
+                                autocomplete="current-password" required>
+                            <label for="inputPassword">Password</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <button class="ui fluid button primary">Se connecter</button>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <div class="ui message field center aligned">
+                        <div class="ui list login">
+                            <div class="item">Pas encore inscrit? <a href="{{ path('register') }}">Enregistrez-vous</a>
+                            </div>
+                            <div class="item">Mot de passe oubliez? <a
+                                    href="{{ path('app_forgot_password_request') }}">Réinitialisez</a></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
-
 
 {% endblock %}

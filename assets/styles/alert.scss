@@ -1,29 +1,24 @@
 @import "variables";
-/* par defaut  */
-#alert-javascript-mobile {
-  display: none;
-}
-/* Media queries pour responsive */
-@media (max-width: 768px) {
-  #alert-javascript-desktop {
-    display: none;
-  }
-  #alert-javascript-mobile {
-    display: block;
-  }
-}
+
+
+
+
 /* Alert styles */
 .ui.message.anim {
   display: none;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
-  font-size: $font-size-alert;
+  font-size: $font-size-navbar-mobile;
   position: absolute; /* position absolute pour un flottement */
   top: $top-alert;
   right: 0; // reste aligner au container right
   max-width: $max-width-alert;
   z-index: 1000; /* pour être sur que l'alert soit visible par dessus tout */
   padding: 10px;
+
+}
+.ui.message.anim .header {
+  font-size: $font-size-navbar-desktop;
 }
 /* ANIMATION */
 @keyframes slide-in-right {
@@ -59,4 +54,38 @@
 .ui.message.anim.hide,
 .ui.message.anim.closing {
   animation: slide-out-right 0.5s forwards;
+}
+
+
+/* Responsive design */
+/* par defaut  */
+#alert-javascript-mobile {
+  display: none;
+}
+/* Media queries pour responsive */
+@media (max-width: 768px) {
+  #alert-javascript-desktop {
+    display: none;
+  }
+  #alert-javascript-mobile {
+    display: block;
+  }
+}
+/* Tablets (portrait) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  #alert-javascript-desktop {
+    display: none;
+  }
+  #alert-javascript-mobile {
+    display: block;
+  }
+}
+/* Desktops and larger devices */
+@media (min-width: 1025px) {
+  #alert-javascript-desktop {
+    display: block;
+  }
+  #alert-javascript-mobile {
+    display: none;
+  }
 }

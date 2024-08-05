@@ -54,17 +54,21 @@ Encore
 
     // Assets personnalisés
     .addStyleEntry('app_styles', [
-        './assets/styles/sticky.css',
         './assets/styles/alert.scss',
+        './assets/styles/navbar.scss',
+        './assets/styles/dropdown.scss',
+        './assets/styles/parallax/parallax.scss',
+        './assets/styles/parallax/parallax_home.scss',
+        './assets/styles/parallax/parallax_footer.scss',
+        './assets/styles/banner/banner.scss',
+        './assets/styles/home.scss',
+        // './assets/styles/course.scss',
+        './assets/styles/sticky.css',
         './assets/styles/login-register.scss',
         './assets/styles/cart.scss',
         './assets/styles/footer.scss',
-        './assets/styles/home.scss',
-        './assets/styles/navbar.scss',
-        './assets/styles/dropdown.scss',
-        './assets/styles/scss_styles.scss',
-        './assets/styles/paralax.scss',
-        './assets/styles/client.scss'
+        './assets/styles/client.scss',
+        './assets/styles/scss_styles.scss'
     ])
     // app
     .addEntry('app', './assets/app.js')

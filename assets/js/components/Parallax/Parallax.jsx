@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import { createRoot } from "react-dom/client";
+import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import { createRoot } from "react-dom/client";
+// import 'slick-carousel/slick/slick.css';
 import "slick-carousel";
-
 const ParallaxHome = ({ id, height_container, height_parallax }) => {
   useEffect(() => {
     // Initialisation du carousel
@@ -24,24 +24,24 @@ const ParallaxHome = ({ id, height_container, height_parallax }) => {
     threshold: 0.5, // Détecte lorsque 50% de l'élément est visible
   });
   return (
-    <div className="parallax-container" style={{ height: height_container }}>
-      <div className="parallax-content" style={{ height: height_parallax }}>
-        <div
-          className={`parallax parallax-home-${id}`}
-          style={{ height: height_parallax }}
-        ></div>
+    <div className="parallax-container">
+      <div className="parallax-content">
+        <div className="overlay-parallax-home"></div>
+        <div className="parallax parallax-home"></div>
         <div className="floating-title-fiverr-junior">
           <h1>
             <div
               ref={ref}
-              className={`${inView ? "fiverr-animate uk-animation-slide-left" : ""
+              className={`${
+                inView ? "fiverr-animate uk-animation-slide-left" : ""
               }`}
             >
               Fiverr
             </div>
             <div
               ref={ref}
-              className={`${inView ? "junior-animate uk-animation-slide-right" : ""
+              className={`${
+                inView ? "junior-animate uk-animation-slide-right" : ""
               }`}
             >
               Junior
@@ -111,14 +111,12 @@ const ParallaxHome = ({ id, height_container, height_parallax }) => {
   );
 };
 
-const ParallaxHomeFooter = ({ id, height_container, height_parallax }) => {
+const ParallaxHomeFooter = ({ id }) => {
   return (
-    <div className="parallax-container" style={{ height: height_container }}>
-      <div className="parallax-content" style={{ height: height_parallax }}>
-        <div
-          className={`parallax parallax-home-${id}`}
-          style={{ height: height_parallax }}
-        ></div>
+    <div className="parallax-container">
+      <div className="parallax-content">
+        <div className="overlay-parallax-footer"></div>
+        <div className="parallax parallax-footer"></div>
         <div className="floating-text">
           <h1>
             <span className="text-primary">Fiverr Junior</span>
@@ -137,20 +135,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const parallaxHome = document.getElementById("ParallaxHome");
 
   if (parallaxHome) {
-
     const root = createRoot(parallaxHome);
-    root.render(
-      <ParallaxHome id="1" height_container="850px" height_parallax="650px" />
-    );
+    root.render(<ParallaxHome id="1" />);
   }
   const parallaxFooter = document.getElementById("ParallaxFooter");
 
   if (parallaxFooter) {
     const root = createRoot(parallaxFooter);
-    root.render(
-      <ParallaxHomeFooter id="2" height_container="400px" height_parallax="400px" />
-    );
+    root.render(<ParallaxHomeFooter id="2" />);
   }
 });
-
 export { ParallaxHome, ParallaxHomeFooter };

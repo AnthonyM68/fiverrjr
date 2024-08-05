@@ -476,6 +476,8 @@ class ServiceItemController extends AbstractController
                 throw $e;
             }
         }
+
+        // dd($service);
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Détail:',
             'service' => $service,
@@ -533,22 +535,12 @@ class ServiceItemController extends AbstractController
     #[Route('/theme', name: 'list_themes')]
     public function listThemes(ThemeRepository $themeRepository, ?Theme $theme = null): Response
     {
-
-        // Récupère les détails du thème en fonction de l'ID
-        // $categories = $theme->getCategories();
-        // // Rend la vue avec les détails du thème
-        // return $this->render('theme/index.html.twig', [
-        //     'title_page' => $theme->getNameTheme(),
-        //     'categories' => $categories,
-        // ]);
-
-        // // Récupère tous les thèmes triés par nom
+        // Récupère tous les thèmes triés par nom
         $themes = $themeRepository->findBy([], ["nameTheme" => "ASC"]);
-
         // Rend la vue avec les thèmes récupérés
         return $this->render('theme/index.html.twig', [
             'title_page' => 'Liste des Thèmes',
-            'liste_themes' => $themes
+            'themes' => $themes
         ]);
     }
 
@@ -807,6 +799,30 @@ class ServiceItemController extends AbstractController
     public function detailCourse(?Course $course = null): Response
     {
         $services = $course->getServiceItems();
+
+        foreach ($services as $service) {
+            $pictureFilename = $service->getPicture();
+            $this->logger->info('Processing service', ['service' => $service->getTitle(), 'pictureFilename' => $pictureFilename]);
+
+            if ($pictureFilename) {
+                try {
+                    $pictureUrl = $this->imageService->generateImageUrl($pictureFilename, 'SERVICE');
+                    $this->logger->info('Generated picture URL', [
+                        'service' => $service->getTitle(),
+                        'pictureUrl' => $pictureUrl
+                    ]);
+                    $service->setPicture($pictureUrl);
+                } catch (\Exception $e) {
+                    $this->logger->error('Failed to generate picture URL', [
+                        'service' => $service->getTitle(),
+                        'error' => $e->getMessage()
+                    ]);
+                    throw $e;
+                }
+            }
+        }
+
+
         // Rend la vue avec les détails du cours
         return $this->render('course/index.html.twig', [
             'title_page' => $course->getNameCourse(),

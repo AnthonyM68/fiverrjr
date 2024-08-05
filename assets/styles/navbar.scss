@@ -1,90 +1,148 @@
 @import "variables";
 
-@function hex-to-rgba($hex, $alpha: 1) {
-  // Vérifie que la couleur est bien en hexadécimal
-  @if not (type-of($hex) == color) {
-    @error "Le paramètre doit être une couleur hexadécimale.";
-  }
-  // Convertit la couleur hexadécimale en couleur RGBA avec l'alpha spécifié
-  @return rgba($hex, $alpha);
-}
-
-.custom-container-navbar {
-  width: $container-navbar-max-width !important;
-}
-.ui.fixed.borderless.huge.menu {
-  background-color: $secondary;
-}
 // Couleur des liens gauche
 .computer.only.row .left.menu a {
   color: $link-navbar;
+  font-size: $font-size-navbar-desktop;
+  z-index:999;
 }
-// Couleur des liens  à droite
+// theme du dropdown
+.ui.dropdown.link.item {
+  color: $primary;
+}
+.ui.dropdown.link.item:hover {
+  color: $link-navbar;
+}
+// Couleur des liens à droite
 .ui.fixed.borderless.huge.menu .right.menu a {
   color: $link-navbar;
+  font-size: $font-size-navbar-desktop;
 }
 // Couleur de l'icône panier
 .ui.fixed.borderless.huge.menu .right.menu a .cart.arrow.down.icon {
-  color: $linkColor;
-}
-// Couleur du texte Thèmes 
-.ui.dropdown .theme {
-  color: $linkColor;
-}
-// Mobile
-//Couleur de l'entête et du bouton icône en mode mobile
-.tablet.mobile.only .header,
-.ui.icon.button {
-  color: $secondary;
-}
-.tablet.mobile.only .header {
-  color: $link-navbar;
-
-}
-.tablet.mobile.only .header:hover {
   color: $primary;
+  font-size: $font-size-cart;
 }
-// Génére un format rgba a partir de la couleur variable
-$primary-color-rgba: hex-to-rgba($primary, $alpha-navbar-mobile);
+.ui.fixed.borderless.huge.menu .right.menu a .cart.arrow.down.icon:hover {
+  color: $link-navbar;
+}
+// search motor
+.ajax-form {
+  display: flex;
+  flex-direction: colum;
+  justify-content: center;
+  align-items: center;
+}
+.ajax-form .search.link.icon {
+  position: relative;
+  bottom: 0;
+  font-size: $font-size-navbar-desktop;
+}
+.prompt.desktop {
+  font-size: $font-size-navbar-desktop-small;
+  height: $margin-extra-large;
+}
 
-/* Styles pour le menu mobile */
+@function hex-to-rgba($hex, $alpha: 1) {
+  @if not(type-of($hex) == color) {
+    @error "Le paramètre doit être une couleur hexadécimale.";
+  }
+  @return rgba($hex, $alpha);
+}
+
+// Couleurs avec opacité
+$primary-color-rgba: hex-to-rgba($primary, $alpha-navbar);
+$secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
+
+// navbar size
+.ui.fixed.borderless.huge.menu {
+  height: $navbar-height !important;
+  background-color: transparent !important;
+}
+.ui.fixed.borderless.huge.menu::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $secondary-color-rgba !important;
+    z-index: -1;
+  }
+.custom-container-navbar {
+  width: $navbar-container-width !important;
+}
+
+// Mobile
+// Couleur de l'entête et du bouton icône en mode mobile
+.tablet.mobile.only.row a {
+  color: $white;
+}
+// // Styles pour le menu mobile 
 .ui.vertical.accordion.menu {
-  display: none; 
-  position: fixed; 
-  top: 0; 
+  display: none;
+  position: fixed;
+  top: $navbar-height;
   right: 0;
-  width: 100%; 
-  max-width: 300px; // Largeur maximale du menu 
-  height: 100%; 
-  overflow-y: auto; // Permet le défilement vertical 
-  background-color: $primary-color-rgba; // résultat de la convertion par function
-  z-index: 998;
-  box-shadow: 0 2px 5px $primary-color-rgba; // Ombre avec couleur rgba 
+  width: 100%;
+  max-width: 300px; 
+  height: 100%;
+  overflow-y: auto; 
+  background-color: $primary-color-rgba; 
+  box-shadow: 0 2px 5px $primary-color-rgba; 
   font-size: $font-size-navbar-mobile;
 }
-
 // Style du bouton burger
 .ui.animated.icon.button > .content > .icon,
 .ui.icon.buttons .button > .icon,
 .ui.icon.button {
-  background-color: transparent;
+  margin-top: -2px !important;
   color: $link-navbar;
-  font-size: $font-size-burger;
+  transition: color 0.3s ease;
 
-  transition: color 0.3s ease; 
+}
+// taille des i burger
+.ui.animated.icon.button > .content > .icon,
+.ui.icon.buttons .button > .icon,
+.ui.icon.button i {
+  font-size: $font-size-burger;
 }
 .ui.animated.icon.button > .content > .icon,
 .ui.icon.buttons .button > .icon,
-.ui.icon.button:hover{
+.ui.icon.button:hover {
   background-color: transparent;
   color: $link-navbar;
-  font-size: $font-size-burger;
-
-  transition: color 0.3s ease; 
+  transition: color 0.3s ease;
 }
 // Changement de couleur au survol
 .ui.animated.icon.button > .content > .icon:hover,
 .ui.icon.buttons .button > .icon:hover,
 .ui.icon.button > .icon:hover {
   color: $primary;
+}
+
+/********************* Responsive design **********/
+
+@media (max-width: 768px) {
+  // largeur du moteur de recherche input
+  .ui.category.search {
+    width: 100% !important;
+  }
+}
+/* Tablets (portrait) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .ui.category.search {
+    // largeur du moteur de recherche input
+    width: 100% !important;
+  }
+}
+/* Desktops and larger devices */
+@media (min-width: 1025px) {
+  .ui.category.search {
+    // largeur du moteur de recherche input
+    width: 100% !important;
+  }
+  .ui.fixed.borderless.huge.menu {
+    height:20vh;
+  }
 }

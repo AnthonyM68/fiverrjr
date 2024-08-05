@@ -1,50 +1,55 @@
 {# StickyFooter #}
-<div id="sticky-root"></div>
-
-<div class="custom-container ">
-    <footer>
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>Liens rapides</h3>
-                <ul>
-                    <li><a href="#"><i class="fas fa-info-circle"></i> A propos</a></li>
-                    <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
-                    <li><a href="#"><i class="fas fa-shield-alt"></i> Politique de confidentialité</a></li>
-                    <li><a href="#"><i class="fas fa-file-contract"></i> Conditions d'utilisation</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Nos services</h3>
-                <ul>
-                    <li><a href="#"><i class="fas fa-laptop-code"></i> Développement web</a></li>
-                    <li><a href="#"><i class="fas fa-mobile-alt"></i> Application mobile</a></li>
-                    <li><a href="#"><i class="fas fa-chart-line"></i> Analyse des données</a></li>
-                    <li><a href="#"><i class="fas fa-cloud"></i> Solutions cloud</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Connecte-toi avec nous</h3>
-                <div class="social-links">
-                    <a href="" class="uk-icon-button  uk-margin-small-right"><i class="facebook f icon"></i></a>
-                    <a href="" class="uk-icon-button  uk-margin-small-right"><i class="twitter icon"></i></a>
-                    <a href="" class="uk-icon-button  uk-margin-small-right"><i class="youtube icon"></i></a>
-                    <a href="" class="uk-icon-button  uk-margin-small-right"><i class="instagram icon"></i></a>
+{# <div id="sticky-root"></div> #}
+<div class="ui inverted vertical segment">
+    <div class="ui container">
+        <div class="ui stackable grid">
+            <div class="four wide column">
+                <h3 class="ui inverted header">Liens rapides</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item"><i class="fas fa-info-circle"></i> A propos</a>
+                    <a href="#" class="item"><i class="fas fa-envelope"></i> Contact</a>
+                    <a href="#" class="item"><i class="fas fa-shield-alt"></i> Politique de confidentialité</a>
+                    <a href="#" class="item"><i class="fas fa-file-contract"></i> Conditions d'utilisation</a>
                 </div>
-                <div class="newsletter">
-                    <h4>Abonnez-vous à notre newsletter</h4>
-                    <form>
-                        <input type="email" placeholder="Votre Email" aria-label="Email for newsletter">
-                        <a class="ui button primary" type="submit">S'abonner</a>
+            </div>
+            <div class="four wide column">
+                <h3 class="ui inverted header">Nos services</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item"><i class="fas fa-laptop-code"></i> Développement web</a>
+                    <a href="#" class="item"><i class="fas fa-mobile-alt"></i> Application mobile</a>
+                    <a href="#" class="item"><i class="fas fa-chart-line"></i> Analyse des données</a>
+                    <a href="#" class="item"><i class="fas fa-cloud"></i> Solutions cloud</a>
+                </div>
+            </div>
+            <div class="six wide column">
+                <h3 class="ui inverted header">Connecte-toi avec nous</h3>
+                <div class="ui inverted link list">
+                    <a href="#" class="item"><i class="facebook f icon"></i> Facebook</a>
+                    <a href="#" class="item"><i class="twitter icon"></i> Twitter</a>
+                    <a href="#" class="item"><i class="youtube icon"></i> YouTube</a>
+                    <a href="#" class="item"><i class="instagram icon"></i> Instagram</a>
+                </div>
+                <div class="ui inverted segment">
+                    <h4 class="ui inverted header">Abonnez-vous à notre newsletter</h4>
+                    <form class="ui form">
+                        <div class="ui action input">
+                            <input type="email" placeholder="Votre Email">
+                            <button class="ui button primary" type="submit">S'abonner</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
-        <div class="footer-bottom">
+        <div class="ui inverted section divider"></div>
+        <div class="ui horizontal inverted small divided link list">
             <p>&copy; 2024 fiverrJR @Elan-Formation</p>
-            <a href="#" class="back-to-top" aria-label="Retour au sommet"><i class="angle up icon"></i></a>
+            <a href="#" class="item back-to-top" aria-label="Retour au sommet"><i class="angle up icon"></i></a>
         </div>
-    </footer>
+    </div>
 </div>
+
+
+
 {% block javascripts %}
 {# {{ encore_entry_script_tags('StickyFooter') }} #}
 {% endblock %}

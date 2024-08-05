@@ -14,7 +14,7 @@
     <div class="ui container">
         <div class="ui segment">
             {# formulaire d'ajout d'un nouveau service #}
-            {% include "itemService/form/form.html.twig" %}  
+            {% include "itemService/form/form.html.twig" %}
         </div>
     </div>
     {% endif %}
@@ -38,11 +38,19 @@
     {# Détail d'un service #}
     {% if service|default %}
     <div class="ui container product-container">
+        
         <div class="ui two column stackable grid">
+
             <div class="column">
                 <div class="ui segment equal-height">
                     <div class="product-image">
                         <img src="{{ asset(service.picture) }}" alt="Product Image" class="ui fluid image">
+                    </div>
+                    <div class="ui segment equal-height">
+                        <div class="product-details">
+
+                            <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
+                        </div>
                     </div>
                 </div>
             </div>

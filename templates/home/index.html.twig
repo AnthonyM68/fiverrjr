@@ -36,26 +36,22 @@
     </div>
 </div> #}
 
-<div class="custom-container">
-    <div id="bestservices-root"></div>
-</div>
-
-<div class="separator"></div>
-
+{# <div id="bestservices-root"></div> #}
 <div id="homepage-root"></div>
 
 <div class="separator"></div>
 
-<div class="custom-container">
-    <div id="last-developers"></div>
-</div>
-<div class="separator"></div>
+{# <div id="last-developers"></div> #}
+
+{# <div class="separator"></div> #}
 
 <div id="ParallaxFooter"></div>
+
 {% block javascripts %}
 {{ parent() }}
 
 {{ encore_entry_script_tags('Parallax') }}
+{{ encore_entry_script_tags('CarouselComponent') }}
 {{ encore_entry_script_tags('Homepage') }}
 {{ encore_entry_script_tags('home') }}
 

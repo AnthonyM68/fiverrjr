@@ -3,34 +3,74 @@
 {% block title %}{{title_page}}{% endblock %}
 
 {% block body %}
-{# On vérifie que le formulaire existe avant de l'afficher #}
-{% if formAddCourse|default %}
-<h1 class="ui list uk-animation-slide-down">{{title_page}}</h1>
-{{ form_start(formAddCourse, {'attr': {'class': 'ui form'}}) }}
-{# la class field pour afficher les erreurs #}
-<div class="{% if formAddCourse.nameCourse.vars.errors|length > 0 %}field{% endif %}">
-    {{ form_row(formAddCourse.nameCourse) }}
-    {{ form_row(formAddCourse.category) }}
-    {{ form_row(formAddCourse.submit) }}
-</div>
-{{ form_end(formAddCourse) }}
-{% endif %}
-
-{% if services | default %}
-<h1 class="uk-animation-slide-left">{{title_page}}</h1>
-{# On affiche les services touvés #}
-<div class="ui list uk-animation-fade">
-    {% for service in services %}
-    <div class="item">
-        <i class="folder icon"></i>
-        <div class="content">
-            <div class="header"><a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title}}</a>
+<div class="fiverr-container">
+    <div class="ui container segment">
+        <div class="ui message ">
+            {% if formAddCourse|default %}
+            <h1 class="ui list uk-animation-slide-down">{{ title_page }}</h1>
+            {{ form_start(formAddCourse, {'attr': {'class': 'ui form'}}) }}
+            <div class="{% if formAddCourse.nameCourse.vars.errors|length > 0 %}field{% endif %}">
+                {{ form_row(formAddCourse.nameCourse) }}
+                {{ form_row(formAddCourse.category) }}
             </div>
+            <div class="field padding-top-large">
+                <button name="serviceForm" type="submit" class="ui-button ui-widget ui-corner-all">
+                    <span class="ui-icon ui-icon-check"></span> Valider
+                </button>
+            </div>
+            {{ form_end(formAddCourse) }}
+            {% endif %}
         </div>
     </div>
-    {% endfor %}
+
+
+
+
+
+    {% if services | default %}
+    <div class="">
+        <h3>Nos services (Développeurs)</h3>
+        <h1 class="uk-animation-slide-right">{{ title_page }}</h1>
+    </div>
+
+    {# On affiche les services touvés #}
+    <div class="ui list uk-animation-fade">
+        {% for service in services %}
+        <div class="ui card custom-card">
+            <div class="custom-image-client">
+                <img src="{{ service.picture }}" alt="{{ service.title }}">
+            </div>
+            <div class="content custom-card-content">
+                <div class="header">{{ service.title }}</div>
+                <div class="meta">
+                    <span class="date">Inscrit le {{ service.createDate|date('d-m-Y') }}</span>
+                </div>
+                <div class="description">
+                    {{ service.description|slice(0, 100) }}...
+                </div>
+            </div>
+            <div class="extra content">
+                <a href="{{ path('detail_service', { 'id': service.id }) }}">
+                    Plus d'infos
+                </a>
+            </div>
+        </div>
+        {# <div class="item">
+            <i class="folder icon"></i>
+            <div class="content">
+                <div class="header"><a href="{{ path('detail_service', { 'id': service.id }) }}">{{
+                        service.title}}</a>
+                </div>
+            </div>
+        </div> #}
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
-{% endif %}
+</div>
+
+
+
 
 
 {% if is_granted('ROLE_ADMIN') %}

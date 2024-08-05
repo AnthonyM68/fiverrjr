@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    
+
     function handleSearch(event, element) {
         showAlert('negative', 'Une erreur est survenue lors de la recherche.');
         event.preventDefault();
@@ -63,8 +63,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ajouter un écouteur d'événement à chaque icône de recherche
     searchIcons.forEach((searchIcon) => {
         searchIcon.addEventListener('click', function (event) {
-            // handleSearch(event, searchIcon);
-            showAlert('positive', 'Une erreur est survenue lors de la recherche.');
+            handleSearch(event, searchIcon);
+
         });
     });
     const searchFields = document.querySelectorAll('input[name="search_form[search_term_desktop]"], input[name="search_form[search_term_mobile]"]');

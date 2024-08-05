@@ -71,21 +71,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const priceFilters = document.querySelectorAll('input[name="price_filter"]');
     priceFilters.forEach(radio => {
         radio.addEventListener('change', () => {
-        // Récupérer le formulaire parent
-        const form = search.closest('form');
-        submitForm(form);
+            // Récupérer le formulaire parent
+            const form = search.closest('form');
+            submitForm(form);
         });
     });
 
+    let close = document.getElementById('close-results')
+    if (close) {
+        // Ajoutez un écouteur d'événements pour le bouton de fermeture
+        document.getElementById('close-results').addEventListener('click', () => {
+            $('#search-results-container').slideUp();
+        });
+    }
 
-
-
-
-
-
-    // Ajoutez un écouteur d'événements pour le bouton de fermeture
-    document.getElementById('close-results').addEventListener('click', () => {
-        $('#search-results-container').slideUp();
-    });
 
 });

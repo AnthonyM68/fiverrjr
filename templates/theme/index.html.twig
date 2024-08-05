@@ -3,75 +3,68 @@
 {% block title %}{{title_page}}{% endblock %}
 
 {% block body %}
+<div class="fiverr-container">
+    <div class="ui container">
+        <div class="uk-animation-slide-right">
+            <h1 class="title">{{ title_page }}</h1>
+        </div>
+        {# On vérifie que le formulaire existe avant de l'afficher #}
+        {% if formAddTheme is defined %}
+        {{ form_start(formAddTheme, {'attr': {'class': 'ui form'}}) }}
+        <div class="{% if formAddTheme.nameTheme.vars.errors|length > 0 %}field{% endif %}">
+            {{ form_row(formAddTheme.nameTheme) }}
+        </div>
+        <div class="field padding-top-large">
+            <button name="serviceForm" type="submit" class="ui-button ui-widget ui-corner-all">
+                <span class="ui-icon ui-icon-check"></span> Valider
+            </button>
+        </div>
+        {{ form_end(formAddTheme) }}
+        {% endif %}
 
-<div class="custom-container">
-    <h1 class="uk-animation-slide-right padding-top-large">Classement par thème:</h1>
-    <div class="separator" id="alert-javascript">{% include "alertflash/flash_message.html.twig" %}</div>
-</div>
-
-<div class="ui container">
-    {# On vérifie que le formulaire existe avant de l'afficher #}
-    {% if formAddTheme is defined %}
-    {{ form_start(formAddTheme, {'attr': {'class': 'ui form'}}) }}
-    {# Si erreur on ajoute la class field #}
-    <div class="{% if formAddTheme.nameTheme.vars.errors|length > 0 %}field{% endif %}">
-        {{ form_row(formAddTheme.nameTheme) }}
-    </div>
-    <div class="field padding-top-large">
-        <button name="serviceForm" type="submit" class="ui-button ui-widget ui-corner-all">
-            <span class="ui-icon ui-icon-check"></span> Valider
-        </button>
-    </div>
-
-
-    {{ form_end(formAddTheme) }}
-    {% endif %}
-
-    {% if liste_themes | default %}
-    <h1 class="uk-animation-slide-left">{{title_page}}</h1>
-    {# On affiche les catégories touvées #}
-    <div class="ui list uk-animation-fade">
-        {% for theme in liste_themes %}
-        <div class="item">
-            <i class="folder icon"></i>
-            <div class="content">
-                <div class="header">
-                    <a href="{{ path('detail_theme', { 'id': theme.id }) }}">{{ theme.nameTheme }}</a>
+        {% if themes | default %}
+        <div class="ui list uk-animation-fade">
+            {% for theme in themes %}
+            <div class="item">
+                <i class="folder icon"></i>
+                <div class="content">
+                    <div class="header">
+                        <a href="{{ path('detail_theme', { 'id': theme.id }) }}">{{ theme.nameTheme }}</a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
-    {% if is_granted('ROLE_ADMIN') %}
-    <div class="ui segment">
-        <h3>Administration:</h3>
-        <a href="{{ path('new_theme') }}" class="ui-button ui-widget ui-corner-all margin-large">
-            <span class="ui-icon ui-icon-plus"></span> Ajouter une thème
-        </a>
-    </div>
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="ui segment">
+            <h3>Administration:</h3>
+            <a href="{{ path('new_theme') }}" class="ui-button ui-widget ui-corner-all margin-large">
+                <span class="ui-icon ui-icon-plus"></span> Ajouter une thème
+            </a>
+        </div>
+        {% endif %}
+        {% endif %}
 
-    {% endif %}
 
-    {% if categories | default %}
-    <h1 class="uk-animation-slide-left">{{title_page}}</h1>
-    {# On affiche les catégories touvées #}
-    <div class="ui list uk-animation-fade">
-        {% for category in categories %}
-        <div class="item">
-            <i class="folder icon"></i>
-            <div class="content">
-                <div class="header">
-                    <a href="{{ path('detail_category', { 'id': category.id }) }}">{{ category.nameCategory }}</a>
+        {% if categories | default %}
+        {# On affiche les catégories touvées #}
+        <div class="ui list uk-animation-fade">
+            {% for category in categories %}
+            <div class="item">
+                <i class="folder icon"></i>
+                <div class="content">
+                    <div class="header">
+                        <a href="{{ path('detail_category', { 'id': category.id }) }}">{{ category.nameCategory }}</a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        {% endif %}
+
+
+
+        {# {% endif %} #}
     </div>
-    {% endif %}
-
-
-
-    {% endif %}
-
 </div>
 {% endblock %}

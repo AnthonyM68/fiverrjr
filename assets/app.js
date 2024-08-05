@@ -3,16 +3,9 @@ import { createRoot } from 'react-dom/client';
 
 // import { Parallax, ParallaxDouble } from './js/components/Parallax/Parallax';
 import { BestServicesCarousel } from './js/components/Carousel/CarouselComponent';
-
-
-
 import StickyFooter from './js/components/Sticky/StickyFooter'
 // hook useFetch
 import useFetch from './js/useFetch';
-
-
-
-
 
 // const StickyParentComponent = () => {
 //     return <StickyParent />;
@@ -31,36 +24,29 @@ import useFetch from './js/useFetch';
 // };
 
 // Composant pour afficher le dernier utilisateur inscrit
-const LastUser = ({ role }) => {
-    const { data: lastUser, error } = useFetch(`/last/user/${role}`);
+// const LastUser = ({ role }) => {
+//     const { data: lastUser, error } = useFetch(`/last/user/${role}`);
 
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
+//     if (error) {
+//         return <div>Error: {error.message}</div>;
+//     }
 
-    if (!lastUser) {
-        return <div className="ui segment">
-            <div className="ui active inverted dimmer">
-                <div className="ui text loader">Loading</div>
-            </div>
-            <p></p>
-        </div>;
-    }
+//     if (!lastUser) {
+//         return <div className="ui segment">
+//             <div className="ui active inverted dimmer">
+//                 <div className="ui text loader">Loading</div>
+//             </div>
+//             <p></p>
+//         </div>;
+//     }
 
-    return <UserCard user={lastUser} />;
-};
+//     return <UserCard user={lastUser} />;
+// };
 
 
 // Vérifier et rendre les composants en fonction des éléments DOM
 document.addEventListener('DOMContentLoaded', () => {
     console.log('=> app.js loaded');
-
-    const carouselRoot = document.getElementById('bestservices-root');
-    if (carouselRoot) {
-        const root = createRoot(carouselRoot);
-        root.render(<BestServicesCarousel />);
-    }
-
     // const lastDevlRoot = document.getElementById('last-developers');
     // if (lastDevlRoot) {
     //     const root = createRoot(lastDevlRoot);

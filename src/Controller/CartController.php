@@ -39,7 +39,7 @@ class CartController extends AbstractController
     ): Response {
         $fullCart = $this->cart->getCart($request);
 
-        $this->addFlash('success', 'Votre commande sera ajoutée au panier');
+        $this->addFlash('positive', 'Votre commande sera ajoutée au panier');
 
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier',

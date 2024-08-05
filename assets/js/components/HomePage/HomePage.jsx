@@ -61,10 +61,13 @@ const HomePage = () => {
   }
 
   return (
-    <div className="custom-grid-container" >
+    <div className="custom-grid-container">
+      <div className="overlay-homepage"></div>
       <Grid stackable padded="vertically" className="home">
         {/* Developer Section */}
-        <Grid.Row columns={2} verticalAlign="middle" >
+        <Grid.Row columns={2} verticalAlign="middle">
+
+          
           <Grid.Column>
             <div ref={refDeveloper}>
               <Card
@@ -77,6 +80,7 @@ const HomePage = () => {
                   <Card.Header>
                     {lastDeveloper.firstName} {lastDeveloper.lastName}
                   </Card.Header>
+
                   <Card.Meta>
                     <span>
                       Date d'inscription:{" "}
@@ -85,12 +89,14 @@ const HomePage = () => {
                       ).toLocaleDateString()}
                     </span>
                   </Card.Meta>
+
                   {lastDeveloper.bio && (
                     <Card.Description>
                       {lastDeveloper.bio.slice(0, 150)}...
                     </Card.Description>
                   )}
                 </Card.Content>
+
                 <Card.Content extra>
                   <Image
                     avatar
@@ -102,9 +108,13 @@ const HomePage = () => {
                       <span className="category">Développeur</span>
                     )}
                 </Card.Content>
+
               </Card>
             </div>
           </Grid.Column>
+
+
+
           <Grid.Column>
             <div
               ref={refDeveloperWelcom}
@@ -129,7 +139,7 @@ const HomePage = () => {
             </div>
           </Grid.Column>
         </Grid.Row>
-
+  
         {/* Contact Section */}
         <Grid.Row centered>
           <Grid.Column textAlign="center">
@@ -152,7 +162,7 @@ const HomePage = () => {
             </div>
           </Grid.Column>
         </Grid.Row>
-
+  
         {/* Client Section */}
         <Grid.Row columns={2} verticalAlign="middle">
           <Grid.Column>
@@ -222,6 +232,8 @@ const HomePage = () => {
       </Grid>
     </div>
   );
+  
+  
 };
 
 

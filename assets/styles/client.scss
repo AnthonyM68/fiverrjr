@@ -1,48 +1,70 @@
-/* Card Client / Developer List */
-.custom-card {
-    display: flex;
-    align-items: stretch;
-    margin-bottom: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .custom-card .custom-image-client {
-    flex: 0 0 150px; 
-    margin-right: 20px; 
-  }
-  
-  .custom-card .custom-image-client img {
-    width: 50%;
-    height: auto;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-  
-  .custom-card .custom-card-content {
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-  }
-  
-  .custom-card .custom-card-content .header {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
-  
-  .custom-card .custom-card-content .meta {
-    margin-bottom: 10px;
-    color: #888;
-  }
-  
-  .custom-card .custom-card-content .description {
-    color: #555;
-  }
-  
-  .custom-card .extra-content a {
-    color: #4183c4;
-    text-decoration: none;
-  }
+@import "variables";
+
+.client-container {
+  position:relative;
+  top: $navbar-height;
+  left:0;
+  width:100%;
+  min-height:100vh;
+}
+
+
+
+
+
+// .custom-card {
+//   display: flex;
+//   align-items: stretch;
+//   margin-bottom: 20px;
+//   border: 1px solid #e0e0e0;
+//   border-radius: 8px;
+//   padding: 10px;
+//   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+// }
+
+// .custom-card .custom-image-client {
+//   flex: 0 0 150px;
+//   margin-right: 20px;
+// }
+
+// .custom-card .custom-image-client img {
+//   width: 50%;
+//   height: auto;
+//   border-radius: 8px;
+//   object-fit: cover;
+// }
+
+// .custom-card .custom-card-content {
+//   flex: 1;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+// }
+
+// .custom-card .custom-card-content .header {
+//   font-size: 1.5em;
+//   margin-bottom: 10px;
+// }
+
+// .custom-card .custom-card-content .meta {
+//   margin-bottom: 10px;
+//   color: #888;
+// }
+
+// .custom-card .custom-card-content .description {
+//   color: #555;
+// }
+
+// .custom-card .extra-content a {
+//   color: #4183c4;
+//   text-decoration: none;
+// }
+// /* Responsive design */
+// @media (max-width: 768px) {
+// }
+// /* Tablets (portrait) */
+// @media (min-width: 769px) and (max-width: 1024px) {
+// }
+// /* Desktops and larger devices */
+// @media (min-width: 1025px) {
+// }

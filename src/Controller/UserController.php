@@ -284,7 +284,7 @@ class UserController extends AbstractController
     #[Route('/usertype/list/{role}/{page}', name: 'list_user_type')]
     public function listUserType(String $role, int $page, Request $request, PaginatorInterface $paginator, SerializerInterface $serializer): Response
     {
-        $limit = 6;
+        $limit = 3;
         // Récupération les User par le role: ROLE_CLIENT
         $queryBuilder = $this->entityManager->getRepository(User::class)->findUsersByRole($role);
         // On filtre par username et l'on trie

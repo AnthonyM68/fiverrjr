@@ -15,6 +15,7 @@ class Cart
 {
     private $entityManager;
     private $serviceItemRepository;
+    private $imageService;
     private $httpKernel;
     private $logger;
 
@@ -23,11 +24,13 @@ class Cart
         EntityManagerInterface $entityManager,
         HttpKernelInterface $httpKernel,
         LoggerInterface $logger,
+        ImageService $imageService
     ) {
         $this->entityManager = $entityManager;
         $this->serviceItemRepository = $serviceItemRepository;
         $this->httpKernel = $httpKernel;
         $this->logger = $logger;
+        $this->imageService = $imageService;
     }
 
     public function getCart(Request $request)
@@ -41,34 +44,37 @@ class Cart
         $totalServiceItem = 0;
 
         foreach ($panier as $id => $quantity) {
-            $product = $this->serviceItemRepository->find($id);
+            $service = $this->serviceItemRepository->find($id);
 
-            if ($product) {
+            if ($service) {
                 $pictureUrl = '';
                 
-                $pictureFilename = $product->getPicture();
-                if ($pictureFilename) {
+                $originalFilename = $service->getPicture();
+                $this->logger->info('Processing generateImageUrl service cart', ['originalFilename' => $originalFilename]);
 
-                    $subRequest = $request->duplicate(null, null, [
-                        '_controller' => 'App\Controller\ImageController::generateImageUrl',
-                        'filename' => $pictureFilename,
-                        'usertype' => 'SERVICE'
+                if ($originalFilename) {
 
-                    ]);
-                    $this->logger->info('pictureUrl: ' . $subRequest);
-                    $pictureUrlResponse = $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
-                    $pictureUrl = json_decode($pictureUrlResponse->getContent(), true);
+                    if ($originalFilename) {
+                        try {
+                            $pictureUrl = $this->imageService->generateImageUrl($originalFilename, 'SERVICE');
+                            // on set l'url de l'image 
+                            $service->setPicture($pictureUrl);
+                        } catch (\Exception $e) {
+                            throw $e;
+                        }
+                    }
+
                 }
                 $data[] = [
                     'serviceItem' => [
-                        'id' => $product->getId(),
-                        'title' => $product->getTitle(),
-                        'price' => $product->getPrice(),
+                        'id' => $service->getId(),
+                        'title' => $service->getTitle(),
+                        'price' => $service->getPrice(),
                         'picture' => $pictureUrl
                     ],
                     'quantity' => $quantity
                 ];
-                $total += $product->getPrice() * $quantity;
+                $total += $service->getPrice() * $quantity;
                 $totalServiceItem += $quantity;
             }
         }
@@ -84,21 +90,7 @@ class Cart
     {
         $session = $request->getSession();
         $id = $serviceItem->getId();
-        // $pictureFilename = $serviceItem->getPicture();
-        // if ($pictureFilename) {
-
-        //     $subRequest = $request->duplicate(null, null, [
-        //         '_controller' => 'App\Controller\ImageController::generateImageUrl',
-        //         'filename' => $pictureFilename,
-        //         'usertype' => 'SERVICE'
-
-        //     ]);
-        //     $pictureUrlResponse = $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
-        //     $pictureUrl = json_decode($pictureUrlResponse->getContent(), true);
-        // }
         $panier = $session->get('cart', []);
-
-
 
         if (isset($panier[$id])) {
             $panier[$id]++;

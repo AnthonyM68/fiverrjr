@@ -1,0 +1,103 @@
+@import "./assets/styles/variables";
+
+/* Fonction pour convertir les couleurs hexadécimales en rgba */
+@function hex-to-rgba($hex, $alpha: 1) {
+  @if not(type-of($hex) == color) {
+    @error "Le paramètre doit être une couleur hexadécimale.";
+  }
+  @return rgba($hex, $alpha);
+}
+$overlay-parallax-home: hex-to-rgba($secondary, $alpha-parallax-home);
+
+.parallax-home {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url("../../../public/uploads/background-home.jpg");
+}
+
+.overlay-parallax-home {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $parallax-container-home-height;
+  background-color: $overlay-parallax-home;
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+.floating-title-fiverr-junior {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: $white;
+  padding: 20px;
+  z-index: 1;
+}
+.parallax-home {
+  height: $parallax-container-home-height;
+}
+
+.floating-title-fiverr-junior {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: $white;
+  padding: $padding-large;
+  z-index: 2;
+}
+.floating-title-fiverr-junior h1 {
+  font-size: $font-size-animate-extra-big-large;
+  display: inline-block;
+}
+.fiverr-animate,
+.junior-animate {
+  position: relative;
+  float: left;
+}
+div .fiverr-animate {
+  color: $primary !important;
+  margin-right: $margin-large;
+}
+div .junior-animate {
+  color: $white !important;
+  margin-right: $margin-large;
+}
+p.sub-animate {
+  font-size: $font-size-animate-medium;
+  color: $grey;
+  text-transform: uppercase;
+  font-weight: $font-size-animate-medium;
+  z-index: 2;
+}
+
+// @media (max-width: 768px) {
+//   .floating-title-fiverr-junior h1 {
+//     font-size: 50px !important;
+//   }
+//   p.sub-animate {
+//     font-size: 50px;
+//     }
+// }
+
+// @media (min-width: 769px) and (max-width: 1024px) {
+
+// }
+
+// @media (min-width: 1025px) {
+//   .parallax-container {
+//     height: 100vh;
+//     border: 5px solid green;
+//   }
+//   .parallax-home {
+//     height: 100%;
+//   }
+// }

@@ -1,0 +1,92 @@
+@import "./assets/styles/variables";
+/* Fonction pour convertir les couleurs hexadécimales en rgba */
+@function hex-to-rgba($hex, $alpha: 1) {
+  @if not(type-of($hex) == color) {
+    @error "Le paramètre doit être une couleur hexadécimale.";
+  }
+  @return rgba($hex, $alpha);
+}
+$overlay-parallax-footer: hex-to-rgba($secondary, $alpha-parallax-home);
+.parallax-footer {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $parallax-container-footer-height;
+  background-image: url("../../../public/uploads/background-footer.jpg");
+}
+.overlay-parallax-footer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $parallax-container-footer-height;
+  background-color: $overlay-parallax-footer !important;
+  pointer-events: none;
+  z-index: 1;
+}
+// .parallax-footer {
+//   background-image: url("../../../public/uploads/background-footer.jpg");
+// }
+// .floating-text {
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   text-align: center;
+//   color: $white;
+//   padding: 20px;
+//   z-index: 1;
+//   width:100%;
+// }
+// .floating-text h1 {
+//   color: $white;
+// }
+// .text-primary,
+// .text-sub {
+//   display: block;
+//   text-align: center;
+//   color: linkColor;
+// }
+
+// .text-primary {
+//   text-transform: uppercase;
+//   letter-spacing: $letter-spacing;
+//   font-size: $font-size-animate-large;
+//   animation: moveLeft 1.5s ease-in;
+  
+// }
+// .text-sub {
+//   letter-spacing: $letter-spacing-small;
+//   font-size: 1em;
+//   animation: moveRight 1.5s ease-in;
+//   text-shadow: 0 0 5px $white;
+//   font-size: $font-size-animate-p;
+// }
+// @keyframes moveLeft {
+//   0% {
+//     opacity: 0;
+//     transform: translatex(-100px);
+//   }
+//   80% {
+//     transform: translatex(10px);
+//   }
+//   100% {
+//     opacity: 1;
+//     transform: translatex(0);
+//   }
+// }
+
+// @keyframes moveRight {
+//   0% {
+//     opacity: 0;
+//     transform: translatex(100px);
+//   }
+//   80% {
+//     transform: translatex(-10px);
+//   }
+//   100% {
+//     opacity: 1;
+//     transform: translatex(0);
+//   }
+// }

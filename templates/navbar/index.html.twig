@@ -14,12 +14,14 @@
 
 
 
-                <div class="ui fluid dropdown link item">
-                    <span class="theme">
+                <div class="ui dropdown link item">
+                    
+                    <div class="theme">
                         Thèmes
                         <i class="theme icon"></i>
-                    </span>
-                    <div class="menu">
+                    </div>
+                   
+                    <div class="menu menu-dropdown-desktop">
                         {% for theme in get_navbar_data() %}
                         <div class="item">
                             <a href="{{ path('detail_theme', { 'id': theme.id }) }}">
@@ -90,46 +92,52 @@
 
         <!--Start: Mobile Nav-->
         <div class="tablet mobile only row">
-            <a class="header item"> Fiverr Junior</a>
+            <a href="#" class="header item">Fiverr Junior</a>
 
             <div class="right menu">
+
+                <a href="{{ path('cart_product') }}" class="ui item">
+                    <i class="cart arrow down icon"></i>
+                </a>
                 <a class="menu item">
                     <div id="burger-menu" class="ui basic icon toggle button">
                         <i class="content icon"></i>
                     </div>
                 </a>
+
             </div>
 
-            <div class="ui vertical accordion borderless fluid menu">
+            <div id="mobile-menu" class="ui vertical accordion borderless fluid menu">
 
                 {# alert mode mobile #}
                 {# si l'alert est javascript, include est écrasé,
                 Si l'alert est php on include l'alert depuis la view #}
-                <div id="alert-javascript-mobile">{% include "alertflash/flash_message.html.twig" %}</div>
+                <div class="container-alert" id="alert-javascript-mobile">{% include "alertflash/flash_message.html.twig" %}</div>
                 {# cart icon #}
-                <div class="item">
-                    <a href="{{ path('cart_product') }}" class="ui item">
-                        <i class="cart arrow down icon"></i>
-                    </a>
-                </div>
+               
+                   
+                
                 <!-- Start: Search -->
                 <!-- Formulaire Mobile -->
                 <div class="padding">
                     {% include './navbar/form/formMobile.html.twig' with { 'attr': { 'class': 'mobile-search-form' } }
-                %}
+                    %}
                 </div>
-                
+
                 <!-- End: Search -->
                 <a href="{{ path('home') }}" class="item">Accueil</a>
                 <a href="{{ path('list_user_type', {'role': 'ROLE_CLIENT', 'page' : '1' }) }}"
-                    class="item">Entrepreneurs</a>
+                    class="item">Entrepreneurs
+                </a>
                 <a href="{{ path('list_user_type', {'role': 'ROLE_DEVELOPER', 'page' : '1'}) }}"
-                    class="item">Développeurs</a>
+                    class="item">Développeurs
+                </a>
 
 
-                <div class="item">
-                    <div class="title">
-                        Thèmes<i class="dropdown icon"></i>
+
+                <div class="item-dropdown-mobile">
+                    <div class="title item">
+                        Thèmes<i class="theme icon"></i>
                     </div>
                     <div class="content">
                         {% for theme in get_navbar_data() %}
