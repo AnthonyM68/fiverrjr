@@ -361,7 +361,7 @@ class ServiceItemController extends AbstractController
      * Créer un nouveau service ou éditer un existant
      */
     #[Route('/service/new', name: 'new_service')]
-    #[Route('/service/edit/{id}', name: 'edit_service')]
+    #[Route('/service/edit/{id}', name: 'edit_service', methods: ['GET', 'POST'])]
     // restreint l'accès aux utilisateurs authentifiés
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     // on restreint cette route au client du site (pour l'interface plein écran simple)
@@ -460,7 +460,7 @@ class ServiceItemController extends AbstractController
      * 
      * Affiche le détail d'un service
      */
-    #[Route('/service/detail/{id}', name: 'detail_service')]
+    #[Route('/service/detail/{id}', name: 'detail_service', methods: ['GET'])]
     public function detailService(
         Request $request,
         ?ServiceItem $service
@@ -532,7 +532,7 @@ class ServiceItemController extends AbstractController
      * THEMES
      */
 
-    #[Route('/theme', name: 'list_themes')]
+    #[Route('/theme', name: 'list_themes', methods: ['GET'])]
     public function listThemes(ThemeRepository $themeRepository, ?Theme $theme = null): Response
     {
         // Récupère tous les thèmes triés par nom
@@ -544,8 +544,8 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
-    #[Route('/theme/new', name: 'new_theme')]
-    #[Route('/theme/{id}/edit', name: 'edit_theme')]
+    #[Route('/theme/new', name: 'new_theme', methods: ['GET'])]
+    #[Route('/theme/{id}/edit', name: 'edit_theme', methods: ['GET', 'POST'])]
     // #[IsGranted('ROLE_ADMIN')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]  // Restreint l'accès aux utilisateurs authentifiés
     public function editTheme(EntityManagerInterface $entityManager, Request $request, ?Theme $theme = null): Response
@@ -583,7 +583,7 @@ class ServiceItemController extends AbstractController
     }
 
 
-    #[Route('/theme/{id}/detail', name: 'detail_theme')]
+    #[Route('/theme/{id}/detail', name: 'detail_theme', methods: ['GET'])]
     public function detailTheme(?Theme $theme = null): Response
     {
         // Récupère les détails du thème en fonction de l'ID
@@ -656,7 +656,7 @@ class ServiceItemController extends AbstractController
     }
 
     // Affiche toutes les catégories
-    #[Route('/category', name: 'list_categories')]
+    #[Route('/category', name: 'list_categories', methods: ['GET'])]
     public function listCategories(CategoryRepository $categoryRepository): Response
     {
         // Récupère toutes les catégories triées par nom
@@ -669,8 +669,8 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
-    #[Route('/category/new', name: 'new_category')]
-    #[Route('/category/{id}/edit', name: 'edit_category')]
+    #[Route('/category/new', name: 'new_category', methods: ['GET'])]
+    #[Route('/category/{id}/edit', name: 'edit_category', methods: ['GET', 'POST'])]
     // Restreint l'accès aux utilisateurs authentifiés
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function editCategory(EntityManagerInterface $entityManager, Request $request, ?Category $category = null): Response
@@ -708,7 +708,7 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
-    #[Route('/category/{id}/detail', name: 'detail_category')]
+    #[Route('/category/{id}/detail', name: 'detail_category', methods: ['GET'])]
     public function detailCategory(?Category $category = null): Response
     {
         $courses = $category->getCourses();
@@ -744,7 +744,7 @@ class ServiceItemController extends AbstractController
      * @param CourseRepository $courseRepository
      * @return Response
      */
-    #[Route('/course', name: 'list_courses')]
+    #[Route('/course', name: 'list_courses', methods: ['GET'])]
     public function listCourses(CourseRepository $courseRepository): Response
     {
         // Récupère tous les cours triés par nom
@@ -757,9 +757,9 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
-    #[Route('/course/new', name: 'new_course')]
-    #[Route('/course/edit/{id}', name: 'edit_course')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]  // Restreint l'accès aux utilisateurs authentifiés
+    #[Route('/admin/course/new', name: 'new_course', methods: ['GET'])]
+    #[Route('/course/edit/{id}', name: 'edit_course', methods: ['GET', 'POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function editCourse(EntityManagerInterface $entityManager, Request $request, ?Course $course = null): Response
     {
         // Si le cours n'existe pas, crée un nouveau cours
@@ -795,7 +795,7 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
-    #[Route('/course/{id}/detail', name: 'detail_course')]
+    #[Route('/course/{id}/detail', name: 'detail_course', methods: ['GET'])]
     public function detailCourse(?Course $course = null): Response
     {
         $services = $course->getServiceItems();

@@ -17,11 +17,37 @@ class ImageService
     private $logger;
 
     public function __construct(
-        ParameterBagInterface $parameters, 
-        LoggerInterface $logger)
-    {
+        ParameterBagInterface $parameters,
+        LoggerInterface $logger
+    ) {
         $this->parameters = $parameters;
         $this->logger = $logger;
+    }
+    public function handlerRoles($roles)
+    {
+        $role = match (true) {
+            in_array('ROLE_ADMIN', $roles, true) => 'ROLE_ADMIN',
+            in_array('ROLE_CLIENT', $roles, true) => 'ROLE_CLIENT',
+            in_array('ROLE_DEVELOPER', $roles, true) => 'ROLE_DEVELOPER',
+            default => 'ROLE_USER',
+        };
+        return $role;
+    }
+    // recherche les paramètres repertoire du service.yaml
+    private function getUploadDirectory(string $role): string
+    {
+        switch ($role) {
+            case 'ROLE_ADMIN':
+                return $this->parameters->get('admin_pictures_directory');
+            case 'ROLE_DEVELOPER':
+                return $this->parameters->get('developer_pictures_directory');
+            case 'ROLE_CLIENT':
+                return $this->parameters->get('client_pictures_directory');
+            case 'SERVICE':
+                return $this->parameters->get('service_pictures_directory');
+            default:
+                return $this->parameters->get('pictures_directory');
+        }
     }
     public function uploadImage(UploadedFile $file, string $role): string
     {
@@ -64,7 +90,7 @@ class ImageService
 
 
 
-    
+
     public function generateImageUrl(string $filename, string $role): string
     {
         $filePath = $this->getImagePath($filename, $role);
@@ -76,22 +102,14 @@ class ImageService
         return str_replace($this->parameters->get('kernel.project_dir') . '/public', '', $filePath);
     }
 
-    private function getUploadDirectory(string $role): string
-    {
-        switch ($role) {
-            case 'ROLE_DEVELOPER':
-                return $this->parameters->get('developer_pictures_directory');
-            case 'ROLE_CLIENT':
-                return $this->parameters->get('client_pictures_directory');
-            case 'SERVICE':
-                return $this->parameters->get('service_pictures_directory');
-            default:
-                return $this->parameters->get('pictures_directory');
-        }
-    }
-    public function setPictureUrl($user, $role)
+
+    public function setPictureUrl($user)
     {
         $pictureFilename = $user->getPicture();
+        $roles = $user->getRoles();
+
+        $role = $this->handlerRoles($roles);
+
         if ($pictureFilename) {
             try {
                 $pictureUrl = $this->generateImageUrl($pictureFilename, $role);

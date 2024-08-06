@@ -62,6 +62,7 @@ Encore
         './assets/styles/parallax/parallax_footer.scss',
         './assets/styles/banner/banner.scss',
         './assets/styles/home.scss',
+        './assets/styles/user.scss',
         // './assets/styles/course.scss',
         './assets/styles/sticky.css',
         './assets/styles/login-register.scss',

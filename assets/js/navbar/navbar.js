@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
     function handleSearch(event, element) {
-        showAlert('negative', 'Une erreur est survenue lors de la recherche.');
+
         event.preventDefault();
         const form = element.closest('form');
         // console.log(form);
@@ -48,11 +48,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error('Error during fetch:', error);
                 showAlert('negative', 'Une erreur est survenue lors de la recherche.');
             } else {
+                showAlert('positive', 'Une erreur est survenue lors de la recherche.');
                 console.log('Données reçues:', data);
                 const resultsHtml = displayResults(data, term);
+                console.log(resultsHtml);
                 $('#search-results-container').slideDown();
                 document.getElementById('search-results').innerHTML = resultsHtml;
-                $('#search-results-container').slideDown();
             }
         });
     }

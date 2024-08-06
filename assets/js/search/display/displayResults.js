@@ -8,8 +8,6 @@ export const displayResults = (results, searchTerm) => {
         resultsHtml += '<h3>Résultats</h3>';
         // on convertit le terme rechercher en minuscule
         const searchTermLower = searchTerm.toLowerCase();
-        console.log(searchTermLower);
-
         results.forEach(entityTheme => {
             let displayTheme = false;
             let themeHtml = '';

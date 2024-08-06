@@ -4,9 +4,14 @@
 
 {% block body %}
 <div class="fiverr-container">
-    <div class="ui container segment">
+    <div class="ui container">
+        <div class="uk-animation-slide-right">
+            <h1 class="title">{{ title_page }}</h1>
+        </div>
+
+
+        {% if formAddCourse|default %}
         <div class="ui message ">
-            {% if formAddCourse|default %}
             <h1 class="ui list uk-animation-slide-down">{{ title_page }}</h1>
             {{ form_start(formAddCourse, {'attr': {'class': 'ui form'}}) }}
             <div class="{% if formAddCourse.nameCourse.vars.errors|length > 0 %}field{% endif %}">
@@ -19,54 +24,69 @@
                 </button>
             </div>
             {{ form_end(formAddCourse) }}
-            {% endif %}
         </div>
-    </div>
+        {% endif %}
 
 
 
 
-
-    {% if services | default %}
-    <div class="">
-        <h3>Nos services (Développeurs)</h3>
-        <h1 class="uk-animation-slide-right">{{ title_page }}</h1>
-    </div>
-
-    {# On affiche les services touvés #}
-    <div class="ui list uk-animation-fade">
-        {% for service in services %}
-        <div class="ui card custom-card">
-            <div class="custom-image-client">
-                <img src="{{ service.picture }}" alt="{{ service.title }}">
-            </div>
-            <div class="content custom-card-content">
-                <div class="header">{{ service.title }}</div>
-                <div class="meta">
-                    <span class="date">Inscrit le {{ service.createDate|date('d-m-Y') }}</span>
-                </div>
-                <div class="description">
-                    {{ service.description|slice(0, 100) }}...
+        {% if courses | default %}
+        {# On affiche les courses touvées #}
+        <div class="ui list uk-animation-fade">
+            {% for course in courses %}
+            <div class="item">
+                <i class="folder icon"></i>
+                <div class="content">
+                    <div class="header"> <a href="{{ path('detail_course', { 'id': course.id }) }}">{{
+                            course.nameCourse}}</a>
+                    </div>
                 </div>
             </div>
-            <div class="extra content">
-                <a href="{{ path('detail_service', { 'id': service.id }) }}">
-                    Plus d'infos
-                </a>
-            </div>
+            {% endfor %}
         </div>
-        {# <div class="item">
-            <i class="folder icon"></i>
-            <div class="content">
-                <div class="header"><a href="{{ path('detail_service', { 'id': service.id }) }}">{{
-                        service.title}}</a>
+        {% endif %}
+
+
+        {% if services | default %}
+        <div class="">
+            <h3>Nos services (Développeurs)</h3>
+            <h1 class="uk-animation-slide-right">{{ title_page }}</h1>
+        </div>
+
+        {# On affiche les services touvés #}
+        <div class="ui list uk-animation-fade">
+            {% for service in services %}
+            <div class="ui card custom-card">
+                <div class="custom-image-client">
+                    <img src="{{ service.picture }}" alt="{{ service.title }}">
+                </div>
+                <div class="content custom-card-content">
+                    <div class="header">{{ service.title }}</div>
+                    <div class="meta">
+                        <span class="date">Inscrit le {{ service.createDate|date('d-m-Y') }}</span>
+                    </div>
+                    <div class="description">
+                        {{ service.description|slice(0, 100) }}...
+                    </div>
+                </div>
+                <div class="extra content">
+                    <a href="{{ path('detail_service', { 'id': service.id }) }}">
+                        Plus d'infos
+                    </a>
                 </div>
             </div>
-        </div> #}
-        {% endfor %}
+            {# <div class="item">
+                <i class="folder icon"></i>
+                <div class="content">
+                    <div class="header"><a href="{{ path('detail_service', { 'id': service.id }) }}">{{
+                            service.title}}</a>
+                    </div>
+                </div>
+            </div> #}
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-</div>
 </div>
 
 

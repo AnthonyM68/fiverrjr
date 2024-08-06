@@ -2,6 +2,7 @@
 
 {% block pending_orders %}
 <h2>Commandes en cours...</h2>
+
     {% if orders_pending %}
         <div class="ui relaxed divided list">
             {% for order in orders_pending %}

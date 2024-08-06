@@ -52,18 +52,32 @@ class UserController extends AbstractController
     #[Route('/user/list', name: 'list_users')]
     public function index(UserRepository $userRepository): Response
     {
-        $users = $userRepository->findAll();
+
         return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-            'users' => $users
+            'controller_name' => 'UserController'
         ]);
     }
 
-    #[Route('/user/detail/{id}', name: 'edit_user')]
-    public function detailsUser(): Response
+    #[Route('/user/detail/{id}', name: 'detail_user')]
+    public function detailsUser(?User $user = null): Response
     {
+        // On vérifie que service est bien une instance
+        if (!$user instanceof User) {
+            return new JsonResponse(['error' => 'Utilisateur non trouvé'], Response::HTTP_NOT_FOUND);
+        }
+        // on utilise imageService pour générer l'url imgae utilisateur
+        $this->imageService->setPictureUrl($user);
+        // Récupérer l'utilisateur par ID
+        // $user = $userRepository->find($id);
         return $this->render('user/index.html.twig', [
+            'title_page' => 'Détail de l\'utilisateur',
             'controller_name' => 'UserController',
+            'lastDeveloper' => null,
+            'lastClient' => null,
+            'orders_pending' => null,
+            'orders_completed' => null,
+            'user' => $user
+
         ]);
     }
 

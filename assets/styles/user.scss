@@ -1,0 +1,13 @@
+@import "variables";
+
+.ui.fluid.image.portrait {
+    width: auto;
+    height: 100%;
+    max-height: $image-portrait-user; 
+    object-fit: cover;
+}
+
+.product-details {
+    display:flex;
+    justify-content: space-between;
+}

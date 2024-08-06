@@ -31,40 +31,26 @@
     </header>
 
     <article>
-
-        {# <div class="ui container"> #}
-
+        <div class="ui container">
             <div class="ui segment" id="search-results-container" style="display: none;">
-                <div class="ui blurring dimmable image">
-                    <div class="ui dimmer">
-                        <div class="content">
-                            <div class="center">
-                                <div id="search-results"></div>
+                <div class="ui grid">
+                    <div class="sixteen wide column">
+                        <div class="ui right aligned grid">
+                            <div class="sixteen wide column">
+                                <button class="ui button primary right floated" id="close-results">Fermer</button>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            {# <div class="sixteen wide column search-results">
-                <div id="search-results"></div>
-            </div> #}
-            {# <div class="ui segment" id="search-results-container" style="display: none;">
-                <div class="ui grid">
-                    <div class="sixteen wide column search-results">
-                        <button class="ui button primary" id="close-results">Fermer</button>
                     </div>
                     <div class="sixteen wide column search-results">
                         <div id="search-results"></div>
                     </div>
                 </div>
-            </div> #}
-        {# </div> #}
-
+            </div>
+        </div>
         {% block body %} {% endblock %}
         <div id="tarteaucitron"></div>
     </article>
-
+    
     <footer>{% include 'footer/footer.html.twig' %}</footer>
 
     {% block javascripts %}
