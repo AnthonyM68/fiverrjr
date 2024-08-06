@@ -4,10 +4,7 @@
 <script>
     // User.js
     // Données des derniers inscrits
-    window.__INITIAL_DATA__ = {
-        lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
-    lastClient: { { lastClient | json_encode() | raw } }
-        };
+    window.__INITIAL_DATA__ = { lastDeveloper: {{ lastDeveloper | json_encode() | raw }}, lastClient: {{ lastClient | json_encode() | raw }} };
 </script>
 
 <div class="fiverr-container">
@@ -17,48 +14,50 @@
         </div>
     </div>
 
-        {# Détail d'un service #}
-        {% if user|default %}
-        <div class="ui container">
-            {# <div class="eight wide column"> #}
-                <div class="ui segment equal-height">
+    {# Détail d'un service #}
+    {% if user|default %}
+    <div class="ui container">
+        {# <div class="eight wide column"> #}
+            <div class="ui segment equal-height">
 
-                    <div class="product-image">
-                        <img src="{{ asset(user.picture) }}" alt="Product Image" class="ui fluid image portrait">
-                    </div>
-
-                    <div class="ui segment equal-height">
-                        <h2 class="ui header">{{ user.firstName }} {{ user.lastName }}</h2>
-                        <div class="product-details">
-
-                            <p><strong>Inscrit depuis: </strong>{{ user.dateRegister|date('d/m/Y') }}</p>
-
-                            {% if is_granted('ROLE_ADMIN') %}
-                            Administrateur
-                            {% endif %}
-                            {% if is_granted('ROLE_CLIENT') %}
-                            Entreprise / Client
-                            {% endif %}
-                            {% if is_granted('ROLE_DEVELOPER') %}
-                            Développeur
-                            {% endif %}
-
-                        </div>
-                    </div>
+                <div class="product-image">
+                    <img src="{{ asset(user.picture) }}" alt="Product Image" class="ui fluid image portrait">
                 </div>
-            {# </div> #}
-            {# <div class="eight wide column"> #}
+
                 <div class="ui segment equal-height">
-                    <h3><strong>Bio: </strong></h3>
+                    <h2 class="ui header">{{ user.firstName }} {{ user.lastName }}</h2>
                     <div class="product-details">
-                        <p>{{ user.bio }}</p>
-                        {# <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p> #}
+
+                        <p><strong>Inscrit depuis: </strong>{{ user.dateRegister|date('d/m/Y') }}</p>
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                        Administrateur
+                        {% endif %}
+                        {% if is_granted('ROLE_CLIENT') %}
+                        Entreprise / Client
+                        {% endif %}
+                        {% if is_granted('ROLE_DEVELOPER') %}
+                        Développeur
+                        {% endif %}
+
                     </div>
                 </div>
-            {# </div> #}
-        </div>
+            </div>
+            {#
+        </div> #}
+        {# <div class="eight wide column"> #}
+            <div class="ui segment equal-height">
+                <h3><strong>Bio: </strong></h3>
+                <div class="product-details">
+                    <p>{{ user.bio }}</p>
+                    {# <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p> #}
+                </div>
+            </div>
+            {#
+        </div> #}
+    </div>
 
-        {% endif %}
+    {% endif %}
 
 
     <div class="ui grid equal-height-columns">
@@ -170,7 +169,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </div>
 
 {% block javascripts %}
