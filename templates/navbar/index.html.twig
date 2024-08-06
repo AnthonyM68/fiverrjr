@@ -15,12 +15,12 @@
 
 
                 <div class="ui dropdown link item">
-                    
+
                     <div class="theme">
                         Thèmes
                         <i class="theme icon"></i>
                     </div>
-                   
+
                     <div class="menu menu-dropdown-desktop">
                         {% for theme in get_navbar_data() %}
                         <div class="item">
@@ -38,8 +38,10 @@
                                     <div class="menu">
                                         {% for course in category.courses %}
                                         <div class="item">
-                                            <a href="{{ path('detail_course', { 'id': course.id }) }}">{{ course.name
-                                                }}</a>
+                                            <a href="{{ path('detail_course', {'id': course.id, 'page' : '1' }) }}">
+                                                {# <a href="{{ path('detail_course', {'id': course.id, 'page' : '1'}) }}"> #}
+                                                    {{ course.name }}
+                                                </a>
                                         </div>
                                         {% endfor %}
                                     </div>
@@ -112,11 +114,12 @@
                 {# alert mode mobile #}
                 {# si l'alert est javascript, include est écrasé,
                 Si l'alert est php on include l'alert depuis la view #}
-                <div class="container-alert" id="alert-javascript-mobile">{% include "alertflash/flash_message.html.twig" %}</div>
+                <div class="container-alert" id="alert-javascript-mobile">{% include
+                    "alertflash/flash_message.html.twig" %}</div>
                 {# cart icon #}
-               
-                   
-                
+
+
+
                 <!-- Start: Search -->
                 <!-- Formulaire Mobile -->
                 <div class="padding">
@@ -156,8 +159,10 @@
                                     <div class="content">
                                         {% for course in category.courses %}
                                         <div class="item">
-                                            <a href="{{ path('detail_course', { 'id': course.id }) }}">{{ course.name
-                                                }}</a>
+                                            <a href="{{ path('detail_course', {'id': course.id, 'page' : '1' }) }}">
+                                            {# <a href="{{ path('detail_course', {'id': course.id, 'page' : '1'}) }}"> #}
+                                                {{ course.name }}
+                                            </a>
                                         </div>
                                         {% endfor %}
                                     </div>

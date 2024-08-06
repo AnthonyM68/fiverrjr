@@ -4,71 +4,70 @@
 
 {% block body %}
 
-{# <div class="custom-container">
-    <h1 class="uk-animation-slide-right padding-top-large">Classement par thème:</h1>
-    <div class="separator" id="alert-javascript">{% include "alertflash/flash_message.html.twig" %}</div>
-</div> #}
-<div class="fiverr-container">
-    <div class="ui container">
+<div class="ui container">
+    {# container title animation #}
+    <div class="uk-animation">
         <div class="uk-animation-slide-right">
-            <h1 class="title">{{ title_page }}</h1>
+            <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
         </div>
-
-        {# On vérifie que le formulaire existe avant de l'afficher #}
-        {% if formAddCategory is defined %}
+    </div>
+    {# list category #}
+    {% if categories | default %}
+    <div class="ui list uk-animation-fade">
+        {% for categorie in categories %}
+        <div class="item">
+            <i class="folder icon"></i>
+            <div class="content">
+                <div class="header">
+                    <a href="{{ path('detail_category', { 'id': categorie.id }) }}">
+                        {{ categorie.nameCategory }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {# list course by category #}
+    {% if courses | default %}
+    {# On affiche les courses touvées #}
+    <div class="ui list uk-animation-fade">
+        {% for course in courses %}
+        <div class="item">
+            <i class="folder icon"></i>
+            <div class="content">
+                <div class="header">
+                    <a href="{{ path('detail_course', { 'id': course.id }) }}">{{
+                        course.nameCourse}}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {# On vérifie que le formulaire existe avant de l'afficher #}
+    {% if formAddCategory is defined %}
+    <div class="ui segment">
         {{ form_start(formAddCategory, {'attr': {'class': 'ui form'}}) }}
         <div class="{% if formAddCategory.nameCategory.vars.errors|length > 0 %}field {% endif %}">
             {{ form_row(formAddCategory.nameCategory) }}
             {{ form_row(formAddCategory.theme) }}
         </div>
-        <div class="field">
+        <div class="field padding-top-large">
             <button name="serviceForm" type="submit" class="ui-button ui-widget ui-corner-all">
                 <span class="ui-icon ui-icon-check"></span> Valider
             </button>
         </div>
-        {{ form_end(formAddCategory) }}
-        {% endif %}
-
-
-        {% if courses | default %}
-        {# On affiche les courses touvées #}
-        <div class="ui list uk-animation-fade">
-            {% for course in courses %}
-            <div class="item">
-                <i class="folder icon"></i>
-                <div class="content">
-                    <div class="header"> <a href="{{ path('detail_course', { 'id': course.id }) }}">{{
-                            course.nameCourse}}</a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        {% if categories | default %}
-        {# On affiche les courses touvées #}
-        <div class="ui list uk-animation-fade">
-            {% for categorie in categories %}
-            <div class="item">
-                <i class="folder icon"></i>
-                <div class="content">
-                    <div class="header"> <a href="{{ path('detail_course', { 'id': categorie.id }) }}">
-                        {{ categorie.nameCategory }}</a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        {# {{ dump(app.user.roles) }} #}
-        {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('new_category') }}" class="ui button">
-            Ajouter une catégorie
-        </a>
-        {% endif %}
-
     </div>
+    {{ form_end(formAddCategory) }}
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') and formAddCategory is not defined %}
+    {# section administration access #}
+    <div class="ui segment">
+        <h3>Administration:</h3>
+        <a href="{{ path('new_category') }}" class="ui-button ui-widget ui-corner-all margin-top-large">
+            <span class="ui-icon ui-icon-plus"></span> Ajouter une thème
+        </a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

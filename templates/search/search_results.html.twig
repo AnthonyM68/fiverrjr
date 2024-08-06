@@ -1,0 +1,18 @@
+{% block search_results %}
+<div class="ui container">
+    <div class="ui segment" id="search-results-container" style="display: none;">
+        <div class="ui grid">
+            <div class="sixteen wide column">
+                <div class="ui right aligned grid">
+                    <div class="sixteen wide column">
+                        <button class="ui button primary right floated" id="close-results">Fermer</button>
+                    </div>
+                </div>
+            </div>
+            <div class="sixteen wide column search-results">
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock search_results %}

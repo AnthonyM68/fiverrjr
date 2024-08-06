@@ -79,8 +79,6 @@ class ServiceItem
     #[Groups(['serviceItem'])]
     private ?Order $order = null;
 
-
-
     public function __construct()
     {
         // $this->course = new ArrayCollection();
@@ -89,8 +87,6 @@ class ServiceItem
     {
         return $this->id;
     }
-
-
     /**
      * Undocumented Course
      *
@@ -105,8 +101,6 @@ class ServiceItem
         $this->course = $course;
         return $this;
     }
-
-
     /**
      * Undocumented User
      *
@@ -122,7 +116,6 @@ class ServiceItem
 
         return $this;
     }
-
     /**
      * Undocumented Order
      *
@@ -139,11 +132,6 @@ class ServiceItem
 
         return $this;
     }
-
-
-
-
-
 
     public function getTitle(): ?string
     {
@@ -216,14 +204,6 @@ class ServiceItem
 
         return $this;
     }
-
-
-
-
-
-
-
-
     public function __toString()
     {
         return $this->title;

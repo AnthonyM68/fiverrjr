@@ -20,21 +20,22 @@ use Symfony\Component\Form\FormError;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ServiceItemRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\Request;
 // Depérécier
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\HttpFoundation\Response;
 // pour générer des token
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 // pour récupérer l'utilisateur courent plutôt que security (deprecier)
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -227,7 +228,6 @@ class ServiceItemController extends AbstractController
     {
         // Récupération des données du formulaire
         $formData = $request->request->all();
-
         $this->logger->info('service_form_update', ['json_decode' => $formData]);
         // // on récupère l'id du service depuis javascript
         $serviceId = $formData['service_id'];
@@ -242,7 +242,6 @@ class ServiceItemController extends AbstractController
         $formService->handleRequest($request);
 
         if ($formService->isSubmitted()) {
-
             if ($formService->isValid()) {
                 // récupérer l'objet file
                 $file = $formService->get('picture')->getData();
@@ -252,23 +251,14 @@ class ServiceItemController extends AbstractController
                     try {
                         // obtenir le nom du fichier de l'image de profil de l'utilisateur
                         $originalFilename = $service->getPicture();
-
-                        $this->logger->info('Processing generateImageUrl service', ['service' => $service, 'originalFilename' => $originalFilename]);
-
-                        if ($originalFilename) {
-                            try {
-                                $pictureUrl = $this->imageService->generateImageUrl($originalFilename, 'SERVICE');
-                                $service->setPicture($pictureUrl);
-                            } catch (\Exception $e) {
-                                throw $e;
-                            }
-                        }
                         // On supprime l'image actuelle
                         $this->imageService->deleteImage($originalFilename, 'SERVICE');
                         // On déplace la nouvelle et récupère son nom et extention
                         $fileName = $this->imageService->uploadImage($file, 'SERVICE');
-                        // On set a l'user
+                        // On set au service le nouveau nom de fichier
                         $service->setPicture($fileName);
+                        // on génére l'url de l'image pour l'affichage
+                        $this->imageService->setPictureUrl($service);
                     } catch (\Exception $e) {
                         return new JsonResponse(['success' => false, 'errors' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
                     }
@@ -421,8 +411,10 @@ class ServiceItemController extends AbstractController
                     $this->imageService->deleteImage($originalFilename, 'SERVICE');
                     // On déplace la nouvelle et récupère son nom et extention
                     $fileName = $this->imageService->uploadImage($file, 'SERVICE');
-                    // On set a l'user
+                    // On set au service le nouveau nom de fichier
                     $service->setPicture($fileName);
+                    // on génére l'url de l'image pour l'affichage
+                    $this->imageService->setPictureUrl($service);
                 } catch (\Exception $e) {
                     // si une exception est levée, afficher un message flash d'erreur
                     $this->addFlash('error', 'Une erreur s\'est produite lors du traitement de l\'image: ' . $e->getMessage());
@@ -437,18 +429,9 @@ class ServiceItemController extends AbstractController
         if ($service->getCourse()) {
             $formService->get('course')->get('course')->setData($service->getCourse());
         }
-        // obtenir le nom du fichier de l'image de profil de l'utilisateur
-        $originalFilename = $service->getPicture();
 
-        $this->logger->info('Processing generateImageUrl', ['originalFilename' => $originalFilename]);
-        if ($originalFilename) {
-            try {
-                $pictureUrl = $this->imageService->generateImageUrl($originalFilename, 'SERVICE');
-                $service->setPicture($pictureUrl);
-            } catch (\Exception $e) {
-                throw $e;
-            }
-        }
+        $this->imageService->setPictureUrl($service);
+
         return $this->render('itemService/index.html.twig', [
             'title_page' => $title_page,
             'formAddService' => $formService->createView(),
@@ -465,19 +448,7 @@ class ServiceItemController extends AbstractController
         Request $request,
         ?ServiceItem $service
     ): Response {
-        // récupére le nom de fichier de l'image de l'utilisateur
-        $originalFilename = $service->getPicture();
-        $this->logger->info('Processing generateImageUrl', ['originalFilename' => $originalFilename]);
-        if ($originalFilename) {
-            try {
-                $pictureUrl = $this->imageService->generateImageUrl($originalFilename, 'SERVICE');
-                $service->setPicture($pictureUrl);
-            } catch (\Exception $e) {
-                throw $e;
-            }
-        }
-
-        // dd($service);
+        $this->imageService->setPictureUrl($service);
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Détail:',
             'service' => $service,
@@ -493,25 +464,7 @@ class ServiceItemController extends AbstractController
             $this->logger->info('findBy id DESC services', ['count' => count($services)]);
 
             foreach ($services as $service) {
-                $pictureFilename = $service->getPicture();
-                $this->logger->info('Processing service', ['service' => $service->getTitle(), 'pictureFilename' => $pictureFilename]);
-
-                if ($pictureFilename) {
-                    try {
-                        $pictureUrl = $this->imageService->generateImageUrl($pictureFilename, 'SERVICE');
-                        $this->logger->info('Generated picture URL', [
-                            'service' => $service->getTitle(),
-                            'pictureUrl' => $pictureUrl
-                        ]);
-                        $service->setPicture($pictureUrl);
-                    } catch (\Exception $e) {
-                        $this->logger->error('Failed to generate picture URL', [
-                            'service' => $service->getTitle(),
-                            'error' => $e->getMessage()
-                        ]);
-                        throw $e;
-                    }
-                }
+                $this->imageService->setPictureUrl($service);
             }
             $this->logger->info('All services processed', ['services' => $services]);
 
@@ -524,9 +477,6 @@ class ServiceItemController extends AbstractController
             return new JsonResponse(['error' => 'Failed to load services.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
 
     /**
      * THEMES
@@ -544,69 +494,54 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
-    #[Route('/theme/new', name: 'new_theme', methods: ['GET'])]
-    #[Route('/theme/{id}/edit', name: 'edit_theme', methods: ['GET', 'POST'])]
-    // #[IsGranted('ROLE_ADMIN')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]  // Restreint l'accès aux utilisateurs authentifiés
+    #[Route('/admin/theme/new', name: 'new_theme', methods: ['GET'])]
+    #[Route('/admin/theme/edit/{id}', name: 'edit_theme', methods: ['GET', 'POST'])]
+
+    #[IsGranted('ROLE_ADMIN')]  // Restreint l'accès aux admins
     public function editTheme(EntityManagerInterface $entityManager, Request $request, ?Theme $theme = null): Response
     {
-        // Si le thème n'existe pas, crée un nouveau thème
+        $name_page = '';
+        // si le thème n'existe pas, crée un nouveau thème
         if (!$theme) {
+            $name_page = "Nouveau";
             $theme = new Theme();
+        } else {
+            $name_page = "Editez le";
         }
-        // Variable pour stocker les erreurs de validation
-        $errors = null;
-        // Crée et gère le formulaire pour le thème
+        // crée et gère le formulaire pour le thème
         $form = $this->createForm(ThemeType::class, $theme);
         $form->handleRequest($request);
-        // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
-        // Si le formulaire est soumis
+        // si le formulaire est soumis
         if ($form->isSubmitted()) {
-            // Si le formulaire est valide, persiste et sauvegarde le thème
+            // si le formulaire est valide
             if ($form->isValid()) {
                 $entityManager->persist($theme);
                 $entityManager->flush();
-                // Redirige vers la liste des thèmes après sauvegarde
+                // Redirige vers la liste des thèmes 
                 return $this->redirectToRoute('list_themes');
-            } else {
-                // Récupère les erreurs de validation
-                $errors = $form->getErrors(true);
             }
         }
         // Rend la vue avec le formulaire
         return $this->render('theme/index.html.twig', [
-            'title_page' => 'Thèmes',
+            'title_page' => $name_page . ' ' . 'thème',
             'theme_id' => $theme->getId(),
             'formAddTheme' => $form->createView(),
-            'errors' => $errors
+            'errors' => $form->getErrors(true),
+            'themes' => $entityManager->getRepository(Theme::class)->findAll()
         ]);
     }
 
 
-    #[Route('/theme/{id}/detail', name: 'detail_theme', methods: ['GET'])]
+    #[Route('/theme/detail/{id}', name: 'detail_theme', methods: ['GET'])]
     public function detailTheme(?Theme $theme = null): Response
     {
-        // Récupère les détails du thème en fonction de l'ID
+        // Récupère les détails du thème (toutes les catégories)
         $categories = $theme->getCategories();
-        // Rend la vue avec les détails du thème
         return $this->render('theme/index.html.twig', [
             'title_page' => $theme->getNameTheme(),
             'categories' => $categories,
         ]);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
     #[Route('/categories_and_courses_by_theme/{themeId}', name: 'categories_by_theme', methods: ['GET'])]
     public function getCategoriesAndCoursesByTheme(int $themeId, CategoryRepository $categoryRepository): JsonResponse
     {
@@ -635,7 +570,6 @@ class ServiceItemController extends AbstractController
         // Retourne les données en JSON
         return new JsonResponse($data);
     }
-
     #[Route('/categories_by_theme/{themeId}', name: 'categories_by_theme', methods: ['GET'])]
     public function getCategoriesByTheme(int $themeId, CategoryRepository $categoryRepository): JsonResponse
     {
@@ -669,42 +603,40 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
-    #[Route('/category/new', name: 'new_category', methods: ['GET'])]
-    #[Route('/category/{id}/edit', name: 'edit_category', methods: ['GET', 'POST'])]
-    // Restreint l'accès aux utilisateurs authentifiés
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[Route('/admin/category/new', name: 'new_category', methods: ['GET'])]
+    #[Route('/admin/category/edit/{id}', name: 'edit_category', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]  // Restreint l'accès aux admins
     public function editCategory(EntityManagerInterface $entityManager, Request $request, ?Category $category = null): Response
     {
-        // Si la catégorie n'existe pas, crée une nouvelle catégorie
+        $name_page = '';
+        // si la catégorie n'existe pas, crée une nouvelle catégorie
         if (!$category) {
+            $name_page = "Nouvelle";
             $category = new Category();
+        } else {
+            $name_page = "Editez la";
         }
-        // Variable pour stocker les erreurs de validation
-        $errors = null;
-        // Crée et gère le formulaire pour la catégorie
+        // crée et gère le formulaire pour la catégorie
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
-        // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
-        // Si le formulaire est soumis
+        // si le formulaire est soumis
         if ($form->isSubmitted()) {
-            // Si le formulaire est valide, persiste et sauvegarde la Category
+            // Si le formulaire est valide
             if ($form->isValid()) {
                 $entityManager->persist($category);
                 $entityManager->flush();
-                // Redirige vers la liste des thèmes après sauvegarde
+                // Redirige vers la liste des catégories 
                 return $this->redirectToRoute('list_categories');
-            } else {
-                // Récupère les erreurs de validation
-                $errors = $form->getErrors(true);
             }
         }
 
         // Rend la vue avec le formulaire
         return $this->render('category/index.html.twig', [
-            'title_page' => 'Catégories',
+            'title_page' => $name_page . ' ' . 'catégorie',
             'category_id' => $category->getId(),
             'formAddCategory' => $form->createView(),
-            'errors' => $errors
+            'errors' => $form->getErrors(true),
+            'categories' => $entityManager->getRepository(Category::class)->findAll()
         ]);
     }
 
@@ -757,17 +689,19 @@ class ServiceItemController extends AbstractController
         ]);
     }
 
+    /**
+     *  Ajout ou edition d'une sous catégorie
+     *  Accès réserver ADMIN
+     */
     #[Route('/admin/course/new', name: 'new_course', methods: ['GET'])]
-    #[Route('/course/edit/{id}', name: 'edit_course', methods: ['GET', 'POST'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[Route('/admin/course/edit/{id}', name: 'edit_course', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function editCourse(EntityManagerInterface $entityManager, Request $request, ?Course $course = null): Response
     {
         // Si le cours n'existe pas, crée un nouveau cours
         if (!$course) {
             $course = new Course();
         }
-        // Variable pour stocker les erreurs de validation
-        $errors = null;;
         // Crée et gère le formulaire pour le cours
         $form = $this->createForm(CourseType::class, $course);
         // Si le formulaire est soumis et valide, persiste et sauvegarde le thème
@@ -780,9 +714,6 @@ class ServiceItemController extends AbstractController
                 $entityManager->flush();
                 // Redirige vers la liste des thèmes après sauvegarde
                 return $this->redirectToRoute('list_courses');
-            } else {
-                // Récupère les erreurs de validation
-                $errors = $form->getErrors(true);
             }
         }
 
@@ -791,42 +722,34 @@ class ServiceItemController extends AbstractController
             'title_page' => 'Sous-catégories',
             'course_id' => $course->getId(),
             'formAddCourse' => $form->createView(),
-            'errors' => $errors
+            'errors' => $form->getErrors(true),
+            'courses' => $entityManager->getRepository(Course::class)->findAll()
         ]);
     }
 
-    #[Route('/course/{id}/detail', name: 'detail_course', methods: ['GET'])]
-    public function detailCourse(?Course $course = null): Response
+    #[Route('/course/detail/{page}/{id}', name: 'detail_course')]
+    public function detailCourse(Request $request, PaginatorInterface $paginator, ?Course $course = null): Response
     {
+        $limit = 3;
         $services = $course->getServiceItems();
 
-        foreach ($services as $service) {
-            $pictureFilename = $service->getPicture();
-            $this->logger->info('Processing service', ['service' => $service->getTitle(), 'pictureFilename' => $pictureFilename]);
+        $page = $request->get('page');
 
-            if ($pictureFilename) {
-                try {
-                    $pictureUrl = $this->imageService->generateImageUrl($pictureFilename, 'SERVICE');
-                    $this->logger->info('Generated picture URL', [
-                        'service' => $service->getTitle(),
-                        'pictureUrl' => $pictureUrl
-                    ]);
-                    $service->setPicture($pictureUrl);
-                } catch (\Exception $e) {
-                    $this->logger->error('Failed to generate picture URL', [
-                        'service' => $service->getTitle(),
-                        'error' => $e->getMessage()
-                    ]);
-                    throw $e;
-                }
-            }
+        foreach ($services as $service) {
+            $this->imageService->setPictureUrl($service);
         }
 
-
+        $pagination = $paginator->paginate(
+            $services,
+            $page,
+            $limit
+        );
         // Rend la vue avec les détails du cours
         return $this->render('course/index.html.twig', [
+            'services' => $pagination,
+            'pagination' => $pagination,
             'title_page' => $course->getNameCourse(),
-            'services' => $services,
+            'course' => $course->getId(),
         ]);
     }
 }

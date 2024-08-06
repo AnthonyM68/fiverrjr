@@ -80,6 +80,7 @@ class NavbarController extends AbstractController
         return $this->render('navbar/index.html.twig', [
             'formServiceDesktop' => $formServiceDesktop->createView(),
             'formServiceMobile' => $formServiceMobile->createView(),
+            'page' => '1'
             // 'results' => $results,
             // 'search_term' => $searchTerm,
             // 'submitted_form' => $submittedFormName,

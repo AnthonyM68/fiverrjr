@@ -1,47 +1,49 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<div class="ui container">
 
-<div class="client-container">
-    <div class="ui container">
-        <div class="uk-animation-slide-right" ><h1 class="title">{{ title_page }}</h1></div>
-         
-        {% if users|default([]) %}
-        <div class="ui three stackable cards">
-            {% for user in users %}
-            <div class="ui card custom-card">
-                <div class="custom-image-client">
-                    <img src="{{ user.picture }}" alt="{{ user.username }}">
+    <div class="uk-animation">
+        <div class="uk-animation-slide-right">
+            <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
+        </div>
+    </div>
+    
+    {% if users|default([]) %}
+    <div class="ui three stackable cards">
+        {% for user in users %}
+        <div class="ui card custom-card">
+            <div class="custom-image-client">
+                <img src="{{ user.picture }}" alt="{{ user.username }}">
+            </div>
+            <div class="content custom-card-content">
+                <div class="header">{{ user.username }}</div>
+                <div class="meta">
+                    <span class="date">Inscrit le {{ user.dateRegister|date('d-m-Y') }}</span>
                 </div>
-                <div class="content custom-card-content">
-                    <div class="header">{{ user.username }}</div>
-                    <div class="meta">
-                        <span class="date">Inscrit le {{ user.dateRegister|date('d-m-Y') }}</span>
-                    </div>
-                    <div class="description">
-                        {{ user.bio|slice(0, 100) }}...
-                    </div>
-                </div>
-                <div class="extra content">
-                    <a href="{{ path('detail_user', {'id': user.id}) }}" class="ui button primary">
-                        Plus d'infos
-                    </a>
+                <div class="description">
+                    {{ user.bio|slice(0, 100) }}...
                 </div>
             </div>
-            {% endfor %}
+            <div class="extra content">
+                <a href="{{ path('detail_user', {'id': user.id}) }}" class="ui button primary">
+                    Plus d'infos
+                </a>
+            </div>
         </div>
+        {% endfor %}
+    </div>
 
-        <div class="ui pagination menu centered custom-margin-top">
-            {% for page in range(1, pagination.pageCount) %}
-            <a class="item{% if page == pagination.currentPageNumber %} active{% endif %}"
-                href="{{ path('list_user_type', {'role': role, 'page': page }) }}">
-                {{ page }}
-            </a>
-            {% endfor %}
-        </div>
-        {% else %}
-        <p>Aucun utilisateur trouvé.</p>
-        {% endif %} 
-    </div> 
+    <div class="ui pagination menu centered custom-margin-top">
+        {% for page in range(1, pagination.pageCount) %}
+        <a class="item{% if page == pagination.currentPageNumber %} active{% endif %}"
+            href="{{ path('list_user_type', {'role': role, 'page': page }) }}">
+            {{ page }}
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Aucun utilisateur trouvé.</p>
+    {% endif %}
 </div>
 {% endblock %}

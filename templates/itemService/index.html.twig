@@ -3,13 +3,20 @@
 {% block body %}
 
 <div class="ui container">
-    <div class="separator"></div>
-    <h1 class="uk-animation-slide-right">{{ title_page }}</h1>
-    <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
-</div>
 
-
-<div class="ui container">
+    <div class="uk-animation">
+        <div class="uk-animation-slide-right">
+            <p class="uk-text-left">
+            <h1 class="title uk-animation-slide-right">
+                {% if service %}
+                {{ service.title }}
+                {% else %}
+                {{ title_page }}
+                {% endif %}
+            </h1>
+            </p>
+        </div>
+    </div>
     {% if formAddService is defined %}
     <div class="ui container">
         <div class="ui segment">
@@ -18,7 +25,6 @@
         </div>
     </div>
     {% endif %}
-
     {# Liste des services #}
     {% if services|default %}
     <div class="ui list">
@@ -33,44 +39,30 @@
         {% endfor %}
     </div>
     {% endif %}
-
-
     {# Détail d'un service #}
     {% if service|default %}
-    <div class="ui container product-container">
-        
-        <div class="ui two column stackable grid">
-
-            <div class="column">
-                <div class="ui segment equal-height">
-                    <div class="product-image">
-                        <img src="{{ asset(service.picture) }}" alt="Product Image" class="ui fluid image">
-                    </div>
-                    <div class="ui segment equal-height">
-                        <div class="product-details">
-
-                            <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
-                        </div>
-                    </div>
-                </div>
+    <div class="ui two column stackable grid">
+        <div class="column">
+            <div class="product-image">
+                <img src="{{ asset(service.picture) }}" alt="Product Image {{ service.title }}" class="ui fluid image">
             </div>
-            <div class="column">
-                <div class="ui segment equal-height">
-                    <div class="product-details">
-                        <h1 class="ui header">{{ service.title }}</h1>
-                        <p><strong>Description: </strong>{{ service.description }}</p>
-                        <p><strong>Prix: </strong>{{ service.price }}€</p>
-                        <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
-                        <p><strong>Créé le: </strong>{{ service.createDate|date('d/m/Y') }}</p>
-                        <p><strong>Réf: </strong>{{ service.id }}</p>
-                        <a href="{{ path('add_service_cart', {'id': service.id}) }}"
-                            class="ui primary button add-to-cart-btn">Ajouter au panier</a>
-                    </div>
+            <div class="ui segment equal-height">
+                <div class="product-details">
+                    <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
                 </div>
             </div>
         </div>
+        <div class="column ui segment">
+            {# <h1 class="ui header">{{ service.title }}</h1> #}
+            <p><strong>Description: </strong>{{ service.description }}</p>
+            <p><strong>Prix: </strong>{{ service.price }}€</p>
+            <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
+            <p><strong>Créé le: </strong>{{ service.createDate|date('d/m/Y') }}</p>
+            <p><strong>Réf: </strong>{{ service.id }}</p>
+            <a href="{{ path('add_service_cart', {'id': service.id}) }}"
+                class="ui primary button add-to-cart-btn">Ajouter au panier</a>
+        </div>
     </div>
-
     {# si l'utilisateur est connecter #}
     {% if app.user %}
     {# On s'assure que l'user est l'auteur du service #}

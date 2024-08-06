@@ -33,6 +33,27 @@ class ImageService
         };
         return $role;
     }
+
+    public function generateImageUrl(string $filename, string $role): string
+    {
+        $filePath = $this->getImagePath($filename, $role);
+
+        if (!file_exists($filePath)) {
+            throw new \Exception('Image not found' . $filePath);
+        }
+
+        return str_replace($this->parameters->get('kernel.project_dir') . '/public', '', $filePath);
+    }
+
+    
+    public function getImagePath(string $filename, string $role): string
+    {
+        $uploadsDirectory = $this->getUploadDirectory($role);
+        return $uploadsDirectory . '/' . $filename;
+    }
+
+
+
     // recherche les paramètres repertoire du service.yaml
     private function getUploadDirectory(string $role): string
     {
@@ -49,6 +70,11 @@ class ImageService
                 return $this->parameters->get('pictures_directory');
         }
     }
+
+
+
+
+
     public function uploadImage(UploadedFile $file, string $role): string
     {
         $uploadsDirectory = $this->getUploadDirectory($role);
@@ -61,15 +87,6 @@ class ImageService
         }
 
         return $filename;
-    }
-
-
-
-
-    public function getImagePath(string $filename, string $role): string
-    {
-        $uploadsDirectory = $this->getUploadDirectory($role);
-        return $uploadsDirectory . '/' . $filename;
     }
 
     public function deleteImage(string $filename, string $role): void
@@ -91,32 +108,31 @@ class ImageService
 
 
 
-    public function generateImageUrl(string $filename, string $role): string
-    {
-        $filePath = $this->getImagePath($filename, $role);
 
-        if (!file_exists($filePath)) {
-            throw new \Exception('Image not found' . $filePath);
+
+
+    public function setPictureUrl($entity)
+    {
+        $role = null;
+        $roles = null;
+        
+        if (!$entity instanceof User) {
+            $role = 'SERVICE';
+          
+        } else {
+            $roles = $entity->getRoles();
+            $role = $this->handlerRoles($roles);
+
         }
-
-        return str_replace($this->parameters->get('kernel.project_dir') . '/public', '', $filePath);
-    }
-
-
-    public function setPictureUrl($user)
-    {
-        $pictureFilename = $user->getPicture();
-        $roles = $user->getRoles();
-
-        $role = $this->handlerRoles($roles);
-
+        $pictureFilename = $entity->getPicture();
+        
         if ($pictureFilename) {
             try {
                 $pictureUrl = $this->generateImageUrl($pictureFilename, $role);
-                $this->logger->info('Generated picture URL', ['pictureUrl' => $pictureUrl]);
-                $user->setPicture($pictureUrl);
+                $this->logger->info('Generated picture URL' . $entity, ['pictureUrl' => $pictureUrl]);
+                $entity->setPicture($pictureUrl);
             } catch (\Exception $e) {
-                $this->logger->error('Failed to generate picture URL', ['error' => $e->getMessage()]);
+                $this->logger->error('Failed to generate picture URL' . $entity, ['error' => $e->getMessage()]);
                 throw $e;
             }
         }

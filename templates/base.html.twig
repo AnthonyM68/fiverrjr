@@ -3,16 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}title_page!{% endblock %}</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-
     {% block stylesheets %}
-
     {{ encore_entry_link_tags('jquery_ui_css') }}
     {{ encore_entry_link_tags('jquery_ui_theme') }}
     {{ encore_entry_link_tags('jquery_ui_structure') }}
-
     {{ encore_entry_link_tags('jquery_popup') }}
     {{ encore_entry_link_tags('slick-carousel-css') }}
     {{ encore_entry_link_tags('slick-carousel-theme-css') }}
@@ -20,50 +17,38 @@
     {{ encore_entry_link_tags('uikit_css') }}
     {{ encore_entry_link_tags('tarteaucitron_css') }}
     {{ encore_entry_link_tags('app_styles') }}
-
     {% endblock %}
 </head>
 
 <body>
-    <header>
-        {# On utilise un controller pour rendre un form search dans la navbar #}
-        {{ render(controller('App\\Controller\\NavbarController::index')) }}
-    </header>
-
-    <article>
-        <div class="ui container">
-            <div class="ui segment" id="search-results-container" style="display: none;">
-                <div class="ui grid">
-                    <div class="sixteen wide column">
-                        <div class="ui right aligned grid">
-                            <div class="sixteen wide column">
-                                <button class="ui button primary right floated" id="close-results">Fermer</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sixteen wide column search-results">
-                        <div id="search-results"></div>
-                    </div>
-                </div>
+    <div class="page-wrapper">
+        <header>
+            {# On utilise un controller pour rendre un form search dans la navbar #}
+            {{ render(controller('App\\Controller\\NavbarController::index')) }}
+        </header>
+        <main class="content">
+            {% include "search/search_results.html.twig" %}
+            {% if home is not defined %}
+            <div class="fiverr-container">
+                {% endif %}
+                {% block body %} {% endblock %}
+                {% if home is not defined %}
             </div>
-        </div>
-        {% block body %} {% endblock %}
-        <div id="tarteaucitron"></div>
-    </article>
-    
-    <footer>{% include 'footer/footer.html.twig' %}</footer>
+            {% endif %}
+        </main>
+        <footer >{% include 'footer/footer.html.twig' %}</footer>
 
+    </div>
+    <div id="tarteaucitron"></div>
     {% block javascripts %}
     {{ encore_entry_script_tags('messageFlash') }}
     {{ encore_entry_script_tags('app') }}
     {{ encore_entry_script_tags('jquery_ui_js') }}
-
     {{ encore_entry_script_tags('semantic') }}
-
     {{ encore_entry_script_tags('uikit') }}
     {{ encore_entry_script_tags('uikit-icons') }}
+    {{ encore_entry_script_tags('cart') }} 
     {# {{ encore_entry_script_tags('slick-carousel') }} #}
-
     {# {{ encore_entry_script_tags('CarouselComponent') }}
     {{ encore_entry_script_tags('StickyFooter') }}
     {{ encore_entry_script_tags('Homepage') }} #}
@@ -90,12 +75,12 @@
                 "readmoreLink": "", /* Change the default readmore link */
                 "mandatory": true /* Show a message about mandatory cookies */
             });
-
         } else {
             console.error('Tarteaucitron is not defined');
         }
     </script>
     {% endblock %}
+
 </body>
 
 </html>

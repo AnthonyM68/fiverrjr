@@ -10,10 +10,9 @@
 {# Convertir le type de message à l'aide du tableau de mappage #}
 {% set mappedType = typeMapping[type] ?? type %}
 
-
 {# Boucle sur chaque message du type courant #}
 {% for flash_message in messages %}
-{# Affiche un div pour chaque message flash #}
+{# Affiche une alert typer pour chaque message flash #}
 <div class="{{ mappedType }}">
     <div class="header">
         {{ flash_message }}

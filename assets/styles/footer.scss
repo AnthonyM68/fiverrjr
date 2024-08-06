@@ -1,11 +1,12 @@
-// @import "./assets/styles/variables";
+ @import "variables";
 
-// footer {
-//   background-color: $secondary;
-//   color: $link-footer;
-//   padding: 50px 0 20px;
-//   font-family: Arial, sans-serif;
-// }
+
+footer {
+    padding: 4px 0 2px;
+    background: #f8f8f8;
+    background-color:$primary!important;
+  }
+  
 
 // .footer-container {
 //   display: flex;

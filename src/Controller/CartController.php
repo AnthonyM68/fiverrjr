@@ -50,7 +50,7 @@ class CartController extends AbstractController
         ]);
     }
 
-    #[Route('/cart/add/serviceItem/{id}', name: 'add_service_cart')]
+    #[Route('/cart/add/service/{id}', name: 'add_service_cart')]
     public function cartAddProduct(
         ServiceItem $serviceItem,
         Request $request,

@@ -3,13 +3,48 @@
 {% block title %}{{title_page}}{% endblock %}
 
 {% block body %}
-<div class="fiverr-container">
-    <div class="ui container">
+
+<div class="custom-container">
+    {# container title animation #}
+    <div class="uk-animation">
         <div class="uk-animation-slide-right">
-            <h1 class="title">{{ title_page }}</h1>
+            <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
         </div>
-        {# On vérifie que le formulaire existe avant de l'afficher #}
-        {% if formAddTheme is defined %}
+    </div>
+    {# list theme #}
+    {% if themes | default %}
+    <div class="ui list uk-animation-fade">
+        {% for theme in themes %}
+        <div class="item">
+            <i class="folder icon"></i>
+            <div class="content">
+                <div class="header">
+                    <a href="{{ path('detail_theme', { 'id': theme.id }) }}">{{ theme.nameTheme }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {# list category by theme #}
+    {% if categories | default %}
+    {# On affiche les category touvées #}
+    <div class="ui list uk-animation-fade">
+        {% for category in categories %}
+        <div class="item">
+            <i class="folder icon"></i>
+            <div class="content">
+                <div class="header">
+                    <a href="{{ path('detail_category', { 'id': category.id }) }}">{{ category.nameCategory }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {# add theme #}
+    {% if formAddTheme is defined %}
+    <div class="ui segment">
         {{ form_start(formAddTheme, {'attr': {'class': 'ui form'}}) }}
         <div class="{% if formAddTheme.nameTheme.vars.errors|length > 0 %}field{% endif %}">
             {{ form_row(formAddTheme.nameTheme) }}
@@ -19,52 +54,17 @@
                 <span class="ui-icon ui-icon-check"></span> Valider
             </button>
         </div>
-        {{ form_end(formAddTheme) }}
-        {% endif %}
-
-        {% if themes | default %}
-        <div class="ui list uk-animation-fade">
-            {% for theme in themes %}
-            <div class="item">
-                <i class="folder icon"></i>
-                <div class="content">
-                    <div class="header">
-                        <a href="{{ path('detail_theme', { 'id': theme.id }) }}">{{ theme.nameTheme }}</a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% if is_granted('ROLE_ADMIN') %}
-        <div class="ui segment">
-            <h3>Administration:</h3>
-            <a href="{{ path('new_theme') }}" class="ui-button ui-widget ui-corner-all margin-large">
-                <span class="ui-icon ui-icon-plus"></span> Ajouter une thème
-            </a>
-        </div>
-        {% endif %}
-        {% endif %}
-
-
-        {% if categories | default %}
-        {# On affiche les catégories touvées #}
-        <div class="ui list uk-animation-fade">
-            {% for category in categories %}
-            <div class="item">
-                <i class="folder icon"></i>
-                <div class="content">
-                    <div class="header">
-                        <a href="{{ path('detail_category', { 'id': category.id }) }}">{{ category.nameCategory }}</a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-
-
-        {# {% endif %} #}
     </div>
+    {{ form_end(formAddTheme) }}
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') and formAddTheme is not defined %}
+    {# section administration access #}
+    <div class="ui segment">
+        <h3>Administration:</h3>
+        <a href="{{ path('new_theme') }}" class="ui-button ui-widget ui-corner-all margin-top-large">
+            <span class="ui-icon ui-icon-plus"></span> Ajouter une thème
+        </a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

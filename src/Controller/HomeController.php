@@ -51,7 +51,7 @@ class HomeController extends AbstractController
         $lastService = $this->entityManager->getRepository(ServiceItem::class)->findby([], ['id' => 'DESC'], 10);
 
         $developer = $lastDeveloper->getQuery()->getSingleResult();
-        $this->imageService->setPictureUrl($developer, 'ROLE_DEVELOPER');
+        $this->imageService->setPictureUrl($developer);
         $lastDeveloperData = $serializer->serialize($developer, 'json', ['groups' => 'user']);
         $dataDeveloper = json_decode($lastDeveloperData, true);
        
@@ -62,10 +62,12 @@ class HomeController extends AbstractController
 
         // Définir les URL des images pour chaque service
         foreach ($lastService as $service) {
-            $this->imageService->setPictureUrl($service, 'SERVICE');
+            $this->imageService->setPictureUrl($service);
         }
         $lastServiceData = $serializer->serialize($lastService, 'json', ['groups' => 'serviceItem']);
         $dataService = json_decode($lastServiceData, true);
+
+
 
         return $this->render('home/index.html.twig', [
             'lastDeveloper' => $dataDeveloper,
@@ -73,6 +75,7 @@ class HomeController extends AbstractController
             'lastService' => $dataService,
             'submitted_form' => null,
             'title_page' => 'Accueil',
+            'home' => true
         ]);
     }
 
