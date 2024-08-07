@@ -138,26 +138,26 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
 }
 /********************* Responsive design **********/
 
-@media (max-width: 768px) {
-  // largeur du moteur de recherche input
-  .ui.category.search {
-    width: 100% !important;
-  }
-}
-/* Tablets (portrait) */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .ui.category.search {
-    // largeur du moteur de recherche input
-    width: 100% !important;
-  }
-}
-/* Desktops and larger devices */
-@media (min-width: 1025px) {
-  .ui.category.search {
-    // largeur du moteur de recherche input
-    width: 100% !important;
-  }
-  .ui.fixed.borderless.huge.menu {
-    height:20vh;
-  }
-}
+// @media (max-width: 768px) {
+//   // largeur du moteur de recherche input
+//   .ui.category.search {
+//     width: 100% !important;
+//   }
+// }
+// /* Tablets (portrait) */
+// @media (min-width: 769px) and (max-width: 1024px) {
+//   .ui.category.search {
+//     // largeur du moteur de recherche input
+//     width: 100% !important;
+//   }
+// }
+// /* Desktops and larger devices */
+// @media (min-width: 1025px) {
+//   .ui.category.search {
+//     // largeur du moteur de recherche input
+//     width: 100% !important;
+//   }
+//   .ui.fixed.borderless.huge.menu {
+//     height:20vh;
+//   }
+// }

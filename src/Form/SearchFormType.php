@@ -25,7 +25,7 @@ class SearchFormType extends AbstractType
             ->add($key, TextType::class, [
                 'required' => true,
                 'attr' => [
-                    'placeholder' => 'Rechercher',
+                    'placeholder' => 'Services',
                     'class' => 'prompt ' . $options['id_suffix']
                 ],
                 'label' => false

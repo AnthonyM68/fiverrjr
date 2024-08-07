@@ -51,7 +51,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->where('u.roles LIKE :role')
             ->setParameter('role', '%' . $role . '%')
             ->orderBy('u.dateRegister', 'DESC')
-            ->setMaxResults(1);  
+            ->setMaxResults(1);
+    }
+    public function searchByTerm($searchTerm)
+    {
+       return $this->createQueryBuilder('u')
+            ->where('u.username LIKE :searchTerm')
+            ->orWhere('u.firstName LIKE :searchTerm')
+            ->orWhere('u.lastName LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->orderBy('u.dateRegister', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**

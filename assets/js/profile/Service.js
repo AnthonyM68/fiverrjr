@@ -115,98 +115,99 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to fetch or parse JSON:', error);
         }
     };
+    if (service_item_list) {
+        // Attacher un écouteur d'événement pour la délégation sur les boutons d'édition et de suppression
+        service_item_list.addEventListener('click', async (event) => {
+            const target = event.target.closest('.ui-button');
+            if (!target) return;
 
-    // Attacher un écouteur d'événement pour la délégation sur les boutons d'édition et de suppression
-    service_item_list.addEventListener('click', async (event) => {
-        const target = event.target.closest('.ui-button');
-        if (!target) return;
-
-        if (target.classList.contains('toggle-edit-service')) {
-            try {
-                // on récupère l'id du service depuis le lien
-                const serviceId = target.getAttribute('data-service-id');
-                // on récupère le token du lien
-                const csrfToken = target.getAttribute(`data-token-${serviceId}`);
-                const url = `/fetch/service/form/generate`;
-
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken // Ajouter le token CSRF dans l'en-tête
-                    },
-                    // Inclure le token CSRF dans le corps de la requête
-                    // et le service (title, id)
-                    body: JSON.stringify({ serviceId, _token: csrfToken })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const contentType = response.headers.get('content-type');
-                // s'il y'a un contenu et de type json dans le header
-                if (contentType && contentType.indexOf('application/json') !== -1) {
-                    // on décode le contenu
-                    const data = await response.json();
-                    console.log('Form data HTML received for service:', data);
-
-                    const editService = document.querySelector('.edit-service-container');
-
-                    if (!editService.style.display || editService.style.display === 'none') {
-                        editService.style.display = 'block';
-                    }
-                    // on injecte le résultat
-                    document.getElementById('service-form-container').innerHTML = data.formHtml;
-                    eventListnerFormService();
-                } else {
-                    const text = await response.text();
-                    console.error('Unexpected response format:', text);
-                }
-            } catch (error) {
-                console.error('Failed to fetch or parse JSON for service form:', error);
-            }
-        } else if (target.classList.contains('toggle-trash-service')) {
-
-            // on récupère l'id du service depuis le lien
-            const serviceId = target.getAttribute('data-service-id');
-            // console.log('Id service:', serviceId);
-            // on récupère le token du lien
-            const csrfToken = target.getAttribute(`data-token-${serviceId}`);
-            // Confirmation JS (prévoir custom)
-            // console.log('token:', csrfToken);
-            if (confirm('Confirmez-vous la suppression du service?')) {
+            if (target.classList.contains('toggle-edit-service')) {
                 try {
-                    const response = await fetch(`/fetch/service/delete`, {
-                        method: 'DELETE',
+                    // on récupère l'id du service depuis le lien
+                    const serviceId = target.getAttribute('data-service-id');
+                    // on récupère le token du lien
+                    const csrfToken = target.getAttribute(`data-token-${serviceId}`);
+                    const url = `/fetch/service/form/generate`;
+
+                    const response = await fetch(url, {
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': csrfToken // Ajouter le token CSRF dans l'en-tête
                         },
                         // Inclure le token CSRF dans le corps de la requête
-                        // body: JSON.stringify({ _token: csrfToken })
+                        // et le service (title, id)
                         body: JSON.stringify({ serviceId, _token: csrfToken })
                     });
+
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
-                    const result = await response.json();
-                    // console.log(result);
-                    if (result.error) {
-                        console.error(`Error: ${result.error}`);
-                        // alert(`Error: ${result.error}`);
+
+                    const contentType = response.headers.get('content-type');
+                    // s'il y'a un contenu et de type json dans le header
+                    if (contentType && contentType.indexOf('application/json') !== -1) {
+                        // on décode le contenu
+                        const data = await response.json();
+                        console.log('Form data HTML received for service:', data);
+
+                        const editService = document.querySelector('.edit-service-container');
+
+                        if (!editService.style.display || editService.style.display === 'none') {
+                            editService.style.display = 'block';
+                        }
+                        // on injecte le résultat
+                        document.getElementById('service-form-container').innerHTML = data.formHtml;
+                        eventListnerFormService();
                     } else {
-                        console.log(result.message);
-                        // alert(result.message);
-                        target.closest('tr').remove();
+                        const text = await response.text();
+                        console.error('Unexpected response format:', text);
                     }
                 } catch (error) {
-                    console.error('Failed to delete service:', error);
-                    // alert('Failed to delete service');
+                    console.error('Failed to fetch or parse JSON for service form:', error);
+                }
+            } else if (target.classList.contains('toggle-trash-service')) {
+
+                // on récupère l'id du service depuis le lien
+                const serviceId = target.getAttribute('data-service-id');
+                // console.log('Id service:', serviceId);
+                // on récupère le token du lien
+                const csrfToken = target.getAttribute(`data-token-${serviceId}`);
+                // Confirmation JS (prévoir custom)
+                // console.log('token:', csrfToken);
+                if (confirm('Confirmez-vous la suppression du service?')) {
+                    try {
+                        const response = await fetch(`/fetch/service/delete`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken // Ajouter le token CSRF dans l'en-tête
+                            },
+                            // Inclure le token CSRF dans le corps de la requête
+                            // body: JSON.stringify({ _token: csrfToken })
+                            body: JSON.stringify({ serviceId, _token: csrfToken })
+                        });
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        const result = await response.json();
+                        // console.log(result);
+                        if (result.error) {
+                            console.error(`Error: ${result.error}`);
+                            // alert(`Error: ${result.error}`);
+                        } else {
+                            console.log(result.message);
+                            // alert(result.message);
+                            target.closest('tr').remove();
+                        }
+                    } catch (error) {
+                        console.error('Failed to delete service:', error);
+                        // alert('Failed to delete service');
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 
 
 

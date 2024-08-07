@@ -1,61 +1,72 @@
 @import "./assets/styles/variables";
 
+.ad-banner {
+  background-color: $secondary;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //   height:25vh;
+  z-index: 2;
+  border: 3px solid yellow;
+  width: 100%;
+}
 
+/* Carousel */
+.ad-carousel {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: auto;
+  display: flex;
 
+  border: 2px solid blue;
+  width: 100%;
+}
 
-// .ad-banner {
-//   // background-color: $secondary;
-//   padding: 10px 0;
-//   height: auto;
-//   height:25vh;
-// }
+.ad-carousel div {
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  //   color: $white;
+  //   padding: 0 10px;
+  text-align: center;
+  border:1px solid green;
+}
 
-// /* Carousel */
-// .ad-carousel {
-//   display: flex;
-//   flex-wrap: wrap;
-//   justify-content: space-around;
-//   align-items: center;
-// }
+.ad-carousel a {
+  display: flex;
+  justify-content: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  margin: 5px;
+  white-space: nowrap;
+  color: $grey;
+  border:1px solid #fff;
+  width:auto;
+}
+.ad-carousel a:hover {
+  text-decoration: none;
+  color: $primary;
+}
+/* Couleur du dot sélectionné */
+.slick-dots li.slick-active button {
+  // background-color: $secondary;
+  color: $white;
+}
+.slick-dots li.slick-active button:before {
+  // background-color: $secondary;
+  color: $white;
+}
+.slick-dots li button:before {
+  // background-color: $secondary;
+  color: $white;
+}
 
-// .ad-carousel div {
-//   color: $white;
-//   padding: 0 10px;
-//   text-align: center;
-// }
-
-// .ad-carousel a {
-//   text-transform: uppercase;
-//   text-decoration: none;
-//   display: inline-block;
-//   padding: 10px 15px;
-//   border-radius: 5px;
-//   transition: background-color 0.3s ease;
-//   margin: 5px;
-//   white-space: nowrap;
-//   color: $grey;
-// }
-
-// .ad-carousel a:hover {
-//   text-decoration: none;
-//   color: $primary;
-// }
-
-// /* Couleur du dot sélectionné */
-// .slick-dots li.slick-active button {
-//   // background-color: $secondary;
-//   color: $white;
-// }
-// .slick-dots li.slick-active button:before {
-//   // background-color: $secondary;
-//   color: $white;
-// }
-// .slick-dots li button:before {
-//   // background-color: $secondary;
-//   color: $white;
-// }
-
-// /* Responsive design */
+/* Responsive design */
 // @media (max-width: 768px) {
 //   .ad-carousel .slick-slide {
 //     display: flex !important;

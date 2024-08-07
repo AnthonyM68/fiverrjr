@@ -10,8 +10,8 @@
     // HomePage.jsx
     window.__INITIAL_DATA__ = {
         lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
-        lastClient: {{ lastClient | json_encode() | raw }},
-        lastService: {{ lastService | json_encode() | raw }} 
+    lastClient: {{ lastClient | json_encode() | raw }},
+    lastService: {{ lastService | json_encode() | raw }} 
         };
     console.log(window.__INITIAL_DATA__.lastService);
 </script>
@@ -20,24 +20,57 @@
 
 <div class="separator"></div>
 
-{# <div class="ui container">
-    <div class="ui message">
-        <h1 class="ui huge header">
-            Navbar example
+<div class="ui container">
+    <div class="ui center aligned message padding-large">
+        <h1 class="ui huge header ">
+            Trouvez un Développeur
         </h1>
-        <p class="lead">
+        <h2 class="ui center aligned icon header">
+            <i class="circular users icon"></i>
+
+            <div class="ui grid">
+
+                <div class="eight wide column right aligned">
+                    <div class="ui right aligned category search">
+                        <form action="/search/developer/name" id="search-user-by-name" class="ui form small icon input" method="POST">
+                            <input name="search-user-by-name"  type="text" placeholder="Nom, prénom...">
+                            <i class="search link icon search-user"></i>
+                            <input type="hidden" name="_token" value="{{ csrf_token('search_item_user') }}">
+                        </form>
+                    </div>
+                </div>
+                <div class="eight wide column left aligned">
+                    <div class="ui right aligned category search">
+                        <form action="/search/developer/city" id="search-user-by-city" class="ui form small icon input" method="POST">
+                            <input name="search-user-by-city" type="text" placeholder="Commune...">
+                            <i class="search link icon search-user"></i>
+                            <input type="hidden" name="_token" value="{{ csrf_token('search_item-city') }}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </h2>
+        {# <p class="lead">
             This example is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work.
             It includes the responsive CSS and HTML, so it also adapts to your viewport and device.
         </p>
         <p class="lead">
             To see the difference between static and fixed top navbars, just scroll.
         </p>
-        <a class="ui big purple button">View navbar docs &raquo; </a>
+        <a class="ui big purple button">View navbar docs &raquo; </a> #}
     </div>
-</div> #}
+</div>
 
 {# <div id="bestservices-root"></div> #}
-<div id="homepage-root"></div>
+
+
+
+
+
+{# <div id="homepage-root"></div> #}
 
 <div class="separator"></div>
 

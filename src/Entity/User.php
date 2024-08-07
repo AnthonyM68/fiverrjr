@@ -22,6 +22,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user', 'serviceItem'])]
     private ?int $id = null;
 
     // Contrainte pour le champ email login
@@ -34,6 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: "Votre email ne peut pas comporter plus de {{ limit }} caractères."
     )]
     #[ORM\Column(length: 180)]
+    // #[Groups(['user', 'serviceItem'])]
     private ?string $email = null;
 
     /**

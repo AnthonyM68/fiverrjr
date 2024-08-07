@@ -8,7 +8,7 @@
         <div class="uk-animation-slide-right">
             <p class="uk-text-left">
             <h1 class="title uk-animation-slide-right">
-                {% if service %}
+                {% if service | default %}
                 {{ service.title }}
                 {% else %}
                 {{ title_page }}
@@ -26,7 +26,7 @@
     </div>
     {% endif %}
     {# Liste des services #}
-    {% if services|default %}
+    {% if services | default %}
     <div class="ui list">
         {% for service in services %}
         <div class="item">
@@ -40,8 +40,10 @@
     </div>
     {% endif %}
     {# Détail d'un service #}
-    {% if service|default %}
+    {% if service | default %}
+    
     <div class="ui two column stackable grid">
+
         <div class="column">
             <div class="product-image">
                 <img src="{{ asset(service.picture) }}" alt="Product Image {{ service.title }}" class="ui fluid image">
@@ -52,6 +54,7 @@
                 </div>
             </div>
         </div>
+
         <div class="column ui segment">
             {# <h1 class="ui header">{{ service.title }}</h1> #}
             <p><strong>Description: </strong>{{ service.description }}</p>

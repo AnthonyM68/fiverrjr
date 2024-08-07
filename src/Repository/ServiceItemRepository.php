@@ -26,17 +26,16 @@ class ServiceItemRepository extends ServiceEntityRepository
 
         // Retourne le QueryBuilder au lieu d'exécuter immédiatement la requête
         return $qb;
-
-        // Ancienne méthode qui exécutait immédiatement la requête et retournait les résultats
-        // Nous avons commenté cette partie car nous voulons maintenant retourner un QueryBuilder
-        // pour pouvoir appliquer des filtres supplémentaires avant d'exécuter la requête.
-        /*
-    return $this->createQueryBuilder('s')
-        ->andWhere('s.title LIKE :term OR s.description LIKE :term')
-        ->setParameter('term', '%' . $term . '%')
-        ->getQuery()
-        ->getResult();  
-    */
+    }
+    public function findByUserId(int $userId): array
+    {
+        return $this->createQueryBuilder('su')
+            ->innerJoin('su.user', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->orderBy('su.createDate', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
     public function countAll()
     {

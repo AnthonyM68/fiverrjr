@@ -10,13 +10,11 @@ html, body {
   height: 100%;
   margin: 0;
 }
-
 .page-wrapper {
   // display: flex;
   // flex-direction: column;
   min-height: 100vh;
 }
-
 .content {
   // flex: 1;
   padding-bottom:150px;
@@ -199,11 +197,11 @@ html, body {
 // }
 
 /* Responsive design */
-@media (max-width: 768px) {
-}
-/* Tablets (portrait) */
-@media (min-width: 769px) and (max-width: 1024px) {
-}
-/* Desktops and larger devices */
-@media (min-width: 1025px) {
-}
+// @media (max-width: 768px) {
+// }
+// /* Tablets (portrait) */
+// @media (min-width: 769px) and (max-width: 1024px) {
+// }
+// /* Desktops and larger devices */
+// @media (min-width: 1025px) {
+// }

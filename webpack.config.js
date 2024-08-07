@@ -63,6 +63,7 @@ Encore
         './assets/styles/banner/banner.scss',
         './assets/styles/home.scss',
         './assets/styles/user.scss',
+        './assets/styles/carouselComponent.scss',
         // './assets/styles/course.scss',
         './assets/styles/sticky.css',
         './assets/styles/login-register.scss',
@@ -82,7 +83,8 @@ Encore
     // Message_flash
     .addEntry('messageFlash', './assets/js/alert/messageFlash.js')
     // DisplayResults 
-    .addEntry('displayResults', './assets/js/search/display/displayResults.js')
+    .addEntry('displayResultsServices', './assets/js/search/services/displayResults.js')
+    .addEntry('displayResultsUsers', './assets/js/search/users/displayResults.js')
     // Navbar 
     .addEntry('navbar', './assets/js/navbar/navbar.js')
     // Search motor

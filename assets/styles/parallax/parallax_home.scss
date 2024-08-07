@@ -9,12 +9,13 @@
 }
 $overlay-parallax-home: hex-to-rgba($secondary, $alpha-parallax-home);
 
-.parallax-home {
+.parallax.parallax-home {
   position: relative;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 85vh;
+  border: 1px solid red;
   background-image: url("../../../public/uploads/background-home.jpg");
 }
 
@@ -24,11 +25,10 @@ $overlay-parallax-home: hex-to-rgba($secondary, $alpha-parallax-home);
   left: 0;
   width: 100%;
   height: $parallax-container-home-height;
-  background-color: $overlay-parallax-home;
+  // background-color: $overlay-parallax-home;
   pointer-events: none;
-  z-index: 1;
+  z-index: 999;
 }
-
 
 .floating-title-fiverr-junior {
   position: absolute;
@@ -53,10 +53,12 @@ $overlay-parallax-home: hex-to-rgba($secondary, $alpha-parallax-home);
   color: $white;
   padding: $padding-large;
   z-index: 2;
+  border: 3px solid purple;
 }
 .floating-title-fiverr-junior h1 {
   font-size: $font-size-animate-extra-big-large;
   display: inline-block;
+  // background-color:red;
 }
 .fiverr-animate,
 .junior-animate {
@@ -79,25 +81,23 @@ p.sub-animate {
   z-index: 2;
 }
 
-// @media (max-width: 768px) {
+@media (max-width:320px) {
+  h1 {
+    font-size: 20px;
+    display: inline-block;
+    background-color:green !important;
+  }
+}
+// @media (min-width: 320px) and (max-width: 768px) {
 //   .floating-title-fiverr-junior h1 {
-//     font-size: 50px !important;
+//     font-size: 20px;
+//     display: inline-block;
+//     background-color:green;
 //   }
-//   p.sub-animate {
-//     font-size: 50px;
-//     }
 // }
 
 // @media (min-width: 769px) and (max-width: 1024px) {
-
 // }
 
 // @media (min-width: 1025px) {
-//   .parallax-container {
-//     height: 100vh;
-//     border: 5px solid green;
-//   }
-//   .parallax-home {
-//     height: 100%;
-//   }
 // }

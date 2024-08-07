@@ -2,16 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Theme;
+use PHPUnit\Util\Json;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
+use App\Service\ImageService;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Util\Json;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 // use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -23,6 +26,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SearchController extends AbstractController
 {
     private $entityManager;
+    private $imageService;
     private $logger;
     private $csrfTokenManager;
     private $serializer;
@@ -30,11 +34,14 @@ class SearchController extends AbstractController
     public function __construct(
         EntityManagerInterface $entityManager,
         CsrfTokenManagerInterface $csrfTokenManager,
-        // SerializerInterface $serializer,
+        ImageService $imageService,
+        SerializerInterface $serializer,
         LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->imageService = $imageService;
+        $this->serializer = $serializer;
         $this->logger = $logger;
     }
 
@@ -64,29 +71,57 @@ class SearchController extends AbstractController
     #[Route("/search/results", name: "search_results", methods: ['POST'])]
     public function searchResult(Request $request, SerializerInterface $serializer): JsonResponse
     {
+
         // Pour le test, on ne prend pas en compte le contenu du request et on récupère toutes les entités Theme
         // $queryBuilder = $this->entityManager->getRepository(ServiceItem::class)->findAll();
 
         $queryBuilder = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds('Developpement');
-
         // Sérialisation des entités Theme
         try {
             $results = $serializer->serialize($queryBuilder->getQuery()->getResult(), JsonEncoder::FORMAT, ['groups' => 'serviceItem']);
-
-
             $this->logger->info('Serialized results:', ['results' => $results]);
-
             return new JsonResponse($results, 200, [], true);
-
-
         } catch (\Exception $e) {
 
             $this->logger->error('Serialization error:', ['exception' => $e]);
-
             return new JsonResponse(['error' => 'Serialization error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    #[Route("/search/developer/name", name: "search_developer", methods: ['POST'])]
+    public function searchDeveloper(Request $request): JsonResponse
+    {
+        // Récupération des données du formulaire
+        $formData = $request->request->all();
 
+        $searchTerm = $formData['search-user-by-name'];
+        $token = $formData['_token'];
+        // Vérifier le token CSRF
+        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken('search_item_user', $token))) {
+            return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
+        }
+        $users = $this->entityManager->getRepository(User::class)->searchByTerm($searchTerm);
+
+        foreach($users as $user) {
+            $this->imageService->setPictureUrl($user);
+        }
+        // formater la date
+        $usersFormatDate = array_map(function ($user) {
+            return [
+                'user' => $user,
+                'formattedDate' => $user->getDateRegister()->format('d/m/Y'),
+                'profileUrl' =>  $this->generateUrl('detail_user', ['id' => $user->getId()]),
+                'listServices' => $this->generateUrl('list_services_by_userID', ['id' => $user->getId()])
+            ];
+        }, $users);
+        try {
+            $results = $this->serializer->serialize($usersFormatDate, JsonEncoder::FORMAT, ['groups' => 'user']);
+            $this->logger->info('Serialized results:', ['results' => $results]);
+            return new JsonResponse($results, 200, [], true);
+        } catch (\Exception $e) {
+            $this->logger->error('Serialization error:', ['exception' => $e]);
+            return new JsonResponse(['error' => 'Serialization error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
     /*#[Route("/search/results", name: "search_results", methods: ['POST'])]

@@ -7,53 +7,75 @@
     window.__INITIAL_DATA__ = { lastDeveloper: {{ lastDeveloper | json_encode() | raw }}, lastClient: {{ lastClient | json_encode() | raw }} };
 </script>
 
-{# Détail d'un service #}
-{% if user|default %}
+{# Détail d'un utilisateur #}
+{% if user| default %}
 <div class="ui container">
 
     <div class="uk-animation">
         <div class="uk-animation-slide-right">
-            <p class="uk-text-left">
             <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
-            </p>
         </div>
     </div>
-    {# <h1 class="title uk-animation-slide-right">{{ title_page }}</h1> #}
-    <div class="eight wide column">
-        <div class="ui segment equal-height">
-            <div class="product-image">
-                <img src="{{ asset(user.picture) }}" alt="Image user profile {{ user.firstName }} {{ user.lastName }}"
-                    class="ui fluid image portrait">
-            </div>
 
+    <div class="ui two column stackable grid">
+
+        <div class="eight wide column">
             <div class="ui segment equal-height">
-                <h2 class="ui header">{{ user.firstName }} {{ user.lastName }}</h2>
-                <div class="product-details">
-                    <p><strong>Inscrit depuis: </strong>{{ user.dateRegister|date('d/m/Y') }}</p>
-                    {% if is_granted('ROLE_ADMIN') %}
-                    Administrateur
-                    {% endif %}
-                    {% if is_granted('ROLE_CLIENT') %}
-                    Entreprise / Client
-                    {% endif %}
-                    {% if is_granted('ROLE_DEVELOPER') %}
-                    Développeur
-                    {% endif %}
+                <div class="product-image">
+                    <img src="{{ asset(user.picture) }}"
+                        alt="Image de profil de {{ user.firstName }} {{ user.lastName }}"
+                        class="ui fluid image portrait">
+                </div>
+
+                <div class="ui segment equal-height">
+                    <h2 class="ui header">{{ user.firstName }} {{ user.lastName }}</h2>
+
+                    <div class="aligned center">
+                        <p><strong>Inscrit depuis: </strong>{{ user.dateRegister|date('d/m/Y') }}</p>
+                        {% set roles = [] %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            {% set roles = roles|merge(['Administrateur']) %}
+                        {% endif %}
+                        {% if is_granted('ROLE_CLIENT') %}
+                            {% set roles = roles|merge(['Entreprise / Client']) %}
+                        {% endif %}
+                        {% if is_granted('ROLE_DEVELOPER') %}
+                            {% set roles = roles|merge(['Développeur']) %}
+                        {% endif %}
+                        {% if roles is not empty %}
+                            <p>Rôle{% if roles|length > 1 %}s{% endif %}: {{ roles|join(', ') }}</p>
+                        {% endif %}
+                        <p><strong>Localité: </strong>{{ user.city }}</p>
+                    </div>
                 </div>
             </div>
         </div>
-
-    </div>
-    <div class="eight wide column">
-        <div class="ui segment equal-height">
-            <h3><strong>Bio: </strong></h3>
-            <div class="product-details">
-                <p>{{ user.bio }}</p>
-                <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
+        <div class="eight wide column">
+            <div class="ui segment equal-height">
+                <h3><strong>Bio: </strong></h3>
+                <div class="product-details">
+                    <p>{{ user.bio }}</p>
+                </div>
             </div>
+
+            <div class="ui segment equal-height">
+                <h3><strong>Portfolio: </strong></h3>
+                <div class="product-details">
+                    <p><a href="{{ user.portfolio }}" target="_blank" rel="noopener noreferrer">Voir le portfolio {{ user.portfolio }}</a></p>
+                </div>
+            </div>
+            <div class="container">
+                <a href="{{ path('list_services_by_userID', { 'id': user.id }) }}" class="ui button primary toggle-service-form">
+                    Ces service
+                </a>
+                <a href="javascript:void(0);" class="ui button primary toggle-list-services">
+                    ...
+                </a>
+
+            </div>
+     
         </div>
     </div>
-
 </div>
 {% else %}
 

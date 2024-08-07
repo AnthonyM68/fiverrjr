@@ -18,9 +18,10 @@ const BestServicesCarousel = () => {
   }, []);
 
   const responsive = {
-    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
-    tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
-    mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4 },
+    tablet: { breakpoint: { max: 1024, min: 768 }, items: 3 },
+    mobile: { breakpoint: { max: 768, min: 320 }, items: 2 },
+    mobile: { breakpoint: { max: 320, min: 0 }, items: 1 },
   };
 
   const [ref, inView] = useInView({
@@ -47,8 +48,9 @@ const BestServicesCarousel = () => {
             const imageUrl = service.picture;
 
             return (
-              <div key={index}>
-                <Card className={inView ? "uk-animation-fade" : ""}>
+              <div key={index} className="carousel-container-item">
+                <Card 
+                className={`carousel-item  ${inView ? "uk-animation-fade" : ""}`}>
                   {imageUrl && <Image src={imageUrl} wrapped ui={false} />}
                   <Card.Content>
                     <Card.Header>{service.title}</Card.Header>

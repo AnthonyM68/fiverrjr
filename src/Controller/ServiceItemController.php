@@ -160,6 +160,7 @@ class ServiceItemController extends AbstractController
     {
         // on décode le contenu de la requête
         $body = json_decode($request->getContent(), true);
+        
         $this->logger->info('service_form_generate', ['json_decode' => $body]);
         // On récupère l'id du service envoyer par javascript 
         $id = $body['serviceId'];
@@ -178,19 +179,7 @@ class ServiceItemController extends AbstractController
             // s'il n'est pas valide
             return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
         }
-        // obtenir le nom du fichier de l'image du service 
-        $originalFilename = $service->getPicture();
-        $this->logger->info('Processing generateImageUrl service curent', ['originalFilename' => $originalFilename]);
-        // on génére l'url de l'image sur le serveur
-        if ($originalFilename) {
-            try {
-                $pictureUrl = $this->imageService->generateImageUrl($originalFilename, 'SERVICE');
-                // on set l'url de l'image 
-                $service->setPicture($pictureUrl);
-            } catch (\Exception $e) {
-                throw $e;
-            }
-        }
+        $this->imageService->setPictureUrl($service);
 
         // on créer le formulaire avec une action personnalisée
         $formAddService = $this->createForm(ServiceItemType::class, $service, [
@@ -267,7 +256,16 @@ class ServiceItemController extends AbstractController
                 $this->entityManager->persist($service);
                 $this->entityManager->flush();
 
-                return new JsonResponse(['success' => true, 'message' => 'Le service a bien été mis à jour'], Response::HTTP_OK);
+                try {
+                    $this->entityManager->remove($service);
+                    $this->entityManager->flush();
+                    return new JsonResponse(['success' => true, 'message' => 'Le service a bien été mis à jour'], Response::HTTP_OK);
+                } catch (\Exception $e) {
+                    return new JsonResponse(['error' => 'Failed to delete service'], Response::HTTP_INTERNAL_SERVER_ERROR);
+                }
+
+
+                
             } else {
                 // Si le formulaire n'est pas valide, récupérer les erreurs par champ
                 foreach ($formService->all() as $fieldName => $field) {
@@ -346,7 +344,17 @@ class ServiceItemController extends AbstractController
             'services' => $services
         ]);
     }
-
+    #[Route('/services/user/{id}', name: 'list_services_by_userID')]
+    public function listServiceByUserID(ServiceItemRepository $ServiceItemRepository, int $id): Response
+    {
+        // Récupère tous les service triés par date
+        $services = $ServiceItemRepository->findByUserId($id);
+        // Rend la vue avec les services récupérés
+        return $this->render('itemService/index.html.twig', [
+            'title_page' => 'Liste des Services',
+            'services' => $services
+        ]);
+    }
     /**
      * Créer un nouveau service ou éditer un existant
      */

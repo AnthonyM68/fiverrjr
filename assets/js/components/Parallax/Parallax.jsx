@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { createRoot } from "react-dom/client";
-// import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick.css';
 import "slick-carousel";
-const ParallaxHome = ({ id, height_container, height_parallax }) => {
+
+const ParallaxHome = ({ id}) => {
   useEffect(() => {
     // Initialisation du carousel
     $(`.ad-carousel-${id}`).slick({
@@ -55,7 +56,7 @@ const ParallaxHome = ({ id, height_container, height_parallax }) => {
         <div className="ad-banner ">
           <div className="custom-container text-center">
             <div className={`ad-carousel-${id} ad-carousel`}>
-              <div className="">
+              <div>
                 <a href="https://example.com/codealsace" target="_blank">
                   CodeAlsace
                 </a>
@@ -111,7 +112,7 @@ const ParallaxHome = ({ id, height_container, height_parallax }) => {
   );
 };
 
-const ParallaxHomeFooter = ({ id }) => {
+const ParallaxHomeFooter = () => {
   return (
     <div className="parallax-container">
       <div className="parallax-content">
@@ -142,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (parallaxFooter) {
     const root = createRoot(parallaxFooter);
-    root.render(<ParallaxHomeFooter id="2" />);
+    root.render(<ParallaxHomeFooter />);
   }
 });
 export { ParallaxHome, ParallaxHomeFooter };

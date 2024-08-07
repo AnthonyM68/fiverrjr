@@ -67,8 +67,6 @@ class HomeController extends AbstractController
         $lastServiceData = $serializer->serialize($lastService, 'json', ['groups' => 'serviceItem']);
         $dataService = json_decode($lastServiceData, true);
 
-
-
         return $this->render('home/index.html.twig', [
             'lastDeveloper' => $dataDeveloper,
             'lastClient' => $dataClient,

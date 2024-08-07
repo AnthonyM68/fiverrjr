@@ -1,6 +1,4 @@
 
-
-
 // Requête de recherche
 const submitForm = (form) => {
     console.log(form);

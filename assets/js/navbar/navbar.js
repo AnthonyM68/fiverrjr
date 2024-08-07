@@ -1,4 +1,4 @@
-import { displayResults } from '../search/display/displayResults.js';
+import { displayResults } from '../search/services/displayResults.js';
 import { showAlert, clean } from './../alert/messageFlash.js';
 import { postData } from './../ajax/postData.js';
 
@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error('Error during fetch:', error);
                 showAlert('negative', 'Une erreur est survenue lors de la recherche.');
             } else {
-                showAlert('positive', 'Une erreur est survenue lors de la recherche.');
                 console.log('Données reçues:', data);
                 const resultsHtml = displayResults(data, term);
                 console.log(resultsHtml);
@@ -60,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
     // On sélectionne toutes les icônes de recherche de la navbar
-    const searchIcons = document.querySelectorAll('.ui.icon.input .search.icon');
+    const searchIcons = document.querySelectorAll('.ui.icon.input .search.icon.search-service');
     // ajouter un écouteur d'événement à chaque icône de recherche
     searchIcons.forEach((searchIcon) => {
         searchIcon.addEventListener('click', function (event) {
