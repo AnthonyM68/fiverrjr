@@ -76,6 +76,11 @@ Encore
     .addEntry('app', './assets/app.js')
     // semantic-ui Framework
     .addEntry('semantic', './semantic/dist/semantic.js')
+
+        // Styles et scripts de Semantic UI
+        // .addStyleEntry('semantic_ui_react_css', './assets/semantic-ui-react/src/semantic-ui-react.css') // Assurez-vous que le chemin est correct
+        // .addEntry('semantic_ui_react_js', './assets/semantic-ui-react/src/semantic-ui-react.js') 
+    
     // uikit Framework
     .addEntry('uikit', './node_modules/uikit/dist/js/uikit.js')
     .addEntry('uikit-icons', './node_modules/uikit/dist/js/uikit-icons.js')
@@ -114,8 +119,13 @@ Encore
     .addEntry('useFetch', './assets/js/useFetch.jsx')
     // Paralax
     .addEntry('Parallax', './assets/js/components/Parallax/Parallax.jsx')
+
     // UserCard
     .addEntry('UserCard', './assets/js/components/Card/UserCard.jsx')
+    // UserCard
+    .addEntry('ItemUser', './assets/js/components/Card/ItemUser.jsx')
+    // DeveloperSearch
+    .addEntry('DeveloperSearch', './assets/js/components/DeveloperSearch/DeveloperSearch.jsx')
     // CarouselComponent React
     .addEntry('CarouselComponent', './assets/js/components/Carousel/CarouselComponent.jsx')
     // HomePage
@@ -166,7 +176,11 @@ Encore
             progress: false
         };
         // Surveillance du thème semantic (changement de styles)
-        options.watchFiles = ['assets/**/*', 'semantic/src/**/*'];
+        options.watchFiles = [
+            'assets/**/*', // Votre répertoire d'actifs personnalisés
+            // 'semantic_ui_react_3.0.0/src/**/*', // Sources de semantic-ui-react
+            'semantic/src/**/*' // Sources de semantic-ui-css
+        ];
     })
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';

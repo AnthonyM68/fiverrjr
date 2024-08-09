@@ -1,4 +1,8 @@
-export const displayResults = (results, searchTerm) => {
+
+
+
+
+export const displayResults = (results) => {
     console.log(results);
     let resultsHtml = '';
 
@@ -6,8 +10,6 @@ export const displayResults = (results, searchTerm) => {
         resultsHtml = '<h2>Aucun résultat</h2>';
     } else {
         resultsHtml += '<h3>Résultats</h3><div class="ui divided items">';
-        // on convertit le terme rechercher en minuscule
-        const searchTermLower = searchTerm.toLowerCase();
         results.forEach(user => {
             resultsHtml += `
             <div class="item">

@@ -1,5 +1,8 @@
 @import "variables";
 
+.custom-container-navbar {
+  width: $navbar-container-width !important;
+}
 // Couleur des liens gauche
 .computer.only.row .left.menu a {
   color: $link-navbar;
@@ -69,9 +72,7 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
     background-color: $secondary-color-rgba !important;
     z-index: -1;
   }
-.custom-container-navbar {
-  width: $navbar-container-width !important;
-}
+
 
 // Mobile
 // Couleur de l'entête et du bouton icône en mode mobile

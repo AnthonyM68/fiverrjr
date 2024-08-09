@@ -1,13 +1,14 @@
 @import "./assets/styles/variables";
 
 .ad-banner {
+  position:relative;
   background-color: $secondary;
   display: flex;
   justify-content: center;
   align-items: center;
-  //   height:25vh;
-  z-index: 2;
-  border: 3px solid yellow;
+  height:25vh;
+  z-index: 4;
+  // border: 3px solid yellow;
   width: 100%;
 }
 
@@ -19,7 +20,7 @@
   height: auto;
   display: flex;
 
-  border: 2px solid blue;
+  // border: 2px solid blue;
   width: 100%;
 }
 
@@ -30,7 +31,7 @@
   //   color: $white;
   //   padding: 0 10px;
   text-align: center;
-  border:1px solid green;
+  // border:1px solid green;
 }
 
 .ad-carousel a {
@@ -45,7 +46,7 @@
   margin: 5px;
   white-space: nowrap;
   color: $grey;
-  border:1px solid #fff;
+  // border:1px solid #fff;
   width:auto;
 }
 .ad-carousel a:hover {

@@ -44,9 +44,49 @@ import useFetch from './js/useFetch';
 // };
 
 
-// Vérifier et rendre les composants en fonction des éléments DOM
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('=> app.js loaded');
+// window.addEventListener('load', () => {
+//     console.log('=> app.js loaded');
+//     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+//     const fadeElement = document.querySelector('#fadeElement');
+//     const slideElement = document.querySelector('#slideElement');
+
+//     const options = {
+//         root: null,
+//         rootMargin: '0px',
+//         threshold: 0.3
+//     };
+
+//     const handleIntersection = (entries, observer) => {
+//         entries.forEach(entry => {
+//             alert();
+//             if (entry.isIntersecting) {
+//                 if (entry.target.id === 'fadeElement') {
+//                     entry.target.classList.add('uk-animation-fade');
+//                     entry.target.classList.reomve('fiverr-display-non');
+//                     entry.target.classList.add('fiverr-display-block');
+//                 }
+//                 if (entry.target.id === 'slideElement') {
+//                     entry.target.classList.add('uk-animation-slide-right');
+//                 }
+//                 observer.unobserve(entry.target);
+//             }
+//         });
+//     };
+
+//     const observer = new IntersectionObserver(handleIntersection, options);
+
+//     if (fadeElement) {
+//         observer.observe(fadeElement);
+//     }
+//     if (slideElement) {
+//         observer.observe(slideElement);
+//     }
+// });
+
+    // if (slideElement) {
+    //     observer.observe(slideElement);
+    // }
     // const lastDevlRoot = document.getElementById('last-developers');
     // if (lastDevlRoot) {
     //     const root = createRoot(lastDevlRoot);
@@ -95,4 +135,4 @@ document.addEventListener('DOMContentLoaded', () => {
     //     root.render(<StickyParentComponent />);
     // }
 
-});
+// });

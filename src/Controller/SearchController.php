@@ -8,19 +8,23 @@ use PHPUnit\Util\Json;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use App\Service\ImageService;
+use App\Repository\ThemeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 // use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validation;
 
 // Controller de la recherche Avancée
 class SearchController extends AbstractController
@@ -67,28 +71,117 @@ class SearchController extends AbstractController
 
         ]);
     }
-
     #[Route("/search/results", name: "search_results", methods: ['POST'])]
-    public function searchResult(Request $request, SerializerInterface $serializer): JsonResponse
+    public function searchResult(Request $request, SerializerInterface $serializer, ThemeRepository $themeRepository)
     {
+        // on récupère les  données JSON envoyer par js
+        $data = json_decode($request->getContent(), true);
+        // on vérfie si la convertion échoue
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return new JsonResponse(['error' => 'Invalid JSON data'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+        $this->logger->info('Received JSON data:', ['data' => $data]);
 
-        // Pour le test, on ne prend pas en compte le contenu du request et on récupère toutes les entités Theme
-        // $queryBuilder = $this->entityManager->getRepository(ServiceItem::class)->findAll();
+        // on vérifie le token CSRF
+        $submittedToken = $data['_token'];
+        $this->logger->info('Submitted token:', ['submittedToken' => $submittedToken]);
 
-        $queryBuilder = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds('Developpement');
-        // Sérialisation des entités Theme
+        $csrfToken = new CsrfToken('token_search_term', $submittedToken);
+
+        if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
+            // si la vérification  échoue on quitte
+            return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
+            $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
+        }
+        // on recherche le terme de rechercher
+        $searchTerm = $data['search_term'] ?? null;
+        $this->logger->info('searchTerm (before processing):', ['searchTerm' => $searchTerm]);
+        // Vérification et traitement du terme rechercher
+        if ($searchTerm !== null) {
+            // Nettoyage du terme de recherche
+            $searchTerm = trim($searchTerm);
+            // Validation avec Symfony Validator
+            $validator = Validation::createValidator();
+            $violations = $validator->validate($searchTerm, [
+                // on défini des contraintes
+                new Assert\NotBlank(),
+                new Assert\Length(['min' => 3]),
+                new Assert\Regex(['pattern' => '/^[A-Za-z0-9\- éèàùêâîôûçÉÈÀÙÊÂÎÔÛÇ]+$/u', 'message' => 'Invalid characters in search term.'])
+            ]);
+            // s'il y a des violations de contraintes, on les ajoutes
+            // comme erreur et retournons le résultat a javascript
+            if (count($violations) > 0) {
+                $errors = [];
+                foreach ($violations as $violation) {
+                    $errors[] = $violation->getMessage();
+                }
+                return new JsonResponse(['error' => '$errors'], JsonResponse::HTTP_BAD_REQUEST);
+            }
+            // échappe les caractères spéciaux en tenant compte des accents
+            $searchTerm = htmlspecialchars($searchTerm, ENT_QUOTES, 'UTF-8');
+            $this->logger->info('searchTerm (after processing):', ['searchTerm' => $searchTerm]);
+        }
+        // Construction de la requête
+        $queryBuilder = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
+        $this->logger->info('Generated SQL Query:', ['sql' => $queryBuilder]);
+        // on sérialise les résultats de recherches d'objets complexe avec gestionnaire circulaire
         try {
-            $results = $serializer->serialize($queryBuilder->getQuery()->getResult(), JsonEncoder::FORMAT, ['groups' => 'serviceItem']);
-            $this->logger->info('Serialized results:', ['results' => $results]);
-            return new JsonResponse($results, 200, [], true);
+            $serializedResults = $serializer->serialize($queryBuilder, JsonEncoder::FORMAT, ['groups' => 'serviceItem']);
+            $this->logger->info('Serialized results:', ['results' => $serializedResults]);
+            return new JsonResponse($serializedResults, 200, [], true);
         } catch (\Exception $e) {
-
             $this->logger->error('Serialization error:', ['exception' => $e]);
             return new JsonResponse(['error' => 'Serialization error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
+
     #[Route("/search/developer/name", name: "search_developer", methods: ['POST'])]
     public function searchDeveloper(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return new JsonResponse(['error' => 'Invalid JSON data'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $this->logger->info('Received JSON data:', ['data' => $data]);
+
+        $submittedToken = $data['_token'];
+        $this->logger->info('Submitted token:', ['csrf_token_user' => $submittedToken]);
+
+        $csrfToken = new CsrfToken('searchItemUserToken', $submittedToken);
+
+        // if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
+        //     return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
+        //     $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
+        // }
+
+
+        // // Suppose that $searchTerm is part of $data
+        $searchTerm = $data['search-user-by-name'] ?? '';
+
+        // Your logic to fetch users based on $searchTerm
+        $users = $this->entityManager->getRepository(User::class)->searchByTerm($searchTerm, "ROLE_DEVELOPER");
+        // on utilise le imageService pour générer le lien image
+        foreach($users as $user) {
+            $this->imageService->setPictureUrl($user);
+        }
+        try {
+            $results = $this->serializer->serialize($users, JsonEncoder::FORMAT, ['groups' => 'user']);
+            $this->logger->info('Serialized results:', ['results' => $results]);
+            return new JsonResponse($results, 200, [], true);
+        } catch (\Exception $e) {
+            $this->logger->error('Serialization error:', ['exception' => $e]);
+            return new JsonResponse(['error' => 'Serialization error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    #[Route("/search/client/name", name: "search_client", methods: ['POST'])]
+    public function searchClient(Request $request): JsonResponse
     {
         // Récupération des données du formulaire
         $formData = $request->request->all();
@@ -99,9 +192,9 @@ class SearchController extends AbstractController
         if (!$this->csrfTokenManager->isTokenValid(new CsrfToken('search_item_user', $token))) {
             return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
         }
-        $users = $this->entityManager->getRepository(User::class)->searchByTerm($searchTerm);
+        $users = $this->entityManager->getRepository(User::class)->searchByTerm($searchTerm, "ROLE_DEVELOPER");
 
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $this->imageService->setPictureUrl($user);
         }
         // formater la date
@@ -122,8 +215,6 @@ class SearchController extends AbstractController
             return new JsonResponse(['error' => 'Serialization error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
     /*#[Route("/search/results", name: "search_results", methods: ['POST'])]
     public function searchResult(Request $request, SerializerInterface $serializer): JsonResponse
     {

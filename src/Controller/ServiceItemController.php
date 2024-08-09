@@ -172,7 +172,7 @@ class ServiceItemController extends AbstractController
         }
 
         // Validation du token CSRF
-        // on récupère le token envoyer par javascript
+        // on crée un token avec la valeur envoyer par javascript
         $csrfToken = new CsrfToken('token_' . $id, $body['_token']);
         // on vérfie le token
         if (!$csrfTokenManager->isTokenValid($csrfToken)) {

@@ -1,87 +1,77 @@
-
-// Requête de recherche
-const submitForm = (form) => {
-    console.log(form);
-    // on récupère les données du formumlaire et on crée un nouveau form
-    const formData = new FormData(form);
-    // on convertit le formualire en objet JSON
-    const jsonData = Object.fromEntries(formData.entries());
-    console.log(jsonData);
-    const term = jsonData['search_form[search_term]']
-
-    fetch(form.action, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jsonData)
-    })
-        .then(response => {
-            // Vérification du statut de la réponse
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // Conversion de la réponse en JSON
-        })
-        .then(data => {
-            console.log(data);
-            displayResults(data, term);
-            $('#search-results-container').slideDown();
-
-        })
-        .catch(error => {
-            $('#search-results-container').slideDown();
-            document.getElementById('search-results').innerHTML = '<p class="error">An error occurred: ' + error.message + '</p>';
-        });
-}
-/**
- * Affichage dynamique des résultats de recherches /templates/search/index.html.twig
- * Gestion du formulaire .assets/js/formsViewSearch.js
- */
+import { displayResults } from './../search/services/displayResults.js';
+import { showAlert } from './../alert/messageFlash.js';
+import { usePostData } from './../ajax/postData.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('=> searchMotor.js loaded');
-    // Gestion Active Link sur le moteur de recherche 
-    // Facultatif prévus pour fonctionner sur plusieurs moteurs ( input )
-    // Sélectionnez tous les éléments de menu (les moteur de recherches, les formulaires)
-    const menuItems = document.querySelectorAll('.ui.vertical.fluid.menu .item.field');
-    // Ajoutez un gestionnaire de clic à chaque élément de menu
-    menuItems.forEach(item => {
-        item.addEventListener('click', function () {
-            // Supprimez la classe 'active teal' de tous les éléments de menu
-            menuItems.forEach(menu => menu.classList.remove('active', 'teal'));
-            // Ajoutez la classe 'active teal' à l'élément cliqué
-            this.classList.add('active', 'teal');
+
+    const formElement = document.querySelector('.ui-button.ui-widget');
+
+    if (formElement) {
+        formElement.addEventListener('click', async function (event) {
+            const form = event.target.closest('.ajax-search-form');
+
+            if (form) {
+                const termInput = form.querySelector('input[name="search_term"]');
+                if (termInput) {
+                    const term = termInput.value;
+                    if (!term) {
+                        showAlert('warning', "Vous n'avez pas indiqué de mot clé de recherche");
+                        event.preventDefault();
+                        return;
+                    }
+
+                    const formData = new FormData(form);
+                    const csrfToken = formData.get('_token');
+
+                    if (!csrfToken) {
+                        console.warn('CSRF token is missing');
+                        showAlert('negative', "Token CSRF manquant");
+                        event.preventDefault();
+                        return;
+                    }
+                    try {
+                        const response = await usePostData(form.action, formData, csrfToken, true);
+                        console.log('Données reçues:', data);
+                        // Extraire le tableau `data` de la réponse
+                        const data = response.data;
+                        if (Array.isArray(data)) {
+                            // console.log('Les données sont bien un tableau.');
+                            data.forEach((entityTheme, index) => {
+                                // console.log(`Élément ${index}:`, entityTheme);
+                                // if (typeof entityTheme !== 'object' || entityTheme === null) {
+                                //     console.log(`Erreur: L'élément ${index} n'est pas un objet.`);
+                                // }
+                                const resultsHtml = displayResults(data, term);
+                                // console.log(resultsHtml);
+                                $('#search-results-container').slideDown();
+                                document.getElementById('search-results').innerHTML = resultsHtml;
+                            });
+                        } else {
+                            console.log('Les données ne sont pas un tableau:', typeof data);
+                        }
+                    } catch (error) {
+                        console.error('Erreur:', error);
+                    }
+                } else {
+                    console.warn('search_term input not found in the form');
+                }
+            } else {
+                console.warn('Form not found');
+            }
+            event.preventDefault();
         });
-    });
-
-
-
-
-
-
-
-
-
-
-
+    }
     // Ajout d'un écouteur d'événement sur les radio buttons pour filtrer par prix
     const priceFilters = document.querySelectorAll('input[name="price_filter"]');
     priceFilters.forEach(radio => {
         radio.addEventListener('change', () => {
-            // Récupérer le formulaire parent
-            const form = search.closest('form');
-            submitForm(form);
+            submitForm(formElement);
         });
     });
-
-    let close = document.getElementById('close-results')
-    if (close) {
-        // Ajoutez un écouteur d'événements pour le bouton de fermeture
-        document.getElementById('close-results').addEventListener('click', () => {
-            $('#search-results-container').slideUp();
-        });
-    }
-
+    // Ajoutez un écouteur d'événements pour le bouton de fermeture
+    document.getElementById('close-results').addEventListener('click', () => {
+        $('#search-results-container').slideUp();
+    });
 
 });

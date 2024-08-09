@@ -1,6 +1,6 @@
 import { displayResults } from '../search/services/displayResults.js';
 import { showAlert, clean } from './../alert/messageFlash.js';
-import { postData } from './../ajax/postData.js';
+import { usePostData } from './../ajax/postData.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
 
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         // console.log('Term:', term);
         // Envoyer les données avec postData et gérer la réponse
-        postData(form.action, formData).then(({ data, error }) => {
+        usePostData(form.action, formData).then(({ data, error }) => {
             if (error) {
                 console.error('Error during fetch:', error);
                 showAlert('negative', 'Une erreur est survenue lors de la recherche.');

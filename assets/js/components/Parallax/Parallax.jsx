@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { createRoot } from "react-dom/client";
-import 'slick-carousel/slick/slick.css';
+import "slick-carousel/slick/slick.css";
 import "slick-carousel";
 
-const ParallaxHome = ({ id}) => {
+const ParallaxHome = ({ id }) => {
   useEffect(() => {
     // Initialisation du carousel
     $(`.ad-carousel-${id}`).slick({
@@ -52,62 +52,61 @@ const ParallaxHome = ({ id}) => {
             Rejoignez une communauté de talents
           </p>
         </div>
-        {/* <div className="overlay"></div> */}
-        <div className="ad-banner ">
-          <div className="custom-container text-center">
-            <div className={`ad-carousel-${id} ad-carousel`}>
-              <div>
-                <a href="https://example.com/codealsace" target="_blank">
-                  CodeAlsace
-                </a>
-              </div>
-              <div>
-                <a href="https://example.com/techhautrhin" target="_blank">
-                  TechHautRhin
-                </a>
-              </div>
-              <div>
-                <a href="https://example.com/innostart-alsace" target="_blank">
-                  InnoStart Alsace
-                </a>
-              </div>
-              <div>
-                <a
-                  href="https://example.com/devfactory-hautrhin"
-                  target="_blank"
-                >
-                  DevFactory Haut-Rhin
-                </a>
-              </div>
-              <div>
-                <a
-                  href="https://example.com/alsace-digital-academy"
-                  target="_blank"
-                >
-                  Alsace Digital Academy
-                </a>
-              </div>
-              <div>
-                <a href="https://example.com/starthub68" target="_blank">
-                  StartHub 68
-                </a>
-              </div>
-              <div>
-                <a href="https://example.com/innovit-hautrhin" target="_blank">
-                  InnovIT Haut-Rhin
-                </a>
-              </div>
-            </div>
-            <h2 className="ui center aligned icon header">
-              <img
-                src="/uploads/services/alsace.png"
-                alt="Friends Icon"
-                className="circular icon"
-              />
-            </h2>
-          </div>
-        </div>
       </div>
+      {/* <div className="overlay"></div> */}
+      <div className="ad-banner ">
+        <div className="custom-container text-center">
+          <div className={`ad-carousel-${id} ad-carousel`}>
+            <div>
+              <a href="https://example.com/codealsace" target="_blank">
+                CodeAlsace
+              </a>
+            </div>
+            <div>
+              <a href="https://example.com/techhautrhin" target="_blank">
+                TechHautRhin
+              </a>
+            </div>
+            <div>
+              <a href="https://example.com/innostart-alsace" target="_blank">
+                InnoStart Alsace
+              </a>
+            </div>
+            <div>
+              <a href="https://example.com/devfactory-hautrhin" target="_blank">
+                DevFactory Haut-Rhin
+              </a>
+            </div>
+            <div>
+              <a
+                href="https://example.com/alsace-digital-academy"
+                target="_blank"
+              >
+                Alsace Digital Academy
+              </a>
+            </div>
+            <div>
+              <a href="https://example.com/starthub68" target="_blank">
+                StartHub 68
+              </a>
+            </div>
+            <div>
+              <a href="https://example.com/innovit-hautrhin" target="_blank">
+                InnovIT Haut-Rhin
+              </a>
+            </div>
+          </div>
+          <h2 className="ui center aligned icon header">
+            <img
+              src="/uploads/services/alsace.png"
+              alt="Friends Icon"
+              className="circular icon"
+            />
+          </h2>
+        </div>
+        <div className="separator"></div>
+      </div>
+      
     </div>
   );
 };

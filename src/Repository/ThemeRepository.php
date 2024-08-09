@@ -38,7 +38,9 @@ class ThemeRepository extends ServiceEntityRepository
             ->orWhere('co.nameCourse LIKE :searchTerm')
             ->orWhere('si.title LIKE :searchTerm')
             ->orWhere('si.description LIKE :searchTerm')
-            ->setParameter('searchTerm', '%' . $searchTerm . '%');
+            ->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->getQuery()
+            ->getResult();
 
             return $qb;
     }

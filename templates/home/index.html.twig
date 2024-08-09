@@ -7,24 +7,30 @@
 
 {% block body %}
 <script>
-    // HomePage.jsx
     window.__INITIAL_DATA__ = {
         lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
-    lastClient: {{ lastClient | json_encode() | raw }},
-    lastService: {{ lastService | json_encode() | raw }} 
+        lastClient: {{ lastClient | json_encode() | raw }},
+        lastService: {{ lastService | json_encode() | raw }},
+        searchItemUserToken: '{{ csrf_token(searchItemUserToken) }}',
+        searchItemCityToken: '{{ csrf_token(searchItemCityToken) }}',
+        searchDeveloperByNameUrl: '{{ search_developer_by_name }}',
+        searchDeveloperByCityUrl: '{{ search_developer_by_city }}',
         };
-    console.log(window.__INITIAL_DATA__.lastService);
+    console.log(window.__INITIAL_DATA__);
 </script>
 
 <div id="ParallaxHome"></div>
-
 <div class="separator"></div>
+<div id="developer-search-root"></div>
 
-<div class="ui container">
+
+{# <div class="ui container">
     <div class="ui center aligned message padding-large">
-        <h1 class="ui huge header ">
-            Trouvez un Développeur
-        </h1>
+
+        <div class="uk-section fiverr-display-none" id="fadeElement">
+            <h1 class="ui huge header ">Trouvez un Développeur</h1>
+        </div>
+
         <h2 class="ui center aligned icon header">
             <i class="circular users icon"></i>
 
@@ -32,8 +38,9 @@
 
                 <div class="eight wide column right aligned">
                     <div class="ui right aligned category search">
-                        <form action="/search/developer/name" id="search-user-by-name" class="ui form small icon input" method="POST">
-                            <input name="search-user-by-name"  type="text" placeholder="Nom, prénom...">
+                        <form action="/search/developer/name" id="search-user-by-name" class="ui form small icon input"
+                            method="POST">
+                            <input name="search-user-by-name" type="text" placeholder="Nom, prénom...">
                             <i class="search link icon search-user"></i>
                             <input type="hidden" name="_token" value="{{ csrf_token('search_item_user') }}">
                         </form>
@@ -41,7 +48,8 @@
                 </div>
                 <div class="eight wide column left aligned">
                     <div class="ui right aligned category search">
-                        <form action="/search/developer/city" id="search-user-by-city" class="ui form small icon input" method="POST">
+                        <form action="/search/developer/city" id="search-user-by-city" class="ui form small icon input"
+                            method="POST">
                             <input name="search-user-by-city" type="text" placeholder="Commune...">
                             <i class="search link icon search-user"></i>
                             <input type="hidden" name="_token" value="{{ csrf_token('search_item-city') }}">
@@ -49,20 +57,9 @@
                     </div>
                 </div>
             </div>
-
-
-
         </h2>
-        {# <p class="lead">
-            This example is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work.
-            It includes the responsive CSS and HTML, so it also adapts to your viewport and device.
-        </p>
-        <p class="lead">
-            To see the difference between static and fixed top navbars, just scroll.
-        </p>
-        <a class="ui big purple button">View navbar docs &raquo; </a> #}
     </div>
-</div>
+</div> #}
 
 {# <div id="bestservices-root"></div> #}
 
@@ -84,6 +81,7 @@
 {{ parent() }}
 
 {{ encore_entry_script_tags('Parallax') }}
+{{ encore_entry_script_tags('DeveloperSearch') }}
 {{ encore_entry_script_tags('CarouselComponent') }}
 {{ encore_entry_script_tags('Homepage') }}
 {{ encore_entry_script_tags('home') }}
