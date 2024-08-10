@@ -20,7 +20,6 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   background-color: $secondary-color-rgba;
   min-height: $navbar-height;
   height: $navbar-height !important;
-  border: 1px solid red;
   display: flex; // Utiliser flexbox pour une meilleure gestion des éléments
   justify-content: space-between; // Espace entre les éléments
   align-items: center; // Centrer verticalement les éléments
@@ -43,6 +42,7 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   left: 0;
   bottom: 0;
   height: 2px;
+
   width: 0;
   background: $primary;
   transition: width 0.3s ease-in-out;
@@ -53,7 +53,7 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   cursor: pointer;
 }
 .ui.fixed.borderless.menu .computer.only .item:hover::after {
-  width: 100%;
+  width: 95%;
 }
 
 .ui .computer.only .item:hover {
@@ -70,7 +70,6 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   color: $link-navbar;
   font-size: $font-size-navbar-desktop;
   z-index: 999;
-  // border:1px solid red;
 }
 
 .ui.dropdown.item .menu {
@@ -220,124 +219,46 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
 #close-results {
   margin-left: auto;
 }
+
+
+
+
 /* iPhone 5 (et appareils similaires) */
 @media (max-width: 320px) {
   .active {
-    display:block;
+    display: block;
   }
-  .tablet.mobile.only .right.menu > .item
-  {
-    font-size:10px;
+  .tablet.mobile.only .right.menu > .item {
+    font-size: 10px;
   }
-
-  .ui.fixed.borderless.menu {
-    height: $navbar-height-mobile !important;
-    width: 100vw;
-
-    .custom-container-navbar {
-      padding: 0 10px;
-    }
-
-    .ui.menu .item {
-      font-size: 14px;
-    }
-
-    // Cache les éléments non essentiels
-    .ui.fixed.borderless.menu .search,
-    .ui.fixed.borderless.menu .extra-items {
-      display: none;
-    }
-    .ui.vertical.menu {
-      display: none;
-      top: $navbar-height-mobile !important;
-    }
-    border: 1px solid yellow !important;
+  .ui.vertical.menu {
+    display: none;
+    top: $navbar-height-mobile !important;
   }
 }
 /* Mobile général (jusqu'à 480px) */
 @media (max-width: 480px) {
-  // .tablet.mobile.only .right.menu > .item
-  // {
-  //   font-size:10px;;
-  // }
-
   .ui.fixed.borderless.menu {
-    height: $navbar-height-mobile !important;
-    width: 100vw;
-
-    .custom-container-navbar {
-      padding: 0 10px;
-    }
-
-    .ui.menu .item {
-      display: none;
-      font-size: 14px;
-    }
-
-    // Cache les éléments non essentiels
-    // .ui.fixed.borderless.menu .search,
-    // .ui.fixed.borderless.menu .extra-items {
-    //   display: none;
-    // }
+    height: $navbar-height-tablet !important;
     .ui.vertical.menu {
-      top: $navbar-height-mobile !important;
+      top: $navbar-height-tablet !important;
     }
-    border: 1px solid yellow !important;
+
   }
 }
-
 /* Téléphones moyens/grands (481px à 767px) */
 @media (min-width: 481px) and (max-width: 768px) {
   .ui.fixed.borderless.menu {
-    height: $navbar-height-mobile !important;
-    width:100vw;
+    height: $navbar-height-tablet !important;
     .ui.vertical.menu {
-
-      top: $navbar-height !important;
+      top: $navbar-height-tablet !important;
     }
-    // .custom-container-navbar {
-    //   padding: 0 15px;
-    // }
-
-    // .ui.menu .item {
-    //   font-size: 15px;
-    // }
-
-    // .ui.fixed.borderless.menu .search,
-    // .ui.fixed.borderless.menu .extra-items {
-    //   display: none;
-    // }
-    // .ui.vertical.menu {
-    //   display: none;
-    //   top: $navbar-height-mobile !important;
-    // }
-    // border: 1px solid blue !important;
   }
 }
-
 /* Tablettes (769px à 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .ui.fixed.borderless.menu {
-    height: $navbar-height-tablet !important;
-    width:100vw;
-    .ui.vertical.menu {
-
-      top: $navbar-height !important;
-    }
-  }
 }
 
 /* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
 @media (min-width: 1023px) {
-  .ui.fixed.borderless.menu {
-    height: $navbar-height !important;
-    width:100vw;
-    // Ajouter ici les styles spécifiques aux écrans larges si nécessaire
-    .ui.vertical.menu {
-
-      top: $navbar-height !important;
-    }
-    border: 1px solid green !important;
-  
-  }
 }

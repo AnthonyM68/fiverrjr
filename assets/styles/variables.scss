@@ -9,42 +9,8 @@ $linkColor: $primary;
 $link-navbar: $white;
 $link-footer: $white;
 $dropdown-text-color-mobile: white;
-// général
-$font-size-animate: 3em;
-$font-size-animate-mobile: 1.8rem;
-$font-size-animate-tablet: 4rem;
-$font-size-animate-p: 1.8rem;
-$font-size-animate-p-mobile: 0.5rem;
-$font-size-animate-p-tablet: 2rem;
-
-// Separators
-$separator-base: 80px;
-$separator: 40px;
-// navbar
-$navbar-height: 8vh;
-$navbar-height-mobile: 14vh;
-$navbar-height-tablet: 14vh;
-$navbar-container-width: 1450px;
-// font-size navbar desktop
-$font-size-navbar-desktop-small: 0.9rem;
-$font-size-navbar-desktop: 1.1rem;
-// font-size navbar mobile
-$font-size-navbar-mobile: 1.1rem;
-// dropdown
-$dropdown-min-width: 300px;
-$dropdown-max-width: 450px;
-// opacity navbar
-$alpha-navbar: 0.8;
-// opacity parallax home
-$alpha-parallax-home: 0.6;
-// opacity home
-$alpha-homepage-jsx: 0.6;
-// taille du burger
-$font-size-burger: 20px;
-// taille de l'icon cart
-$font-size-cart: 20px;
-// opacity burger
-$alpha-navbar-mobile: 0.7;
+// img
+$image-portrait-user: 200px;
 
 // container custom
 $custom-container: 1600px;
@@ -57,33 +23,78 @@ $container-padding: 10px;
 $container-grid-max-width: 1400px;
 $container-grid-padding: 10px;
 
+// title parallax home
+$font-size-animate: 3em;
+$font-size-animate-mobile: 1.8rem;
+$font-size-animate-tablet: 4rem;
+$font-size-animate-p: 1.8rem;
+$font-size-animate-p-mobile: 0.5rem;
+$font-size-animate-p-tablet: 2rem;
+// title parallax footer
+$font-size-animate-footer: 2.5em;
+$font-size-animate-footer-mobile: 1.1rem;
+$font-size-animate-footer-tablet: 4rem;
+$font-size-animate-footer-p: 1.5rem;
+$font-size-animate-footer-p-mobile: 1rem;
+$font-size-animate-footer-p-tablet: 2rem;
+$font-weight-animate-p: 600;
+$letter-spacing: 25px;
+$letter-spacing-mobile: 8px;
+// font-size navbar desktop
+$font-size-navbar-desktop-small: 0.9rem;
+$font-size-navbar-desktop: 1.1rem;
+// font-size navbar mobile
+$font-size-navbar-mobile: 1.1rem;
+// taille du burger
+$font-size-burger: 20px;
+// taille de l'icon cart
+$font-size-cart: 20px;
+// Separators
+$separator: 40px;
+// navbar
+$navbar-height: 8vh;
+$navbar-height-mobile: 14vh;
+$navbar-height-tablet: 14vh;
+$navbar-container-width: 1450px;
+// dropdown
+$dropdown-min-width: 300px;
+$dropdown-max-width: 450px;
+// opacity navbar
+$alpha-navbar: 0.8;
+// opacity burger
+$alpha-navbar-mobile: 0.7;
+// opacity parallax home
+$alpha-parallax-home: 0.1;
+
+$parallax-container-home-height: 100vh;
+
+$alpha-parallax-footer: 0.1;
+
+$parallax-container-footer-height: 70vh;
+
+
+
+// opacity home
+$alpha-homepage-jsx: 0.6;
+
+
 // padding
 $padding-small: 5px;
 $padding-medium: 10px;
 $padding-large: 25px;
-$padding-extra-large: 35px;
+$padding-extra-large: 30px;
 // margin
 $margin-small: 5px;
 $margin-medium: 10px;
 $margin-large: 25px;
 $margin-extra-large: 30px;
+
+
+
 // alert
 $font-size-alert: 12px;
 $top-alert: 30px;
 $right-alert: 30px;
 $max-width-alert: 300px;
 
-// parallax home
-// title animate
 
-// title footer
-
-$font-weight-animate-p: 600;
-$letter-spacing: 35px;
-$letter-spacing-small: 10px;
-
-// parallax footer home
-$parallax-container-home-height: 100vh;
-$parallax-container-footer-height: 500px;
-
-$image-portrait-user: 200px;

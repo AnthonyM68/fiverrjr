@@ -3,8 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {# balise pour la gestion d'affichage multi écran #}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <title>{% block title %}title_page!{% endblock %}</title>
+
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
     {% block stylesheets %}
@@ -12,16 +15,18 @@
     {{ encore_entry_link_tags('jquery_ui_theme') }}
     {{ encore_entry_link_tags('jquery_ui_structure') }}
     {{ encore_entry_link_tags('jquery_popup') }}
-    {{ encore_entry_link_tags('slick-carousel-css') }}
-    {{ encore_entry_link_tags('slick-carousel-theme-css') }}
-    {{ encore_entry_link_tags('semantic_less') }}
     {{ encore_entry_link_tags('uikit_css') }}
+    {# {{ encore_entry_link_tags('semantic_less') }} Cause des débordement html, body dès l'injection du fichier
+    voir si le theme fonctionne correctement #}
+    {{ encore_entry_link_tags('semantic_css') }}
     {{ encore_entry_link_tags('tarteaucitron_css') }}
     {{ encore_entry_link_tags('app_styles') }}
+
     {% endblock %}
 </head>
 
 <body>
+
     <div class="page-wrapper">
         <header>
             {# On utilise un controller pour rendre un form search dans la navbar #}
@@ -37,7 +42,7 @@
             </div>
             {% endif %}
         </main>
-        <footer >{% include 'footer/footer.html.twig' %}</footer>
+        <footer>{% include 'footer/footer.html.twig' %}</footer>
 
     </div>
     <div id="tarteaucitron"></div>
@@ -48,13 +53,13 @@
     {{ encore_entry_script_tags('semantic') }}
     {{ encore_entry_script_tags('uikit') }}
     {{ encore_entry_script_tags('uikit-icons') }}
-    {{ encore_entry_script_tags('cart') }} 
+    {{ encore_entry_script_tags('cart') }}
     {# {{ encore_entry_script_tags('slick-carousel') }} #}
     {# {{ encore_entry_script_tags('CarouselComponent') }}
     {{ encore_entry_script_tags('StickyFooter') }}
     {{ encore_entry_script_tags('Homepage') }} #}
 
-    <script src="{{ asset('tarteaucitron.js')}}"></script>
+    {# <script src="{{ asset('tarteaucitron.js')}}"></script> #}
     <script type="text/javascript">
         if (typeof tarteaucitron !== 'undefined') {
 
@@ -81,7 +86,6 @@
         }
     </script>
     {% endblock %}
-
 </body>
 
 </html>

@@ -1,5 +1,13 @@
 @import "variables";
 
+@function hex-to-rgba($hex, $alpha: 1) {
+  @if not(type-of($hex) == color) {
+    @error "Le paramètre doit être une couleur hexadécimale.";
+  }
+  @return rgba($hex, $alpha);
+}
+
+
 .item-dropdown-mobile .title.item {
   color: $white;
 }
@@ -9,6 +17,8 @@
   width: auto !important;
   z-index: 1000; 
 }
+
+$secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
 .ui.dropdown.link.item .menu.menu-dropdown-desktop {
   position: absolute;
   top: 100%;
@@ -17,14 +27,14 @@
   min-width: $dropdown-min-width !important; // 200px
   max-width: $dropdown-max-width !important; // 400px
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background: $white;
+  // background: $white;
   z-index: 1001; // Plus élevé que le parent pour être au-dessus
   font-size: $font-size-navbar-desktop-small;
-  background-color: $primary;
+  background-color: $secondary-color-rgba;
 }
 .ui.dropdown.link.item .menu .item > a {
   text-decoration: none;
-  color: $secondary;
+  color: $link-navbar;
 }
 
 // Sous-menu du dropdown
@@ -33,7 +43,7 @@
   top: 0;
   left: 100%;
   width: auto !important;
-  background-color: $primary;
+  background-color: $secondary-color-rgba;
 }
 
 /* iPhone 5 (et appareils similaires) */

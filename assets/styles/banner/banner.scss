@@ -1,18 +1,43 @@
 @import "./assets/styles/variables";
 
-.ad-banner {
-  position:relative;
-  background-color: $secondary;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height:25vh;
-  z-index: 4;
-  // border: 3px solid yellow;
-  width: 100%;
-}
+// .ad-banner {
+//     padding: 20px 0; /* Ajustez cette valeur si nécessaire */
+//     background-color: #333;
+//     color: #fff;
+//     text-align: center;
+//     overflow: hidden;
+//     height: auto; /* Assurez-vous que la hauteur est suffisante pour le contenu */
+//   }
+  
+//   .ad-carousel {
+//     width: 100%;
+//     display: flex;
+//     justify-content: center;
+//   }
+  
+//   .ad-carousel div {
+//     // margin: 0 10px;
+//     // padding: 10px 20px;
+//     background-color: #444;
+//     // border-radius: 5px;
+//     transition: background-color 0.3s ease;
+//   }
+  
 
-/* Carousel */
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /* Carousel */
 .ad-carousel {
   position: relative;
   top: 0;
@@ -21,14 +46,14 @@
   display: flex;
 
   // border: 2px solid blue;
-  width: 100%;
+  max-width: 100%;
 }
 
 .ad-carousel div {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  //   color: $white;
+  color: $white !important;
   //   padding: 0 10px;
   text-align: center;
   // border:1px solid green;
@@ -45,7 +70,7 @@
   transition: background-color 0.3s ease;
   margin: 5px;
   white-space: nowrap;
-  color: $grey;
+  color: $grey!important;
   // border:1px solid #fff;
   width:auto;
 }
@@ -69,11 +94,7 @@
 
 /* iPhone 5 (et appareils similaires) */
 @media (max-width: 320px) {
-  .parallax-content {
 
-    height:100vh;
-
-  }
 }
 
 /* Mobile général (jusqu'à 480px) */
@@ -83,15 +104,7 @@
 
 /* Téléphones moyens/grands (481px à 767px) */
 @media (min-width: 481px) and (max-width: 768px) {
-  .ad-carousel .slick-slide {
-    display: flex !important;
-    justify-content: center;
-  }
-  .ad-carousel .slick-slide > div {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
+
 }
 
 /* Tablettes (769px à 1024px) */
@@ -103,3 +116,5 @@
 @media (min-width: 1025px) {
 
 }
+
+/* Container for the carousel */

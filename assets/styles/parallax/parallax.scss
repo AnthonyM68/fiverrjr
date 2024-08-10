@@ -13,7 +13,6 @@
   overflow: hidden;
   min-height: 100vh;
   width: 100%;
-  border: 2px solid red;
 }
 .parallax-content {
   position: relative;
@@ -26,33 +25,15 @@
 }
 /* iPhone 5 (et appareils similaires) */
 @media (max-width: 320px) {
-  .parallax {
-    width: 100vw;
-  }
-  .parallax-container {
-    height: 100vh;
-    width: 100vw;
-  }
-  .parallax-content {
-    height: 100vh;
-    width: 100vw;
-  }
+
 }
 
 /* Mobile général (jusqu'à 480px) */
 @media (max-width: 480px) {
-  .parallax-container {
-  }
-  .parallax-content {
-  }
 }
 
 /* Téléphones moyens/grands (481px à 767px) */
 @media (min-width: 481px) and (max-width: 768px) {
-  .parallax-container {
-  }
-  .parallax-content {
-  }
 }
 
 /* Tablettes (769px à 1024px) */

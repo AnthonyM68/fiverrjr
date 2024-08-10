@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
 {{ parent() }}
-{{ encore_entry_link_tags('react-responsive-carousel') }}
-{{ encore_entry_link_tags('react-multi-carousel') }}
+{# {{ encore_entry_link_tags('react-responsive-carousel') }} #}
+{# {{ encore_entry_link_tags('react-multi-carousel') }} #}
+{{ encore_entry_link_tags('slick-carousel-css') }} 
+{{ encore_entry_link_tags('slick-carousel-theme-css') }} 
 {% endblock %}
 
 {% block body %}
@@ -20,72 +22,19 @@
 </script>
 
 <div id="ParallaxHome"></div>
-<div class="separator"></div>
 <div id="developer-search-root"></div>
-
-
-{# <div class="ui container">
-    <div class="ui center aligned message padding-large">
-
-        <div class="uk-section fiverr-display-none" id="fadeElement">
-            <h1 class="ui huge header ">Trouvez un Développeur</h1>
-        </div>
-
-        <h2 class="ui center aligned icon header">
-            <i class="circular users icon"></i>
-
-            <div class="ui grid">
-
-                <div class="eight wide column right aligned">
-                    <div class="ui right aligned category search">
-                        <form action="/search/developer/name" id="search-user-by-name" class="ui form small icon input"
-                            method="POST">
-                            <input name="search-user-by-name" type="text" placeholder="Nom, prénom...">
-                            <i class="search link icon search-user"></i>
-                            <input type="hidden" name="_token" value="{{ csrf_token('search_item_user') }}">
-                        </form>
-                    </div>
-                </div>
-                <div class="eight wide column left aligned">
-                    <div class="ui right aligned category search">
-                        <form action="/search/developer/city" id="search-user-by-city" class="ui form small icon input"
-                            method="POST">
-                            <input name="search-user-by-city" type="text" placeholder="Commune...">
-                            <i class="search link icon search-user"></i>
-                            <input type="hidden" name="_token" value="{{ csrf_token('search_item-city') }}">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </h2>
-    </div>
-</div> #}
-
 {# <div id="bestservices-root"></div> #}
-
-
-
-
-
 {# <div id="homepage-root"></div> #}
-
-<div class="separator"></div>
-
 {# <div id="last-developers"></div> #}
-
-{# <div class="separator"></div> #}
-
 <div id="ParallaxFooter"></div>
-
 {% block javascripts %}
 {{ parent() }}
 
 {{ encore_entry_script_tags('Parallax') }}
-{{ encore_entry_script_tags('DeveloperSearch') }}
-{{ encore_entry_script_tags('CarouselComponent') }}
-{{ encore_entry_script_tags('Homepage') }}
+{{ encore_entry_script_tags('slick-carousel') }}
+{# {{ encore_entry_script_tags('DeveloperSearch') }} #}
+{# {{ encore_entry_script_tags('CarouselComponent') }} #}
+{# {{ encore_entry_script_tags('Homepage') }} #}
 {{ encore_entry_script_tags('home') }}
-
-
 {% endblock %}
 {% endblock %}

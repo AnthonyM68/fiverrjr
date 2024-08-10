@@ -32,7 +32,7 @@ Encore
     .addEntry('jquery_ui_js', './assets/js/jquery-ui/jquery-ui.js')
 
     // semantic-themes
-    // .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
+    .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
     // semantic-source-theme
     .addStyleEntry('semantic_less', './semantic/src/semantic.less')
 
@@ -54,7 +54,7 @@ Encore
 
     // Assets personnalisés
     .addStyleEntry('app_styles', [
-        './assets/styles/alert.scss',
+        //'./assets/styles/alert.scss',
         './assets/styles/navbar.scss',
         './assets/styles/dropdown.scss',
         './assets/styles/parallax/parallax.scss',

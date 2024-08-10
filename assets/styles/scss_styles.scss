@@ -5,236 +5,46 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  // border:1px solid grey;
+}
+img, video {
+  max-width: 100%;
+  height: auto;
 }
 html, body {
-  height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
-.page-wrapper {
-  min-height: 100%;
-  width:100vw;
-}
-.fiverr-container {
-  position: relative;
-  top: $navbar-height;
-  left: 0;
-  width: 100vw;
-  display: flex;
-  justify-content: center; 
-  min-height: calc(100vh - $navbar-height - 70px); 
-}
-
-.custom-container {
-  position: relative;
-  width: $custom-container;
-  padding: $container-padding;
-  margin: 0 auto; 
-  // border: 2px solid green;
-}
-
-.fiverr-display-block {
-  display: block !important;
-}
-.fiverr-display-none {
-  display: none !important;
-}
-.separator {
-  height: $separator !important;
-  display: block;
-  margin: 10px 0;
-}
-// .search-results {
-//   display: flex!important;
-//   justify-content: space-between !important;
-//   align-items: center !important;
-// }
-// .custom-padding {
-//   padding: 30px;
-// }
-// .custom-margin {
-//   margin: 30px 0;
-// }
-.custom-margin-top {
-  margin-top: 30px !important;
-}
-// .custom-margin-bottom {
-//   margin-bottom: 30px !important;
-// }
-
-// /* img preview */
-// .img-visible {
-//   display: block;
-// }
-// .img-hidden {
-//   display: none;
-// }
-// .text-center {
-//   text-align: center;
-// }
-// /* ajoute un espaceur */
-// .separator-base {
-//   height: $separator-base;
-//   display: block;
-//   margin: 10px 0;
-// }
-
-// Padding
-.padding {
-  padding: $padding-medium; // Valeur par défaut
-}
-
-.padding-small {
-  padding: $padding-small;
-}
-
-.padding-large {
-  padding: $padding-large;
-}
-.padding-extra-large {
-  padding: $padding-extra-large;
-}
-.padding-top {
-  padding-top: $padding-medium;
-}
-
-.padding-top-small {
-  padding-top: $padding-small;
-}
-
-.padding-top-large {
-  padding-top: $padding-large;
-}
-.padding-top-extra-large {
-  padding-top: $padding-extra-large;
-}
-.padding-bottom {
-  padding-bottom: $padding-medium;
-}
-
-.padding-bottom-small {
-  padding-bottom: $padding-small;
-}
-
-.padding-bottom-large {
-  padding-bottom: $padding-large;
-}
-.padding-bottom-extra-large {
-  padding-bottom: $padding-extra-large;
-}
-// Margin
-.margin {
-  margin: $margin-medium; // Valeur par défaut
-}
-
-.margin-small {
-  margin: $margin-small;
-}
-
-.margin-large {
-  margin: $margin-large;
-}
-.margin-extra-large {
-  margin: $margin-extra-large;
-}
-
-.margin-top {
-  margin-top: $margin-medium;
-}
-
-.margin-top-small {
-  margin-top: $margin-small;
-}
-
-.margin-top-large {
-  margin-top: $margin-large;
-}
-
-.margin-top-extra-large {
-  margin-top: $margin-extra-large;
-}
-.margin-bottom {
-  margin-bottom: $margin-medium;
-}
-.margin-bottom-small {
-  margin-bottom: $margin-small;
-}
-.margin-bottom-large {
-  margin-bottom: $margin-large;
-}
-.margin-bottom-extra-large {
-  margin-bottom: $margin-extra-large;
-}
-/* Search motor  */
-// .full-width-input {
-//   width: 100% !important; /* Prend toute la largeur disponible */
-//   box-sizing: border-box;
-// }
-// /* On masque les * des required des moteur de recherche */
-// label.required::after {
-//   content: "";
-//   display: none !important;
-// }
-
-// .custom-container h1,
-// h2 {
-//   color: rgba(0, 0, 0, 0.87) !important;
-// }
-
-// .custom-segment {
-//   height: 700px;
-//   overflow: auto;
-// }
-
-// .grid.home {
-//   height: 700px;
-//   overflow: auto;
-// }
-
-/* Responsive design */
-// @media (max-width: 768px) {
-// }
-// /* Tablets (portrait) */
-// @media (min-width: 769px) and (max-width: 1024px) {
-// }
-// /* Desktops and larger devices */
-// @media (min-width: 1025px) {
-// }
-/* iPhone 5 (et appareils similaires) */
-@media (max-width: 320px) {
-  .page-wrapper {
-    width:100vw;
-  }
-  .fiverr-container {
-    width:100vw;
-  }
-  .custom-container {
-    width: 100vh;
-  }
-}
-
 /* Mobile général (jusqu'à 480px) */
-@media (max-width: 480px) {
-  .page-wrapper {
-    width:100vw;
-  }
-  .fiverr-container {
-    width:100vw;
-  }
-  .custom-container {
-    width: 100vh;
-  }
-}
+// @media (max-width: 320px) {
+//   .page-wrapper {
+//     min-height: 100%;
+//     width: 100vw;
+//     height:100vh;
 
-/* Téléphones moyens/grands (481px à 767px) */
-@media (min-width: 481px) and (max-width: 768px) {
+//     width: 100vw;
+//     // border: 1px solid red;
+//   }
+//   .fiverr-container {
+//     width: 100vw;
+//   }
+//   .custom-container {
+//     width: 100vh;
+//   }
+// }
+// @media (max-width: 480px) {
+//   .page-wrapper {
+//     min-height: 100%;
+//     width: 100vw;
+//     height:100vh;
 
-}
-
-/* Tablettes (769px à 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
-
-}
-
-/* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
-@media (min-width: 1025px) {
-
-}
+//     width: 100vw;
+//     // border: 1px solid red;
+//   }
+//   .fiverr-container {
+//     width: 100vw;
+//   }
+//   .custom-container {
+//     width: 100vh;
+//   }
+// }

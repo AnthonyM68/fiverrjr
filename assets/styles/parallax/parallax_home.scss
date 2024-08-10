@@ -9,7 +9,6 @@
 }
 
 $overlay-parallax-home: hex-to-rgba($secondary, $alpha-parallax-home);
-
 $text-shadow-primary: hex-to-rgba($primary, $alpha-parallax-home);
 
 .parallax.parallax-home {
@@ -62,6 +61,7 @@ $text-shadow-primary: hex-to-rgba($primary, $alpha-parallax-home);
 .junior-animate {
   position: relative;
   float: left;
+  padding:25px;
 }
 div .fiverr-animate {
   color: $primary !important;
@@ -90,8 +90,8 @@ p.sub-animate {
     width:100vw;
   }
 }
-// iPhone 5 (et appareils similaires) 
-// Mobile général (jusqu'à 480px) 
+// iPhone 5 (et appareils similaires)
+// Mobile général (jusqu'à 480px)
 @media (max-width: 480px) {
   .parallax-container,
   .parallax-content {
@@ -120,7 +120,7 @@ p.sub-animate {
   }
 }
 
-// Téléphones moyens/grands (481px à 767px) 
+// Téléphones moyens/grands (481px à 767px)
 @media (min-width: 481px) and (max-width: 768px) {
   .parallax-container,
   .parallax-content {
@@ -144,7 +144,7 @@ p.sub-animate {
   }
 }
 
-// Tablettes (769px à 1024px) 
+// Tablettes (769px à 1024px)
 @media (min-width: 769px) and (max-width: 1024px) {
   .floating-title h1 {
     font-size: $font-size-animate-tablet;
@@ -164,6 +164,6 @@ p.sub-animate {
   }
 }
 
-// Ordinateurs de bureau et plus grands appareils (1025px et plus) 
+// Ordinateurs de bureau et plus grands appareils (1025px et plus)
 @media (min-width: 1025px) {
 }
