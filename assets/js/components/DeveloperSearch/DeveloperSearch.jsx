@@ -3,7 +3,9 @@ import { createRoot } from "react-dom/client";
 import { useInView } from "react-intersection-observer";
 import { showAlert } from "./../../alert/messageFlash.js";
 import { usePostData } from "../../useFetch";
-import CardUser from "../Card/ItemUser"; // Assurez-vous que le chemin est correct
+import UserCard from "../Card/ItemUser"; // Assurez-vous que le chemin est correct
+import "uikit/dist/css/uikit.min.css";
+import UIkit from "uikit";
 
 // Composant principal pour la recherche de développeur
 const DeveloperSearch = () => {
@@ -133,9 +135,9 @@ const DeveloperSearch = () => {
         return (
           <div>
             <h2>Résultats de la recherche:</h2>
-            <div className="padding-bottom-large">
+            <div className="cards-container padding-bottom-large">
               {data.map((item, index) => (
-                <CardUser key={index} user={item} />
+                <UserCard key={index} user={item} />
               ))}
             </div>
             <button className="ui button primary" onClick={handleCloseResults}>

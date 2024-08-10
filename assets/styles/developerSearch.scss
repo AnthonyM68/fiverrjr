@@ -1,39 +1,38 @@
 @import "variables";
 
-.best-services-carousel {
-  //   width: 100%;
-  //   margin: 0 auto;
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 10px;
 }
-.carousel-container-item {
-  // width: 100%;
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
-  // border:2px solid red;
-}
-.carousel-item {
+
+.cards-container .card {
+  flex: 1 1 300px;
+  min-width: 100px;
+  max-width: 200px;
+  min-height: 150px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
 }
 /* iPhone 5 (et appareils similaires) */
 @media (max-width: 320px) {
-
 }
 
 /* Mobile général (jusqu'à 480px) */
 @media (max-width: 480px) {
-
 }
 
 /* Téléphones moyens/grands (481px à 767px) */
 @media (min-width: 481px) and (max-width: 768px) {
-
 }
 
 /* Tablettes (769px à 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
-
 }
 
 /* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
 @media (min-width: 1025px) {
-
 }

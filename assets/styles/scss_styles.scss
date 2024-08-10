@@ -8,23 +8,16 @@
 }
 html, body {
   height: 100%;
-  margin: 0;
 }
 .page-wrapper {
-  // display: flex;
-  // flex-direction: column;
-  min-height: 100vh;
+  min-height: 100%;
+  width:100vw;
 }
-.content {
-  // flex: 1;
-  padding-bottom:150px;
-}
-
 .fiverr-container {
   position: relative;
   top: $navbar-height;
   left: 0;
-  width: 100%;
+  width: 100vw;
   display: flex;
   justify-content: center; 
   min-height: calc(100vh - $navbar-height - 70px); 
@@ -205,3 +198,43 @@ html, body {
 // /* Desktops and larger devices */
 // @media (min-width: 1025px) {
 // }
+/* iPhone 5 (et appareils similaires) */
+@media (max-width: 320px) {
+  .page-wrapper {
+    width:100vw;
+  }
+  .fiverr-container {
+    width:100vw;
+  }
+  .custom-container {
+    width: 100vh;
+  }
+}
+
+/* Mobile général (jusqu'à 480px) */
+@media (max-width: 480px) {
+  .page-wrapper {
+    width:100vw;
+  }
+  .fiverr-container {
+    width:100vw;
+  }
+  .custom-container {
+    width: 100vh;
+  }
+}
+
+/* Téléphones moyens/grands (481px à 767px) */
+@media (min-width: 481px) and (max-width: 768px) {
+
+}
+
+/* Tablettes (769px à 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+}
+
+/* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
+@media (min-width: 1025px) {
+
+}

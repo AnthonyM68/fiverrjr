@@ -1,43 +1,44 @@
 import React from 'react'
+
 import {
-  ItemMeta,
-  ItemImage,
-  ItemHeader,
-  ItemGroup,
-  ItemExtra,
-  ItemDescription,
-  ItemContent,
+  CardMeta,
+  CardHeader,
+  CardDescription,
+  CardContent,
+  Card,
+  Icon,
   Image,
-  Item,
 } from 'semantic-ui-react'
+const CardUser = ({ user }) => {
+  // Déstructuration des propriétés de l'objet user
+  const { picture, firstName, lastName, username, dateRegister, bio } = user;
 
-const CardUser = () => (
-  <ItemGroup>
-    <Item>
-      <ItemImage size='tiny' src='/images/wireframe/image.png' />
+  return (
+    <Card>
+      {/* Image du profil */}
+      <Image src={picture} wrapped ui={false} />
 
-      <ItemContent>
-        <ItemHeader as='a'>Header</ItemHeader>
-        <ItemMeta>Description</ItemMeta>
-        <ItemDescription>
-          <Image src='/images/wireframe/short-paragraph.png' />
-        </ItemDescription>
-        <ItemExtra>Additional Details</ItemExtra>
-      </ItemContent>
-    </Item>
+      <CardContent>
+        {/* Nom et prénom */}
+        <CardHeader>{firstName} {lastName}</CardHeader>
 
-    <Item>
-      <ItemImage size='tiny' src='/images/wireframe/image.png' />
+        {/* Métadonnées (peut-être la date d'inscription) */}
+        <CardMeta>
+          <span className='date'>Inscrit depuis {new Date(dateRegister).getFullYear()}</span>
+        </CardMeta>
 
-      <ItemContent>
-        <ItemHeader as='a'>Header</ItemHeader>
-        <ItemMeta>Description</ItemMeta>
-        <ItemDescription>
-          <Image src='/images/wireframe/short-paragraph.png' />
-        </ItemDescription>
-        <ItemExtra>Additional Details</ItemExtra>
-      </ItemContent>
-    </Item>
-  </ItemGroup>
-)
+        {/* Description */}
+        <CardDescription>{bio}</CardDescription>
+      </CardContent>
+
+      {/* Contenu supplémentaire (comme le nombre d'amis) */}
+      <CardContent extra>
+        <a>
+          <Icon name='user' />
+          22 Amis
+        </a>
+      </CardContent>
+    </Card>
+  );
+};
 export default CardUser

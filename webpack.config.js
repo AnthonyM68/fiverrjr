@@ -64,6 +64,7 @@ Encore
         './assets/styles/home.scss',
         './assets/styles/user.scss',
         './assets/styles/carouselComponent.scss',
+        './assets/styles/developerSearch.scss',
         // './assets/styles/course.scss',
         './assets/styles/sticky.css',
         './assets/styles/login-register.scss',
@@ -77,10 +78,10 @@ Encore
     // semantic-ui Framework
     .addEntry('semantic', './semantic/dist/semantic.js')
 
-        // Styles et scripts de Semantic UI
-        // .addStyleEntry('semantic_ui_react_css', './assets/semantic-ui-react/src/semantic-ui-react.css') // Assurez-vous que le chemin est correct
-        // .addEntry('semantic_ui_react_js', './assets/semantic-ui-react/src/semantic-ui-react.js') 
-    
+    // Styles et scripts de Semantic UI
+    .addStyleEntry('semantic_ui_react_css', './node_modules/semantic-ui-css/semantic.min.css') // Assurez-vous que le chemin est correct
+    .addEntry('semantic_ui_react_js', './node_modules/semantic-ui-css/semantic.min.js')
+
     // uikit Framework
     .addEntry('uikit', './node_modules/uikit/dist/js/uikit.js')
     .addEntry('uikit-icons', './node_modules/uikit/dist/js/uikit-icons.js')

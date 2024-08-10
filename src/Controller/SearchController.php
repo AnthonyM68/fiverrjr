@@ -159,16 +159,16 @@ class SearchController extends AbstractController
         //     $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
         // }
 
-
-        // // Suppose that $searchTerm is part of $data
         $searchTerm = $data['search-user-by-name'] ?? '';
 
-        // Your logic to fetch users based on $searchTerm
         $users = $this->entityManager->getRepository(User::class)->searchByTerm($searchTerm, "ROLE_DEVELOPER");
+        $this->logger->info('Received users:', ['users' => $users]);
         // on utilise le imageService pour générer le lien image
         foreach($users as $user) {
             $this->imageService->setPictureUrl($user);
         }
+
+        // return new JsonResponse($users, 200, [], true);
         try {
             $results = $this->serializer->serialize($users, JsonEncoder::FORMAT, ['groups' => 'user']);
             $this->logger->info('Serialized results:', ['results' => $results]);

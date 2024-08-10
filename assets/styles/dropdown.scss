@@ -1,6 +1,5 @@
 @import "variables";
 
-
 .item-dropdown-mobile .title.item {
   color: $white;
 }
@@ -37,9 +36,18 @@
   background-color: $primary;
 }
 
-// /* Responsive styles */
-// Responsive styles
-@media (max-width: 768px) {
+/* iPhone 5 (et appareils similaires) */
+@media (max-width: 320px) {
+
+}
+
+/* Mobile général (jusqu'à 480px) */
+@media (max-width: 480px) {
+
+}
+
+/* Téléphones moyens/grands (481px à 767px) */
+@media (min-width: 481px) and (max-width: 768px) {
   .item-dropdown-mobile {
     color: $dropdown-text-color-mobile !important;
     .content {
@@ -60,9 +68,13 @@
     }
   }
 }
-/* Tablets (portrait) */
+
+/* Tablettes (769px à 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
+
 }
-/* Desktops and larger devices */
+
+/* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
 @media (min-width: 1025px) {
+
 }

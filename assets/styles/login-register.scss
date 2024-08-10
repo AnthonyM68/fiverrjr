@@ -134,3 +134,27 @@
 .ui.message {
   padding: 1em;
 }
+/* iPhone 5 (et appareils similaires) */
+@media (max-width: 320px) {
+
+}
+
+/* Mobile général (jusqu'à 480px) */
+@media (max-width: 480px) {
+
+}
+
+/* Téléphones moyens/grands (481px à 767px) */
+@media (min-width: 481px) and (max-width: 768px) {
+
+}
+
+/* Tablettes (769px à 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+}
+
+/* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
+@media (min-width: 1025px) {
+
+}

@@ -62,6 +62,36 @@
 #alert-javascript-mobile {
   display: none;
 }
+/* iPhone 5 (et appareils similaires) */
+@media (max-width: 320px) {
+  #alert-javascript-desktop {
+    display: none;
+  }
+  #alert-javascript-mobile {
+    display: block;
+  }
+}
+
+/* Mobile général (jusqu'à 480px) */
+@media (max-width: 480px) {
+  #alert-javascript-desktop {
+    display: none;
+  }
+  #alert-javascript-mobile {
+    display: block;
+  }
+}
+
+/* Téléphones moyens/grands (481px à 767px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  #alert-javascript-desktop {
+    display: none;
+  }
+  #alert-javascript-mobile {
+    display: block;
+  }
+}
+
 /* Media queries pour responsive */
 @media (max-width: 768px) {
   #alert-javascript-desktop {
@@ -71,6 +101,8 @@
     display: block;
   }
 }
+
+
 /* Tablets (portrait) */
 @media (min-width: 769px) and (max-width: 1024px) {
   #alert-javascript-desktop {

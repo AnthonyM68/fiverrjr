@@ -2,50 +2,8 @@
 
 .custom-container-navbar {
   width: $navbar-container-width !important;
+  padding: 0 10px;
 }
-// Couleur des liens gauche
-.computer.only.row .left.menu a {
-  color: $link-navbar;
-  font-size: $font-size-navbar-desktop;
-  z-index:999;
-}
-// theme du dropdown
-.ui.dropdown.link.item {
-  color: $primary;
-}
-.ui.dropdown.link.item:hover {
-  color: $link-navbar;
-}
-// Couleur des liens à droite
-.ui.fixed.borderless.huge.menu .right.menu a {
-  color: $link-navbar;
-  font-size: $font-size-navbar-desktop;
-}
-// Couleur de l'icône panier
-.ui.fixed.borderless.huge.menu .right.menu a .cart.arrow.down.icon {
-  color: $primary;
-  font-size: $font-size-cart;
-}
-.ui.fixed.borderless.huge.menu .right.menu a .cart.arrow.down.icon:hover {
-  color: $link-navbar;
-}
-// search motor
-.ajax-form {
-  display: flex;
-  flex-direction: colum;
-  justify-content: center;
-  align-items: center;
-}
-.ajax-form .search.link.icon {
-  position: relative;
-  bottom: 0;
-  font-size: $font-size-navbar-desktop;
-}
-.prompt.desktop {
-  font-size: $font-size-navbar-desktop-small;
-  height: $margin-extra-large;
-}
-
 @function hex-to-rgba($hex, $alpha: 1) {
   @if not(type-of($hex) == color) {
     @error "Le paramètre doit être une couleur hexadécimale.";
@@ -57,70 +15,195 @@
 $primary-color-rgba: hex-to-rgba($primary, $alpha-navbar);
 $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
 
-// navbar size
-.ui.fixed.borderless.huge.menu {
+// Nav Général
+.ui.fixed.borderless.menu {
+  background-color: $secondary-color-rgba;
+  min-height: $navbar-height;
   height: $navbar-height !important;
-  background-color: transparent !important;
+  border: 1px solid red;
+  display: flex; // Utiliser flexbox pour une meilleure gestion des éléments
+  justify-content: space-between; // Espace entre les éléments
+  align-items: center; // Centrer verticalement les éléments
 }
-.ui.fixed.borderless.huge.menu::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: $secondary-color-rgba !important;
-    z-index: -1;
-  }
+.ui .computer.only .item {
+  color: $link-navbar;
+}
+// Soulignement animé au survol
+.ui.fixed.borderless.menu .computer.only .item {
+  position: relative;
+  color: $link-navbar;
+  transition: color 0.3s;
+}
+.ui.fixed.borderless.menu .computer.only .item:hover {
+  color: $primary;
+}
+.ui.fixed.borderless.menu .computer.only .item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: $primary;
+  transition: width 0.3s ease-in-out;
+}
+/* Annule l'effet de soulignement sur les éléments avec la classe .no-underline */
+.ui.fixed.borderless.menu .computer.only .item.no-underline::after {
+  display: none;
+  cursor: pointer;
+}
+.ui.fixed.borderless.menu .computer.only .item:hover::after {
+  width: 100%;
+}
 
+.ui .computer.only .item:hover {
+  // background: $primary !important;
+  // color: #fff !important;
+  // border-bottom: 1px solid hsl(0, 0%, 100%);
+}
+.ui .computer .item.active {
+  // color: #fff;
+  // border-bottom: 1px solid #fff;
+}
+// Couleur des liens gauche
+.computer.only.row a {
+  color: $link-navbar;
+  font-size: $font-size-navbar-desktop;
+  z-index: 999;
+  // border:1px solid red;
+}
 
+.ui.dropdown.item .menu {
+}
+.ui.menu .ui.dropdown .menu > .item {
+}
+.ui.menu .ui.dropdown .menu > .item.active {
+}
+.ui.menu .ui.dropdown .menu > .item:hover {
+}
+
+// moteur de recherche input search
+.prompt.desktop {
+  font-size: $font-size-navbar-desktop-small;
+  height: $margin-extra-large;
+}
+.right.menu {
+}
+.item-prompt {
+}
+// search motor
+.ajax-form {
+  // display: flex;
+  // flex-direction: colum;
+  // justify-content: center;
+  // align-items: center;
+}
+.ajax-form .search.link.icon {
+  // position: relative;
+  // bottom: 0;
+  // font-size: $font-size-navbar-desktop;
+}
 // Mobile
-// Couleur de l'entête et du bouton icône en mode mobile
-.tablet.mobile.only.row a {
-  color: $white;
+.tablet.mobile.only .header,
+.ui.icon.button > .icon {
+  color: $link-navbar;
 }
-// // Styles pour le menu mobile 
-.ui.vertical.accordion.menu {
+
+.tablet.mobile.only .header:hover {
+  background-color: $primary !important;
+  color: $link-navbar !important;
+  border-bottom: 1px solid $link-navbar;
+}
+
+// menu cart icon panier
+// menu burger
+.ui.basic.button:hover {
+  background: $primary !important;
+  color: $link-navbar !important;
+  border-bottom: 1px solid $link-navbar;
+}
+// positions pour le menu mobile
+.ui.vertical.menu {
   display: none;
   position: fixed;
   top: $navbar-height;
   right: 0;
   width: 100%;
-  max-width: 300px; 
+  max-width: 300px;
   height: 100%;
-  overflow-y: auto; 
-  background-color: $primary-color-rgba; 
-  box-shadow: 0 2px 5px $primary-color-rgba; 
+  overflow-y: auto;
+  background-color: $primary-color-rgba;
+  box-shadow: 0 2px 5px $primary-color-rgba;
   font-size: $font-size-navbar-mobile;
 }
-// Style du bouton burger
-.ui.animated.icon.button > .content > .icon,
-.ui.icon.buttons .button > .icon,
-.ui.icon.button {
-  margin-top: -2px !important;
+.ui.vertical.menu > .item {
+  padding-left: 1.428em;
   color: $link-navbar;
-  transition: color 0.3s ease;
+}
 
+// .ui.vertical.menu > .item.active {
+//   padding-left: 1.428em;
+//   background-color: #00ba49 !important;
+//   color: #fff !important;
+//   border-bottom: 1px solid #fff;
+// }
+
+.ui.vertical.menu > .item:hover {
+  padding-left: 1.428em;
+  // background-color: $primary !important;
+  color: $link-navbar !important;
+  border-bottom: 1px solid $link-navbar;
 }
-// taille des i burger
-.ui.animated.icon.button > .content > .icon,
-.ui.icon.buttons .button > .icon,
-.ui.icon.button i {
-  font-size: $font-size-burger;
-}
-.ui.animated.icon.button > .content > .icon,
-.ui.icon.buttons .button > .icon,
-.ui.icon.button:hover {
-  background-color: transparent;
+.ui.vertical.menu .item .title {
   color: $link-navbar;
-  transition: color 0.3s ease;
 }
-// Changement de couleur au survol
-.ui.animated.icon.button > .content > .icon:hover,
-.ui.icon.buttons .button > .icon:hover,
-.ui.icon.button > .icon:hover {
-  color: $primary;
+.ui.vertical.menu .item .title .dropdown.icon {
+  float: none;
+  color: $link-navbar;
 }
+
+.ui.vertical.menu .title {
+  padding: 1em 1.5em;
+  color: $link-navbar;
+}
+
+// themes
+.ui.vertical.menu .title:hover {
+  color: $link-navbar;
+  background-color: $primary-color-rgba;
+}
+.ui.vertical.content {
+  padding: 0.5em 1em;
+  color: $link-navbar;
+  overflow: auto;
+}
+.ui.vertical.menu .content:hover {
+  color: $link-navbar;
+  background-color: $primary-color-rgba;
+}
+.ui.vertical.menu .item .content .item {
+  padding: 0.5em 1em;
+  color: $link-navbar;
+}
+
+.ui.vertical.menu .item .content .item:hover {
+  padding: 0.5em 1em;
+  background-color: $primary-color-rgba !important;
+  color: $link-navbar !important;
+  border-bottom: 1px solid $link-navbar;
+}
+
+.ui.vertical.menu .item .content .item.active {
+  padding: 0.5em 1em;
+  background-color: $primary !important;
+  color: $link-navbar !important;
+  border-bottom: 1px solid $link-navbar;
+}
+
+// .ui.vertical.menu .header.item {
+//   text-transform: uppercase;
+//   color: $link-navbar;
+// }
 
 #search-results-container {
   position: absolute;
@@ -131,34 +214,130 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   background-color: rgba(255, 255, 255, 0.95);
   z-index: 1000;
   overflow-y: auto;
-  color:$secondary;
+  color: $secondary;
 }
 
 #close-results {
   margin-left: auto;
 }
-/********************* Responsive design **********/
+/* iPhone 5 (et appareils similaires) */
+@media (max-width: 320px) {
+  .active {
+    display:block;
+  }
+  .tablet.mobile.only .right.menu > .item
+  {
+    font-size:10px;
+  }
 
-// @media (max-width: 768px) {
-//   // largeur du moteur de recherche input
-//   .ui.category.search {
-//     width: 100% !important;
-//   }
-// }
-// /* Tablets (portrait) */
-// @media (min-width: 769px) and (max-width: 1024px) {
-//   .ui.category.search {
-//     // largeur du moteur de recherche input
-//     width: 100% !important;
-//   }
-// }
-// /* Desktops and larger devices */
-// @media (min-width: 1025px) {
-//   .ui.category.search {
-//     // largeur du moteur de recherche input
-//     width: 100% !important;
-//   }
-//   .ui.fixed.borderless.huge.menu {
-//     height:20vh;
-//   }
-// }
+  .ui.fixed.borderless.menu {
+    height: $navbar-height-mobile !important;
+    width: 100vw;
+
+    .custom-container-navbar {
+      padding: 0 10px;
+    }
+
+    .ui.menu .item {
+      font-size: 14px;
+    }
+
+    // Cache les éléments non essentiels
+    .ui.fixed.borderless.menu .search,
+    .ui.fixed.borderless.menu .extra-items {
+      display: none;
+    }
+    .ui.vertical.menu {
+      display: none;
+      top: $navbar-height-mobile !important;
+    }
+    border: 1px solid yellow !important;
+  }
+}
+/* Mobile général (jusqu'à 480px) */
+@media (max-width: 480px) {
+  // .tablet.mobile.only .right.menu > .item
+  // {
+  //   font-size:10px;;
+  // }
+
+  .ui.fixed.borderless.menu {
+    height: $navbar-height-mobile !important;
+    width: 100vw;
+
+    .custom-container-navbar {
+      padding: 0 10px;
+    }
+
+    .ui.menu .item {
+      display: none;
+      font-size: 14px;
+    }
+
+    // Cache les éléments non essentiels
+    // .ui.fixed.borderless.menu .search,
+    // .ui.fixed.borderless.menu .extra-items {
+    //   display: none;
+    // }
+    .ui.vertical.menu {
+      top: $navbar-height-mobile !important;
+    }
+    border: 1px solid yellow !important;
+  }
+}
+
+/* Téléphones moyens/grands (481px à 767px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .ui.fixed.borderless.menu {
+    height: $navbar-height-mobile !important;
+    width:100vw;
+    .ui.vertical.menu {
+
+      top: $navbar-height !important;
+    }
+    // .custom-container-navbar {
+    //   padding: 0 15px;
+    // }
+
+    // .ui.menu .item {
+    //   font-size: 15px;
+    // }
+
+    // .ui.fixed.borderless.menu .search,
+    // .ui.fixed.borderless.menu .extra-items {
+    //   display: none;
+    // }
+    // .ui.vertical.menu {
+    //   display: none;
+    //   top: $navbar-height-mobile !important;
+    // }
+    // border: 1px solid blue !important;
+  }
+}
+
+/* Tablettes (769px à 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .ui.fixed.borderless.menu {
+    height: $navbar-height-tablet !important;
+    width:100vw;
+    .ui.vertical.menu {
+
+      top: $navbar-height !important;
+    }
+  }
+}
+
+/* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
+@media (min-width: 1023px) {
+  .ui.fixed.borderless.menu {
+    height: $navbar-height !important;
+    width:100vw;
+    // Ajouter ici les styles spécifiques aux écrans larges si nécessaire
+    .ui.vertical.menu {
+
+      top: $navbar-height !important;
+    }
+    border: 1px solid green !important;
+  
+  }
+}

@@ -65,12 +65,27 @@ $overlay-homepage: hex-to-rgba($secondary, $alpha-homepage-jsx);
 //   padding: $padding-small;
 //   box-sizing: border-box;
 // }
-/* Responsive design */
-@media (max-width: 768px) {
+/* iPhone 5 (et appareils similaires) */
+@media (max-width: 320px) {
+
 }
-/* Tablets (portrait) */
+
+/* Mobile général (jusqu'à 480px) */
+@media (max-width: 480px) {
+
+}
+
+/* Téléphones moyens/grands (481px à 767px) */
+@media (min-width: 481px) and (max-width: 768px) {
+
+}
+
+/* Tablettes (769px à 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
+
 }
-/* Desktops and larger devices */
+
+/* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
 @media (min-width: 1025px) {
+
 }

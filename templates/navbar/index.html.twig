@@ -1,17 +1,19 @@
 {% block navbar %}
 
+
+<!--Start: Nav  -->
 <div class="ui fixed borderless huge menu">
-    <div class="ui container custom-container-navbar grid">
+
+    <div class="ui container custom-container-navbar grid ">
 
         <!--Start: Desktop Nav-->
         <div class="computer only row">
-            <div class="left menu">
-                <a href="{{ path('home') }}" class="item">Accueil</a>
-                <a href="{{ path('list_user_type', {'role': 'ROLE_CLIENT', 'page' : '1' }) }}"
-                    class="item">Entrepreneurs</a>
-                <a href="{{ path('list_user_type', {'role': 'ROLE_DEVELOPER', 'page' : '1'}) }}"
-                    class="item">Développeurs</a>
 
+            <a href="{{ path('home') }}" class=" item">Accueil</a>
+            <a href="{{ path('list_user_type', {'role': 'ROLE_CLIENT', 'page' : '1' }) }}"
+                class="item">Entrepreneurs</a>
+            <a href="{{ path('list_user_type', {'role': 'ROLE_DEVELOPER', 'page' : '1'}) }}"
+                class="item">Développeurs</a>
 
 
                 <div class="ui dropdown link item">
@@ -52,10 +54,8 @@
                         {% endfor %}
                     </div>
                 </div>
-            </div>
-            <div class="container-alert" id="alert-javascript-desktop">
-                {% include "alertflash/flash_message.html.twig" %}
-            </div>
+            <!-- End: Popup -->
+
             <div class="right menu">
                 <!-- Start: Search -->
                 <!-- Formulaire Desktop -->
@@ -66,8 +66,11 @@
                     </div>
                     <div class="results"></div>
                 </div> #}
+                <div class="item no-underline">
                 {% include './navbar/form/formDesktop.html.twig' with { 'attr': { 'class': 'desktop-search-form' } }
-                %}
+                %}                    
+                </div>
+
 
 
 
@@ -94,39 +97,27 @@
 
         <!--Start: Mobile Nav-->
         <div class="tablet mobile only row">
-            <a href="#" class="header item">Fiverr Junior</a>
+            <a class="header item">Fiverr Junior</a>
 
             <div class="right menu">
-
-                <a href="{{ path('cart_product') }}" class="ui item">
-                    <i class="cart arrow down icon"></i>
-                </a>
-                <a class="menu item">
-                    <div id="burger-menu" class="ui basic icon toggle button">
-                        <i class="content icon"></i>
+                <a class="menu item" href="{{ path('cart_product') }}" >
+                    <div id="menu-cart" class="ui basic icon toggle button">
+                        <i class="cart arrow down icon"></i>
                     </div>
                 </a>
 
+                <a class="menu item">
+                    <div id="menu-burger" class="ui basic icon toggle button burger">
+                        <i class="content icon"></i>
+                    </div>
+                </a>
             </div>
-
-            <div id="mobile-menu" class="ui vertical accordion borderless fluid menu">
-
-                {# alert mode mobile #}
-                {# si l'alert est javascript, include est écrasé,
-                Si l'alert est php on include l'alert depuis la view #}
-                <div class="container-alert" id="alert-javascript-mobile">{% include
-                    "alertflash/flash_message.html.twig" %}</div>
-                {# cart icon #}
-
-
-
+            <div class="ui vertical accordion borderless fluid menu">
                 <!-- Start: Search -->
-                <!-- Formulaire Mobile -->
-                <div class="padding">
-                    {% include './navbar/form/formMobile.html.twig' with { 'attr': { 'class': 'mobile-search-form' } }
-                    %}
+                <div class="item">
+                    {% include './navbar/form/formMobile.html.twig' with { 'attr': { 'class': 'mobile-search-form' } }%}
                 </div>
-
+                
                 <!-- End: Search -->
                 <a href="{{ path('home') }}" class="item">Accueil</a>
                 <a href="{{ path('list_user_type', {'role': 'ROLE_CLIENT', 'page' : '1' }) }}"
@@ -136,44 +127,40 @@
                     class="item">Développeurs
                 </a>
 
-
-
-                <div class="item-dropdown-mobile">
-                    <div class="title item">
-                        Thèmes<i class="theme icon"></i>
-                    </div>
-                    <div class="content">
-                        {% for theme in get_navbar_data() %}
-                        <div class="item">
-                            <div class="title">
-                                <i class="dropdown icon"></i>
-                                {{ theme.name }}
-                            </div>
-                            <div class="content">
-                                {% for category in theme.categories %}
-                                <div class="item">
-                                    <div class="title">
-                                        <i class="dropdown icon"></i>
-                                        {{ category.name }}
-                                    </div>
-                                    <div class="content">
-                                        {% for course in category.courses %}
-                                        <div class="item">
-                                            <a href="{{ path('detail_course', {'id': course.id, 'page' : '1' }) }}">
-                                            {# <a href="{{ path('detail_course', {'id': course.id, 'page' : '1'}) }}"> #}
-                                                {{ course.name }}
-                                            </a>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
+                <div class="title">
+                    Thèmes<i class="theme icon"></i>
+                </div>
+                <div class="content">
+                    {% for theme in get_navbar_data() %}
+                    <div class="item">
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            {{ theme.name }}
                         </div>
-                        {% endfor %}
-
-
+                        <div class="content">
+                            {% for category in theme.categories %}
+                            <div class="item">
+                                <div class="title">
+                                    <i class="dropdown icon"></i>
+                                    {{ category.name }}
+                                </div>
+                                <div class="content">
+                                    {% for course in category.courses %}
+                                    <div class="item">
+                                        <a href="{{ path('detail_course', {'id': course.id, 'page' : '1' }) }}">
+                                        {# <a href="{{ path('detail_course', {'id': course.id, 'page' : '1'}) }}"> #}
+                                            {{ course.name }}
+                                        </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
+                    {% endfor %}
+
+
                 </div>
                 <div class="ui divider"></div>
                 {% if app.user %}
@@ -188,12 +175,13 @@
                 {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('admin') }}" class="ui item">Tableau de bord</a>
                 {% endif %}
-
             </div>
         </div>
         <!--End: Mobile Nav-->
     </div>
 </div>
+
+
 {% block js_navbar %}
 {{ encore_entry_script_tags('jquery_ui_js') }}
 {{ encore_entry_script_tags('semantic') }}

@@ -29,7 +29,12 @@ const ParallaxHome = ({ id }) => {
       <div className="parallax-content">
         <div className="overlay-parallax-home"></div>
         <div className="parallax parallax-home"></div>
-        <div className="floating-title-fiverr-junior">
+        <div
+          ref={ref}
+          className={`${
+            inView ? "uk-animation-fade floating-title" : "floating-title"
+          }`}
+        >
           <h1>
             <div
               ref={ref}
@@ -54,7 +59,7 @@ const ParallaxHome = ({ id }) => {
         </div>
       </div>
       {/* <div className="overlay"></div> */}
-      <div className="ad-banner ">
+      {/* <div className="ad-banner ">
         <div className="custom-container text-center">
           <div className={`ad-carousel-${id} ad-carousel`}>
             <div>
@@ -105,8 +110,7 @@ const ParallaxHome = ({ id }) => {
           </h2>
         </div>
         <div className="separator"></div>
-      </div>
-      
+      </div> */}
     </div>
   );
 };

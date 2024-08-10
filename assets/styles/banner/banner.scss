@@ -67,15 +67,39 @@
   color: $white;
 }
 
-/* Responsive design */
-// @media (max-width: 768px) {
-//   .ad-carousel .slick-slide {
-//     display: flex !important;
-//     justify-content: center;
-//   }
-//   .ad-carousel .slick-slide > div {
-//     display: flex;
-//     justify-content: center;
-//     width: 100%;
-//   }
-// }
+/* iPhone 5 (et appareils similaires) */
+@media (max-width: 320px) {
+  .parallax-content {
+
+    height:100vh;
+
+  }
+}
+
+/* Mobile général (jusqu'à 480px) */
+@media (max-width: 480px) {
+
+}
+
+/* Téléphones moyens/grands (481px à 767px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .ad-carousel .slick-slide {
+    display: flex !important;
+    justify-content: center;
+  }
+  .ad-carousel .slick-slide > div {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+/* Tablettes (769px à 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+}
+
+/* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
+@media (min-width: 1025px) {
+
+}

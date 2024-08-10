@@ -10,16 +10,20 @@ $link-navbar: $white;
 $link-footer: $white;
 $dropdown-text-color-mobile: white;
 // général
-$font-size-animate-small: 1.5rem;
-$font-size-animate-medium: 2rem;
-$font-size-animate-large: 3rem;
-$font-size-animate-extra-large: 4rem;
-$font-size-animate-extra-big-large: 5em;
+$font-size-animate: 3em;
+$font-size-animate-mobile: 1.8rem;
+$font-size-animate-tablet: 4rem;
+$font-size-animate-p: 1.8rem;
+$font-size-animate-p-mobile: 0.5rem;
+$font-size-animate-p-tablet: 2rem;
+
 // Separators
 $separator-base: 80px;
 $separator: 40px;
 // navbar
-$navbar-height: 15vh;
+$navbar-height: 8vh;
+$navbar-height-mobile: 14vh;
+$navbar-height-tablet: 14vh;
 $navbar-container-width: 1450px;
 // font-size navbar desktop
 $font-size-navbar-desktop-small: 0.9rem;
