@@ -54,7 +54,7 @@ Encore
 
     // Assets personnalisés
     .addStyleEntry('app_styles', [
-        //'./assets/styles/alert.scss',
+        './assets/styles/alert.scss',
         './assets/styles/navbar.scss',
         './assets/styles/dropdown.scss',
         './assets/styles/parallax/parallax.scss',
@@ -65,7 +65,6 @@ Encore
         './assets/styles/user.scss',
         './assets/styles/carouselComponent.scss',
         './assets/styles/developerSearch.scss',
-        // './assets/styles/course.scss',
         './assets/styles/sticky.css',
         './assets/styles/login-register.scss',
         './assets/styles/cart.scss',
@@ -120,7 +119,6 @@ Encore
     .addEntry('useFetch', './assets/js/useFetch.jsx')
     // Paralax
     .addEntry('Parallax', './assets/js/components/Parallax/Parallax.jsx')
-
     // UserCard
     .addEntry('UserCard', './assets/js/components/Card/UserCard.jsx')
     // UserCard

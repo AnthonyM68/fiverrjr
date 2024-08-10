@@ -184,7 +184,7 @@ const DeveloperSearch = () => {
         <h2 className="ui center aligned icon header">
           <i className="circular users icon"></i>
           <div className="ui grid">
-            <div className="eight wide column right aligned">
+            <div className="eight wide column right aligned margin-bottom-large">
               <div className="ui right aligned category search">
                 <form
                   onSubmit={handleSubmitByName}

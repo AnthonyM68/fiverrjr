@@ -11,17 +11,21 @@ $link-footer: $white;
 $dropdown-text-color-mobile: white;
 // img
 $image-portrait-user: 200px;
-
+// foverr container
+$fiverr-container:1450px;
 // container custom
-$custom-container: 1600px;
-// container navbar
-$container-body-max-width: 1400px;
+$custom-container: 1550px;
 // custom-container
 $container-max-width: 1400px;
 $container-padding: 10px;
 // grid
 $container-grid-max-width: 1400px;
 $container-grid-padding: 10px;
+// navbar
+$container-navbar-width: 1450px;
+$navbar-height: 8vh;
+$navbar-height-mobile: 14vh;
+$navbar-height-tablet: 14vh;
 
 // title parallax home
 $font-size-animate: 3em;
@@ -51,11 +55,7 @@ $font-size-burger: 20px;
 $font-size-cart: 20px;
 // Separators
 $separator: 40px;
-// navbar
-$navbar-height: 8vh;
-$navbar-height-mobile: 14vh;
-$navbar-height-tablet: 14vh;
-$navbar-container-width: 1450px;
+
 // dropdown
 $dropdown-min-width: 300px;
 $dropdown-max-width: 450px;
@@ -72,7 +72,7 @@ $alpha-parallax-footer: 0.1;
 
 $parallax-container-footer-height: 70vh;
 
-
+$alpha-banner-parallax-home: 1;
 
 // opacity home
 $alpha-homepage-jsx: 0.6;

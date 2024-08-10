@@ -21,30 +21,20 @@
     {{ encore_entry_link_tags('semantic_css') }}
     {{ encore_entry_link_tags('tarteaucitron_css') }}
     {{ encore_entry_link_tags('app_styles') }}
-
     {% endblock %}
 </head>
 
 <body>
-
-    <div class="page-wrapper">
-        <header>
-            {# On utilise un controller pour rendre un form search dans la navbar #}
-            {{ render(controller('App\\Controller\\NavbarController::index')) }}
-        </header>
-        <main class="content">
-            {% include "search/search_results.html.twig" %}
-            {% if home is not defined %}
-            <div class="fiverr-container">
-                {% endif %}
-                {% block body %} {% endblock %}
-                {% if home is not defined %}
-            </div>
-            {% endif %}
-        </main>
-        <footer>{% include 'footer/footer.html.twig' %}</footer>
-
-    </div>
+    <header>
+        {# On utilise un controller pour rendre un form search dans la navbar #}
+        {{ render(controller('App\\Controller\\NavbarController::index')) }}
+    </header>
+    <main class="content">
+        {% include "search/search_results.html.twig" %}
+            {% block body %} {% endblock %}
+        </div>
+    </main>
+    <footer>{% include 'footer/footer.html.twig' %}</footer>
     <div id="tarteaucitron"></div>
     {% block javascripts %}
     {{ encore_entry_script_tags('messageFlash') }}
@@ -59,7 +49,8 @@
     {{ encore_entry_script_tags('StickyFooter') }}
     {{ encore_entry_script_tags('Homepage') }} #}
 
-    {# <script src="{{ asset('tarteaucitron.js')}}"></script> #}
+    {# <script src="{{ asset('tarteaucitron.js')}}"></script>  #}
+
     <script type="text/javascript">
         if (typeof tarteaucitron !== 'undefined') {
 

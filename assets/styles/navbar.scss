@@ -1,7 +1,7 @@
 @import "variables";
 
 .custom-container-navbar {
-  width: $navbar-container-width !important;
+  width: $container-navbar-width !important;
   padding: 0 10px;
 }
 @function hex-to-rgba($hex, $alpha: 1) {
@@ -18,8 +18,8 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
 // Nav Général
 .ui.fixed.borderless.menu {
   background-color: $secondary-color-rgba;
-  min-height: $navbar-height;
-  height: $navbar-height !important;
+  min-height: $navbar-height !important;
+  // height: $navbar-height !important;
   display: flex; // Utiliser flexbox pour une meilleure gestion des éléments
   justify-content: space-between; // Espace entre les éléments
   align-items: center; // Centrer verticalement les éléments
@@ -42,7 +42,6 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   left: 0;
   bottom: 0;
   height: 2px;
-
   width: 0;
   background: $primary;
   transition: width 0.3s ease-in-out;
@@ -53,17 +52,17 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   cursor: pointer;
 }
 .ui.fixed.borderless.menu .computer.only .item:hover::after {
-  width: 95%;
+  width: 100%;
 }
 
-.ui .computer.only .item:hover {
-  // background: $primary !important;
-  // color: #fff !important;
-  // border-bottom: 1px solid hsl(0, 0%, 100%);
-}
+// .ui .computer.only .item:hover {
+//   background: $primary !important;
+//   color: #fff !important;
+//   border-bottom: 1px solid hsl(0, 0%, 100%);
+// }
 .ui .computer .item.active {
-  // color: #fff;
-  // border-bottom: 1px solid #fff;
+  color: #fff;
+  border-bottom: 1px solid #fff;
 }
 // Couleur des liens gauche
 .computer.only.row a {
@@ -140,16 +139,16 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   color: $link-navbar;
 }
 
-// .ui.vertical.menu > .item.active {
-//   padding-left: 1.428em;
-//   background-color: #00ba49 !important;
-//   color: #fff !important;
-//   border-bottom: 1px solid #fff;
-// }
+.ui.vertical.menu > .item.active {
+  padding-left: 1.428em;
+  background-color: #00ba49 !important;
+  color: #fff !important;
+  border-bottom: 1px solid #fff;
+}
 
 .ui.vertical.menu > .item:hover {
   padding-left: 1.428em;
-  // background-color: $primary !important;
+  background-color: $primary !important;
   color: $link-navbar !important;
   border-bottom: 1px solid $link-navbar;
 }

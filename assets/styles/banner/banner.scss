@@ -1,62 +1,39 @@
 @import "./assets/styles/variables";
 
-// .ad-banner {
-//     padding: 20px 0; /* Ajustez cette valeur si nécessaire */
-//     background-color: #333;
-//     color: #fff;
-//     text-align: center;
-//     overflow: hidden;
-//     height: auto; /* Assurez-vous que la hauteur est suffisante pour le contenu */
-//   }
-  
-//   .ad-carousel {
-//     width: 100%;
-//     display: flex;
-//     justify-content: center;
-//   }
-  
-//   .ad-carousel div {
-//     // margin: 0 10px;
-//     // padding: 10px 20px;
-//     background-color: #444;
-//     // border-radius: 5px;
-//     transition: background-color 0.3s ease;
-//   }
-  
+.custom-container-navbar {
+  width: $container-navbar-width !important;
+  padding: 0 10px;
+}
+@function hex-to-rgba($hex, $alpha: 1) {
+  @if not(type-of($hex) == color) {
+    @error "Le paramètre doit être une couleur hexadécimale.";
+  }
+  @return rgba($hex, $alpha);
+}
+// Couleurs avec opacité
+$secondary-color-rgba: hex-to-rgba($secondary, $alpha-banner-parallax-home);
+.ad-banner {
+  padding: 20px 0; 
+  background-color: $secondary-color-rgba;
+  text-align: center;
+  overflow: hidden;
+  height: auto; 
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// /* Carousel */
 .ad-carousel {
   position: relative;
   top: 0;
   left: 0;
   height: auto;
   display: flex;
-
-  // border: 2px solid blue;
   max-width: 100%;
 }
-
 .ad-carousel div {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   color: $white !important;
-  //   padding: 0 10px;
   text-align: center;
-  // border:1px solid green;
 }
 
 .ad-carousel a {
@@ -70,9 +47,8 @@
   transition: background-color 0.3s ease;
   margin: 5px;
   white-space: nowrap;
-  color: $grey!important;
-  // border:1px solid #fff;
-  width:auto;
+  color: $grey !important;
+  width: auto;
 }
 .ad-carousel a:hover {
   text-decoration: none;
@@ -91,30 +67,21 @@
   // background-color: $secondary;
   color: $white;
 }
-
 /* iPhone 5 (et appareils similaires) */
 @media (max-width: 320px) {
-
 }
-
 /* Mobile général (jusqu'à 480px) */
 @media (max-width: 480px) {
-
 }
-
 /* Téléphones moyens/grands (481px à 767px) */
 @media (min-width: 481px) and (max-width: 768px) {
-
 }
 
 /* Tablettes (769px à 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
-
 }
 
 /* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
 @media (min-width: 1025px) {
-
 }
 
-/* Container for the carousel */

@@ -15,36 +15,92 @@ html, body {
   max-width: 100%;
   overflow-x: hidden;
 }
-/* Mobile général (jusqu'à 480px) */
-// @media (max-width: 320px) {
-//   .page-wrapper {
-//     min-height: 100%;
-//     width: 100vw;
-//     height:100vh;
 
-//     width: 100vw;
-//     // border: 1px solid red;
-//   }
-//   .fiverr-container {
-//     width: 100vw;
-//   }
-//   .custom-container {
-//     width: 100vh;
-//   }
+// // base.html
+// .fiverr-container {
+//   max-width: $container-max-width;
+//   margin: 0 auto;
+//   padding: $container-padding;
 // }
-// @media (max-width: 480px) {
-//   .page-wrapper {
-//     min-height: 100%;
-//     width: 100vw;
-//     height:100vh;
+// .custom-container {
+//   max-width: $container-max-width;
+//   margin: 0 auto;
+//   padding: $container-padding;
+// }
+// .custom-grid-container {
+//   max-width: $container-grid-max-width;
+//   margin: 0 auto;
+//   padding: $container-grid-padding;
+//   border:1px solid #000;
+// }
+// Padding
+.padding {
+  padding: $padding-medium; // Valeur par défaut
+}
 
-//     width: 100vw;
-//     // border: 1px solid red;
-//   }
-//   .fiverr-container {
-//     width: 100vw;
-//   }
-//   .custom-container {
-//     width: 100vh;
-//   }
-// }
+.padding-small {
+  padding: $padding-small;
+}
+
+.padding-large {
+  padding: $padding-large;
+}
+
+.padding-top {
+  padding-top: $padding-medium;
+}
+
+.padding-top-small {
+  padding-top: $padding-small;
+}
+
+.padding-top-large {
+  padding-top: $padding-large;
+}
+
+.padding-bottom {
+  padding-bottom: $padding-medium;
+}
+
+.padding-bottom-small {
+  padding-bottom: $padding-small;
+}
+
+.padding-bottom-large {
+  padding-bottom: $padding-large;
+}
+
+// Margin
+.margin {
+  margin: $margin-medium; // Valeur par défaut
+}
+
+.margin-small {
+  margin: $margin-small;
+}
+
+.margin-large {
+  margin: $margin-large;
+}
+
+.margin-top {
+  margin-top: $margin-medium;
+}
+
+.margin-top-small {
+  margin-top: $margin-small;
+}
+
+.margin-top-large {
+  margin-top: $margin-large;
+}
+
+.margin-bottom {
+  margin-bottom: $margin-medium;
+}
+.margin-bottom-small {
+  margin-bottom: $margin-small;
+}
+.margin-bottom-large {
+  margin-bottom: $margin-large;
+}

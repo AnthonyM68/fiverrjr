@@ -91,8 +91,7 @@ class HomeController extends AbstractController
             'search_developer_by_name' => $searchDeveloperByNameUrl,
             'search_developer_by_city' => $searchDeveloperByCityUrl,
             'submitted_form' => null,
-            'title_page' => 'Accueil',
-            'home' => true
+            'title_page' => 'Accueil'
         ]);
     }
 
