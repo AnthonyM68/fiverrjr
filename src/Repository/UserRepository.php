@@ -66,7 +66,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ->getQuery()
         ->getResult();
     }
-
+    public function searchByTermFromCity(?string $searchTerm, ?string $userType)
+    {
+        return $this->createQueryBuilder('u')
+        ->where('u.city LIKE :searchTerm')
+        ->andWhere('u.roles LIKE :role')
+        ->setParameter('searchTerm', '%' . $searchTerm . '%')
+        ->setParameter('role', '%' . $userType . '%')
+        ->orderBy('u.dateRegister', 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

@@ -60,6 +60,9 @@ Encore
         './assets/styles/parallax/parallax.scss',
         './assets/styles/parallax/parallax_home.scss',
         './assets/styles/parallax/parallax_footer.scss',
+        './assets/styles/cards/userCard.scss',
+        './assets/styles/cards/itemUser.scss',
+        './assets/styles/cards/itemUserCards.scss',
         './assets/styles/banner/banner.scss',
         './assets/styles/home.scss',
         './assets/styles/user.scss',
@@ -123,6 +126,9 @@ Encore
     .addEntry('UserCard', './assets/js/components/Card/UserCard.jsx')
     // UserCard
     .addEntry('ItemUser', './assets/js/components/Card/ItemUser.jsx')
+    // ItemUserCards
+    .addEntry('ItemUserCards', './assets/js/components/Card/ItemUserCards.jsx')
+
     // DeveloperSearch
     .addEntry('DeveloperSearch', './assets/js/components/DeveloperSearch/DeveloperSearch.jsx')
     // CarouselComponent React

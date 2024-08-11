@@ -1,22 +1,49 @@
 @import "variables";
 
-.cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  padding: 10px;
+.developer-search-container {
+  width:100%;  
+  max-width: $developer-search-container;
+  margin: 0 auto;
+  padding: $container-padding;
+  height:100%;
 }
 
-.cards-container .card {
-  flex: 1 1 300px;
-  min-width: 100px;
-  max-width: 200px;
-  min-height: 150px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  overflow: hidden;
-}
+
+// .cards-container {F
+//   display: flex;
+//   flex-wrap: wrap;
+//   gap: 20px;
+//   justify-content: center;
+//   padding: 10px;
+// }
+
+// .cards-container .card {
+//   flex: 1 1 300px;
+//   min-width: 100px;
+//   max-width: 200px;
+//   min-height: 150px;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//   border-radius: 10px;
+//   overflow: hidden;
+// }
+// // ItemUser.jsx
+// .image-container {
+//   width: 100%; // Assure que le conteneur prend toute la largeur de la carte
+//   height: 200px; //Hauteur fixe pour les images*/
+//   max-height:50%;
+//   overflow: hidden; // Cache toute partie de l'image qui dépasse 
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
+// .profile-image {
+//   width: auto; // Ajuste la largeur
+//   height: 100%; // La hauteur de l'image est égale à la hauteur du conteneur 
+//   object-fit: cover; // Assure que l'image couvre toute la surface du conteneur 
+// }
+
+
+
 /* iPhone 5 (et appareils similaires) */
 @media (max-width: 320px) {
 }

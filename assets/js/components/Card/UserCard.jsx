@@ -21,15 +21,20 @@ const UserCard = ({
 
   return (
     <Card fluid>
-      <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-        {picture && (
+      <div 
+      className="image-container"
+      style={{ display: 'flex', alignItems: 'flex-start' }}
+      >
+      {picture && (
           <Image
             src={picture}
             wrapped
             ui={true}
-            style={{ width: '150px', height: 'auto', marginRight: '1rem' }}
+            className="profile-image"
+            alt={`Image de profil de ${firstName} ${lastName}`}
           />
         )}
+        
         <Card.Content style={{ flex: 1, textAlign: 'left' }}>
           <Card.Header>
             <p>
@@ -39,6 +44,7 @@ const UserCard = ({
           </Card.Header>
           <Card.Meta>
             <span className="date">Date d'inscription: {formattedDate}</span>
+            <span className="date">UserCard</span>
           </Card.Meta>
           <Card.Description>{bio}</Card.Description>
         </Card.Content>

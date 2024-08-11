@@ -9,9 +9,7 @@
 }
 
 $overlay-homepage: hex-to-rgba($secondary, $alpha-homepage-jsx);
-#homepage-root {
-  background-color: $primary;
-}
+
 .custom-grid-container {
     position: relative;
     max-width: $container-grid-max-width;
@@ -19,8 +17,7 @@ $overlay-homepage: hex-to-rgba($secondary, $alpha-homepage-jsx);
     padding: $padding-extra-large;
     overflow: hidden;
     box-sizing: border-box;
-    border: 5px solid green;
-    background-color: $primary;
+    // background-color: $primary;
   }
   
   .overlay-homepage {
@@ -29,7 +26,7 @@ $overlay-homepage: hex-to-rgba($secondary, $alpha-homepage-jsx);
     left: 0;
     width: 100%;
     height: 100%; 
-    background-color: $overlay-homepage;
+    // background-color: $overlay-homepage;
     pointer-events: none;
     z-index: 1;
   }

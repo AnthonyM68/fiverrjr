@@ -138,37 +138,38 @@ class SearchController extends AbstractController
 
 
 
-    #[Route("/search/developer/name", name: "search_developer", methods: ['POST'])]
+    #[Route("/fetch/search/developer/name", name: "search_developer", methods: ['POST'])]
     public function searchDeveloper(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+        $this->logger->info('Received JSON data:', ['data' => $data]);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             return new JsonResponse(['error' => 'Invalid JSON data'], JsonResponse::HTTP_BAD_REQUEST);
         }
-
-        $this->logger->info('Received JSON data:', ['data' => $data]);
-
+        // on recherche le token soumis dans le formulaire
         $submittedToken = $data['_token'];
-        $this->logger->info('Submitted token:', ['csrf_token_user' => $submittedToken]);
-
+        $this->logger->info('Submitted token:', ['csrf_token' => $submittedToken]);
+        // on crée un token du même nom que celui créer dans le template twig
+        // searchItemUserToken: "{{ csrf_token('searchItemUserToken') }}",
         $csrfToken = new CsrfToken('searchItemUserToken', $submittedToken);
-
-        // if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
-        //     return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
-        //     $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
-        // }
-
+        $this->logger->info('CSRF Token for validation:', ['csrf_token' => $csrfToken]);
+        // on vérfie a l'aide du gestionnaire de token qu'il correspond a celui stocké 
+        // en session
+        if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
+            $this->logger->error('Invalid CSRF token:', ['csrf_token_name' => $csrfToken]);
+            return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
+        }
+        // on recherche le searchTerm du formulaire
         $searchTerm = $data['search-user-by-name'] ?? '';
-
+        // on effectue la recherche
         $users = $this->entityManager->getRepository(User::class)->searchByTerm($searchTerm, "ROLE_DEVELOPER");
         $this->logger->info('Received users:', ['users' => $users]);
-        // on utilise le imageService pour générer le lien image
-        foreach($users as $user) {
+        // on utilise le imageService pour générer les liens image
+        foreach ($users as $user) {
             $this->imageService->setPictureUrl($user);
         }
-
-        // return new JsonResponse($users, 200, [], true);
+        // on sérialise les résultatet les convertissons au format JSON
         try {
             $results = $this->serializer->serialize($users, JsonEncoder::FORMAT, ['groups' => 'user']);
             $this->logger->info('Serialized results:', ['results' => $results]);
@@ -183,37 +184,7 @@ class SearchController extends AbstractController
     #[Route("/search/client/name", name: "search_client", methods: ['POST'])]
     public function searchClient(Request $request): JsonResponse
     {
-        // Récupération des données du formulaire
-        $formData = $request->request->all();
 
-        $searchTerm = $formData['search-user-by-name'];
-        $token = $formData['_token'];
-        // Vérifier le token CSRF
-        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken('search_item_user', $token))) {
-            return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
-        }
-        $users = $this->entityManager->getRepository(User::class)->searchByTerm($searchTerm, "ROLE_DEVELOPER");
-
-        foreach ($users as $user) {
-            $this->imageService->setPictureUrl($user);
-        }
-        // formater la date
-        $usersFormatDate = array_map(function ($user) {
-            return [
-                'user' => $user,
-                'formattedDate' => $user->getDateRegister()->format('d/m/Y'),
-                'profileUrl' =>  $this->generateUrl('detail_user', ['id' => $user->getId()]),
-                'listServices' => $this->generateUrl('list_services_by_userID', ['id' => $user->getId()])
-            ];
-        }, $users);
-        try {
-            $results = $this->serializer->serialize($usersFormatDate, JsonEncoder::FORMAT, ['groups' => 'user']);
-            $this->logger->info('Serialized results:', ['results' => $results]);
-            return new JsonResponse($results, 200, [], true);
-        } catch (\Exception $e) {
-            $this->logger->error('Serialization error:', ['exception' => $e]);
-            return new JsonResponse(['error' => 'Serialization error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
     }
     /*#[Route("/search/results", name: "search_results", methods: ['POST'])]
     public function searchResult(Request $request, SerializerInterface $serializer): JsonResponse

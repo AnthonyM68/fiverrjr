@@ -1,29 +1,33 @@
 import { useState, useEffect } from "react";
-
 /**
- * Hook personnalisé pour effectuer une requête POST et gérer l'état des données et des erreurs.
- * @param {string} url - L'URL de l'API à laquelle effectuer la requête.
- * @param {FormData} formData - Les données du formulaire à envoyer.
- * @returns {Object} - Un objet contenant les données récupérées et toute erreur survenue.
+ *
+ * @param {*} url
+ * @param {*} formdata
+ * @param {*} csrfToken
+ * @param {*} asJson
+ * @returns
  */
-export const usePostData = (url, formdata, csrfToken = false, asJson = false) => {
-  console.log(`useFetch.jsx posting data to ${url}`);
-
+export const usePostData = (
+  url = '',
+  formdata = false,
+  csrfToken = false,
+  asJson = false
+) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
+    console.log(`usePostData called with URL: ${url}, Formdata:`, formdata, `CSRF Token: ${csrfToken}`);
+
     const postData = async () => {
       if (!url || !formdata) {
-        // Ne pas exécuter si url ou formdata sont manquants
-        // (recherche sur multiple appel a usePostData)
+        console.log("Skipping fetch due to missing URL or Formdata");
         return;
       }
 
       let body;
       let headers = {
-        'X-CSRF-TOKEN': csrfToken, // Ajouter le token CSRF dans l'en-tête
+        "X-CSRF-TOKEN": csrfToken, // Ajouter le token CSRF dans l'en-tête
       };
 
       if (asJson) {
@@ -63,15 +67,17 @@ export const usePostData = (url, formdata, csrfToken = false, asJson = false) =>
 
       try {
         const response = await fetch(url, {
-          method: 'POST',
+          method: "POST",
           headers: headers,
           body: body,
         });
         if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
+          throw new Error(
+            `Network response was not ok: ${response.statusText}`
+          );
         }
         const result = await response.json();
-        console.log(result);
+        console.log("Fetch result:", result);
         setData(result);
       } catch (err) {
         setError(err);
@@ -80,7 +86,9 @@ export const usePostData = (url, formdata, csrfToken = false, asJson = false) =>
       }
     };
 
-    postData();
+    if (url && formdata) {
+      postData();
+    }
   }, [url, formdata, csrfToken, asJson]);
 
   return { data, error, loading };

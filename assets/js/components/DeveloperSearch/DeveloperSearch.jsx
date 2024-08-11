@@ -3,9 +3,12 @@ import { createRoot } from "react-dom/client";
 import { useInView } from "react-intersection-observer";
 import { showAlert } from "./../../alert/messageFlash.js";
 import { usePostData } from "../../useFetch";
-import UserCard from "../Card/ItemUser"; // Assurez-vous que le chemin est correct
-import "uikit/dist/css/uikit.min.css";
-import UIkit from "uikit";
+
+import ItemUserCards from "../Card/ItemUserCards.jsx"; 
+import './../../../styles/developerSearch.scss';
+
+// import "uikit/dist/css/uikit.min.css";
+// import UIkit from "uikit";
 
 // Composant principal pour la recherche de développeur
 const DeveloperSearch = () => {
@@ -128,17 +131,17 @@ const DeveloperSearch = () => {
 
   // Rendu des résultats
   const renderResults = () => {
-    console.log(data);
-
     if (data && showResults) {
+      console.log(`developerSearch send data: ${data}`);
       if (data.length > 0) {
         return (
           <div>
             <h2>Résultats de la recherche:</h2>
             <div className="cards-container padding-bottom-large">
-              {data.map((item, index) => (
-                <UserCard key={index} user={item} />
-              ))}
+            <ItemUserCards items={data} />
+              {/* {data.map((item, index) => (
+                <ItemExampleProps items={item} />
+              ))} */}
             </div>
             <button className="ui button primary" onClick={handleCloseResults}>
               Fermer
@@ -173,7 +176,7 @@ const DeveloperSearch = () => {
 
   // Rendu principal du composant
   return (
-    <div className="ui container">
+    <div className="ui container padding-large">
       <div
         ref={ref}
         className={`ui center aligned message ${
@@ -184,7 +187,7 @@ const DeveloperSearch = () => {
         <h2 className="ui center aligned icon header">
           <i className="circular users icon"></i>
           <div className="ui grid">
-            <div className="eight wide column right aligned margin-bottom-large">
+            <div className="eight wide column right aligned">
               <div className="ui right aligned category search">
                 <form
                   onSubmit={handleSubmitByName}

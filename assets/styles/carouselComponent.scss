@@ -1,18 +1,16 @@
 @import "variables";
 
-.best-services-carousel {
-  //   width: 100%;
-  //   margin: 0 auto;
+
+.bestservices-container {
+  width:100%;  
+  max-width: $bestservices-container;
+  margin: 0 auto;
+  padding: $container-padding;
+  height:100%;
 }
-.carousel-container-item {
-  // width: 100%;
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
-  // border:2px solid red;
-}
-.carousel-item {
-}
+
+
+
 /* iPhone 5 (et appareils similaires) */
 @media (max-width: 320px) {
 

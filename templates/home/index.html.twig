@@ -1,30 +1,31 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
 {{ parent() }}
-{# {{ encore_entry_link_tags('react-responsive-carousel') }} #}
-{# {{ encore_entry_link_tags('react-multi-carousel') }} #}
-{{ encore_entry_link_tags('slick-carousel-css') }} 
-{{ encore_entry_link_tags('slick-carousel-theme-css') }} 
+{{ encore_entry_link_tags('react-responsive-carousel') }}
+{{ encore_entry_link_tags('react-multi-carousel') }}
+{{ encore_entry_link_tags('slick-carousel-css') }}
+{{ encore_entry_link_tags('slick-carousel-theme-css') }}
 {% endblock %}
 
 {% block body %}
 <script>
     window.__INITIAL_DATA__ = {
-        lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
-        lastClient: {{ lastClient | json_encode() | raw }},
-        lastService: {{ lastService | json_encode() | raw }},
-        searchItemUserToken: '{{ csrf_token(searchItemUserToken) }}',
-        searchItemCityToken: '{{ csrf_token(searchItemCityToken) }}',
-        searchDeveloperByNameUrl: '{{ search_developer_by_name }}',
-        searchDeveloperByCityUrl: '{{ search_developer_by_city }}',
-        };
+    lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
+    lastClient: {{ lastClient | json_encode() | raw }},
+    lastService: {{ lastService | json_encode() | raw }},
+    searchItemUserToken: "{{ csrf_token('searchItemUserToken') }}",
+    searchItemCityToken: "{{ csrf_token('searchItemCityToken') }}",
+    searchDeveloperByNameUrl: '{{ search_developer_by_name }}',
+    searchDeveloperByCityUrl: '{{ search_developer_by_city }}',};
     console.log(window.__INITIAL_DATA__);
 </script>
 
+
 <div id="ParallaxHome"></div>
-<div id="developer-search-root"></div>
-{# <div id="bestservices-root"></div> #}
+<div class="developer-search-container" id="developer-search-root"></div>
+<div class="bestservices-container" id="bestservices-root"></div>
 <div id="homepage-root"></div>
+
 {# <div id="last-developers"></div> #}
 <div id="ParallaxFooter"></div>
 {% block javascripts %}

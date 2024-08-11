@@ -6,6 +6,10 @@
 
     <div class="ui container custom-container-navbar grid ">
 
+        <!-- Section pour les alertes -->
+        <div id="alert-javascript-desktop" className="alert-desktop">
+            <!-- Code d'affichage des alertes pour desktop -->
+        </div>
         <!--Start: Desktop Nav-->
         <div class="computer only row">
 
@@ -16,44 +20,45 @@
                 class="item">Développeurs</a>
 
 
-                <div class="ui dropdown link item">
+            <div class="ui dropdown link item">
 
-                    <div class="theme">
-                        Thèmes
-                        <i class="theme icon"></i>
-                    </div>
-
-                    <div class="menu menu-dropdown-desktop">
-                        {% for theme in get_navbar_data() %}
-                        <div class="item">
-                            <a href="{{ path('detail_theme', { 'id': theme.id }) }}">
-                                <i class="dropdown icon"></i>
-                                {{ theme.name }}
-                            </a>
-                            <div class="menu">
-                                {% for category in theme.categories %}
-                                <div class="item">
-                                    <a href="{{ path('detail_category', { 'id': category.id }) }}">
-                                        <i class="dropdown icon"></i>
-                                        {{ category.name }}
-                                    </a>
-                                    <div class="menu">
-                                        {% for course in category.courses %}
-                                        <div class="item">
-                                            <a href="{{ path('detail_course', {'id': course.id, 'page' : '1' }) }}">
-                                                {# <a href="{{ path('detail_course', {'id': course.id, 'page' : '1'}) }}"> #}
-                                                    {{ course.name }}
-                                                </a>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
+                <div class="theme">
+                    Thèmes
+                    <i class="theme icon"></i>
                 </div>
+
+                <div class="menu menu-dropdown-desktop">
+                    {% for theme in get_navbar_data() %}
+                    <div class="item">
+                        <a href="{{ path('detail_theme', { 'id': theme.id }) }}">
+                            <i class="dropdown icon"></i>
+                            {{ theme.name }}
+                        </a>
+                        <div class="menu">
+                            {% for category in theme.categories %}
+                            <div class="item">
+                                <a href="{{ path('detail_category', { 'id': category.id }) }}">
+                                    <i class="dropdown icon"></i>
+                                    {{ category.name }}
+                                </a>
+                                <div class="menu">
+                                    {% for course in category.courses %}
+                                    <div class="item">
+                                        <a href="{{ path('detail_course', {'id': course.id, 'page' : '1' }) }}">
+                                            {# <a href="{{ path('detail_course', {'id': course.id, 'page' : '1'}) }}">
+                                                #}
+                                                {{ course.name }}
+                                            </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
             <!-- End: Popup -->
 
             <div class="right menu">
@@ -66,9 +71,13 @@
                     </div>
                     <div class="results"></div>
                 </div> #}
+                <div id="alert-javascript-mobile" className="alert-mobile">
+                    <!-- Code d'affichage des alertes pour mobile -->
+                  </div>
                 <div class="item no-underline">
-                {% include './navbar/form/formDesktop.html.twig' with { 'attr': { 'class': 'desktop-search-form' } }
-                %}                    
+                    {% include './navbar/form/formDesktop.html.twig' with { 'attr': { 'class': 'desktop-search-form' } }
+                    %}
+                    <div class="results"></div>
                 </div>
 
 
@@ -100,7 +109,7 @@
             <a class="header item">Fiverr Junior</a>
 
             <div class="right menu">
-                <a class="menu item" href="{{ path('cart_product') }}" >
+                <a class="menu item" href="{{ path('cart_product') }}">
                     <div id="menu-cart" class="ui basic icon toggle button">
                         <i class="cart arrow down icon"></i>
                     </div>
@@ -117,7 +126,7 @@
                 <div class="item">
                     {% include './navbar/form/formMobile.html.twig' with { 'attr': { 'class': 'mobile-search-form' } }%}
                 </div>
-                
+
                 <!-- End: Search -->
                 <a href="{{ path('home') }}" class="item">Accueil</a>
                 <a href="{{ path('list_user_type', {'role': 'ROLE_CLIENT', 'page' : '1' }) }}"
@@ -148,9 +157,10 @@
                                     {% for course in category.courses %}
                                     <div class="item">
                                         <a href="{{ path('detail_course', {'id': course.id, 'page' : '1' }) }}">
-                                        {# <a href="{{ path('detail_course', {'id': course.id, 'page' : '1'}) }}"> #}
-                                            {{ course.name }}
-                                        </a>
+                                            {# <a href="{{ path('detail_course', {'id': course.id, 'page' : '1'}) }}">
+                                                #}
+                                                {{ course.name }}
+                                            </a>
                                     </div>
                                     {% endfor %}
                                 </div>
