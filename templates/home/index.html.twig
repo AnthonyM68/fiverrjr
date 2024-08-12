@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block body %}
+
 <script>
     window.__INITIAL_DATA__ = {
     lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
@@ -15,17 +16,111 @@
     lastService: {{ lastService | json_encode() | raw }},
     searchItemUserToken: "{{ csrf_token('searchItemUserToken') }}",
     searchItemCityToken: "{{ csrf_token('searchItemCityToken') }}",
-    searchDeveloperByNameUrl: '{{ search_developer_by_name }}',
-    searchDeveloperByCityUrl: '{{ search_developer_by_city }}',};
-    console.log(window.__INITIAL_DATA__);
+    searchDeveloper: "{{ search_developer }}", // route search_developer
+    searchClient: "{{ search_client }}"};// route search_client Optionel
 </script>
 
+<style>
+.content-block {
+    display: flex;
+    align-items: center;
+    gap: 50px; 
+    max-width: 1000px;
+    height: 250px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .image-container {
+    flex: 1;
+    max-width: 100%;
+  }
+  
+  .image-container img {
+    width: 100%; 
+    height: auto; 
+    border-radius: 8px;
+  }
+  
+
+  .text-container {
+    flex: 2; 
+    color: #333; 
+  }
+  
+
+  .text-container h2 {
+    font-size: 20px; 
+    margin-bottom: 10px; 
+  }
+  
+
+  .text-container p {
+    font-size: 14px; 
+    line-height: 1.5; 
+    margin: 0; 
+  }
+  
+
+  @media (max-width: 768px) {
+    .content-block {
+      flex-direction: column; 
+      height: auto; 
+      gap: 20px; 
+    }
+  
+    .image-container {
+      max-width: 100%; 
+    }
+  
+    .text-container {
+      flex: none; 
+    }
+  
+    .text-container h2 {
+      font-size: 18px; 
+    }
+  
+    .text-container p {
+      font-size: 12px; /
+    }
+  }
+
+</style>
 
 <div id="ParallaxHome"></div>
-<div class="developer-search-container" id="developer-search-root"></div>
-<div class="bestservices-container" id="bestservices-root"></div>
-<div id="homepage-root"></div>
 
+
+<div class="content-block">
+    <div class="image-container">
+        <img src="{{ asset('uploads/group2.webp') }}" alt="Description of the image">
+    </div>
+    <div class="text-container">
+        <h2>Trouvez le bon profil</h2>
+        <p>Consultez les avis et expériences, et discutez directement avec les freelances pour pouvoir les engager en
+            quelques clics. </p>
+    </div>
+</div>
+
+<div class="separator"></div>
+{# <div class="bestservices-container" id="bestservices-root"></div> #}
+{# <div id="homepage-root"></div> #}
+<div id="developer-search-root"></div>
+<div class="separator"></div>
+
+<div class="content-block">
+    <div class="text-container">
+        <h2>Évoluez dans un endroit sûr et un service sécurisé</h2>
+        <p>Concentrez-vous sur la collaboration grâce au paiement en ligne sécurisé, aux commentaires et évaluations, aux missions garanties et aux profils de freelances vérifiés.</p>
+    </div>
+    <div class="image-container">
+        <img src="{{ asset('uploads/group.webp') }}" alt="Description of the image">
+    </div>
+
+</div>
 {# <div id="last-developers"></div> #}
 <div id="ParallaxFooter"></div>
 {% block javascripts %}
@@ -34,7 +129,7 @@
 {{ encore_entry_script_tags('Parallax') }}
 {{ encore_entry_script_tags('slick-carousel') }}
 {{ encore_entry_script_tags('DeveloperSearch') }}
-{# {{ encore_entry_script_tags('CarouselComponent') }} #}
+{{ encore_entry_script_tags('CarouselComponent') }}
 {# {{ encore_entry_script_tags('Homepage') }} #}
 {{ encore_entry_script_tags('home') }}
 {% endblock %}

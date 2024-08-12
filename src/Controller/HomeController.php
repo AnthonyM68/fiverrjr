@@ -79,8 +79,8 @@ class HomeController extends AbstractController
         $csrfTokenUser = $csrfTokenManager->getToken('csrf_token_user')->getValue();
         $csrfTokenCity = $csrfTokenManager->getToken('csrf_token_city')->getValue();
         // Générez les URLs
-        $searchDeveloperByNameUrl = $urlGenerator->generate('search_developer');
-        $searchDeveloperByCityUrl = $urlGenerator->generate('search_client');
+        $searchDeveloper = $urlGenerator->generate('search_developer');
+        $searchClient = $urlGenerator->generate('search_client');
         //  dd($searchDeveloperByNameUrl,  $searchDeveloperByCityUrl);
         return $this->render('home/index.html.twig', [
             'lastDeveloper' => $dataDeveloper,
@@ -88,8 +88,8 @@ class HomeController extends AbstractController
             'lastService' => $dataService,
             'searchItemUserToken' => $csrfTokenUser,
             'searchItemCityToken' => $csrfTokenCity,
-            'search_developer_by_name' => $searchDeveloperByNameUrl,
-            'search_developer_by_city' => $searchDeveloperByCityUrl,
+            'search_developer' => $searchDeveloper,
+            'search_client' => $searchClient,
             'submitted_form' => null,
             'title_page' => 'Accueil'
         ]);

@@ -1,6 +1,46 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<style>
+    /* .ui.two.column.stackable.equal.height.grid {
+        height: auto; 
+    }
+    
+    .ui.two.column.stackable.equal.height.grid > .column {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: auto; 
+    } */
+    
+    .ui.container.user {
+        position: relative;
+        top: 8vh;
+        max-width: 100%;
+        height: 100vh; 
+        padding: 20px;
+    }
+/*
+    .ui.two.column.stackable {
+        margin-top: 20px;
+        box-shadow: 1px 3px 8px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .ui.list.service {
+        padding-top: 40px;
+    }
+    
+    .product-image.service img {
+        vertical-align: bottom;
+    }
+    
+    .flex-end {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    } */
+    
+</style>
 <script>
     // User.js
     // Données des derniers inscrits
@@ -9,7 +49,7 @@
 
 {# Détail d'un utilisateur #}
 {% if user| default %}
-<div class="ui container">
+<div class="ui container user">
 
     <div class="uk-animation">
         <div class="uk-animation-slide-right">

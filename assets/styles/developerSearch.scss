@@ -1,13 +1,28 @@
 @import "variables";
 
 .developer-search-container {
-  width:100%;  
-  max-width: $developer-search-container;
+  width: 100%;
+  max-width: 1000px;
   margin: 0 auto;
   padding: $container-padding;
-  height:100%;
+  height: 100%;
 }
+.cards-container-display {
+  // display: none;
+}
+// .results-container {
+//   transition: transform 0.3s ease, opacity 0.3s ease;
+// }
 
+// .slide-down {
+//   transform: translateY(0);
+//   opacity: 1;
+// }
+
+// .slide-up {
+//   transform: translateY(-20px);
+//   opacity: 0;
+// }
 
 // .cards-container {F
 //   display: flex;
@@ -31,18 +46,16 @@
 //   width: 100%; // Assure que le conteneur prend toute la largeur de la carte
 //   height: 200px; //Hauteur fixe pour les images*/
 //   max-height:50%;
-//   overflow: hidden; // Cache toute partie de l'image qui dépasse 
+//   overflow: hidden; // Cache toute partie de l'image qui dépasse
 //   display: flex;
 //   align-items: center;
 //   justify-content: center;
 // }
 // .profile-image {
 //   width: auto; // Ajuste la largeur
-//   height: 100%; // La hauteur de l'image est égale à la hauteur du conteneur 
-//   object-fit: cover; // Assure que l'image couvre toute la surface du conteneur 
+//   height: 100%; // La hauteur de l'image est égale à la hauteur du conteneur
+//   object-fit: cover; // Assure que l'image couvre toute la surface du conteneur
 // }
-
-
 
 /* iPhone 5 (et appareils similaires) */
 @media (max-width: 320px) {

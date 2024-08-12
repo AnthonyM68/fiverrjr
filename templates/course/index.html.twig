@@ -3,17 +3,29 @@
 {% block title %}{{title_page}}{% endblock %}
 
 {% block body %}
+<style>
+    .ui.container.course {
+        position: relative;
+        top: $navbar-height;
+        max-width: 100%;
+        height: 100vh;
+        padding: 20px;
+    }
 
-<div class="ui container ">
+    .ui.list.course {
+        padding-top: 40px;
+    }
+</style>
+<div class="ui container course">
     {# container title animation #}
-    <div class="uk-animation">
+    <div class="uk-animation padding-top-large">
         <div class="uk-animation-slide-right">
             <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
         </div>
     </div>
     {# list course #}
     {% if courses | default %}
-    <div class="ui list uk-animation-fade">
+    <div class="ui list uk-animation-fade course ">
         {% for course in courses %}
         <div class="item">
             <i class="folder icon"></i>
@@ -29,7 +41,7 @@
     {% endif %}
     {% if services | default %}
     {# On affiche les services touvés #}
-    <div class="ui list uk-animation-fade">
+    <div class="ui list uk-animation-fade course">
         {% for service in services %}
         <div class="ui card custom-card">
             <div class="custom-image-client">
@@ -55,12 +67,12 @@
 
     <div class="ui container">
         <div class="ui pagination menu centered custom-margin-top">
-            {# {% for page in range(1, pagination.pageCount) %}
+            {% for page in range(1, pagination.pageCount) %}
             <a class="item{% if page == pagination.currentPageNumber %} active{% endif %}"
-                href="{{ path('detail_course', {'id': course.id, 'page': '1' }) }}">
+                href="{{ path('detail_course', {'id': courseId, 'page': '1' }) }}">
                 {{ page }}
             </a>
-            {% endfor %} #}
+            {% endfor %}
         </div>
     </div>
     {% endif %}

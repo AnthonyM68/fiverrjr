@@ -121,7 +121,7 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   border-bottom: 1px solid $link-navbar;
 }
 // positions pour le menu mobile
-.ui.vertical.menu {
+.ui.vertical.accordion.borderless.menu {
   display: none;
   position: fixed;
   top: $navbar-height;
@@ -134,39 +134,39 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   box-shadow: 0 2px 5px $primary-color-rgba;
   font-size: $font-size-navbar-mobile;
 }
-.ui.vertical.menu > .item {
+.ui.vertical.accordion.borderless.menu > .item {
   padding-left: 1.428em;
   color: $link-navbar;
 }
 
-.ui.vertical.menu > .item.active {
+.ui.vertical.accordion.borderless.menu > .item.active {
   padding-left: 1.428em;
   background-color: #00ba49 !important;
   color: #fff !important;
   border-bottom: 1px solid #fff;
 }
 
-.ui.vertical.menu > .item:hover {
+.ui.vertical.accordion.borderless.menu > .item:hover {
   padding-left: 1.428em;
   background-color: $primary !important;
   color: $link-navbar !important;
   border-bottom: 1px solid $link-navbar;
 }
-.ui.vertical.menu .item .title {
+.ui.vertical.accordion.borderless.menu .item .title {
   color: $link-navbar;
 }
-.ui.vertical.menu .item .title .dropdown.icon {
+.ui.vertical.accordion.borderless.menu .item .title .dropdown.icon {
   float: none;
   color: $link-navbar;
 }
 
-.ui.vertical.menu .title {
+.ui.vertical.accordion.borderless.menu .title {
   padding: 1em 1.5em;
   color: $link-navbar;
 }
 
 // themes
-.ui.vertical.menu .title:hover {
+.ui.vertical.accordion.borderless.menu .title:hover {
   color: $link-navbar;
   background-color: $primary-color-rgba;
 }
@@ -175,30 +175,30 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   color: $link-navbar;
   overflow: auto;
 }
-.ui.vertical.menu .content:hover {
+.ui.vertical.accordion.borderless.menu .content:hover {
   color: $link-navbar;
   background-color: $primary-color-rgba;
 }
-.ui.vertical.menu .item .content .item {
+.ui.vertical.accordion.borderless.menu .item .content .item {
   padding: 0.5em 1em;
   color: $link-navbar;
 }
 
-.ui.vertical.menu .item .content .item:hover {
+.ui.vertical.accordion.borderless.menu .item .content .item:hover {
   padding: 0.5em 1em;
   background-color: $primary-color-rgba !important;
   color: $link-navbar !important;
   border-bottom: 1px solid $link-navbar;
 }
 
-.ui.vertical.menu .item .content .item.active {
+.ui.vertical.accordion.borderless.menu .item .content .item.active {
   padding: 0.5em 1em;
   background-color: $primary !important;
   color: $link-navbar !important;
   border-bottom: 1px solid $link-navbar;
 }
 
-// .ui.vertical.menu .header.item {
+// .ui.vertical.accordion.borderless.menu .header.item {
 //   text-transform: uppercase;
 //   color: $link-navbar;
 // }
@@ -230,7 +230,7 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
   .tablet.mobile.only .right.menu > .item {
     font-size: 10px;
   }
-  .ui.vertical.menu {
+  .ui.vertical.accordion.borderless.menu {
     display: none;
     top: $navbar-height-mobile !important;
   }
@@ -239,7 +239,7 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
 @media (max-width: 480px) {
   .ui.fixed.borderless.menu {
     height: $navbar-height-tablet !important;
-    .ui.vertical.menu {
+    .ui.vertical.accordion.borderless.menu {
       top: $navbar-height-tablet !important;
     }
 
@@ -249,7 +249,7 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
 @media (min-width: 481px) and (max-width: 768px) {
   .ui.fixed.borderless.menu {
     height: $navbar-height-tablet !important;
-    .ui.vertical.menu {
+    .ui.vertical.accordion.borderless.menu {
       top: $navbar-height-tablet !important;
     }
   }

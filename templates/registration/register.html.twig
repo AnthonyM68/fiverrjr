@@ -1,75 +1,84 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}Register{% endblock %}
 
 {% block body %}
-<div class="ui middle aligned center aligned grid">
+<style>
+    .ui.container.register {
+        position: relative;
+        max-width: 100%;
+        min-height: 100vh;
+        padding: 20px;
+    }
+</style>
+<div class="ui container register">
+    <div class="ui middle aligned center aligned grid">
 
-    <div class="ui segment login-register uk-animation-fade" style="width:350px">
+        <div class="ui segment login-register uk-animation-fade" style="width:350px">
 
-        <h2 class="ui header uk-animation-slide-right">Enregistrement</h2>
+            <h2 class="ui header uk-animation-slide-right">Enregistrement</h2>
 
-        {{ form_start(registrationForm, {'attr': {'class': 'ui large form register'}}) }}
-        <div class="ui stacked segment">
-            <div class="{{ registrationForm.username.vars.errors|length > 0 ? 'field error' }}">
-                {{ form_errors(registrationForm.username) }}
-                <div class="ui right icon input floating-label fluid">
-                    <i class="user icon"></i>
-                    {{ form_widget(registrationForm.username) }}
-                    {{ form_label(registrationForm.username, 'Nom d\'utilisateur') }}
-                </div>
-            </div>
-            <div class="{{ registrationForm.email.vars.errors|length > 0 ? 'field error' }}">
-                {{ form_errors(registrationForm.email) }}
-                <div class="ui right icon input floating-label fluid">
-                    <i class="envelope icon"></i>
-                    {{ form_widget(registrationForm.email) }}
-                    {{ form_label(registrationForm.email) }}
-                </div>
-            </div>
-            <div class="{{ registrationForm.plainPassword.first.vars.errors|length > 0 ? 'field error' }}">
-                {{ form_errors(registrationForm.plainPassword.first) }}
-                <div class="ui right icon input floating-label fluid">
-                    <i class="lock icon"></i>
-                    {{ form_widget(registrationForm.plainPassword.first) }}
-                    {{ form_label(registrationForm.plainPassword.first, 'Mot de passe') }}
-                </div>
-            </div>
-            <div class="{{ registrationForm.plainPassword.second.vars.errors|length > 0 ? 'field error' }}">
-                {{ form_errors(registrationForm.plainPassword.second) }}
-                <div class="ui right icon input floating-label fluid">
-                    <i class="lock icon"></i>
-                    {{ form_widget(registrationForm.plainPassword.second) }}
-                    {{ form_label(registrationForm.plainPassword.second, 'Répétez mot de passe') }}
-                </div>
-            </div>
-            <div class="{{ registrationForm.roles.vars.errors|length > 0 ? 'field error' }}">
-                {{ form_errors(registrationForm.roles) }}
-                <div class="ui fitted checkbox input fluid ">
-                    {{ form_label(registrationForm.roles) }}
-                    {{ form_widget(registrationForm.roles) }}
-                   
-                </div>
-            </div>
-            <div class="uk-margin-top {{ registrationForm.agreeTerms.vars.errors|length > 0 ? 'field error' }}">
-                {{ form_errors(registrationForm.agreeTerms) }}
-                <div class="ui message field fluid large teal center aligned">
-                    <div class="ui checkbox checkbox-container fluid">
-                        {{ form_widget(registrationForm.agreeTerms) }}
-                        {{ form_label(registrationForm.agreeTerms, 'Acceptez les termes') }}
+            {{ form_start(registrationForm, {'attr': {'class': 'ui large form register'}}) }}
+            <div class="ui stacked segment">
+                <div class="{{ registrationForm.username.vars.errors|length > 0 ? 'field error' }}">
+                    {{ form_errors(registrationForm.username) }}
+                    <div class="ui right icon input floating-label fluid">
+                        <i class="user icon"></i>
+                        {{ form_widget(registrationForm.username) }}
+                        {{ form_label(registrationForm.username, 'Nom d\'utilisateur') }}
                     </div>
                 </div>
+                <div class="{{ registrationForm.email.vars.errors|length > 0 ? 'field error' }}">
+                    {{ form_errors(registrationForm.email) }}
+                    <div class="ui right icon input floating-label fluid">
+                        <i class="envelope icon"></i>
+                        {{ form_widget(registrationForm.email) }}
+                        {{ form_label(registrationForm.email) }}
+                    </div>
+                </div>
+                <div class="{{ registrationForm.plainPassword.first.vars.errors|length > 0 ? 'field error' }}">
+                    {{ form_errors(registrationForm.plainPassword.first) }}
+                    <div class="ui right icon input floating-label fluid">
+                        <i class="lock icon"></i>
+                        {{ form_widget(registrationForm.plainPassword.first) }}
+                        {{ form_label(registrationForm.plainPassword.first, 'Mot de passe') }}
+                    </div>
+                </div>
+                <div class="{{ registrationForm.plainPassword.second.vars.errors|length > 0 ? 'field error' }}">
+                    {{ form_errors(registrationForm.plainPassword.second) }}
+                    <div class="ui right icon input floating-label fluid">
+                        <i class="lock icon"></i>
+                        {{ form_widget(registrationForm.plainPassword.second) }}
+                        {{ form_label(registrationForm.plainPassword.second, 'Répétez mot de passe') }}
+                    </div>
+                </div>
+                <div class="{{ registrationForm.roles.vars.errors|length > 0 ? 'field error' }}">
+                    {{ form_errors(registrationForm.roles) }}
+                    <div class="ui fitted checkbox input fluid ">
+                        {{ form_label(registrationForm.roles) }}
+                        {{ form_widget(registrationForm.roles) }}
+
+                    </div>
+                </div>
+                <div class="uk-margin-top {{ registrationForm.agreeTerms.vars.errors|length > 0 ? 'field error' }}">
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                    <div class="ui message field fluid large teal center aligned">
+                        <div class="ui checkbox checkbox-container fluid">
+                            {{ form_widget(registrationForm.agreeTerms) }}
+                            {{ form_label(registrationForm.agreeTerms, 'Acceptez les termes') }}
+                        </div>
+                    </div>
+                </div>
+                <div class="field uk-margin-top">
+                    <button type="submit" class="ui fluid button primary">S'enregistrer</button>
+                </div>
+                <div class="ui message field center aligned">
+                    Déjà inscrit? <a href="{{ path('login') }}">Connectez-vous</a>
+                </div>
             </div>
-            <div class="field uk-margin-top">
-                <button type="submit" class="ui fluid button primary">S'enregistrer</button>
-            </div>
-            <div class="ui message field center aligned">
-                Déjà inscrit? <a href="{{ path('login') }}">Connectez-vous</a>
-            </div>
+            {{ form_end(registrationForm) }}
+
         </div>
-        {{ form_end(registrationForm) }}
-        
     </div>
 </div>
 {% endblock %}

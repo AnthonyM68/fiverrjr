@@ -1,41 +1,27 @@
-/* Footer Styling */
-footer {
-  background-color: #1a1a1a;
-  color: #f0f0f0;
-  padding: 50px 0 20px;
-  font-family: Arial, sans-serif;
+/* Styles généraux du footer */
+.ui-container.footer {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .footer-container {
+  background-color: #1a1a1a !important;
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  flex-wrap: wrap;
 }
 
 .footer-section {
-  flex: 1;
+  flex: 1 1 calc(33.333% - 40px);
+  margin: 20px;
   min-width: 250px;
-  margin-bottom: 30px;
 }
 
 .footer-section h3 {
-  color: #fff;
-  font-size: 1.2em;
+  font-size: 1.5em;
   margin-bottom: 20px;
-  position: relative;
-}
-
-.footer-section h3::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -5px;
-  width: 30px;
-  height: 2px;
-  background-color: #3498db;
+  color: #fff;
 }
 
 .footer-section ul {
@@ -48,109 +34,217 @@ footer {
 }
 
 .footer-section ul li a {
-  color: #b0b0b0;
+  color: #fff;
   text-decoration: none;
-  transition: color 0.3s ease;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.footer-section ul li i {
+  color: #007bff;
 }
 
 .footer-section ul li a:hover {
-  color: #3498db;
+  color: #007bff; /* Utilisation de la couleur primaire */
 }
 
-.footer-section ul li a i {
-  margin-right: 5px;
-  color: #3498db;
+/* Animation de soulignement */
+.footer-section ul li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: #007bff; /* Couleur primaire pour l'animation de soulignement */
+  transition: width 0.3s ease-in-out;
 }
 
-.social-links {
-  margin-bottom: 20px;
+.footer-section ul li a:hover::after {
+  width: 100%;
 }
 
-.social-links a {
-  display: inline-block;
-  width: 35px;
-  height: 35px;
+
+
+.social-links .ui.icon.button {
+  background-color: #1a1a1a;
+  border: 1px solid grey;
+  border-radius: 5px;
+  color: #007bff; /* Couleur primaire pour les icônes */
+}
+
+.social-links .ui.icon.button:hover {
   background-color: #333;
-  color: #fff;
-  text-align: center;
-  line-height: 35px;
-  border-radius: 50%;
-  margin-right: 10px;
-  transition: all 0.3s ease;
+  border-color: #fff;
 }
 
-.social-links a:hover {
-  background-color: #3498db;
-  transform: translateY(-3px);
+/* Newsletter */
+.newsletter {
+  margin-top: 20px;
 }
 
 .newsletter h4 {
-  margin-bottom: 15px;
+  color: #fff;
+  margin-bottom: 10px;
 }
 
 .newsletter form {
   display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.newsletter input {
+.newsletter input[type="email"] {
   flex-grow: 1;
   padding: 10px;
-  border: none;
-  border-radius: 3px 0 0 3px;
-  outline: none;
-}
-
-.newsletter button {
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 0 3px 3px 0;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.newsletter button:hover {
-  background-color: #2980b9;
-}
-
-.footer-bottom {
-  text-align: center;
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #333;
-  position: relative;
-}
-
-.back-to-top {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  background-color: #3498db;
-  color: #fff;
-  width: 40px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
   height: 40px;
-  text-align: center;
-  line-height: 40px;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
+  font-size: 14px;
+  box-sizing: border-box; /* Assurez-vous que la hauteur et la largeur respectent les bordures et le padding */
+  min-width: 0; /* Empêche l'input de forcer le conteneur à s'étendre */
 }
 
-.back-to-top:hover {
-  background-color: #2980b9;
+.newsletter button.ui.button.primary {
+  height: 40px;
+  border-radius: 5px;
+  padding: 0 20px;
+  font-size: 14px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  max-width: 100%; /* Empêche le bouton de déborder */
+  white-space: nowrap; /* Empêche le texte de se décomposer en plusieurs lignes */
 }
 
-/* Responsive design */
+.newsletter form {
+  width: 100%; /* Assurez-vous que le formulaire prend toute la largeur disponible */
+  display: flex;
+  flex-wrap: wrap; /* Permet au bouton et à l'input de s'ajuster correctement dans les petites résolutions */
+}
+
+/* Footer bottom */
+.footer-bottom {
+  text-align: left;
+  padding: 20px;
+  background-color: #e9e9e9;
+}
+
+.footer-bottom p {
+  margin: 0;
+  color: #333;
+}
+
+.footer-bottom a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.footer-bottom a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 320px) {
+  .ui.items .item {
+    font-size: 14px; 
+  }
+
+  .cart-total h3 {
+    font-size: 18px; 
+  }
+
+  .ui.small.image {
+    width: 100%; 
+    height: auto;
+  }
+  .footer-section.link {
+    padding: 10px 10px;
+    border:1px solid red;
+  }
+  .footer-section.services {
+    padding: 20px 20px;
+    border:1px solid red;
+  }
+  .footer-section.connect {
+    border:1px solid red;
+    padding: 10px 20px;
+  }
+  .footer-section.connect h3 {
+    font-size:1.3rem;
+    border:1px solid red;
+  }
+}
+
+@media (max-width: 480px) {
+  .ui.items .item {
+    font-size: 14px; 
+  }
+
+  .cart-total h3 {
+    font-size: 18px; 
+  }
+
+  .ui.small.image {
+    width: 100%; 
+    height: auto;
+  }
+  // .footer-section.link {
+  //   padding: 20px 20px;
+  // }
+  // .footer-section.services {
+  //   padding: 20px 20px;
+  // }
+  // .footer-section.connect {
+  //   font-size:1rem;
+  //   padding: 20px 20px;
+  // }
+}
+
 @media (max-width: 768px) {
-  .footer-container {
-      flex-direction: column;
+  .ui.items .item {
+    flex-direction: column; 
+    text-align: center; 
   }
 
-  .footer-section {
-      margin-bottom: 30px;
+  .ui.small.image {
+    margin-bottom: 10px;
   }
 
-  .back-to-top {
-      right: 10px;
-      bottom: 10px;
+  .ui.container.cart {
+    padding-top: 5vh;
   }
+
+  .cart-total {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .ui.labeled.input {
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .ui.primary.button {
+    margin-top: 10px;
+    width: 100%; 
+  }
+
+  .extra .ui.right.floated {
+    width: 100%; 
+    text-align: center;
+  }
+
+  .extra .ui.primary.button {
+    margin-top: 10px;
+  }
+  // .footer-section.link {
+  //   padding: 20px 20px;
+  // }
+  // .footer-section.services {
+  //   padding: 20px 20px;
+  // }
+  // .footer-section.connect {
+  //   padding: 20px 20px;
+  // }
 }

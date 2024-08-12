@@ -1,51 +1,113 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<style>
+    .ui.container.cart {
+        padding-top: 10vh;
+        display: flex;
+        flex-direction: column; /* Change to column on smaller screens */
+        align-items: center;
+        max-width: 100%;
+        min-height: 100%;
+        margin: 10px auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid red;
+        padding: 20px; /* Add some padding to the container */
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .ui.items .item {
+            flex-direction: column; /* Stack items vertically on small screens */
+            text-align: center; /* Center align text */
+        }
+        
+        .ui.small.image {
+            margin-bottom: 10px; /* Add some space below images */
+        }
+    
+        .ui.container.cart {
+            padding-top: 5vh; /* Reduce top padding on small screens */
+        }
+    
+        .cart-total {
+            margin-top: 20px;
+            width: 100%;
+            text-align: center;
+        }
+    
+        .ui.labeled.input {
+            width: 100%;
+            justify-content: center;
+            margin-top: 10px;
+        }
+    
+        .ui.primary.button {
+            margin-top: 10px; /* Add some space above the button */
+            width: 100%; /* Make buttons full width */
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .ui.items .item {
+            font-size: 14px; /* Smaller text on very small screens */
+        }
+    
+        .cart-total h3 {
+            font-size: 18px; /* Adjust total text size */
+        }
+    
+        .ui.small.image {
+            width: 100%; /* Make images full width on small screens */
+            height: auto;
+        }
+    }
+    
+</style>
 
 
-    <div class="ui container">
 
-        {% if data | default %}
-        <div class="ui segment">
-            <div class="ui items padding-top-extra-large">
-                {% for product in data %}
+<div class="ui container cart">
 
-                <div class="item">
-                    <div class="ui small image">
-                        <img src="{{ product.serviceItem.picture }}"
-                            alt="Image produits {{ product.serviceItem.title }}">
+    {% if data | default %}
+        <div class="ui items">
+            {% for product in data %}
+
+            <div class="item">
+                <div class="ui small image">
+                    <img src="{{ product.serviceItem.picture }}" alt="Image produits {{ product.serviceItem.title }}">
+                </div>
+                <div class="content">
+                    <a class="header">{{ product.serviceItem.title }}</a>
+                    <div class="meta">
+                        <span class="price">{{ product.serviceItem.price }}€</span>
                     </div>
-                    <div class="content">
-                        <a class="header">{{ product.serviceItem.title }}</a>
-                        <div class="meta">
-                            <span class="price">{{ product.serviceItem.price }}€</span>
-                        </div>
 
-                        <div class="extra">
-                            <div class="ui right floated">
-                                <div class="ui labeled input">
-                                    <div class="ui label">Quantité</div>
-                                    <input type="number" value="{{ product.quantity }}">
-                                </div>
-                                <a href="{{ path('delete_service_cart', {id: product.serviceItem.id}) }}"
-                                    class="ui primary button">Supprimer</a>
+                    <div class="extra">
+                        <div class="ui right floated">
+                            <div class="ui labeled input">
+                                {# <div class="ui label">Quantité</div> #}
+                                {# <input type="number" value="{{ product.quantity }}"> #}
                             </div>
+                            <a href="{{ path('delete_service_cart', {id: product.serviceItem.id}) }}"
+                                class="ui primary button">Supprimer</a>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-
-            <div class="cart-total">
-                <h3>Total: {{ total }}€</h3>
-                {% if stripe_public_key| default %}
-                <button class="ui button green" id="checkout-button" data-public-key="{{ stripe_public_key }}"
-                    data-create-checkout="{{ path('app_stripe_charge') }}">Payer</button>
-                {% endif %}
-            </div>
+            {% endfor %}
         </div>
-        {% endif %}
-    </div>
+        <div class="cart-total">
+            <h3>Total: {{ total }}€</h3>
+            {% if stripe_public_key| default %}
+            <button class="ui button green" id="checkout-button" data-public-key="{{ stripe_public_key }}"
+                data-create-checkout="{{ path('app_stripe_charge') }}">Payer</button>
+            {% endif %}
+        </div>
+    {# </div> #}
+    {% endif %}
+</div>
 
 {% block javascripts %}
 {{ parent() }}

@@ -3,7 +3,15 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-
+<style>
+    .ui.container.login {
+        position: relative;
+        max-width: 100%;
+        min-height: 100vh;
+        padding: 20px;
+    }
+</style>
+<div class="ui container login">
     <div class="ui middle aligned center aligned grid ">
 
         <div class="ui segment login-register uk-animation-fade" style="width:350px">
@@ -47,6 +55,6 @@
             </form>
         </div>
     </div>
-
+</div>
 
 {% endblock %}

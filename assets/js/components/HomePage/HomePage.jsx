@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
+
 import {
   Container,
   Grid,
@@ -8,6 +9,7 @@ import {
   Header,
   Segment,
 } from "semantic-ui-react";
+
 import { useInView } from "react-intersection-observer";
 
 const HomePage = () => {
@@ -47,7 +49,7 @@ const HomePage = () => {
     triggerOnce: true,
     threshold: 0.5,
   });
-  const [refCLientWelcom, inViewCLientWelcom] = useInView({
+  const [refClientWelcom, inViewClientWelcom] = useInView({
     triggerOnce: true,
     threshold: 0.5,
   });
@@ -57,23 +59,21 @@ const HomePage = () => {
   });
 
   if (loading) {
-    return <div className="ui active inline loader"></div>;
+    return <div className="homepage-ui active inline loader"></div>;
   }
 
   return (
-    <div className="custom-grid-container">
-      <div className="overlay-homepage"></div>
-      <Grid stackable padded="vertically" className="home">
+    <div className="homepage-container">
+      <div className="homepage-overlay"></div>
+      <Grid stackable padded="vertically" className="homepage-home">
         {/* Developer Section */}
         <Grid.Row columns={2} verticalAlign="middle">
-
-          
           <Grid.Column>
             <div ref={refDeveloper}>
               <Card
                 centered
                 className={`${
-                  inViewDeveloper ? "uk-animation-scale-up slow" : ""
+                  inViewDeveloper ? "homepage-uk-animation-scale-up slow" : ""
                 }`}
               >
                 <Card.Content>
@@ -105,21 +105,18 @@ const HomePage = () => {
                   />
                   {lastDeveloper.roles &&
                     lastDeveloper.roles.includes("ROLE_DEVELOPER") && (
-                      <span className="category">Développeur</span>
+                      <span className="homepage-category">Développeur</span>
                     )}
                 </Card.Content>
-
               </Card>
             </div>
           </Grid.Column>
-
-
 
           <Grid.Column>
             <div
               ref={refDeveloperWelcom}
               className={`${
-                inViewDeveloperWelcom ? "uk-animation-slide-right slow" : ""
+                inViewDeveloperWelcom ? "homepage-uk-animation-slide-right slow" : ""
               }`}
             >
               <Segment>
@@ -139,7 +136,7 @@ const HomePage = () => {
             </div>
           </Grid.Column>
         </Grid.Row>
-  
+
         {/* Contact Section */}
         <Grid.Row centered>
           <Grid.Column textAlign="center">
@@ -147,14 +144,14 @@ const HomePage = () => {
               ref={refTitle}
               className={`${
                 inViewTitle
-                  ? "uk-animation-scale-up uk-transform-origin-top-center custom-margin custom-padding"
+                  ? "homepage-uk-animation-scale-up homepage-uk-transform-origin-top-center homepage-custom-margin homepage-custom-padding"
                   : ""
               }`}
             >
-              <Header as="h1" className="ui header">
+              <Header as="h1" className="homepage-ui header">
                 Contactez des Développeurs Front-End maintenant
               </Header>
-              <p className="ui paragraph margined padded">
+              <p className="homepage-ui paragraph homepage-margined homepage-padded">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim
                 omnis doloribus quo deserunt optio! Tempora fugiat, harum ipsa
                 alias magnam neque! Maiores dolores molestias magnam ipsum at
@@ -162,14 +159,14 @@ const HomePage = () => {
             </div>
           </Grid.Column>
         </Grid.Row>
-  
+
         {/* Client Section */}
         <Grid.Row columns={2} verticalAlign="middle">
           <Grid.Column>
             <div
-              ref={refCLientWelcom}
+              ref={refClientWelcom}
               className={`${
-                inViewCLientWelcom ? "uk-animation-slide-left slow" : ""
+                inViewClientWelcom ? "homepage-uk-animation-slide-left slow" : ""
               }`}
             >
               <Segment>
@@ -195,7 +192,7 @@ const HomePage = () => {
               <Card
                 centered
                 className={`${
-                  inViewClient ? "uk-animation-scale-up slow" : ""
+                  inViewClient ? "homepage-uk-animation-scale-up slow" : ""
                 }`}
               >
                 <Card.Content>
@@ -222,7 +219,7 @@ const HomePage = () => {
                   />
                   {lastClient.roles &&
                     lastClient.roles.includes("ROLE_CLIENT") && (
-                      <span className="category">Client</span>
+                      <span className="homepage-category">Client</span>
                     )}
                 </Card.Content>
               </Card>
@@ -232,10 +229,6 @@ const HomePage = () => {
       </Grid>
     </div>
   );
-  
-  
 };
-
-
 
 export { HomePage };

@@ -5,11 +5,10 @@ import { usePostData } from './../ajax/postData.js';
 document.addEventListener('DOMContentLoaded', async () => {
 
     console.log('=> navbar.js loaded');
-    // Toggle button burger
-    $('.ui.basic.icon.toggle.button').on('click', function () {
-        $('.ui.accordion.vertical.menu').toggle("250", "linear");
-    });
-
+    // // Toggle button burger
+    // $('.ui.basic.icon.toggle.button').on('click', function () {
+    //     $('.ui.accordion.vertical.menu').toggle("250", "linear");
+    // });
     // Initialize accordion for mobile
     $('.ui.accordion').accordion();
     // gestion des lien active de la navigation
@@ -23,21 +22,30 @@ document.addEventListener('DOMContentLoaded', async () => {
             this.classList.add('active');
         });
     });
-
-    // Gestion du menu mobile
+    // gestion du menu mobile
     const mobileMenu = document.querySelector('.tablet.mobile.only .ui.vertical.menu');
-
     const mobileMenuToggle = document.querySelector('#menu-burger');
+    let menuOpen = false; // Flag to track menu state
 
-    // // Ferme le menu mobile en cliquant en dehors
-    document.addEventListener('click', function (event) {
-        console.log(mobileMenu.contains(event.target), mobileMenuToggle.contains(event.target));
-        // Vérifie si le clic est en dehors du menu mobile et du bouton de toggle
-        if (!mobileMenu.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
-            $('.ui.vertical.menu').toggle("250", "linear");
+    // Fonction pour ouvrir/fermer le menu
+    const toggleMobileMenu = () => {
+        $(mobileMenu).toggle("250", "linear");
+        menuOpen = !menuOpen; // Toggle the menuOpen flag
+    };
 
+    // Clic sur le bouton burger pour ouvrir/fermer le menu
+    mobileMenuToggle.addEventListener('click', function (e) {
+        e.stopPropagation(); // Prevent immediate propagation
+        toggleMobileMenu();
+    });
+
+    // Fonction pour gérer le clic en dehors du menu
+    document.addEventListener('click', function (e) {
+        if (menuOpen && !mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+            toggleMobileMenu();
         }
     });
+
 
     function handleSearch(event, element) {
 

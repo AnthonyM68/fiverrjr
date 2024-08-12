@@ -1,32 +1,23 @@
 {% block navbar %}
-
-
 <!--Start: Nav  -->
 <div class="ui fixed borderless huge menu">
-
     <div class="ui container custom-container-navbar grid ">
-
         <!-- Section pour les alertes -->
         <div id="alert-javascript-desktop" className="alert-desktop">
             <!-- Code d'affichage des alertes pour desktop -->
         </div>
         <!--Start: Desktop Nav-->
         <div class="computer only row">
-
             <a href="{{ path('home') }}" class=" item">Accueil</a>
             <a href="{{ path('list_user_type', {'role': 'ROLE_CLIENT', 'page' : '1' }) }}"
                 class="item">Entrepreneurs</a>
             <a href="{{ path('list_user_type', {'role': 'ROLE_DEVELOPER', 'page' : '1'}) }}"
                 class="item">Développeurs</a>
-
-
             <div class="ui dropdown link item">
-
                 <div class="theme">
                     Thèmes
                     <i class="theme icon"></i>
                 </div>
-
                 <div class="menu menu-dropdown-desktop">
                     {% for theme in get_navbar_data() %}
                     <div class="item">
@@ -60,7 +51,6 @@
                 </div>
             </div>
             <!-- End: Popup -->
-
             <div class="right menu">
                 <!-- Start: Search -->
                 <!-- Formulaire Desktop -->
@@ -79,10 +69,6 @@
                     %}
                     <div class="results"></div>
                 </div>
-
-
-
-
                 <!-- End: Search -->
                 <a href="{{ path('search') }}" class="item">Avancées</a>
                 {% if app.user %}
@@ -99,7 +85,6 @@
                 {# {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('admin') }}" class="ui item">Tableau de bord</a>
                 {% endif %} #}
-
             </div>
         </div>
         <!--End: Desktop Nav-->
@@ -114,7 +99,6 @@
                         <i class="cart arrow down icon"></i>
                     </div>
                 </a>
-
                 <a class="menu item">
                     <div id="menu-burger" class="ui basic icon toggle button burger">
                         <i class="content icon"></i>
@@ -126,7 +110,6 @@
                 <div class="item">
                     {% include './navbar/form/formMobile.html.twig' with { 'attr': { 'class': 'mobile-search-form' } }%}
                 </div>
-
                 <!-- End: Search -->
                 <a href="{{ path('home') }}" class="item">Accueil</a>
                 <a href="{{ path('list_user_type', {'role': 'ROLE_CLIENT', 'page' : '1' }) }}"
@@ -135,7 +118,6 @@
                 <a href="{{ path('list_user_type', {'role': 'ROLE_DEVELOPER', 'page' : '1'}) }}"
                     class="item">Développeurs
                 </a>
-
                 <div class="title">
                     Thèmes<i class="theme icon"></i>
                 </div>
@@ -169,8 +151,6 @@
                         </div>
                     </div>
                     {% endfor %}
-
-
                 </div>
                 <div class="ui divider"></div>
                 {% if app.user %}
@@ -181,7 +161,6 @@
                 <a href="{{ path('login') }}" class="ui item">Se connecter</a>
                 <a href="{{ path('register') }}" class="ui item">S'enregistrer</a>
                 {% endif %}
-
                 {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('admin') }}" class="ui item">Tableau de bord</a>
                 {% endif %}

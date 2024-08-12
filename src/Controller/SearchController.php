@@ -138,7 +138,7 @@ class SearchController extends AbstractController
 
 
 
-    #[Route("/fetch/search/developer/name", name: "search_developer", methods: ['POST'])]
+    #[Route("/fetch/search/developer/by", name: "search_developer", methods: ['POST'])]
     public function searchDeveloper(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -150,21 +150,53 @@ class SearchController extends AbstractController
         // on recherche le token soumis dans le formulaire
         $submittedToken = $data['_token'];
         $this->logger->info('Submitted token:', ['csrf_token' => $submittedToken]);
-        // on crée un token du même nom que celui créer dans le template twig
-        // searchItemUserToken: "{{ csrf_token('searchItemUserToken') }}",
-        $csrfToken = new CsrfToken('searchItemUserToken', $submittedToken);
-        $this->logger->info('CSRF Token for validation:', ['csrf_token' => $csrfToken]);
-        // on vérfie a l'aide du gestionnaire de token qu'il correspond a celui stocké 
-        // en session
-        if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
-            $this->logger->error('Invalid CSRF token:', ['csrf_token_name' => $csrfToken]);
-            return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
-        }
+
         // on recherche le searchTerm du formulaire
         $searchTerm = $data['search-user-by-name'] ?? '';
-        // on effectue la recherche
-        $users = $this->entityManager->getRepository(User::class)->searchByTerm($searchTerm, "ROLE_DEVELOPER");
-        $this->logger->info('Received users:', ['users' => $users]);
+
+        if ($searchTerm) {
+            // on crée un token du même nom que celui créer dans le template twig
+            // searchItemUserToken: "{{ csrf_token('searchItemUserToken') }}",
+            $csrfToken = new CsrfToken('searchItemUserToken', $submittedToken);
+            $this->logger->info('CSRF Token for validation:', ['csrf_token' => $csrfToken]);
+            // on vérfie a l'aide du gestionnaire de token qu'il correspond a celui stocké 
+            // en session
+            if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
+                $this->logger->error('Invalid CSRF token:', ['csrf_token_name' => $csrfToken]);
+                return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
+            }
+            // on effectue la recherche
+            $users = $this->entityManager->getRepository(User::class)->searchByTerm($searchTerm, "ROLE_DEVELOPER");
+            $this->logger->info('Received users by name:', ['users' => $users]);
+        }
+
+
+        // on recherche le searchTerm du formulaire
+        $searchTerm = $data['search-user-by-city'] ?? '';
+
+        if ($searchTerm) {
+                        // on crée un token du même nom que celui créer dans le template twig
+            // searchItemUserToken: "{{ csrf_token('searchItemUserToken') }}",
+            $csrfToken = new CsrfToken('searchItemCityToken', $submittedToken);
+            $this->logger->info('CSRF Token for validation:', ['csrf_token' => $csrfToken]);
+            // on vérfie a l'aide du gestionnaire de token qu'il correspond a celui stocké 
+            // en session
+            if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
+                $this->logger->error('Invalid CSRF token:', ['csrf_token_name' => $csrfToken]);
+                return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
+            }
+            // on effectue la recherche
+            $users = $this->entityManager->getRepository(User::class)->searchByTermFromCity($searchTerm, "ROLE_DEVELOPER");
+            $this->logger->info('Received users by city:', ['users' => $users]);
+            
+        }
+
+
+
+
+
+
+
         // on utilise le imageService pour générer les liens image
         foreach ($users as $user) {
             $this->imageService->setPictureUrl($user);
@@ -180,80 +212,9 @@ class SearchController extends AbstractController
         }
     }
 
-
     #[Route("/search/client/name", name: "search_client", methods: ['POST'])]
-    public function searchClient(Request $request): JsonResponse
+    public function searchClient(Request $request): JSONResponse
     {
-
+        return new JSONResponse("test");
     }
-    /*#[Route("/search/results", name: "search_results", methods: ['POST'])]
-    public function searchResult(Request $request, SerializerInterface $serializer): JsonResponse
-    {
-        // Récupération des données du formulaire
-        $formData = $request->request->all();
-        // si le formulaire est vide on quitte
-        if (empty($formData)) {
-            return new JsonResponse([
-                'error' => 'formData empty'
-            ], JsonResponse::HTTP_BAD_REQUEST);
-        }
-        // s'il y' une valeur dans le champ du token on la sauvegarde
-        // sinon token vaut null
-        $token = $formData['search_form']['_token'] ?? null;
-        // si le token du formulaire existe
-        // if ($token) {
-        //     // Si le token n'est pas présent
-        //     if ($token === null) {
-        //         return new JsonResponse([
-        //             'error' => 'Token is not defined or null'
-        //         ], JsonResponse::HTTP_BAD_REQUEST);
-        //     }
-        //     // Si le token n'est pas valide
-        //     if (!$this->isCsrfTokenValid('search_item', $token)) {
-        //         return new JsonResponse([
-        //             'error' => 'Invalid CSRF token!'
-        //         ], JsonResponse::HTTP_BAD_REQUEST);
-        //     }
-        // }
-      
-        // on récupère la valeur des champs
-        $searchTerm = $formData['search_form']['search_term_desktop']|| $formData['search_form']['search_term_mobile'];
-        $this->logger->info('Term search:', ['search_form[...]' => $searchTerm]);
-        
-        // $submittedFormType = $jsonData['submitted_form_type'] ?? null;
-        // $this->logger->info('Form submitted:', ['submitted_form_type' => $submittedFormType]);
-
-
-
-        // Récupération des résultats de recherche pour les ServiceItems
-        $queryBuilder = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
-        // $queryBuilder = $this->entityManager->getRepository(Theme::class)->findAll();
-
-        $priceFilter = $formData['search_form']['price_filter'] ?? null;
-        $this->logger->info('Price:', ['priceFilter' => $priceFilter]);
-
-        // on trie les résultats
-        if ($priceFilter === 'low_to_high') {
-            $queryBuilder->orderBy('si.price', 'ASC');
-        } elseif ($priceFilter === 'high_to_low') {
-            $queryBuilder->orderBy('si.price', 'DESC');
-        }
-        // on recherche le resultat
-        $serviceItems = $queryBuilder->getQuery()->getResult();
-        // On sérialise un tableau d'objet complexe
-        // on traite également les références circulaire et attribuons
-        // un ID unique pour éviter les boucles infinie 
-        try {
-
-            $results = $serializer->serialize($serviceItems, JsonEncoder::FORMAT);
-
-            $this->logger->info('Serialized results:', ['results' => $results]);
-
-            return new JsonResponse($results, 200, [], true);
-
-        } catch (\Exception $e) {
-            $this->logger->error('Serialization error:', ['exception' => $e]);
-            return new JsonResponse(['error' => 'Serialization error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }*/
 }

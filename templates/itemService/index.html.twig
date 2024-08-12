@@ -1,8 +1,47 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-<div class="ui container">
+<style>
+    .ui.two.column.stackable.equal.height.grid {
+        height: auto; 
+    }
+    
+    .ui.two.column.stackable.equal.height.grid > .column {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: auto; 
+    }
+    
+    .ui.container.service {
+        position: relative;
+        top: 8vh;
+        max-width: 100%;
+        height: 100vh; 
+        padding: 20px;
+    }
+    
+    .ui.two.column.stackable {
+        margin-top: 20px;
+        box-shadow: 1px 3px 8px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .ui.list.service {
+        padding-top: 40px;
+    }
+    
+    .product-image.service img {
+        vertical-align: bottom;
+    }
+    
+    .flex-end {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+    
+</style>
+<div class="ui container service">
 
     <div class="uk-animation">
         <div class="uk-animation-slide-right">
@@ -17,6 +56,8 @@
             </p>
         </div>
     </div>
+
+
     {% if formAddService is defined %}
     <div class="ui container">
         <div class="ui segment">
@@ -25,9 +66,12 @@
         </div>
     </div>
     {% endif %}
+
+
+
     {# Liste des services #}
     {% if services | default %}
-    <div class="ui list">
+    <div class="ui list service">
         {% for service in services %}
         <div class="item">
             <i class="folder icon"></i>
@@ -39,24 +83,42 @@
         {% endfor %}
     </div>
     {% endif %}
+
+
+
+
     {# Détail d'un service #}
     {% if service | default %}
-    
-    <div class="ui two column stackable grid">
+
+    <div class="ui two column stackable equal height grid uk-animation-fade">
 
         <div class="column">
-            <div class="product-image">
+            <div class="product-image service">
                 <img src="{{ asset(service.picture) }}" alt="Product Image {{ service.title }}" class="ui fluid image">
             </div>
-            <div class="ui segment equal-height">
+            <div class="ui segment">
                 <div class="product-details">
                     <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="column ui segment">
-            {# <h1 class="ui header">{{ service.title }}</h1> #}
+        <div class="column flex-end">
+            <div class="ui mini card">
+                <div class="content">
+                    <div class="header">{{ service.user.username }}</div>
+                    <div class="meta">
+                        <span class="date">Propose ce service</span>
+                    </div>
+                </div>
+                <div class="extra content">
+                    <a href="{{ path('detail_user', {'id': service.user.id}) }}">
+                        <i class="user icon"></i>
+                        Voir le profil
+                    </a>
+                </div>
+            </div>
+        
             <p><strong>Description: </strong>{{ service.description }}</p>
             <p><strong>Prix: </strong>{{ service.price }}€</p>
             <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>

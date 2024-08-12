@@ -757,7 +757,7 @@ class ServiceItemController extends AbstractController
             'services' => $pagination,
             'pagination' => $pagination,
             'title_page' => $course->getNameCourse(),
-            'course' => $course->getId(),
+            'courseId' => $course->getId(),
         ]);
     }
 }

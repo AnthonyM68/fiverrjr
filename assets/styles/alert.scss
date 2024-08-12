@@ -1,26 +1,22 @@
 @import "variables";
-
-
-
-
 /* Alert styles */
 .ui.message.anim {
   display: none;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   font-size: $font-size-navbar-mobile;
-  position: absolute; /* position absolute pour un flottement */
+  position: absolute; // position absolute pour un flottement 
   top: $top-alert;
   right: 0; // reste aligner au container right
   max-width: $max-width-alert;
-  z-index: 1000; /* pour être sur que l'alert soit visible par dessus tout */
+  z-index: 1000; // pour être sur que l'alert soit visible par dessus tout 
   padding: 10px;
 
 }
 .ui.message.anim .header {
   font-size: $font-size-navbar-desktop;
 }
-/* ANIMATION */
+
 @keyframes slide-in-right {
   from {
     transform: translateX(100%);
@@ -57,7 +53,6 @@
 }
 
 
-/* Responsive design */
 /* par defaut  */
 #alert-javascript-mobile {
   display: none;
