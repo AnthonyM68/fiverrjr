@@ -56,7 +56,7 @@
   bottom: 0;
   height: 2px;
   width: 0;
-  background: #007bff; /* Couleur primaire pour l'animation de soulignement */
+  background: #007bff; 
   transition: width 0.3s ease-in-out;
 }
 
@@ -70,7 +70,7 @@
   background-color: #1a1a1a;
   border: 1px solid grey;
   border-radius: 5px;
-  color: #007bff; /* Couleur primaire pour les icônes */
+  color: #007bff; 
 }
 
 .social-links .ui.icon.button:hover {
@@ -101,8 +101,8 @@
   border: 1px solid #ccc;
   height: 40px;
   font-size: 14px;
-  box-sizing: border-box; /* Assurez-vous que la hauteur et la largeur respectent les bordures et le padding */
-  min-width: 0; /* Empêche l'input de forcer le conteneur à s'étendre */
+  box-sizing: border-box;
+  min-width: 0; 
 }
 
 .newsletter button.ui.button.primary {
@@ -113,14 +113,13 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  max-width: 100%; /* Empêche le bouton de déborder */
-  white-space: nowrap; /* Empêche le texte de se décomposer en plusieurs lignes */
+  max-width: 100%; 
+  white-space: nowrap; 
 }
-
 .newsletter form {
-  width: 100%; /* Assurez-vous que le formulaire prend toute la largeur disponible */
+  width: 100%; 
   display: flex;
-  flex-wrap: wrap; /* Permet au bouton et à l'input de s'ajuster correctement dans les petites résolutions */
+  flex-wrap: wrap; 
 }
 
 /* Footer bottom */
@@ -132,16 +131,34 @@
 
 .footer-bottom p {
   margin: 0;
-  color: #333;
+  color: #1a1a1a;
+  display:inline-block;
 }
 
-.footer-bottom a {
-  color: #007bff;
-  text-decoration: none;
+.footer-bottom .back-to-top {
+  // position: fixed;
+  // bottom: 20px; 
+  // right: 20px; 
+  float:right;
+  background-color: #007bff; 
+  color: white; 
+  border-radius: 50%; 
+  width: 50px;
+  height: 50px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  transition: background-color 0.3s ease;
+  z-index: 1000;
 }
 
-.footer-bottom a:hover {
-  text-decoration: underline;
+.footer-bottom .back-to-top:hover {
+  background-color: #0056b3;
+}
+
+.footer-bottom .back-to-top i.chevron {
+  font-size: 20px; 
 }
 @media (max-width: 320px) {
   .ui.items .item {

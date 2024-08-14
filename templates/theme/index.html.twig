@@ -3,8 +3,18 @@
 {% block title %}{{title_page}}{% endblock %}
 
 {% block body %}
+<style>
+    .ui.container.theme {
+        padding-top:10vh;
+        max-width: 100%;
+        height: 100vh; 
+    }
 
-<div class="custom-container">
+    .ui.list.theme {
+        padding-top: 40px;
+    }
+</style>
+<div class="ui container theme">
     {# container title animation #}
     <div class="uk-animation">
         <div class="uk-animation-slide-right">
@@ -13,7 +23,7 @@
     </div>
     {# list theme #}
     {% if themes | default %}
-    <div class="ui list uk-animation-fade">
+    <div class="ui list theme uk-animation-fade ">
         {% for theme in themes %}
         <div class="item">
             <i class="folder icon"></i>
@@ -29,7 +39,7 @@
     {# list category by theme #}
     {% if categories | default %}
     {# On affiche les category touvées #}
-    <div class="ui list uk-animation-fade">
+    <div class="ui list theme uk-animation-fade">
         {% for category in categories %}
         <div class="item">
             <i class="folder icon"></i>

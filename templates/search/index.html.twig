@@ -3,26 +3,109 @@
 {% block title %}{{ title_page }}{% endblock %}
 
 {% block body %}
-<div class="custom-container">
-    <h2 class="margined padding-large">{{ title_page }}</h2>
-    <div class="content padding-large">
-        <div class="ui grid">
-            <div class="four wide left attached column">
+<style>
+    .ui.grid.stackable {
+        margin-top: 10vh;
+        height: calc(100vh - 10vh);
+        display: flex;
+        align-items: center; 
+        border:1px solid green;
+    }
+
+    .custom-container {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    
+    /* Style du segment */
+    .ui.segment {
+        background-color: #ffffff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Champs de recherche avec un affichage plein-width */
+    .full-width-input input {
+        width: 100%;
+    }
+    
+    /* Colonne de recherche avec une largeur maximale */
+    .search-form-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center;
+        border: 1px solid green; 
+    }
+    
+    /* Colonne des résultats avec une largeur maximale */
+    .ten.wide.column {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center;
+
+        min-height: 100%;
+    }
+    
+    /* Conteneur des résultats avec un fond blanc */
+    #search-results-container {
+        width: 100%;
+        max-height: calc(100vh - 10vh); 
+        overflow-y: auto; 
+        padding: 20px;
+    }
+    
+    /* Résultats de recherche */
+    #search-results {
+        width: 100%;
+        max-height: 100%;
+        overflow-y: auto; 
+    }
+    
+    @media (max-width: 768px) {
+        .custom-container {
+            padding: 10px;
+        }
+    
+        .content {
+            max-width: 100%;
+            padding: 10px;
+        }
+    
+        .field.padding {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+<div class="ui grid stackable">
+    <!-- Colonne de gauche : Moteur de recherche -->
+    <div class="six wide column">
+
+
+        <div class="custom-container">
+            <h2 class="margined padding-large">{{ title_page }}</h2>
+            <div class="content padding-large">
                 <div class="ui vertical fluid menu">
                     <div id="menu-service"
-                        class="item field {% if submitted_form| default %}{{ submitted_form == 'form_service' ? 'active teal' : '' }} {% endif %}">
-                        {# Formulaire de recherche d'un service au travers les 3 entity #}
-                        {# Soumission classique d'un formulaire #}
+                        class="item field {% if submitted_form|default %}{{ submitted_form == 'form_service' ? 'active teal' : '' }}{% endif %}">
+
                         <form method="POST" action="/search/results" class="ui form ajax-search-form">
-                            {# le token masqué #}
                             <input type="hidden" name="_token" value="{{ csrf_token('token_search_term') }}">
-                            {# Input du term a rechercher #}
+
                             <div class="ui icon input full-width-input">
                                 <input type="text" name="search_term" required>
                                 <i class="search icon"></i>
                             </div>
-                            {# Radio buttons pour filtrer par prix #}
-                            {# Gestion dynamique par javascript #}
+
                             <div class="field padding">
                                 <div class="ui radio checkbox padding-small">
                                     <input type="radio" name="price_filter" value="low_to_high">
@@ -33,133 +116,76 @@
                                     <label>Du plus au moins cher</label>
                                 </div>
                             </div>
-                            <a href="javascript:void(0);" type="submit" class="ui-button ui-widget ui-corner-all primary">Rechercher</a>
-                            
+
+                            <button type="submit" class="ui button widget primary">Rechercher</button>
                         </form>
-                        {# Afficheur du compteur de service #}
+
                         <div class="ui label">{{ service_count }}</div>
                     </div>
                 </div>
             </div>
-            <div class="twelve wide stretched column">
+        </div>
+    </div>
 
-                {% if results|default and results is iterable %}
-                <h3>Résultats</h3>
-                <ul>
-                    {# Afficher un message si aucun résultat n'est trouvé #}
-                    {% if results.empty|default %}
-                    <h2>Aucun résultat</h2>
-                    {% else %}
-                    {# Conversion du terme de recherche en minuscules pour une comparaison insensible à la casse #}
-                    {% set search_term_lower = search_term|lower %}
-
-                    {# Boucle à travers les résultats et affichage si le terme de recherche est trouvé #}
-                    <ul>
-                        {% for result in results %}
-                        {# Vérifie si le thème contient des catégories/cours/services correspondant au terme de
-                        recherche #}
-                        {% set display_theme = false %}
-                        {% for category in result.categories %}
-                        {% for course in category.courses %}
-                        {% for serviceItem in course.serviceItems %}
-                        {% if serviceItem.title|lower matches '/.*' ~ search_term_lower ~ '.*/' or
-                        serviceItem.description|lower
-                        matches
-                        '/.*' ~
-                        search_term_lower ~ '.*/' %}
-                        {% set display_theme = true %}
-                        {% endif %}
-                        {% endfor %}
-                        {% endfor %}
-                        {% endfor %}
-
-                        {# Affiche le thème si nécessaire #}
-                        {% if display_theme %}
-                        <li><strong>Thème : {{ result.nameTheme }}</strong></li>
-                        <ul>
-                            {% for category in result.categories %}
-                            {# Vérifie si la catégorie contient des cours/services correspondant au terme de
-                            recherche #}
-                            {% set display_category = false %}
-                            {% for course in category.courses %}
-                            {% for serviceItem in course.serviceItems %}
-                            {% if serviceItem.title|lower matches '/.*' ~ search_term_lower ~ '.*/' or
-                            serviceItem.description|lower
-                            matches
-                            '/.*' ~ search_term_lower ~ '.*/' %}
-                            {% set display_category = true %}
-                            {% endif %}
-                            {% endfor %}
-                            {% endfor %}
-
-                            {# Affiche la catégorie si nécessaire #}
-                            {% if display_category %}
-                            <li><strong>Catégorie : {{ category.nameCategory }}</strong></li>
-                            <ul>
-                                {% for course in category.courses %}
-                                {# Vérifie si le cours contient des services correspondant au terme de recherche #}
-                                {% set display_course = false %}
-                                {% for serviceItem in course.serviceItems %}
-                                {% if serviceItem.title|lower matches '/.*' ~ search_term_lower ~ '.*/' or
-                                serviceItem.description|lower
-                                matches
-                                '/.*' ~ search_term_lower ~ '.*/' %}
-                                {% set display_course = true %}
-                                {% endif %}
-                                {% endfor %}
-
-                                {# Affiche le cours si nécessaire #}
-                                {% if display_course %}
-                                <li><strong>Cours : {{ course.nameCourse }}</strong></li>
-                                <ul>
-                                    {% for serviceItem in course.serviceItems %}
-                                    {% if serviceItem.title|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
-                                    <li>
-                                        <a href="{{ path('detail_service', { 'id': serviceItem.id }) }}">{{
-                                            serviceItem.title
-                                            }}</a>
-                                    </li>
-                                    {% endif %}
-                                    {% if serviceItem.description|lower matches '/.*' ~ search_term_lower ~ '.*/' %}
-                                    <li>
-                                        <a href="{{ path('detail_service', { 'id': serviceItem.id }) }}">{{
-                                            serviceItem.description
-                                            }}</a>
-                                    </li>
-                                    {% endif %}
-                                    {% endfor %}
-                                </ul>
-                                {% endif %}
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                </ul>
-                {% endif %}
-
-
-                <div id="search-results">
-
-                </div>
+    <!-- Colonne de droite : Résultats de recherche -->
+    <div class="ten wide column">
+        <div id="search-results-container" class="ui segment" style="display:none;">
+            <h3>Résultats de recherche</h3>
+            <div id="search-results" class="ui divided items">
+                <!-- Les résultats seront insérés ici -->
             </div>
-            {# <div class="actions">
-                <div class="ui red cancel inverted button">
-                    <i class="remove icon"></i>
-                    Fermer
-                </div>
-                <div class="ui green ok inverted button">
-                    <i class="checkmark icon"></i>
-                    Yes
-                </div>
-            </div> #}
         </div>
     </div>
 </div>
+{# <div class="custom-container">
+    <h2 class="margined padding-large">{{ title_page }}</h2>
+    <div class="content padding-large">
+        <div class="ui grid centered">
+            <div class="sixteen wide column search-form-container">
+                <div class="ui vertical fluid menu">
+                    <div id="menu-service"
+                        class="item field {% if submitted_form|default %}{{ submitted_form == 'form_service' ? 'active teal' : '' }}{% endif %}">
+
+                        <form method="POST" action="/search/results" class="ui form ajax-search-form">
+
+                            <input type="hidden" name="_token" value="{{ csrf_token('token_search_term') }}">
+
+                            <div class="ui icon input full-width-input">
+
+                                <input type="text" name="search_term" required>
+
+                                <i class="search icon"></i>
+                            </div>
+
+
+                            <div class="field padding">
+                                <div class="ui radio checkbox padding-small">
+
+                                    <input type="radio" name="price_filter" value="low_to_high">
+
+                                    <label>Du moins au plus cher</label>
+                                </div>
+                                <div class="ui radio checkbox padding-small">
+
+                                    <input type="radio" name="price_filter" value="high_to_low">
+
+                                    <label>Du plus au moins cher</label>
+                                </div>
+                            </div>
+
+
+                            <button type="submit" class="ui button widget primary">Rechercher</button>
+                        </form>
+
+
+                        <div class="ui label">{{ service_count }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> #}
+
 {% block javascripts %}
 {{ parent() }}
 {{ encore_entry_script_tags('searchMotor') }}

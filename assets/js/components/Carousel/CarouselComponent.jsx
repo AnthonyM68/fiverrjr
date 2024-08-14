@@ -7,6 +7,7 @@ import './../../../styles/carouselComponent.scss';
 const Carousel = lazy(() => import('react-multi-carousel'));
 
 const BestServicesCarousel = () => {
+  
   const [lastService, setLastService] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -101,5 +102,10 @@ const preloadImages = async (urls) => {
     </div>
   );
 };
-
-export { BestServicesCarousel };
+document.addEventListener("DOMContentLoaded", () => {
+  const searchRoot = document.getElementById("bestservices-root");
+  if (searchRoot) {
+    const root = createRoot(searchRoot);
+    root.render(<BestServicesCarousel />);
+  }
+});export { BestServicesCarousel };

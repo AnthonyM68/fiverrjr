@@ -1,6 +1,7 @@
 import { showAlert } from './../alert/messageFlash.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    
     console.log('=> Service.js loaded');
     const service_item_course_theme = document.getElementById('service_item_course_theme');
     const service_item_course_category = document.getElementById('service_item_course_category');

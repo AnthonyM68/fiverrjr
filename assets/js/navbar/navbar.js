@@ -51,9 +51,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         event.preventDefault();
         const form = element.closest('form');
-        // console.log(form);
         // Récupérer les données du formulaire
         const formData = new FormData(form);
+
+        // Boucle sur le FormData pour vérifier son contenu
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+
+
         const termDesktop = formData.get('search_form[search_term_desktop]');
         const termMobile = formData.get('search_form[search_term_mobile]');
         const term = termDesktop || termMobile;
@@ -62,16 +68,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             showAlert('warning', "Vous n'avez pas indiqué de mot clé de recherche");
             return;
         }
-        // console.log('Term:', term);
+        const csrfToken = formData.get('search_form[_token]');
+        // si le token n'existe pas on déclenche une alerte javascript et quittons
+        if (!csrfToken) {
+            showAlert('negative', "Token CSRF manquant");
+            return;
+        }
+        console.log(csrfToken);
         // Envoyer les données avec postData et gérer la réponse
-        usePostData(form.action, formData).then(({ data, error }) => {
+        usePostData(form.action, formData, false, false).then(({ data, error }) => {
             if (error) {
                 console.error('Error during fetch:', error);
                 showAlert('negative', 'Une erreur est survenue lors de la recherche.');
             } else {
-                console.log('Données reçues:', data);
+                console.log('Données reçues de postData:', data);
                 const resultsHtml = displayResults(data, term);
-                console.log(resultsHtml);
                 $('#search-results-container').slideDown();
                 document.getElementById('search-results').innerHTML = resultsHtml;
             }

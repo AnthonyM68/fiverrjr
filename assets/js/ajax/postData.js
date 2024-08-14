@@ -7,66 +7,140 @@
  * @returns {Promise<Object>} - Une Promise contenant les données récupérées et les erreurs survenues.
  */
 export const usePostData = async (url, data, csrfToken = false, asJson = false) => {
-    console.log(`postData.js posting data to ${url}`);
+    console.log(`postData.js: Starting POST request to ${url}`);
+    // console.log(`postData.js: CSRF Token provided: ${csrfToken}`);
+    // console.log(`postData.js: Sending data as JSON: ${asJson}`);
 
     let body;
     let headers = {
-        'X-CSRF-TOKEN': csrfToken, // Ajouter le token CSRF dans l'en-tête
+        'X-CSRF-TOKEN': csrfToken, // Ajoute le token CSRF dans l'en-tête
     };
 
     if (asJson) {
+        console.log("postData => Converting data to JSON format.");
+
         // Convertir FormData en objet JSON si nécessaire
         if (data instanceof FormData) {
+
+
+
+
+            console.log("postData => Data is of type FormData, converting to JSON object.");
+
+
             const formObject = {};
+
+
             data.forEach((value, key) => {
-                formObject[key] = value; // Correction ici
+                // Ajouter chaque paire clé/valeur à l'objet
+                formObject[key] = value;
+            
+                // Si le champ actuel est le token CSRF, mettre à jour sa valeur
+                if (csrfToken && key.includes('_token')) {
+                    formObject[key] = csrfToken;
+                }
             });
-            formObject['_token'] = csrfToken;
-            body = JSON.stringify(formObject);
+
+            // if (csrfToken) {
+            //     formObject['_token'] = csrfToken; // Ajouter le token CSRF à l'objet
+            // }
+
+
+            body = JSON.stringify(formObject); // Convertir l'objet en JSON
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         } else {
-            data['_token'] = csrfToken;
-            body = JSON.stringify(data);
-        }
-        headers['Content-Type'] = 'application/json';
-    } else {
-        // Ajouter le token CSRF aux données du formulaire
-        if (data instanceof FormData) {
+            console.log("postData => Data is already an object, adding CSRF token if necessary.");
             if (csrfToken) {
-                data.append('_token', csrfToken);
+                data['search_form[_token]'] = csrfToken; // Ajouter le token CSRF à l'objet directement
             }
-            body = data;
+            body = JSON.stringify(data); // Convertir l'objet en JSON
+        }
+        headers['Content-Type'] = 'application/json'; // Définir l'en-tête de type JSON
+        console.log("postData => Headers set for JSON:", headers);
+    }
+
+
+
+
+
+
+
+    else {
+        console.log("postData => Sending data as FormData.");
+
+        // On vérifie le format de data
+        if (data instanceof FormData) {
+            console.log("postData => Data is of type FormData.");
+            // if (csrfToken) {
+            //     data.append('_token', csrfToken); // on ajoute le token CSRF au FormData
+            // }
+            for (const pair of data.entries()) {
+                console.log(`FormData entry => {${pair[0]}: ${pair[1]}}`);
+            }
+            body = data; // on utilise le FormData comme corps de la requête
+
+
+
+
+
+
+
         } else {
+            console.log("postData => Data is of type Object, converting to FormData.");
             // Convertir l'objet en FormData
             const formData = new FormData();
             for (const key in data) {
                 if (data.hasOwnProperty(key)) {
-                    formData.append(key, data[key]);
+                    formData.append(key, data[key]); // Ajouter chaque paire clé/valeur au FormData
                 }
             }
             if (csrfToken) {
-                formData.append('_token', csrfToken);
+                formData.append('_token', csrfToken); // Ajouter le token CSRF au FormData
             }
-            body = formData;
+            body = formData; // Utiliser le FormData comme corps de la requête
         }
     }
 
     try {
+        console.log("postData => Sending POST request.");
         const response = await fetch(url, {
             method: 'POST',
-            headers: headers,
-            body: body,
+            headers: headers, // Utiliser les en-têtes définis
+            body: body, // Utiliser le corps de la requête préparé
         });
 
         if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.statusText}`);
+            console.error(`postData => Network response was not ok: ${response.statusText}`);
+            throw new Error(`Network response was not ok: ${response.statusText}`); // Gérer les erreurs de réseau
         }
 
-        const responseData = await response.json();
-        console.log('postData received:', responseData);
-        return { data: responseData, error: null };
+        const responseData = await response.json(); // Convertir la réponse en JSON
+        console.log('postData => Received response data:', responseData);
+        return { data: responseData, error: null }; // Retourner les données récupérées
 
     } catch (error) {
-        console.error('Post error:', error);
-        return { data: null, error };
+        console.error('postData => Error during POST request:', error); // Gérer les erreurs de la requête
+        return { data: null, error }; // Retourner les erreurs survenues
     }
 };

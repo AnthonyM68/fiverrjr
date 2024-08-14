@@ -21,6 +21,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -57,76 +58,170 @@ class SearchController extends AbstractController
         // $categoryCount = $this->entityManager->getRepository(Category::class)->countAll();
         // $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
         $ServiceCount = $this->entityManager->getRepository(ServiceItem::class)->countAll();
-
         // $serviceItems = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds('Développement');
         // $results = $serviceItems->getQuery()->getResult();
-
         // Rendu de la vue avec les données des formulaires et les comptes d'enregistrements
         return $this->render('search/index.html.twig', [
-            'controller_name' => 'SearchController',
-            'title_page' => 'Résultats de la recherche',
-            // 'results' => $results,
+            'title_page' => 'Recherche de services avancées',
             'service_count' => $ServiceCount,
-            'search_term' => 'Développement'
-
         ]);
     }
-    #[Route("/search/results", name: "search_results", methods: ['POST'])]
-    public function searchResult(Request $request, SerializerInterface $serializer, ThemeRepository $themeRepository)
+
+    #[Route("/search/results/formdata", name: "search_results_formdata", methods: ['POST'])]
+    public function searchResultFormData(Request $request, SerializerInterface $serializer, ThemeRepository $themeRepository)
     {
-        // on récupère les  données JSON envoyer par js
-        $data = json_decode($request->getContent(), true);
-        // on vérfie si la convertion échoue
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return new JsonResponse(['error' => 'Invalid JSON data'], JsonResponse::HTTP_BAD_REQUEST);
+        // Vérifier le Content-Type de la requête
+        $contentType = $request->headers->get('Content-Type');
+        
+        if (strpos($contentType, 'multipart/form-data') === false) {
+            return new JsonResponse(['error' => 'Invalid Content-Type'], 415);
         }
-        $this->logger->info('Received JSON data:', ['data' => $data]);
 
-        // on vérifie le token CSRF
-        $submittedToken = $data['_token'];
-        $this->logger->info('Submitted token:', ['submittedToken' => $submittedToken]);
+        $formData = $request->request->all();
+        $this->logger->info('Received form data', ['formData' => $formData]);
 
-        $csrfToken = new CsrfToken('token_search_term', $submittedToken);
+        // Extraction des données de formulaire
+        $searchForm = $formData['search_form'] ?? [];
 
-        if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
-            // si la vérification  échoue on quitte
-            return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
-            $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
+
+
+        $submittedToken = $searchForm['search_form[_token]'] ?? $request->request->get('search_form[_token]', '');
+
+        // return new JSONResponse(['data' => $submittedToken]);
+
+
+        $searchTerm = '';
+        $submittedToken = '';
+        $tokenName = '';
+
+        if (isset($searchForm['search_term_mobile']) && !empty($searchForm['search_term_mobile'])) {
+            $searchTerm = $searchForm['search_term_mobile'];
+            $tokenName = 'search_form[_token]';
+        } elseif (isset($searchForm['search_term_desktop']) && !empty($searchForm['search_term_desktop'])) {
+            $searchTerm = $searchForm['search_term_desktop'];
+            $tokenName = 'search_form[_token]';
+        } else {
+            $searchTerm = $request->request->get('search_term', '');
+            $tokenName = 'token_search_term';
         }
-        // on recherche le terme de rechercher
-        $searchTerm = $data['search_term'] ?? null;
-        $this->logger->info('searchTerm (before processing):', ['searchTerm' => $searchTerm]);
+
+        // $submittedToken = $searchForm['_token'] ?? $request->request->get('_token', '');
+        // $submittedToken = $searchForm['search_form[_token]'] ?? $request->request->get('search_form[_token]', '');
+
+        // // Créer le token CSRF avec le nom déterminé
+        // $csrfToken = new CsrfToken($tokenName, $submittedToken);
+
+        // Vérifier le token CSRF
+        // if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
+        //     $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
+        //     return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
+        // }
+
         // Vérification et traitement du terme rechercher
-        if ($searchTerm !== null) {
-            // Nettoyage du terme de recherche
+        if (!empty($searchTerm)) {
             $searchTerm = trim($searchTerm);
+
             // Validation avec Symfony Validator
             $validator = Validation::createValidator();
             $violations = $validator->validate($searchTerm, [
-                // on défini des contraintes
                 new Assert\NotBlank(),
                 new Assert\Length(['min' => 3]),
-                new Assert\Regex(['pattern' => '/^[A-Za-z0-9\- éèàùêâîôûçÉÈÀÙÊÂÎÔÛÇ]+$/u', 'message' => 'Invalid characters in search term.'])
             ]);
-            // s'il y a des violations de contraintes, on les ajoutes
-            // comme erreur et retournons le résultat a javascript
+
             if (count($violations) > 0) {
                 $errors = [];
                 foreach ($violations as $violation) {
                     $errors[] = $violation->getMessage();
                 }
-                return new JsonResponse(['error' => '$errors'], JsonResponse::HTTP_BAD_REQUEST);
+                $this->logger->error('Validation errors:', ['errors' => $errors]);
+                return new JsonResponse(['error' => $errors], JsonResponse::HTTP_BAD_REQUEST);
             }
-            // échappe les caractères spéciaux en tenant compte des accents
+
+            $this->logger->info('Validation passed successfully.');
             $searchTerm = htmlspecialchars($searchTerm, ENT_QUOTES, 'UTF-8');
-            $this->logger->info('searchTerm (after processing):', ['searchTerm' => $searchTerm]);
+        } else {
+            return new JsonResponse(['error' => 'Search term is required'], JsonResponse::HTTP_BAD_REQUEST);
         }
+
         // Construction de la requête
-        $queryBuilder = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
+        $queryBuilder = $themeRepository->searchByTermAllChilds($searchTerm);
         $this->logger->info('Generated SQL Query:', ['sql' => $queryBuilder]);
-        // on sérialise les résultats de recherches d'objets complexe avec gestionnaire circulaire
+
+        // Sérialisation des résultats
         try {
-            $serializedResults = $serializer->serialize($queryBuilder, JsonEncoder::FORMAT, ['groups' => 'serviceItem']);
+            $serializedResults = $serializer->serialize($queryBuilder, 'json', ['groups' => 'serviceItem']);
+            $this->logger->info('Serialized results:', ['results' => $serializedResults]);
+            return new JsonResponse($serializedResults, 200, [], true);
+        } catch (\Exception $e) {
+            $this->logger->error('Serialization error:', ['exception' => $e]);
+            return new JsonResponse(['error' => 'Serialization error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    #[Route("/search/results/json", name: "search_results_json", methods: ['POST'])]
+    public function searchResultFormdataJson(Request $request, SerializerInterface $serializer, ThemeRepository $themeRepository)
+    {
+        // Vérifier le Content-Type de la requête
+        $contentType = $request->headers->get('Content-Type');
+
+        if (strpos($contentType, 'application/json') === false) {
+            return new JsonResponse(['error' => 'Invalid Content-Type'], 415);
+        }
+
+        $content = $request->getContent();
+
+        $this->logger->info('Received JSON content', ['content' => $content]);
+        $data = json_decode($content, true);
+        $this->logger->info('Received data', ['data' => $data]);
+
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return new JsonResponse(['error' => 'Invalid JSON data'], 400);
+        }
+
+        $searchTerm = $data['search_form[search_term_mobile]'] ?? '';
+
+        // $submittedToken = $data['search_form[_token]'] ?? '';
+        // $tokenName = 'search_term_mobile[_token]';
+        // $tokenName = 'search_term_mobile[search_form[_token]';
+
+        // $csrfToken = new CsrfToken( $tokenName, $submittedToken);
+        // if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
+        //     $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
+        //     return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
+        // }
+        // // // Vérification et traitement du terme rechercher
+        if (!empty($searchTerm)) {
+            $searchTerm = trim($searchTerm);
+
+            // Validation avec Symfony Validator
+            $validator = Validation::createValidator();
+            $violations = $validator->validate($searchTerm, [
+                new Assert\NotBlank(),
+                new Assert\Length(['min' => 3]),
+            ]);
+
+            if (count($violations) > 0) {
+                $errors = [];
+                foreach ($violations as $violation) {
+                    $errors[] = $violation->getMessage();
+                }
+                $this->logger->error('Validation errors:', ['errors' => $errors]);
+                return new JsonResponse(['error' => $errors], JsonResponse::HTTP_BAD_REQUEST);
+            }
+
+            $this->logger->info('Validation passed successfully.');
+            $searchTerm = htmlspecialchars($searchTerm, ENT_QUOTES, 'UTF-8');
+        } else {
+            return new JsonResponse(['error' => 'Search term is required'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        // // Construction de la requête
+        $queryBuilder = $themeRepository->searchByTermAllChilds($searchTerm);
+        $this->logger->info('Generated SQL Query:', ['sql' => $queryBuilder]);
+
+        // Sérialisation des résultats
+        try {
+            $serializedResults = $serializer->serialize($queryBuilder, 'json', ['groups' => 'serviceItem']);
             $this->logger->info('Serialized results:', ['results' => $serializedResults]);
             return new JsonResponse($serializedResults, 200, [], true);
         } catch (\Exception $e) {
@@ -135,9 +230,76 @@ class SearchController extends AbstractController
         }
     }
 
+    #[Route("/search/results", name: "search_results", methods: ['POST'])]
+    public function searchResultJson(Request $request, SerializerInterface $serializer, ThemeRepository $themeRepository)
+    {
+        // Vérifier le Content-Type de la requête
+        $contentType = $request->headers->get('Content-Type');
 
+        if (strpos($contentType, 'application/json') === false) {
+            return new JsonResponse(['error' => 'Invalid Content-Type'], 415);
+        }
 
+        $content = $request->getContent();
 
+        $this->logger->info('Received JSON content', ['content' => $content]);
+        $data = json_decode($content, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return new JsonResponse(['error' => 'Invalid JSON data'], 400);
+        }
+
+        $searchTerm = $data['search_term'] ?? '';
+        $submittedToken = $data['_token'] ?? '';
+        $tokenName = 'token_search_term';
+
+        $csrfToken = new CsrfToken($tokenName, $submittedToken);
+        if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
+            $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
+            return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
+        }
+
+        // // Vérification et traitement du terme rechercher
+        if (!empty($searchTerm)) {
+            $searchTerm = trim($searchTerm);
+
+            // Validation avec Symfony Validator
+            $validator = Validation::createValidator();
+            $violations = $validator->validate($searchTerm, [
+                new Assert\NotBlank(),
+                new Assert\Length(['min' => 3]),
+            ]);
+
+            if (count($violations) > 0) {
+                $errors = [];
+                foreach ($violations as $violation) {
+                    $errors[] = $violation->getMessage();
+                }
+                $this->logger->error('Validation errors:', ['errors' => $errors]);
+                return new JsonResponse(['error' => $errors], JsonResponse::HTTP_BAD_REQUEST);
+            }
+
+            $this->logger->info('Validation passed successfully.');
+            $searchTerm = htmlspecialchars($searchTerm, ENT_QUOTES, 'UTF-8');
+        } else {
+            return new JsonResponse(['error' => 'Search term is required'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        // // Construction de la requête
+        $queryBuilder = $themeRepository->searchByTermAllChilds($searchTerm);
+        $this->logger->info('Generated SQL Query:', ['sql' => $queryBuilder]);
+
+        // Sérialisation des résultats
+        try {
+            $serializedResults = $serializer->serialize($queryBuilder, 'json', ['groups' => 'serviceItem']);
+            $this->logger->info('Serialized results:', ['results' => $serializedResults]);
+            return new JsonResponse($serializedResults, 200, [], true);
+        } catch (\Exception $e) {
+            $this->logger->error('Serialization error:', ['exception' => $e]);
+            return new JsonResponse(['error' => 'Serialization error'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    // recherche un developpeur par username, lastName, firstName ou par city
     #[Route("/fetch/search/developer/by", name: "search_developer", methods: ['POST'])]
     public function searchDeveloper(Request $request): JsonResponse
     {
@@ -150,7 +312,6 @@ class SearchController extends AbstractController
         // on recherche le token soumis dans le formulaire
         $submittedToken = $data['_token'];
         $this->logger->info('Submitted token:', ['csrf_token' => $submittedToken]);
-
         // on recherche le searchTerm du formulaire
         $searchTerm = $data['search-user-by-name'] ?? '';
 
@@ -169,13 +330,11 @@ class SearchController extends AbstractController
             $users = $this->entityManager->getRepository(User::class)->searchByTerm($searchTerm, "ROLE_DEVELOPER");
             $this->logger->info('Received users by name:', ['users' => $users]);
         }
-
-
         // on recherche le searchTerm du formulaire
         $searchTerm = $data['search-user-by-city'] ?? '';
 
         if ($searchTerm) {
-                        // on crée un token du même nom que celui créer dans le template twig
+            // on crée un token du même nom que celui créer dans le template twig
             // searchItemUserToken: "{{ csrf_token('searchItemUserToken') }}",
             $csrfToken = new CsrfToken('searchItemCityToken', $submittedToken);
             $this->logger->info('CSRF Token for validation:', ['csrf_token' => $csrfToken]);
@@ -188,15 +347,7 @@ class SearchController extends AbstractController
             // on effectue la recherche
             $users = $this->entityManager->getRepository(User::class)->searchByTermFromCity($searchTerm, "ROLE_DEVELOPER");
             $this->logger->info('Received users by city:', ['users' => $users]);
-            
         }
-
-
-
-
-
-
-
         // on utilise le imageService pour générer les liens image
         foreach ($users as $user) {
             $this->imageService->setPictureUrl($user);

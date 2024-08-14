@@ -1,64 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<style>
-    /* .ui.two.column.stackable.equal.height.grid {
-        height: auto; 
-    }
-    
-    .ui.two.column.stackable.equal.height.grid > .column {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        height: auto; 
-    } */
-    
-    .ui.container.user {
-        position: relative;
-        top: 8vh;
-        max-width: 100%;
-        height: 100vh; 
-        padding: 20px;
-    }
-/*
-    .ui.two.column.stackable {
-        margin-top: 20px;
-        box-shadow: 1px 3px 8px 3px rgba(0, 0, 0, 0.1);
-    }
-    
-    .ui.list.service {
-        padding-top: 40px;
-    }
-    
-    .product-image.service img {
-        vertical-align: bottom;
-    }
-    
-    .flex-end {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-    } */
-    
-</style>
 <script>
     // User.js
-    // Données des derniers inscrits
     window.__INITIAL_DATA__ = { lastDeveloper: {{ lastDeveloper | json_encode() | raw }}, lastClient: {{ lastClient | json_encode() | raw }} };
 </script>
 
 {# Détail d'un utilisateur #}
 {% if user| default %}
 <div class="ui container user">
-
     <div class="uk-animation">
         <div class="uk-animation-slide-right">
             <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
         </div>
     </div>
-
     <div class="ui two column stackable grid">
-
         <div class="eight wide column">
             <div class="ui segment equal-height">
                 <div class="product-image">
@@ -66,24 +22,22 @@
                         alt="Image de profil de {{ user.firstName }} {{ user.lastName }}"
                         class="ui fluid image portrait">
                 </div>
-
                 <div class="ui segment equal-height">
                     <h2 class="ui header">{{ user.firstName }} {{ user.lastName }}</h2>
-
                     <div class="aligned center">
                         <p><strong>Inscrit depuis: </strong>{{ user.dateRegister|date('d/m/Y') }}</p>
                         {% set roles = [] %}
                         {% if is_granted('ROLE_ADMIN') %}
-                            {% set roles = roles|merge(['Administrateur']) %}
+                        {% set roles = roles|merge(['Administrateur']) %}
                         {% endif %}
                         {% if is_granted('ROLE_CLIENT') %}
-                            {% set roles = roles|merge(['Entreprise / Client']) %}
+                        {% set roles = roles|merge(['Entreprise / Client']) %}
                         {% endif %}
                         {% if is_granted('ROLE_DEVELOPER') %}
-                            {% set roles = roles|merge(['Développeur']) %}
+                        {% set roles = roles|merge(['Développeur']) %}
                         {% endif %}
                         {% if roles is not empty %}
-                            <p>Rôle{% if roles|length > 1 %}s{% endif %}: {{ roles|join(', ') }}</p>
+                        <p>Rôle{% if roles|length > 1 %}s{% endif %}: {{ roles|join(', ') }}</p>
                         {% endif %}
                         <p><strong>Localité: </strong>{{ user.city }}</p>
                     </div>
@@ -101,11 +55,13 @@
             <div class="ui segment equal-height">
                 <h3><strong>Portfolio: </strong></h3>
                 <div class="product-details">
-                    <p><a href="{{ user.portfolio }}" target="_blank" rel="noopener noreferrer">Voir le portfolio {{ user.portfolio }}</a></p>
+                    <p><a href="{{ user.portfolio }}" target="_blank" rel="noopener noreferrer">Voir le portfolio {{
+                            user.portfolio }}</a></p>
                 </div>
             </div>
             <div class="container">
-                <a href="{{ path('list_services_by_userID', { 'id': user.id }) }}" class="ui button primary toggle-service-form">
+                <a href="{{ path('list_services_by_userID', { 'id': user.id }) }}"
+                    class="ui button primary toggle-service-form">
                     Ces service
                 </a>
                 <a href="javascript:void(0);" class="ui button primary toggle-list-services">
@@ -113,126 +69,117 @@
                 </a>
 
             </div>
-     
+
         </div>
     </div>
 </div>
+
+
+
+{# profile de l'utilisateur, interface #}
 {% else %}
-
-
-
-
-
-
-
-
-<div class="ui grid equal-height-columns">
-
-    {# première colone #}
-    <div class="eight wide column">
-        {# on crée un nouveau grid dans la première colone #}
-        <div class="ui grid equal-height-columns">
-            {# on divise en deux colone #}
-            <div class="eight wide column">
-                {# formualire édition profil utilisateur #}
-                <div class="ui segment">
-                    <h2>Informations Profil</h2>
-                    <div id="user-form">{% include "user/form/form.html.twig" %}</div>
+<div class="ui container">
+    <div class="ui grid equal-height-columns">
+        {# première colone #}
+        <div class="eight wide column">
+            {# on crée un nouveau grid dans la première colone #}
+            <div class="ui grid equal-height-columns">
+                {# on divise en deux colone #}
+                <div class="eight wide column">
+                    {# formualire édition profil utilisateur #}
+                    <div class="ui segment">
+                        <h2>Informations Profil</h2>
+                        <div id="user-form">{% include "user/form/form.html.twig" %}</div>
+                    </div>
                 </div>
-            </div>
-            {# On affiche le dernier développeur et le dernier client inscrit #}
-            <div class="eight wide column">
-                {# {% if is_granted('ROLE_CLIENT') %} #}
-                <div class="ui segment" id="last-developer-profile"></div>
-                {# {% elseif is_granted('ROLE_DEVELOPER') %} #}
-                <div class="ui segment" id="last-client-profile"></div>
-                {# {% endif %} #}
-                <div class="column">
-                    <div class="ui segment ">
-                        <div class="ui container">
-                            Button 3...
+                {# On affiche le dernier développeur et le dernier client inscrit #}
+                <div class="eight wide column">
+                    {# {% if is_granted('ROLE_CLIENT') %} #}
+                    <div class="ui segment" id="last-developer-profile"></div>
+                    {# {% elseif is_granted('ROLE_DEVELOPER') %} #}
+                    <div class="ui segment" id="last-client-profile"></div>
+                    {# {% endif %} #}
+                    <div class="column">
+                        <div class="ui segment ">
+                            <div class="ui container">
+                                Button 3...
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="eight wide column">
+            <div class="ui segment">
+                {# liste des commandes #}
+                <div id="orders_pending">{% include "/user/order/pending.html.twig" %}</div>
+            </div>
+            <div class="ui segment">
+                {# liste des commandes #}
+                <div id="orders_completed">{% include "/user/order/completed.html.twig" %}</div>
+            </div>
+
+            <div class="ui segment">
+                <div class="ui container">
+
+                    {% if is_granted('ROLE_CLIENT') %}
+                    {# pas d'accès à Nouveau service et liste des service Client #}
+                    {% elseif is_granted('ROLE_DEVELOPER') %}
 
 
+                    <div class="container">
+                        <a href="javascript:void(0);" class="ui button primary toggle-service-form">
+                            Nouveau service
+                        </a>
+                        <a href="javascript:void(0);" class="ui button primary toggle-list-services">
+                            Liste de mes services
+                        </a>
 
+                    </div>
 
-    </div>
+                    {% if formAddService | default %}
+                    {# en cas d'erreur de soumission le formulaire reste afficher #}
+                    <div id="service-form"
+                        class="ui segment service-form {{ formAddService.vars.errors|length > 0 ? 'display:block' : 'display:none' }}">
+                        <h2>Nouveau service</h2>
+                        {% include "itemService/form/form.html.twig" %}
+                    </div>
+                    {% endif %}
 
-    <div class="eight wide column">
-        <div class="ui segment">
-            {# liste des commandes #}
-            <div id="orders_pending">{% include "/user/order/pending.html.twig" %}</div>
-        </div>
-        <div class="ui segment">
-            {# liste des commandes #}
-            <div id="orders_completed">{% include "/user/order/completed.html.twig" %}</div>
-        </div>
+                    {# liste des service de l'utilisateur #}
+                    <div class="ui segment list-services" style="display: none;">
+                        <h2>Mes services</h2>
+                        <table class="ui celled table">
+                            <thead>
+                                <tr>
+                                    <th>Intitulé du service</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="service_item_list" class="parent-container"></tbody>
+                        </table>
+                    </div>
 
-        <div class="ui segment">
-            <div class="ui container">
-
-                {% if is_granted('ROLE_CLIENT') %}
-                {# pas d'accès à Nouveau service et liste des service Client #}
-                {% elseif is_granted('ROLE_DEVELOPER') %}
-
-
-                <div class="container">
-                    <a href="javascript:void(0);" class="ui button primary toggle-service-form">
-                        Nouveau service
-                    </a>
-                    <a href="javascript:void(0);" class="ui button primary toggle-list-services">
-                        Liste de mes services
-                    </a>
-
-                </div>
-
-                {% if formAddService | default %}
-                {# en cas d'erreur de soumission le formulaire reste afficher #}
-                <div id="service-form"
-                    class="ui segment service-form {{ formAddService.vars.errors|length > 0 ? 'display:block' : 'display:none' }}">
-                    <h2>Nouveau service</h2>
-                    {% include "itemService/form/form.html.twig" %}
-                </div>
-                {% endif %}
-
-                {# liste des service de l'utilisateur #}
-                <div class="ui segment list-services" style="display: none;">
-                    <h2>Mes services</h2>
-                    <table class="ui celled table">
-                        <thead>
-                            <tr>
-                                <th>Intitulé du service</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="service_item_list" class="parent-container"></tbody>
-                    </table>
-                </div>
-
-                {# edition d'un service #}
-                <div class="ui segment edit-service-container" style="display: none;">
-                    <h2>J'édite mon service</h2>
-                    <div class="ui grid">
-                        <div class="sixteen wide column"
-                            style="display: flex; justify-content: space-between; align-items: center;">
-                            <h2 id=""></h2>
-                            <button class="ui button primary" id="close-edit">Fermer</button>
-                        </div>
-                        <div class="sixteen wide column search-results">
-                            <div id="service-form-container">Loading...</div>
+                    {# edition d'un service #}
+                    <div class="ui segment edit-service-container" style="display: none;">
+                        <h2>J'édite mon service</h2>
+                        <div class="ui grid">
+                            <div class="sixteen wide column"
+                                style="display: flex; justify-content: space-between; align-items: center;">
+                                <h2 id=""></h2>
+                                <button class="ui button primary" id="close-edit">Fermer</button>
+                            </div>
+                            <div class="sixteen wide column search-results">
+                                <div id="service-form-container">Loading...</div>
+                            </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
-                {% endif %}
             </div>
         </div>
     </div>
 </div>
-
 {% endif %}
 
 

@@ -1,22 +1,18 @@
 @import "variables";
 /* Alert styles */
 .ui.message.anim {
-  display: none;
+  display: none; /* Caché par défaut */
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
-  font-size: $font-size-navbar-mobile;
-  position: absolute; // position absolute pour un flottement 
-  top: $top-alert;
-  right: 0; // reste aligner au container right
-  max-width: $max-width-alert;
-  z-index: 1000; // pour être sur que l'alert soit visible par dessus tout 
+  position: absolute; /* Position absolue pour flotter */
+  top: 10px; /* Ajustez selon votre besoin */
+  right: 10px; /* Ajustez selon votre besoin */
+  max-width: 90%; /* Ajustez selon votre besoin */
+  z-index: 1000; /* Pour être au-dessus des autres éléments */
   padding: 10px;
-
-}
-.ui.message.anim .header {
-  font-size: $font-size-navbar-desktop;
 }
 
+/* Slide-in animation */
 @keyframes slide-in-right {
   from {
     transform: translateX(100%);
@@ -28,6 +24,7 @@
   }
 }
 
+/* Slide-out animation */
 @keyframes slide-out-right {
   from {
     transform: translateX(0);
@@ -39,80 +36,29 @@
   }
 }
 
-/* Slide-in animation */
+/* Apply styles for the alert to show */
 .ui.message.anim.show {
-  display: block;
+  display: block; /* Affiche l’alerte */
   opacity: 1;
   animation: slide-in-right 0.5s forwards;
 }
 
-/* Slide-out animation */
-.ui.message.anim.hide,
-.ui.message.anim.closing {
+/* Hide the alert */
+.ui.message.anim.hide {
   animation: slide-out-right 0.5s forwards;
 }
-
-
-/* par defaut  */
-#alert-javascript-mobile {
-  display: none;
+.ui.message.anim .header{
+  color:#1a1a1a !important;
 }
-/* iPhone 5 (et appareils similaires) */
-@media (max-width: 320px) {
-  #alert-javascript-desktop {
-    display: none;
-  }
-  #alert-javascript-mobile {
-    display: block;
-  }
-}
-
-/* Mobile général (jusqu'à 480px) */
-@media (max-width: 480px) {
-  #alert-javascript-desktop {
-    display: none;
-  }
-  #alert-javascript-mobile {
-    display: block;
-  }
-}
-
-/* Téléphones moyens/grands (481px à 767px) */
-@media (min-width: 481px) and (max-width: 768px) {
-  #alert-javascript-desktop {
-    display: none;
-  }
-  #alert-javascript-mobile {
-    display: block;
-  }
-}
-
-/* Media queries pour responsive */
+/* Ensure mobile-specific styles */
 @media (max-width: 768px) {
-  #alert-javascript-desktop {
-    display: none;
-  }
   #alert-javascript-mobile {
-    display: block;
-  }
-}
-
-
-/* Tablets (portrait) */
-@media (min-width: 769px) and (max-width: 1024px) {
-  #alert-javascript-desktop {
-    display: none;
-  }
-  #alert-javascript-mobile {
-    display: block;
-  }
-}
-/* Desktops and larger devices */
-@media (min-width: 1025px) {
-  #alert-javascript-desktop {
-    display: block;
-  }
-  #alert-javascript-mobile {
-    display: none;
+    display: block; /* Assurez-vous que le conteneur est visible sur mobile */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    min-width: 100%;
+    z-index: 1000;
+    padding: 10px;
   }
 }

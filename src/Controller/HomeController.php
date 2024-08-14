@@ -81,7 +81,7 @@ class HomeController extends AbstractController
         // Générez les URLs
         $searchDeveloper = $urlGenerator->generate('search_developer');
         $searchClient = $urlGenerator->generate('search_client');
-        //  dd($searchDeveloperByNameUrl,  $searchDeveloperByCityUrl);
+
         return $this->render('home/index.html.twig', [
             'lastDeveloper' => $dataDeveloper,
             'lastClient' => $dataClient,

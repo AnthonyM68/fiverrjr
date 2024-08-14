@@ -1,37 +1,41 @@
 @import "variables";
-
+.ui.container.user {
+  padding-top: 10vh;
+  max-width: 100%;
+  height: 100vh;
+}
 .ui.fluid.image.portrait {
-    width: auto;
-    height: 100%;
-    max-height: $image-portrait-user; 
-    object-fit: cover;
+  width: auto;
+  height: 100%;
+  max-height: $image-portrait-user;
+  object-fit: cover;
 }
 
+
 .product-details {
-    display:flex;
-    justify-content: space;
+  display: flex;
+  justify-content: space;
 }
 /* iPhone 5 (et appareils similaires) */
 @media (max-width: 320px) {
-
 }
 
 /* Mobile général (jusqu'à 480px) */
 @media (max-width: 480px) {
-
 }
 
 /* Téléphones moyens/grands (481px à 767px) */
 @media (min-width: 481px) and (max-width: 768px) {
-
 }
 
 /* Tablettes (769px à 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
-
 }
 
 /* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
 @media (min-width: 1025px) {
-
 }
+
+
+
+

@@ -30,9 +30,8 @@
         {{ render(controller('App\\Controller\\NavbarController::index')) }}
     </header>
     <main class="content home">
-        {% include "search/search_results.html.twig" %}
-            {% block body %} {% endblock %}
-        </div>
+        {# {% include "search/search_results.html.twig" %} #}
+        {% block body %} {% endblock %}
     </main>
     <footer>{% include 'footer/footer.html.twig' %}</footer>
     <div id="tarteaucitron"></div>

@@ -164,7 +164,7 @@ const DeveloperSearch = () => {
   }
 
   return (
-    <div class="developer-search-container">
+    <div className="developer-search-container">
       <div className="ui container">
         <div
           ref={ref}
