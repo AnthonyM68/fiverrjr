@@ -46,8 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         // on effectue la requête AJAX via fetch()
                         // on utilise la fonction usePostData, une requête personnalisée
                         // pouvant prendre en argument un csrfToken et un booléen indiquant s'il est nécessaire de convertir en JSON
-                        const response = await usePostData(form.action, formData, csrfToken, true);
-                        console.log('Raw response object:', response);
+                        const response = await usePostData(form.action, formData, false, false);
+                        if(response.error) {
+                            console.error(response.error);
+                        }
                         // Extraire le tableau `data` de la réponse
                         const data = response.data;
                         console.log('Données reçues:', data);

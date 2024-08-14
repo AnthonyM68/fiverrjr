@@ -68,13 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             showAlert('warning', "Vous n'avez pas indiqué de mot clé de recherche");
             return;
         }
-        const csrfToken = formData.get('search_form[_token]');
-        // si le token n'existe pas on déclenche une alerte javascript et quittons
-        if (!csrfToken) {
-            showAlert('negative', "Token CSRF manquant");
-            return;
-        }
-        console.log(csrfToken);
+
         // Envoyer les données avec postData et gérer la réponse
         usePostData(form.action, formData, false, false).then(({ data, error }) => {
             if (error) {

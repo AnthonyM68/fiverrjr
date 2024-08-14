@@ -18,56 +18,19 @@ export const usePostData = async (url, data, csrfToken = false, asJson = false) 
 
     if (asJson) {
         console.log("postData => Converting data to JSON format.");
-
         // Convertir FormData en objet JSON si nécessaire
         if (data instanceof FormData) {
-
-
-
-
             console.log("postData => Data is of type FormData, converting to JSON object.");
-
-
             const formObject = {};
-
-
             data.forEach((value, key) => {
                 // Ajouter chaque paire clé/valeur à l'objet
                 formObject[key] = value;
-            
                 // Si le champ actuel est le token CSRF, mettre à jour sa valeur
                 if (csrfToken && key.includes('_token')) {
                     formObject[key] = csrfToken;
                 }
             });
-
-            // if (csrfToken) {
-            //     formObject['_token'] = csrfToken; // Ajouter le token CSRF à l'objet
-            // }
-
-
             body = JSON.stringify(formObject); // Convertir l'objet en JSON
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         } else {
             console.log("postData => Data is already an object, adding CSRF token if necessary.");
@@ -79,13 +42,6 @@ export const usePostData = async (url, data, csrfToken = false, asJson = false) 
         headers['Content-Type'] = 'application/json'; // Définir l'en-tête de type JSON
         console.log("postData => Headers set for JSON:", headers);
     }
-
-
-
-
-
-
-
     else {
         console.log("postData => Sending data as FormData.");
 
@@ -99,13 +55,6 @@ export const usePostData = async (url, data, csrfToken = false, asJson = false) 
                 console.log(`FormData entry => {${pair[0]}: ${pair[1]}}`);
             }
             body = data; // on utilise le FormData comme corps de la requête
-
-
-
-
-
-
-
         } else {
             console.log("postData => Data is of type Object, converting to FormData.");
             // Convertir l'objet en FormData

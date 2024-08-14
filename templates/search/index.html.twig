@@ -98,7 +98,7 @@
                     <div id="menu-service"
                         class="item field {% if submitted_form|default %}{{ submitted_form == 'form_service' ? 'active teal' : '' }}{% endif %}">
 
-                        <form method="POST" action="/search/results" class="ui form ajax-search-form">
+                        <form method="POST" action="/search/results/formdata" class="ui form ajax-search-form">
                             <input type="hidden" name="_token" value="{{ csrf_token('token_search_term') }}">
 
                             <div class="ui icon input full-width-input">
