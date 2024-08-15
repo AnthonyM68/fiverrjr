@@ -88,40 +88,43 @@ class SearchController extends AbstractController
         if (isset($searchForm['search_term_mobile']) && !empty($searchForm['search_term_mobile'])) {
             $searchTerm = $searchForm['search_term_mobile'];
             $tokenName = 'search_form';
-        } elseif (isset($formData['search_term_desktop']) && !empty($searchForm['search_term_desktop'])) {
+        } elseif (isset($searchForm['search_term_desktop']) && !empty($searchForm['search_term_desktop'])) {
             $searchTerm = $searchForm['search_term_desktop'];
             $tokenName = 'search_form';
-        } else {
-            $searchTerm = $request->request->get('search_term', '');
-            $tokenName = 'token_search_term';
         }
+        // } else {
+        //     $searchTerm = $request->request->get('search_term', '');
+        //     $tokenName = 'token_search_term';
+        // }
         // // le nom du token créer par twig dans la vue
-        $csrfToken = new CsrfToken($tokenName, $submittedToken);
+        // $csrfToken = new CsrfToken($tokenName, $submittedToken);
 
-        if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
-            $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
-            return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
-        }
+        // if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
+        //     $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
+        //     return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
+        // }
 
         // Vérification et traitement du terme rechercher
         if (!empty($searchTerm)) {
+            $this->logger->info('Validation:', ['searchTerm' => $searchTerm]);
             $searchTerm = trim($searchTerm);
 
             // Validation avec Symfony Validator
-            $validator = Validation::createValidator();
-            $violations = $validator->validate($searchTerm, [
-                new Assert\NotBlank(),
-                new Assert\Length(['min' => 3]),
-            ]);
+            // $validator = Validation::createValidator();
+            // $violations = $validator->validate($searchTerm, [
+            //     new Assert\NotBlank(),
+            //     new Assert\Length(['min' => 3]),
+            // ]);
 
-            if (count($violations) > 0) {
-                $errors = [];
-                foreach ($violations as $violation) {
-                    $errors[] = $violation->getMessage();
-                }
-                $this->logger->error('Validation errors:', ['errors' => $errors]);
-                return new JsonResponse(['error' => $errors], JsonResponse::HTTP_BAD_REQUEST);
-            }
+            // if (count($violations) > 0) {;
+            //     $this->logger->error('Validation errors:');
+            //     $errors = [];
+            //     foreach ($violations as $violation) {
+            //         $errors[] = $violation->getMessage();
+            //     }
+            //     $this->logger->error('Validation errors:', ['errors' => $errors]);
+            //     return new JsonResponse(['error' => $errors], JsonResponse::HTTP_BAD_REQUEST);
+            // }
 
             $this->logger->info('Validation passed successfully.');
             $searchTerm = htmlspecialchars($searchTerm, ENT_QUOTES, 'UTF-8');

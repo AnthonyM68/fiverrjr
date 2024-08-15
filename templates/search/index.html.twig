@@ -57,6 +57,7 @@
     
     /* Conteneur des résultats avec un fond blanc */
     #search-results-container {
+        display:none;
         width: 100%;
         max-height: calc(100vh - 10vh); 
         overflow-y: auto; 
@@ -69,7 +70,17 @@
         max-height: 100%;
         overflow-y: auto; 
     }
-    
+    #close-search-results-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1050;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+    }
     @media (max-width: 768px) {
         .custom-container {
             padding: 10px;
@@ -129,63 +140,17 @@
 
     <!-- Colonne de droite : Résultats de recherche -->
     <div class="ten wide column">
-        <div id="search-results-container" class="ui segment" style="display:none;">
+        <div id="search-results-container" class="ui segment">
             <h3>Résultats de recherche</h3>
+            <button class="ui button icon close-modal" id="close-search-results-button">
+                <i class="close icon"></i> Fermer
+            </button>
             <div id="search-results" class="ui divided items">
                 <!-- Les résultats seront insérés ici -->
             </div>
         </div>
     </div>
 </div>
-{# <div class="custom-container">
-    <h2 class="margined padding-large">{{ title_page }}</h2>
-    <div class="content padding-large">
-        <div class="ui grid centered">
-            <div class="sixteen wide column search-form-container">
-                <div class="ui vertical fluid menu">
-                    <div id="menu-service"
-                        class="item field {% if submitted_form|default %}{{ submitted_form == 'form_service' ? 'active teal' : '' }}{% endif %}">
-
-                        <form method="POST" action="/search/results" class="ui form ajax-search-form">
-
-                            <input type="hidden" name="_token" value="{{ csrf_token('token_search_term') }}">
-
-                            <div class="ui icon input full-width-input">
-
-                                <input type="text" name="search_term" required>
-
-                                <i class="search icon"></i>
-                            </div>
-
-
-                            <div class="field padding">
-                                <div class="ui radio checkbox padding-small">
-
-                                    <input type="radio" name="price_filter" value="low_to_high">
-
-                                    <label>Du moins au plus cher</label>
-                                </div>
-                                <div class="ui radio checkbox padding-small">
-
-                                    <input type="radio" name="price_filter" value="high_to_low">
-
-                                    <label>Du plus au moins cher</label>
-                                </div>
-                            </div>
-
-
-                            <button type="submit" class="ui button widget primary">Rechercher</button>
-                        </form>
-
-
-                        <div class="ui label">{{ service_count }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> #}
-
 {% block javascripts %}
 {{ parent() }}
 {{ encore_entry_script_tags('searchMotor') }}

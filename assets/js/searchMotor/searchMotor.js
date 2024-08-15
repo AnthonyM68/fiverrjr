@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const formData = new FormData(form);
 
                     formData.forEach((value, key) => {
-                        console.log(`{${key} : ${value}}`); 
+                        console.log(`{${key} : ${value}}`);
                     });
                     // depuis ce formulaire on recherche la valeur du champ caché "_token"
                     // et on sauvegarde
@@ -47,32 +47,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         // on utilise la fonction usePostData, une requête personnalisée
                         // pouvant prendre en argument un csrfToken et un booléen indiquant s'il est nécessaire de convertir en JSON
                         const response = await usePostData(form.action, formData, false, false);
-                        if(response.error) {
+                        if (response.error) {
                             console.error(response.error);
                         }
                         // Extraire le tableau `data` de la réponse
                         const data = response.data;
-                        console.log('Données reçues:', data);
-
+                        console.log('Data received:', data);
                         // Vérifier si data est bien un tableau
                         if (Array.isArray(data)) {
-                            // Appeler la fonction js displayResults
-                            // Envoyer à la fonction les data (tableau de résultats)
+                            // on envois en argument le tableau de résultats
                             const resultsHtml = displayResults(data, term);
-
-                            // $('#search-results-container').slideDown();
-                            // document.getElementById('search-results').innerHTML = resultsHtml;
-
                             $('#search-results').html(resultsHtml);
-
                             $('#search-results-container').slideDown();
-
-
+                            $('#close-search-results-button').on('click', function () {
+                                $('#search-results-container').slideUp();
+                            });
                         } else {
-                            console.log('Les données ne sont pas un tableau:', typeof data);
+                            console.log('Data not array:', typeof data);
                         }
-
-
                     } catch (error) {
                         console.error('Erreur:', error);
                     }

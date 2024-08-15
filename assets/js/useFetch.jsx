@@ -17,9 +17,9 @@ export const usePostData = (
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    console.log(`usePostData called with URL: ${url}, Formdata:`, formdata, `CSRF Token: ${csrfToken}`);
-
     const postData = async () => {
+      console.log(`usePostData called with URL: ${url}, Formdata:`, formdata, `CSRF Token: ${csrfToken}`);
+
       if (!url || !formdata) {
         console.log("Skipping fetch due to missing URL or Formdata");
         return;

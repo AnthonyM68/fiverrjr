@@ -5,8 +5,6 @@ export const displayResults = (results, searchTerm) => {
     if (!results || results.length === 0) {
         resultsHtml = '<h2>Aucun résultat</h2>';
     } else {
-        // on incrémente une balise title
-        resultsHtml += '<h3>Résultats</h3>';
         // on convertit le terme rechercher en minuscule
         const searchTermLower = searchTerm.toLowerCase();
         // on itère sur les résultats

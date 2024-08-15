@@ -5,11 +5,7 @@ import { usePostData } from './../ajax/postData.js';
 document.addEventListener('DOMContentLoaded', async () => {
 
     console.log('=> navbar.js loaded');
-    // // Toggle button burger
-    // $('.ui.basic.icon.toggle.button').on('click', function () {
-    //     $('.ui.accordion.vertical.menu').toggle("250", "linear");
-    // });
-    // Initialize accordion for mobile
+    // on initialise l'accordion semantic UI
     $('.ui.accordion').accordion();
     // gestion des lien active de la navigation
     const links = document.querySelectorAll('.computer.only .item');
@@ -48,24 +44,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
     function handleSearch(event, element) {
-
         event.preventDefault();
         const form = element.closest('form');
         // Récupérer les données du formulaire
         const formData = new FormData(form);
 
         // Boucle sur le FormData pour vérifier son contenu
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-
+        // for (let [key, value] of formData.entries()) {
+        //     console.log(`${key}: ${value}`);
+        // }
 
         const termDesktop = formData.get('search_form[search_term_desktop]');
         const termMobile = formData.get('search_form[search_term_mobile]');
         const term = termDesktop || termMobile;
 
         if (!term) {
-            showAlert('warning', "Vous n'avez pas indiqué de mot clé de recherche");
+            showAlert('warning', "Le champ de recherche ne peut pas être vide");
             return;
         }
 
@@ -75,15 +69,38 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error('Error during fetch:', error);
                 showAlert('negative', 'Une erreur est survenue lors de la recherche.');
             } else {
-                console.log('Données reçues de postData:', data);
+                console.log('Données received from postData:', data);
                 const resultsHtml = displayResults(data, term);
-                $('#search-results-container').slideDown();
-                document.getElementById('search-results').innerHTML = resultsHtml;
+                $('#search-modal')
+                    .modal({
+                        blurring: true,
+                        transition: 'slide down',
+                        onShow: function () {
+                            $('#fixed-close-button').show();
+                            // Forcer le recalcul des styles (corrige le défilement bloqué du premier scroll)
+                            setTimeout(function () {
+                                $('#fixed-close-button').css({
+                                    right: '10px',
+                                    top: '10px'
+                                });
+                                $('#search-modal').css('overflow', 'hidden');
+                                $('#search-modal').offsetHeight; // Recalcule le rendu
+                                $('#search-modal').css('overflow', 'auto');
+                            }, 100);
+                        },
+                        onHide: function () {
+                            $('#fixed-close-button').hide();
+                        }
+                    })
+                    .modal('show');
+
+                $('#fixed-close-button').on('click', function () {
+                    $('#search-modal').modal('hide');
+                });
+                document.getElementById('search-modal').innerHTML = resultsHtml;
             }
         });
     }
-
-
     // On sélectionne toutes les icônes de recherche de la navbar
     const searchIcons = document.querySelectorAll('.ui.icon.input .search.icon.search-service');
     // ajouter un écouteur d'événement à chaque icône de recherche
@@ -102,5 +119,4 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
     });
-
 });

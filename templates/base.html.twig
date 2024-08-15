@@ -16,8 +16,6 @@
     {{ encore_entry_link_tags('jquery_ui_structure') }}
     {{ encore_entry_link_tags('jquery_popup') }}
     {{ encore_entry_link_tags('uikit_css') }}
-    {# {{ encore_entry_link_tags('semantic_less') }} Cause des débordement html, body dès l'injection du fichier
-    voir si le theme fonctionne correctement #}
     {{ encore_entry_link_tags('semantic_css') }}
     {{ encore_entry_link_tags('tarteaucitron_css') }}
     {{ encore_entry_link_tags('app_styles') }}
@@ -30,7 +28,8 @@
         {{ render(controller('App\\Controller\\NavbarController::index')) }}
     </header>
     <main class="content home">
-        {# {% include "search/search_results.html.twig" %} #}
+        {# affichage les résultats de recherche du moteur de la navbar #}
+        {% include "search/results.html.twig" %} 
         {% block body %} {% endblock %}
     </main>
     <footer>{% include 'footer/footer.html.twig' %}</footer>
