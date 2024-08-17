@@ -4,47 +4,112 @@
 
 {% block body %}
 
-<div class="ui container">
-    {# container title animation #}
+<style>
+    /* Conteneur principal avec flexbox pour un agencement fluide */
+    .ui.container.category {
+        padding-top: 10vh;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 20px); /* Hauteur ajustée pour laisser de l'espace pour le footer */
+        overflow: hidden;
+    }
+
+    /* Zone de contenu avec scroll si nécessaire */
+    .ui.list.category, .ui.segment {
+        overflow-y: auto;
+        flex: 1; /* Prend tout l'espace disponible */
+        margin-bottom: 20px; /* Espace pour le footer */
+    }
+
+    /* Ajustements de paddings et marges */
+    .uk-animation {
+        padding-top: 40px;
+    }
+
+    /* Style personnalisé pour les boutons d'administration */
+    .ui-button {
+        margin-top: 20px;
+    }
+
+    /* Adaptation pour le mobile */
+    @media (max-width: 768px) {
+        .ui.container.category {
+            padding: 5vh 2vw;
+            height: calc(100vh - 15px);
+        }
+    }
+</style>
+
+<div class="ui container category">
+    <!-- Titre avec animation -->
     <div class="uk-animation">
         <div class="uk-animation-slide-right">
             <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
         </div>
     </div>
-    {# list category #}
+
+    <!-- Liste des catégories -->
     {% if categories | default %}
-    <div class="ui list uk-animation-fade">
+    <div class="ui list uk-animation-fade category">
         {% for categorie in categories %}
         <div class="item">
             <i class="folder icon"></i>
             <div class="content">
                 <div class="header">
                     <a href="{{ path('detail_category', { 'id': categorie.id }) }}">
-                        {{ categorie.nameCategory }}</a>
+                        {{ categorie.nameCategory }}
+                    </a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
+        <!-- Section d'administration pour les utilisateurs avec le rôle ADMIN -->
+        {% if is_granted('ROLE_ADMIN') and formAddTheme is not defined %}
+        <div class="ui segment">
+            <h3>Administration :</h3>
+            <a href="{{ path('new_category') }}" class="ui-button ui-widget ui-corner-all margin-top-large">
+                <span class="ui-icon ui-icon-plus"></span> Ajouter une catégorie
+            </a>
+        </div>
+        {% endif %}
     {% endif %}
-    {# list course by category #}
+
+    <!-- Liste des cours par catégorie -->
     {% if courses | default %}
-    {# On affiche les courses touvées #}
-    <div class="ui list uk-animation-fade">
+    <div class="ui list uk-animation-fade category">
         {% for course in courses %}
         <div class="item">
             <i class="folder icon"></i>
             <div class="content">
                 <div class="header">
-                    <a href="{{ path('detail_course', { 'id': course.id }) }}">{{
-                        course.nameCourse}}</a>
+                    <a href="{{ path('detail_course', { 'id': course.id, 'page': '1' }) }}">
+                        {{ course.nameCourse }}
+                    </a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
+
+    <!-- Options d'administration pour les utilisateurs avec le rôle ADMIN -->
+    {% if is_granted('ROLE_ADMIN') and formAddCategory is not defined %}
+    <div class="ui segment">
+        <h3>Administration :</h3>
+        <a href="{{ path('new_theme') }}" class="ui-button ui-widget ui-corner-all">
+            <span class="ui-icon ui-icon-plus"></span> Ajouter un thème
+        </a>
+        <a href="{{ path('new_category') }}" class="ui-button ui-widget ui-corner-all">
+            <span class="ui-icon ui-icon-plus"></span> Ajouter une catégorie
+        </a>
+        <a href="{{ path('new_course') }}" class="ui-button ui-widget ui-corner-all">
+            <span class="ui-icon ui-icon-plus"></span> Ajouter une sous-catégorie
+        </a>
+    </div>
     {% endif %}
-    {# On vérifie que le formulaire existe avant de l'afficher #}
+    {% endif %}
+
+    <!-- Formulaire d'ajout de catégorie -->
     {% if formAddCategory is defined %}
     <div class="ui segment">
         {{ form_start(formAddCategory, {'attr': {'class': 'ui form'}}) }}
@@ -59,15 +124,6 @@
         </div>
     </div>
     {{ form_end(formAddCategory) }}
-    {% endif %}
-    {% if is_granted('ROLE_ADMIN') and formAddCategory is not defined %}
-    {# section administration access #}
-    <div class="ui segment">
-        <h3>Administration:</h3>
-        <a href="{{ path('new_category') }}" class="ui-button ui-widget ui-corner-all margin-top-large">
-            <span class="ui-icon ui-icon-plus"></span> Ajouter une thème
-        </a>
-    </div>
     {% endif %}
 </div>
 {% endblock %}

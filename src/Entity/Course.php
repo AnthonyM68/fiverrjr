@@ -19,9 +19,10 @@ class Course
     #[ORM\GeneratedValue]
     #[ORM\Column]
 
-    // #[Groups(['course' , 'serviceItem'])]
-
+    #[Groups(['course' , 'serviceItem'])]
     private ?int $id = null;
+
+     
     #[ORM\Column(length: 100)]
     #[Groups(['serviceItem'])]
     #[Assert\NotBlank(message: "Choisissez une sous-catégorie")]

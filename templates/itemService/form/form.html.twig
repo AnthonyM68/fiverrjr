@@ -1,7 +1,7 @@
-{# {% block form_service %} #}
 
 {% if formAddService is defined %}
-    {{ form_start(formAddService, {'attr': {'class': 'ui form service-form', 'novalidate' :'novalidate'}}) }}
+
+    {{ form_start(formAddService, {'attr': {'class': 'ui form service-form-template', 'novalidate' :'novalidate'}}) }}
 
     <div class="{{ formAddService.course.vars.errors|length > 0 ? 'field error' }}">
         {{ form_errors(formAddService.course.theme) }}
@@ -22,8 +22,10 @@
 
     <hr>
     <div class="image-container">
-        <img src="{{ formAddService.vars.data.picture }}" alt="Image Preview"
+        <img src="{{ formAddService.vars.data.picture }}" alt="Image Preview new service suscribe"
             class="image-preview {% if formAddService.vars.data.picture %}img-visible{% else %}img-hidden{% endif %}">
+            
+            <div id="loader-picture" class="ui loader">Loading...</div>
 
         <div class="{{ formAddService.picture.vars.errors|length > 0 ? 'field error' }}">
             {{ form_errors(formAddService.picture) }}
@@ -52,9 +54,6 @@
         {{ form_label(formAddService.duration) }}
         {{ form_widget(formAddService.duration) }}
     </div>
-
-    {# <input type="hidden" name="_token" value="{{ csrf_token('service_form') }}"> #}
-
     <div class="field">
         <button name="serviceForm" type="submit" class="ui-button ui-widget ui-corner-all">
             <span class="ui-icon ui-icon-check"></span> Valider
@@ -63,4 +62,3 @@
     {{ form_end(formAddService) }}
 
 {% endif %}
-{# {% endblock form_service %} #}

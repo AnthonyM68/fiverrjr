@@ -131,14 +131,25 @@ class SearchController extends AbstractController
         } else {
             return new JsonResponse(['error' => 'Search term is required'], JsonResponse::HTTP_BAD_REQUEST);
         }
-
         // Construction de la requête
-        $queryBuilder = $themeRepository->searchByTermAllChilds($searchTerm);
-        $this->logger->info('Generated SQL Query:', ['sql' => $queryBuilder]);
-
+        $themes = $themeRepository->searchByTermAllChilds($searchTerm);
+        $this->logger->info('Generated SQL Query:', ['sql' => $themes]);
+        foreach ($themes as $theme) {
+            $this->logger->info('Processing theme', ['theme' => $theme]);
+            foreach ($theme->getCategories() as $category) {
+                $this->logger->info('Processing category', ['category' => $category]);
+                foreach ($category->getCourses() as $course) {
+                    $this->logger->info('Processing course', ['course' => $course]);
+                    foreach ($course->getServiceItems() as $service) {
+                        $this->logger->info('Processing service', ['service' => $service]);
+                        $this->imageService->setPictureUrl($service);
+                    }
+                }
+            }
+        }
         // Sérialisation des résultats
         try {
-            $serializedResults = $serializer->serialize($queryBuilder, 'json', ['groups' => 'serviceItem']);
+            $serializedResults = $serializer->serialize($themes, 'json', ['groups' => 'serviceItem']);
             $this->logger->info('Serialized results:', ['results' => $serializedResults]);
             return new JsonResponse($serializedResults, 200, [], true);
         } catch (\Exception $e) {

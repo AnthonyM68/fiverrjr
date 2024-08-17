@@ -1,29 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{title_page}}{% endblock %}
+{% block title %}{{ title_page }}{% endblock %}
 
 {% block body %}
 <style>
+    /* Conteneur principal avec flexbox pour un agencement fluide */
     .ui.container.theme {
-        padding-top:10vh;
-        max-width: 100%;
-        height: 100vh; 
+        padding-top: 10vh;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 20px); /* Hauteur ajustée pour laisser de l'espace pour le footer */
+        overflow: hidden;
     }
 
-    .ui.list.theme {
+    /* Zone de contenu avec scroll si nécessaire */
+    .ui.list.theme, .ui.segment {
+        overflow-y: auto;
+        flex: 1; /* Prend tout l'espace disponible */
+        margin-bottom: 20px; /* Espace pour le footer */
+    }
+
+    /* Ajustements de paddings et marges */
+    .uk-animation {
         padding-top: 40px;
     }
+
+    /* Style personnalisé pour les boutons d'administration */
+    .ui-button {
+        margin-top: 20px;
+    }
+
+    /* Adaptation pour le mobile */
+    @media (max-width: 768px) {
+        .ui.container.theme {
+            padding: 5vh 2vw;
+            height: calc(100vh - 15px);
+        }
+    }
 </style>
+
 <div class="ui container theme">
-    {# container title animation #}
+    <!-- Titre avec animation -->
     <div class="uk-animation">
         <div class="uk-animation-slide-right">
             <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
         </div>
     </div>
-    {# list theme #}
+
+    <!-- Liste des thèmes -->
     {% if themes | default %}
-    <div class="ui list theme uk-animation-fade ">
+    <div class="ui list theme uk-animation-fade">
         {% for theme in themes %}
         <div class="item">
             <i class="folder icon"></i>
@@ -35,10 +61,20 @@
         </div>
         {% endfor %}
     </div>
+    
+    <!-- Section d'administration pour les utilisateurs avec le rôle ADMIN -->
+    {% if is_granted('ROLE_ADMIN') and formAddTheme is not defined %}
+    <div class="ui segment">
+        <h3>Administration :</h3>
+        <a href="{{ path('new_theme') }}" class="ui-button ui-widget ui-corner-all margin-top-large">
+            <span class="ui-icon ui-icon-plus"></span> Ajouter un thème
+        </a>
+    </div>
     {% endif %}
-    {# list category by theme #}
+    {% endif %}
+
+    <!-- Liste des catégories associées au thème -->
     {% if categories | default %}
-    {# On affiche les category touvées #}
     <div class="ui list theme uk-animation-fade">
         {% for category in categories %}
         <div class="item">
@@ -51,8 +87,22 @@
         </div>
         {% endfor %}
     </div>
+
+    <!-- Options d'administration pour les utilisateurs avec le rôle ADMIN -->
+    {% if is_granted('ROLE_ADMIN') and formAddCourse is not defined %}
+    <div class="ui segment padding-bottom-large">
+        <h3>Administration :</h3>
+        <a href="{{ path('new_theme') }}" class="ui-button ui-widget ui-corner-all margin-top-large">
+            <span class="ui-icon ui-icon-plus"></span> Ajouter un thème
+        </a>
+        <a href="{{ path('new_course') }}" class="ui-button ui-widget ui-corner-all margin-top-large">
+            <span class="ui-icon ui-icon-plus"></span> Ajouter une catégorie
+        </a>
+    </div>
     {% endif %}
-    {# add theme #}
+    {% endif %}
+
+    <!-- Formulaire d'ajout de thème -->
     {% if formAddTheme is defined %}
     <div class="ui segment">
         {{ form_start(formAddTheme, {'attr': {'class': 'ui form'}}) }}
@@ -66,15 +116,6 @@
         </div>
     </div>
     {{ form_end(formAddTheme) }}
-    {% endif %}
-    {% if is_granted('ROLE_ADMIN') and formAddTheme is not defined %}
-    {# section administration access #}
-    <div class="ui segment">
-        <h3>Administration:</h3>
-        <a href="{{ path('new_theme') }}" class="ui-button ui-widget ui-corner-all margin-top-large">
-            <span class="ui-icon ui-icon-plus"></span> Ajouter une thème
-        </a>
-    </div>
     {% endif %}
 </div>
 {% endblock %}

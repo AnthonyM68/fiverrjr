@@ -1,4 +1,5 @@
 import React from "react";
+import { createRoot } from 'react-dom/client';
 
 import {
   CardMeta,
@@ -17,7 +18,7 @@ const CardUser = ({ user }) => {
   const registerDate = new Date(dateRegister);
   const isValidDate = !isNaN(registerDate.getTime());
   return (
-    <Card>
+    <Card className="margin-bottom-large">
       {/* Image du profil */}
       {/* Conteneur pour l'image du profil avec des dimensions fixes */}
       {picture && (
@@ -51,10 +52,31 @@ const CardUser = ({ user }) => {
       <CardContent extra>
         <a>
           <Icon name="user" />
-          22 Amis
+          22 Services
         </a>
       </CardContent>
     </Card>
   );
 };
-export default CardUser;
+
+document.addEventListener("DOMContentLoaded", () => {
+  const lastDeveloperRoot = document.getElementById('last-developer-profile');
+  if (lastDeveloperRoot) {
+      const root = createRoot(lastDeveloperRoot);
+      // on récupère les données du dernier utilisateur depuis le template user/index.html.twig
+      root.render(<CardUser user={window.__INITIAL_DATA__.lastDeveloper} />);
+  }
+  /**
+   * REACT dernier client affichage de la carte dans le profil utilisateur
+   */
+  const lastClientRoot = document.getElementById('last-client-profile');
+  if (lastClientRoot) {
+      const root = createRoot(lastClientRoot);
+      // on récupère les données du dernier utilisateur depuis le template user/index.html.twig
+      root.render(<CardUser user={window.__INITIAL_DATA__.lastClient} />);
+  }
+});
+
+
+
+export {CardUser};

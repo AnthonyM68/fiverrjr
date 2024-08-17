@@ -4,77 +4,110 @@
 
 {% block body %}
 <style>
+    /* Conteneur principal avec flexbox pour aligner le contenu et gérer l'espace */
     .ui.container.course {
-        padding-top:10vh;
-        max-width: 100%;
-        height: 100vh; 
+        padding-top: 10vh;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 20px); /* Ajuste pour garder l'espace en dessous pour le footer */
+        overflow: hidden;
     }
 
-    .ui.list.course {
+    /* Zone de contenu avec scroll si nécessaire */
+    .ui.list.course, .ui.segment {
+        overflow-y: auto;
+        flex: 1; /* Remplit l'espace disponible */
+        margin-bottom: 20px; /* Laisse un espace pour le footer */
+    }
+
+    .uk-animation.padding-top-large {
         padding-top: 40px;
     }
+
+    .custom-card {
+        margin-bottom: 20px;
+    }
+
+    /* Adaptation pour le mobile */
+    @media (max-width: 768px) {
+        .ui.container.course {
+            padding: 5vh 2vw;
+            height: calc(100vh - 15px);
+        }
+    }
 </style>
+
 <div class="ui container course">
-    {# container title animation #}
+    <!-- Titre avec animation -->
     <div class="uk-animation padding-top-large">
         <div class="uk-animation-slide-right">
             <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
         </div>
     </div>
-    {# list course #}
+
+    <!-- Liste des cours -->
     {% if courses | default %}
-    <div class="ui list uk-animation-fade course ">
+    <div class="ui list uk-animation-fade course">
         {% for course in courses %}
         <div class="item">
             <i class="folder icon"></i>
             <div class="content">
                 <div class="header">
                     <a href="{{ path('detail_course', { 'id': course.id, 'page' : '1' }) }}">
-                        {{ course.nameCourse}}</a>
+                        <strong>{{ course.nameCourse }}</strong>
+                    </a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
     {% endif %}
+
+    <!-- Liste des services -->
     {% if services | default %}
-    {# On affiche les services touvés #}
     <div class="ui list uk-animation-fade course">
         {% for service in services %}
         <div class="ui card custom-card">
             <div class="custom-image-client">
-                <img src="{{ service.picture }}" alt="Image {{ title_page }} {{ service.title }}">
+                <img src="{{ service.picture }}" alt="Image illustrant {{ service.title }} - {{ title_page }} - Service proposé par {{ service.user.username }}">
             </div>
             <div class="content custom-card-content">
-                <div class="header">{{ service.title }}</div>
+                <div class="header">
+                    <strong>{{ service.title }}</strong>
+                </div>
                 <div class="meta">
-                    <span class="date">Inscrit le {{ service.createDate|date('d-m-Y') }}</span>
+                    <span class="date">
+                        Service déposé le : <strong>{{ service.createDate|date('d-m-Y') }}</strong>
+                    </span>
                 </div>
                 <div class="description">
                     {{ service.description|slice(0, 100) }}...
                 </div>
             </div>
             <div class="extra content">
+                <p>Service proposé par : <strong>{{ service.user.username }}</strong></p>
                 <a href="{{ path('detail_service', { 'id': service.id }) }}">
-                    Plus d'infos
+                    <strong>Plus d'infos</strong>
                 </a>
             </div>
         </div>
         {% endfor %}
     </div>
 
+    <!-- Pagination -->
     <div class="ui container">
         <div class="ui pagination menu centered custom-margin-top">
             {% for page in range(1, pagination.pageCount) %}
             <a class="item{% if page == pagination.currentPageNumber %} active{% endif %}"
-                href="{{ path('detail_course', {'id': courseId, 'page': '1' }) }}">
+                href="{{ path('detail_course', {'id': courseId, 'page': page }) }}">
                 {{ page }}
             </a>
             {% endfor %}
         </div>
     </div>
     {% endif %}
-    {# add course #}
+
+    <!-- Formulaire d'ajout de cours -->
     {% if formAddCourse|default %}
     <div class="ui segment">
         {{ form_start(formAddCourse, {'attr': {'class': 'ui form'}}) }}
@@ -88,18 +121,7 @@
             </button>
         </div>
     </div>
-
     {{ form_end(formAddCourse) }}
     {% endif %}
-    {% if is_granted('ROLE_ADMIN') and formAddCourse is not defined %}
-    {# section administration access #}
-    <div class="ui segment padding-bottom-large">
-        <h3>Administration:</h3>
-        <a href="{{ path('new_course') }}" class="ui-button ui-widget ui-corner-all margin-top-large">
-            <span class="ui-icon ui-icon-plus"></span> Ajouter une sous-catégorie
-        </a>
-    </div>
-    {% endif %}
-
 </div>
 {% endblock %}

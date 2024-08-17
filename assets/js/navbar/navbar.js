@@ -1,4 +1,4 @@
-import { displayResults } from '../search/services/displayResults.js';
+import { displayResults } from '../search/display/results_navbar.js';
 import { showAlert, clean } from './../alert/messageFlash.js';
 import { usePostData } from './../ajax/postData.js';
 

@@ -180,38 +180,38 @@ CREATE TABLE IF NOT EXISTS `service_item` (
   CONSTRAINT `FK_D15891F2591CC992` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
   CONSTRAINT `FK_D15891F28D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
   CONSTRAINT `FK_D15891F2A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.service_item : ~19 rows (environ)
+-- Listage des données de la table fiverrjr.service_item : ~20 rows (environ)
 INSERT INTO `service_item` (`id`, `course_id`, `user_id`, `order_id`, `title`, `description`, `price`, `duration`, `create_date`, `picture`) VALUES
-	(1, 1, 1, NULL, 'Création de site vitrine professionnel', 'Nous développons des sites vitrines professionnels pour mettre en avant votre entreprise et vos services.', 1500, 30, '2024-07-10 19:54:03', 'informatique.jpg'),
-	(2, 2, 1, NULL, 'Développement de blog personnalisé', 'Nous offrons des services de développement de blogs personnalisés avec des fonctionnalités avancées.', 1200, 25, '2024-07-10 19:54:03', 'marketing.png'),
-	(3, 3, 1, NULL, 'Création de portfolio en ligne', 'Nous créons des portfolios en ligne élégants pour présenter vos travaux et compétences.', 800, 20, '2024-07-10 19:54:03', 'Informatique.png'),
-	(4, 4, 2, NULL, 'Boutique en ligne avec Shopify', 'Nous développons des boutiques en ligne performantes et sécurisées avec Shopify.', 4500, 40, '2024-07-10 19:54:03', 'microsoft.png'),
-	(5, 5, 2, NULL, 'Développement de boutiques WooCommerce', 'Nous développons des boutiques en ligne performantes avec WooCommerce, adaptées à vos besoins.', 2000, 35, '2024-07-10 20:00:05', 'bureautique.png'),
-	(6, 6, 2, NULL, 'Intégration de systèmes de paiement', 'Nous intégrons des systèmes de paiement sécurisés comme Stripe, PayPal, etc., pour votre site web.', 500, 10, '2024-07-10 20:00:05', 'front-end.png'),
-	(7, 7, 2, NULL, 'Développement HTML/CSS/JavaScript', 'Nous offrons des services de développement front-end en HTML, CSS et JavaScript pour des sites web interactifs.', 1000, 20, '2024-07-10 20:00:05', 'bureautique.png'),
-	(8, 8, 2, NULL, 'Utilisation de frameworks front-end', 'Nous utilisons des frameworks front-end comme React, Angular et Vue.js pour créer des applications web modernes.', 1500, 25, '2024-07-10 20:00:05', 'front-end.png'),
-	(9, 9, 1, NULL, 'Optimisation des performances front-end', 'Nous optimisons les performances front-end de votre site pour garantir une expérience utilisateur fluide et rapide.', 800, 15, '2024-07-10 20:00:05', 'microsoft.png'),
-	(10, 10, 1, NULL, 'Développement avec Node.js', 'Nous développons des applications back-end robustes et évolutives avec Node.js.', 1800, 30, '2024-07-10 20:00:05', 'developer.webp'),
-	(11, 11, 1, NULL, 'Développement avec Python/Django', 'Nous offrons des services de développement avec Python et Django pour des applications web performantes.', 2000, 35, '2024-07-10 20:00:05', 'developer.webp'),
-	(12, 12, 1, NULL, 'Utilisation de PHP et frameworks', 'Nous utilisons PHP et des frameworks comme Laravel et Symfony pour créer des applications web puissantes.', 1700, 30, '2024-07-10 20:00:05', 'developer.webp'),
-	(13, 13, 1, NULL, 'Projets MERN', 'Nous réalisons des projets MERN (MongoDB, Express, React, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'gestion.png'),
-	(14, 14, 1, NULL, 'Projets MEAN', 'Nous développons des projets MEAN (MongoDB, Express, Angular, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'marketing.png'),
-	(15, 15, 1, NULL, 'Projets LAMP', 'Nous proposons des services de développement LAMP (Linux, Apache, MySQL, PHP) pour des solutions web robustes.', 1800, 30, '2024-07-10 20:00:05', 'gestion.png'),
-	(16, 16, 1, NULL, 'Développement de thèmes et plugins WordPress', 'Nous développons des thèmes et plugins WordPress personnalisés pour répondre à vos besoins spécifiques.', 1200, 25, '2024-07-10 20:00:05', 'marketing.png'),
-	(17, 17, 1, NULL, 'Développement avec Joomla et Drupal', 'Nous offrons des services de développement avec Joomla et Drupal pour des sites web performants et sécurisés.', 1500, 30, '2024-07-10 20:00:05', 'group3.jpg'),
-	(18, 18, 1, NULL, 'Développement d\'API RESTful', 'Nous développons des API RESTful pour faciliter la communication entre vos différentes applications.', 1000, 20, '2024-07-10 20:00:05', 'group2.jpg'),
-	(19, 19, 1, NULL, 'Intégration de services tiers', 'Nous intégrons des services tiers comme Stripe, PayPal, etc., pour enrichir les fonctionnalités de votre site web.', 700, 15, '2024-07-10 20:00:05', 'group.jpg');
+	(1, 1, 2, NULL, 'Création de site vitrine professionnel', 'Nous développons des sites vitrines professionnels pour mettre en avant votre entreprise et vos services.', 1700, 30, '2024-07-10 19:54:03', 'group.webp'),
+	(2, 2, 2, NULL, 'Développement de blog personnalisé', 'Nous offrons des services de développement de blogs personnalisés avec des fonctionnalités avancées.', 1420, 25, '2024-07-10 19:54:03', '66c03d15efb04.png'),
+	(3, 3, 1, NULL, 'Création de portfolio en ligne', 'Nous créons des portfolios en ligne élégants pour présenter vos travaux et compétences.', 1800, 20, '2024-07-10 19:54:03', 'group.webp'),
+	(4, 4, 2, NULL, 'Boutique en ligne avec Shopify', 'Nous développons des boutiques en ligne performantes et sécurisées avec Shopify.', 4500, 40, '2024-07-10 19:54:03', 'group.webp'),
+	(5, 5, 2, NULL, 'Développement de boutiques WooCommerce', 'Nous développons des boutiques en ligne performantes avec WooCommerce, adaptées à vos besoins.', 2000, 35, '2024-07-10 20:00:05', 'group.webp'),
+	(6, 6, 2, NULL, 'Intégration de systèmes de paiement', 'Nous intégrons des systèmes de paiement sécurisés comme Stripe, PayPal, etc., pour votre site web.', 500, 10, '2024-07-10 20:00:05', 'group.webp'),
+	(7, 7, 2, NULL, 'Développement HTML/CSS/JavaScript', 'Nous offrons des services de développement front-end en HTML, CSS et JavaScript pour des sites web interactifs.', 1000, 20, '2024-07-10 20:00:05', 'group.webp'),
+	(8, 8, 2, NULL, 'Utilisation de frameworks front-end', 'Nous utilisons des frameworks front-end comme React, Angular et Vue.js pour créer des applications web modernes.', 1500, 25, '2024-07-10 20:00:05', 'group.webp'),
+	(9, 9, 1, NULL, 'Optimisation des performances front-end', 'Nous optimisons les performances front-end de votre site pour garantir une expérience utilisateur fluide et rapide.', 800, 15, '2024-07-10 20:00:05', 'group.webp'),
+	(10, 10, 1, NULL, 'Développement avec Node.js', 'Nous développons des applications back-end robustes et évolutives avec Node.js.', 1800, 30, '2024-07-10 20:00:05', 'group.webp'),
+	(11, 11, 1, NULL, 'Développement avec Python/Django', 'Nous offrons des services de développement avec Python et Django pour des applications web performantes.', 2000, 35, '2024-07-10 20:00:05', 'group.webp'),
+	(12, 12, 1, NULL, 'Utilisation de PHP et frameworks', 'Nous utilisons PHP et des frameworks comme Laravel et Symfony pour créer des applications web puissantes.', 1700, 30, '2024-07-10 20:00:05', 'group.webp'),
+	(13, 13, 1, NULL, 'Projets MERN', 'Nous réalisons des projets MERN (MongoDB, Express, React, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'group.webp'),
+	(14, 14, 1, NULL, 'Projets MEAN', 'Nous développons des projets MEAN (MongoDB, Express, Angular, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'group.webp'),
+	(15, 15, 1, NULL, 'Projets LAMP', 'Nous proposons des services de développement LAMP (Linux, Apache, MySQL, PHP) pour des solutions web robustes.', 1800, 30, '2024-07-10 20:00:05', 'group.webp'),
+	(16, 16, 1, NULL, 'Développement de thèmes et plugins WordPress', 'Nous développons des thèmes et plugins WordPress personnalisés pour répondre à vos besoins spécifiques.', 1200, 25, '2024-07-10 20:00:05', 'group.webp'),
+	(17, 17, 1, NULL, 'Développement avec Joomla et Drupal', 'Nous offrons des services de développement avec Joomla et Drupal pour des sites web performants et sécurisés.', 1500, 30, '2024-07-10 20:00:05', 'group.webp'),
+	(18, 18, 1, NULL, 'Développement d\'API RESTful', 'Nous développons des API RESTful pour faciliter la communication entre vos différentes applications.', 1000, 20, '2024-07-10 20:00:05', 'group.webp'),
+	(19, 19, 1, NULL, 'Intégration de services tiers', 'Nous intégrons des services tiers comme Stripe, PayPal, etc., pour enrichir les fonctionnalités de votre site web.', 700, 15, '2024-07-10 20:00:05', 'group.webp');
 
 -- Listage de la structure de table fiverrjr. theme
 CREATE TABLE IF NOT EXISTS `theme` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name_theme` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.theme : ~7 rows (environ)
+-- Listage des données de la table fiverrjr.theme : ~10 rows (environ)
 INSERT INTO `theme` (`id`, `name_theme`) VALUES
 	(1, 'Développement Web'),
 	(2, 'Développement Mobile'),
@@ -219,7 +219,10 @@ INSERT INTO `theme` (`id`, `name_theme`) VALUES
 	(4, 'Bases de Données'),
 	(5, 'DevOps et Administration Système'),
 	(6, 'Intelligence Artificielle et Data Science'),
-	(8, 'Test Theme 1');
+	(8, 'Test Theme 1'),
+	(9, 'Test Theme 2'),
+	(10, 'Test Theme 3'),
+	(11, 'Test Theme 4');
 
 -- Listage de la structure de table fiverrjr. user
 CREATE TABLE IF NOT EXISTS `user` (
@@ -243,11 +246,11 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- Listage des données de la table fiverrjr.user : ~22 rows (environ)
 INSERT INTO `user` (`id`, `email`, `roles`, `password`, `first_name`, `last_name`, `phone_number`, `date_register`, `picture`, `city`, `portfolio`, `bio`, `is_verified`, `username`) VALUES
-	(1, 'client@gmail.com', '["ROLE_CLIENT"]', '$2y$13$030uvowwY4st0yG1THvBuuC5vjemI9k4kUMluwi.IBH32YCV.uVl2', 'Elan', 'Formation', '330760000000', '2024-06-20 00:00:00', 'client.webp', 'Thann', NULL, 'En tant qu\'entreprise innovante et en pleine croissance, nous sommes constamment à la recherche de jeunes développeurs talentueux pour rejoindre notre équipe dynamique. Nous offrons des opportunités passionnantes dans le développement web et mobile, et nous cherchons des professionnels créatifs et motivés maîtrisant des technologies telles que HTML, CSS, JavaScript, React et Node.js. Si vous êtes prêt à relever des défis stimulants et à contribuer à des projets captivants, explorez notre profil et découvrez comment vous pouvez collaborer avec nous. Nous avons hâte de découvrir vos talents et de travailler ensemble pour réaliser des projets ambitieux !', 0, 'Elan-formation'),
-	(2, 'developer@gmail.com', '["ROLE_DEVELOPER"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Anthony', 'Montmirail', '330760000000', '2024-06-27 00:00:00', '66a8ca10a2b25.png', 'Thann', NULL, 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim omnis doloribus quo deserunt optio! Tempora fugiat, harum ipsa alias magnam neque! Maiores dolores molestias magnam ipsum at accusantium, commodi a.', 0, 'Anthony'),
-	(3, 'enterprise1@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Un', '1234567890', '2024-07-29 17:11:34', 'client.webp', 'Paris', 'http://portfolio1.example.com', 'Nous sommes une grande entreprise.', 1, 'enterprise1'),
-	(4, 'enterprise2@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Deux', '1234567891', '2024-07-29 17:11:34', 'client.webp', 'Lyon', 'http://portfolio2.example.com', 'Nous sommes une entreprise innovante.', 1, 'enterprise2'),
-	(5, 'enterprise3@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Trois', '1234567892', '2024-07-29 17:11:34', 'client.webp', 'Marseille', 'http://portfolio3.example.com', 'Nous offrons des services divers.', 1, 'enterprise3'),
+	(1, 'client@gmail.com', '["ROLE_CLIENT", "ROLE_ADMIN"]', '$2y$13$030uvowwY4st0yG1THvBuuC5vjemI9k4kUMluwi.IBH32YCV.uVl2', 'Anthony', 'Formation', '330760000000', '2024-06-20 00:00:00', 'client.webp', 'Thann', 'http://portfolio11.example.com', 'En tant qu\'entreprise innovante et en pleine croissance, nous sommes constamment à la recherche de jeunes développeurs talentueux pour rejoindre notre équipe dynamique. Nous offrons des opportunités passionnantes dans le développement web et mobile, et nous cherchons des professionnels créatifs et motivés maîtrisant des technologies telles que HTML, CSS, JavaScript, React et Node.js. Si vous êtes prêt à relever des défis stimulants et à contribuer à des projets captivants, explorez notre profil et découvrez comment vous pouvez collaborer avec nous. Nous avons hâte de découvrir vos talents et de travailler ensemble pour réaliser des projets ambitieux !', 0, 'Elan-formation'),
+	(2, 'developer@gmail.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Anthony', 'Montmirail', '330760000000', '2024-06-27 00:00:00', 'admin.webp', 'Thann', 'http://portfolio.example.com', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim omnis doloribus quo deserunt optio! Tempora fugiat, harum ipsa alias magnam neque! Maiores dolores molestias magnam ipsum at accusantium, commodi a.', 0, 'Anthony'),
+	(3, 'enterprise1@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Un', '1234567890', '2024-07-29 17:11:34', 'client.webp', 'Paris', 'http://portfolio1.example.com', 'Nous sommes une grande entreprise.', 1, 'Anthony'),
+	(4, 'enterprise2@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Anthony', 'Deux', '1234567891', '2024-07-29 17:11:34', 'client.webp', 'Lyon', 'http://portfolio2.example.com', 'Nous sommes une entreprise innovante.', 1, 'Anthony'),
+	(5, 'enterprise3@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Anthony', 'Trois', '1234567892', '2024-07-29 17:11:34', 'client.webp', 'Marseille', 'http://portfolio3.example.com', 'Nous offrons des services divers.', 1, 'enterprise3'),
 	(6, 'enterprise4@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Quatre', '1234567893', '2024-07-29 17:11:34', 'client.webp', 'Toulouse', 'http://portfolio4.example.com', 'Spécialistes en technologie.', 1, 'enterprise4'),
 	(7, 'enterprise5@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Cinq', '1234567894', '2024-07-29 17:11:34', 'client.webp', 'Nice', 'http://portfolio5.example.com', 'Expertise en développement.', 1, 'enterprise5'),
 	(8, 'enterprise6@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Six', '1234567895', '2024-07-29 17:11:34', 'client.webp', 'Nantes', 'http://portfolio6.example.com', 'Nous faisons la différence.', 1, 'enterprise6'),

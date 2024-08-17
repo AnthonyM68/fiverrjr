@@ -33,7 +33,7 @@ class ImageService
         };
         return $role;
     }
-
+    // génére une url d'image et de son répertoire de stockage
     public function generateImageUrl(string $filename, string $role): string
     {
         $filePath = $this->getImagePath($filename, $role);
@@ -45,14 +45,12 @@ class ImageService
         return str_replace($this->parameters->get('kernel.project_dir') . '/public', '', $filePath);
     }
 
-    
+    // recherche une image a partir de son nom de fichier et d'un rôle pour iddentifier le répertoire
     public function getImagePath(string $filename, string $role): string
     {
         $uploadsDirectory = $this->getUploadDirectory($role);
         return $uploadsDirectory . '/' . $filename;
     }
-
-
 
     // recherche les paramètres repertoire du service.yaml
     private function getUploadDirectory(string $role): string
@@ -71,10 +69,7 @@ class ImageService
         }
     }
 
-
-
-
-
+    // déplace une image et retourne son nom unique de fichier
     public function uploadImage(UploadedFile $file, string $role): string
     {
         $uploadsDirectory = $this->getUploadDirectory($role);
@@ -88,7 +83,7 @@ class ImageService
 
         return $filename;
     }
-
+    // efface une image
     public function deleteImage(string $filename, string $role): void
     {
         $filePath = $this->getImagePath($filename, $role);
@@ -104,13 +99,7 @@ class ImageService
             throw new \Exception('Failed to delete image');
         }
     }
-
-
-
-
-
-
-
+    // affecte au champ picture de l'entité une url image générée
     public function setPictureUrl($entity)
     {
         $role = null;

@@ -2,79 +2,96 @@
 
 {% block body %}
 <style>
-    .ui.two.column.stackable.equal.height.grid {
-        height: auto; 
+    /* Conteneur principal avec flexbox pour un agencement fluide */
+    .ui.container.service {
+        padding-top: 10vh;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 20px); /* Ajustement pour laisser de l'espace pour le footer */
+        overflow: hidden;
     }
-    
+
+    /* Zone de contenu avec scroll si nécessaire */
+    .ui.list.service, .ui.segment {
+        overflow-y: auto;
+        flex: 1; /* Prend tout l'espace disponible */
+        margin-bottom: 20px; /* Espace pour le footer */
+    }
+
+    /* Styles spécifiques aux sections */
+    .ui.two.column.stackable.equal.height.grid {
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
     .ui.two.column.stackable.equal.height.grid > .column {
+        flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        height: auto; 
+        margin-bottom: 20px; /* Espace pour éviter tout débordement */
     }
-    
-    .ui.container.service {
-        padding-top:10vh;
-        max-width: 100%;
-        height: 100vh; 
-    }
-    
-    .ui.two.column.stackable {
-        margin-top: 20px;
-        box-shadow: 1px 3px 8px 3px rgba(0, 0, 0, 0.1);
-    }
-    
-    .ui.list.service {
-        padding-top: 40px;
-    }
-    
+
+    /* Alignement des images dans les détails des services */
     .product-image.service img {
         vertical-align: bottom;
+        max-width: 100%;
+        height: auto;
     }
-    
+
+    /* Flexbox pour aligner les colonnes à la fin */
     .flex-end {
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
     }
-    
-</style>
-<div class="ui container service">
 
+    /* Box-shadow pour les cartes */
+    .ui.two.column.stackable {
+        margin-top: 20px;
+        box-shadow: 1px 3px 8px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Adaptation pour mobile */
+    @media (max-width: 768px) {
+        .ui.container.service {
+            padding: 5vh 2vw;
+            height: calc(100vh - 15px);
+        }
+    }
+</style>
+
+<div class="ui container service">
+    <!-- Titre avec animation -->
     <div class="uk-animation">
         <div class="uk-animation-slide-right">
-            <p class="uk-text-left">
             <h1 class="title uk-animation-slide-right">
-                {% if service | default %}
+                {% if service is defined %}
                 {{ service.title }}
                 {% else %}
                 {{ title_page }}
                 {% endif %}
             </h1>
-            </p>
         </div>
     </div>
 
-
+    <!-- Formulaire d'ajout de service, si défini -->
     {% if formAddService is defined %}
-    <div class="ui container">
-        <div class="ui segment">
-            {# formulaire d'ajout d'un nouveau service #}
-            {% include "itemService/form/form.html.twig" %}
-        </div>
+    <div class="ui segment">
+        {% include "itemService/form/form.html.twig" %}
     </div>
     {% endif %}
 
-
-
-    {# Liste des services #}
-    {% if services | default %}
+    <!-- Liste des services -->
+    {% if services is defined %}
     <div class="ui list service">
         {% for service in services %}
         <div class="item">
             <i class="folder icon"></i>
             <div class="content">
-                <div class="header"> <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title}}</a>
+                <div class="header">
+                    <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title }}</a>
                 </div>
             </div>
         </div>
@@ -82,22 +99,15 @@
     </div>
     {% endif %}
 
-
-
-
-    {# Détail d'un service #}
-    {% if service | default %}
-
+    <!-- Détail d'un service -->
+    {% if service is defined %}
     <div class="ui two column stackable equal height grid uk-animation-fade">
-
         <div class="column">
             <div class="product-image service">
-                <img src="{{ asset(service.picture) }}" alt="Product Image {{ service.title }}" class="ui fluid image">
+                <img src="{{ asset(service.picture) }}" alt="Image {{ service.title }}" class="ui fluid image">
             </div>
             <div class="ui segment">
-                <div class="product-details">
-                    <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
-                </div>
+                <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
             </div>
         </div>
 
@@ -116,33 +126,23 @@
                     </a>
                 </div>
             </div>
-        
+
             <p><strong>Description: </strong>{{ service.description }}</p>
             <p><strong>Prix: </strong>{{ service.price }}€</p>
             <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
             <p><strong>Créé le: </strong>{{ service.createDate|date('d/m/Y') }}</p>
             <p><strong>Réf: </strong>{{ service.id }}</p>
-            <a href="{{ path('add_service_cart', {'id': service.id}) }}"
-                class="ui primary button add-to-cart-btn">Ajouter au panier</a>
+            <a href="{{ path('add_service_cart', {'id': service.id}) }}" class="ui primary button add-to-cart-btn">Ajouter au panier</a>
         </div>
     </div>
-    {# si l'utilisateur est connecter #}
-    {% if app.user %}
-    {# On s'assure que l'user est l'auteur du service #}
-    {% if service.user.id == app.user.id %}
     {% endif %}
-    {% endif %}
-
-    {% endif %}
-    {% block javascripts %}
-    {{ parent() }}
-    {# On a besoin de ces scripts uniquement si nous créons ou éditons un Service #}
-    {% if formAddService is defined %}
-    {# On inject le script pour la gestion des contenus dynamique des select #}
-    {{ encore_entry_script_tags('Service') }}
-    {# On inject le script pour la prévisualisation de l'image avant upload (enregistrement) #}
-    {{ encore_entry_script_tags('previewImage') }}
-    {% endif %}
-    {% endblock %}
 </div>
+
+{% block javascripts %}
+{{ parent() }}
+{% if formAddService is defined %}
+{{ encore_entry_script_tags('Service') }}
+{{ encore_entry_script_tags('previewImage') }}
+{% endif %}
+{% endblock %}
 {% endblock %}

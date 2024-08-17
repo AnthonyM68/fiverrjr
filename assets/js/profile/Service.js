@@ -1,332 +1,412 @@
 import { showAlert } from './../alert/messageFlash.js';
+import { usePostData } from './../ajax/postData.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-    
-    console.log('=> Service.js loaded');
-    const service_item_course_theme = document.getElementById('service_item_course_theme');
-    const service_item_course_category = document.getElementById('service_item_course_category');
-    const service_item_course_course = document.getElementById('service_item_course_course');
-    const service_item_list = document.getElementById('service_item_list');
-    const serviceForm = document.getElementById('service-form');
+// initialise les champs select du formulaire service_theme_category_course_type
+const initializeForm = () => {
+    const serviceItemCourseTheme = document.getElementById('service_item_course_theme');
+    const serviceItemCourseCategory = document.getElementById('service_item_course_category');
+    const serviceItemCourseCourse = document.getElementById('service_item_course_course');
 
-    // Récupère les données à utilisés dans les select
-    const updateForm = async (url) => {
+    // récupère les données via ajax
+    const fetchData = async (url) => {
         try {
-            const req = await fetch(url);
-            return await req.json();
+            const response = await fetch(url);
+            return await response.json();
         } catch (error) {
-            console.error('Failed to fetch or parse JSON:', error);
+            console.error('erreur lors de la récupération des données:', error);
             return [];
         }
     };
-    // Mets à jour par Thème, les Catégories du select  
+
+    // met à jour les catégories en fonction du thème sélectionné
     const updateCategories = async (e) => {
         const themeId = e.target.value;
+        const categories = await fetchData(`/categories_by_theme/${themeId}`);
 
-        const url = `/categories_by_theme/${themeId}`;
-        const categories = await updateForm(url);
-
-        service_item_course_category.innerHTML = '';
+        serviceItemCourseCategory.innerHTML = '';
         categories.forEach(category => {
             const option = document.createElement('option');
             option.value = category.id;
             option.textContent = category.name;
-            service_item_course_category.appendChild(option);
+            serviceItemCourseCategory.appendChild(option);
         });
         updateCourses();
     };
-    // Mets à jour les Sous-catégories du select par Catégorie
+
+    // met à jour les cours en fonction de la catégorie sélectionnée
     const updateCourses = async () => {
-        const categoryId = service_item_course_category.value;
+        const categoryId = serviceItemCourseCategory.value;
+        const courses = await fetchData(`/courses_by_category/${categoryId}`);
 
-        const url = `/courses_by_category/${categoryId}`;
-        const courses = await updateForm(url);
-
-        service_item_course_course.innerHTML = '';
+        serviceItemCourseCourse.innerHTML = '';
         courses.forEach(course => {
             const option = document.createElement('option');
             option.value = course.id;
             option.textContent = course.name;
-            service_item_course_course.appendChild(option);
+            serviceItemCourseCourse.appendChild(option);
         });
     };
 
-    const updateListeServices = async () => {
-        const url = '/fetch/get_service';
+    // attache les événements de changement
+    if (serviceItemCourseTheme) {
+        serviceItemCourseTheme.addEventListener('change', updateCategories);
+    }
+    if (serviceItemCourseCategory) {
+        serviceItemCourseCategory.addEventListener('change', updateCourses);
+    }
+};
+const resetFieldErrors = () => {
+    const formFields = document.querySelectorAll('#service_form_ajax .field'); 
+    formFields.forEach(field => {
+        field.addEventListener('input', () => {
+            field.classList.remove('field-error'); 
+        });
+    });
+};
+// écoute les événements du formulaire pour l'envoi ajax
+const eventListnerFormService = async () => {
+    const form = document.getElementById('service_form_ajax');
+    if (!form) return;
+    console.log(form);
+    // on annule tout autre écouteur sur cet élément
+    form.removeEventListener("submit", handleFormSubmit);
+    // on en crée un nouveau
+    form.addEventListener("submit", handleFormSubmit);
+
+    async function handleFormSubmit(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const formData = new FormData(form);
+        const serviceId = form.getAttribute('data-service-id');
+
+        console.log(serviceId);
+
+
+        if (serviceId) formData.append('service_id', serviceId);
+
+        // Display the key/value pairs
+        for (const pair of formData.entries()) {
+            console.log(pair[0], pair[1]);
+        }
+
         try {
-            const req = await fetch(url);
-            if (!req.ok) {
-                throw new Error(`HTTP error! Status: ${req.status}`);
-            }
-            const contentType = req.headers.get('content-type');
+            const { data, error } = await usePostData(form.action, formData, false, false);
 
-            if (contentType && contentType.indexOf('application/json') !== -1) {
-                const data = await req.json();
-                console.log('Data all services by userId:', data);
+            if (error) {
+                showAlert('negative', error.message); 
 
-                service_item_list.innerHTML = '';
+                if (error.formHtml) {
+                    document.getElementById('service-form-new').innerHTML = error.formHtml;
+                    initializeForm();
+                    eventListnerFormService();
+                    resetFieldErrors(); // Réinitialiser les erreurs sur les nouveaux champs générés
 
-                data.forEach(service => {
-                    const tr = document.createElement('tr');
+                    // Masquer le loader si nécessaire
+                    $('#loader-new').hide();
+                    $('#loader-edit').hide();
+                }
 
-                    const tdTitle = document.createElement('td');
-                    tdTitle.setAttribute('data-label', 'service-title');
-                    tdTitle.textContent = service.title;
-                    tr.appendChild(tdTitle);
-
-                    const tdButtons = document.createElement('td');
-                    tdButtons.setAttribute('data-label', 'service-btn');
-
-                    const buttonGroup = document.createElement('div');
-                    buttonGroup.className = 'ui buttons';
-
-                    // Bouton edit 
-                    const editButton = document.createElement('a');
-                    editButton.className = 'ui-button ui-widget ui-corner-all toggle-edit-service';
-                    editButton.innerHTML = '<span class="ui-icon ui-icon-pencil"></span>';
-                    editButton.setAttribute('href', "javascript:void(0);");
-                    editButton.setAttribute('data-service-id', service.id);
-                    editButton.setAttribute(`data-token-${service.id}`, service.csrf_token);
-                    editButton.setAttribute('title', 'Editer Service'); // Tooltip text
-                    buttonGroup.appendChild(editButton);
-
-                    // Bouton de suppression
-                    const deleteButton = document.createElement('a');
-                    deleteButton.className = 'ui-button ui-widget ui-corner-all toggle-trash-service';
-                    deleteButton.innerHTML = '<span class="ui-icon ui-icon-trash"></span>';
-                    deleteButton.setAttribute('href', "javascript:void(0);");
-                    deleteButton.setAttribute('href', "javascript:void(0);");
-                    deleteButton.setAttribute('data-service-id', service.id);
-                    deleteButton.setAttribute(`data-token-${service.id}`, service.csrf_token);
-                    deleteButton.setAttribute('title', 'Supprimer Service'); // Tooltip text
-
-                    buttonGroup.appendChild(deleteButton);
-
-                    tdButtons.appendChild(buttonGroup);
-
-                    tr.appendChild(tdButtons);
-
-                    service_item_list.appendChild(tr);
-                });
+                // if (error.formHtml) {
+                //     document.getElementById('service-form-new').innerHTML = error.formHtml;
+                //     if ($('#loader-new').is(':visible')) {
+                //         $('#loader-new').hide();
+                //     }
+                //     if ($('#loader-edit').is(':visible')) {
+                //         $('#loader-edit').hide();
+                //     }
+                //     initializeForm();
+                //     eventListnerFormService();
+                // }
             } else {
-                const text = await req.text();
-                console.error('Unexpected response format:', text);
+                showAlert('positive', data.message); 
+
             }
         } catch (error) {
-            console.error('Failed to fetch or parse JSON:', error);
+            showAlert('negative', 'Erreur lors de l\'envoi du formulaire : ' + error.message);
+            console.error('erreur lors de l\'envoi du formulaire:', error);
+        }
+    }
+};
+
+// gestion de l'affichage du formulaire "nouveau service"
+const NewServiceManager = (function () {
+    const serviceFormContainer = $('#service-form');
+    const serviceListContainer = $('#service-item-list');
+    const editServiceContainer = $('#edit-item-service');
+    const toggleButton = $('.toggle-new-service');
+    const loader = $('#loader-new');
+
+    const toggleServiceForm = async () => {
+        console.log('toggle-new-service');
+        // vérifie si le formulaire est visible et le ferme si nécessaire
+        if (serviceFormContainer.is(':visible')) {
+            serviceFormContainer.slideUp(400, () => toggleButton.text('nouveau service'));
+            return;
+        }
+
+        // ferme le conteneur d'édition si visible
+        if (editServiceContainer.is(':visible')) {
+            editServiceContainer.slideUp(400);
+        }
+
+        // affiche le formulaire de création via ajax
+        serviceFormContainer.slideDown(400, async () => {
+            toggleButton.text('fermer le formulaire');
+            loader.show();
+
+            const token = toggleButton.attr('data-token');
+            const formData = new FormData();
+            formData.append('_token', token);
+
+            try {
+                const response = await usePostData(`/fetch/service/form/generate`, formData, false, false);
+                if (response.error) {
+                    showAlert('negative', response.error);
+                    console.error(response.error);
+                    return;
+                }
+
+                const data = response.data;
+                if (data.formHtml) {
+                    document.getElementById('service-form-new').innerHTML = data.formHtml;
+                    initializeForm();
+                    eventListnerFormService();
+                    loader.hide();
+
+                }
+            } catch (error) {
+                showAlert('negative', 'Erreur lors de la requête AJAX : ' + error.message);
+                console.error('erreur lors de la requête ajax:', error);
+            }
+        });
+
+        // ferme la liste des services si visible
+        if (serviceListContainer.is(':visible')) {
+            serviceListContainer.slideUp(400, () => $('.toggle-list-services').text('liste de mes services'));
         }
     };
-    if (service_item_list) {
-        // Attacher un écouteur d'événement pour la délégation sur les boutons d'édition et de suppression
-        service_item_list.addEventListener('click', async (event) => {
-            const target = event.target.closest('.ui-button');
-            if (!target) return;
 
-            if (target.classList.contains('toggle-edit-service')) {
+    const initEventListeners = function () {
+        toggleButton.on('click', toggleServiceForm);
+    };
+
+    return { init: initEventListeners };
+})();
+// gestion de l'affichage de la liste des services
+const ServiceToggleManager = (function () {
+    const serviceListContainer = $('#service-item-list');
+    const serviceEditContainer = $('#edit-item-service');
+    const serviceFormContainer = $('#service-form');
+    const toggleListButton = $('.toggle-list-services');
+    const loader = $('#loader-list');
+    const closeEditButton = $('#close-edit'); // bouton pour fermer le conteneur d'édition
+
+    // fonction pour fermer tous les conteneurs
+    const closeAllContainers = () => {
+        if (serviceListContainer.is(':visible')) {
+            serviceListContainer.slideUp(400);
+        }
+        if (serviceFormContainer.is(':visible')) {
+            serviceFormContainer.slideUp(400);
+        }
+        if (serviceEditContainer.is(':visible')) {
+            serviceEditContainer.slideUp(400);
+        }
+    };
+
+    // fonction pour afficher ou cacher la liste des services
+    const toggleServiceList = () => {
+        // ferme tous les conteneurs ouverts avant de gérer la liste des services
+        closeAllContainers();
+
+        // vérifie si la liste des services est visible
+        if (serviceListContainer.is(':visible')) {
+            // si visible, on ferme la liste et met à jour le texte du bouton
+            serviceListContainer.slideUp(400, () => toggleListButton.text('liste de mes services'));
+        } else {
+            // si non visible, on affiche la liste et met à jour le texte du bouton
+            loader.show();
+            serviceListContainer.slideDown(400, () => {
+                ServiceListManager.updateListeServices();
+                toggleListButton.text('fermer la liste');
+            });
+        }
+    };
+
+    // fonction pour fermer le conteneur d'édition
+    const closeEditContainer = () => {
+        if (serviceEditContainer.is(':visible')) {
+            serviceEditContainer.slideUp(400);
+        }
+    };
+
+    // initialisation des écouteurs d'événements
+    const initEventListeners = () => {
+        // écouteur pour le bouton de la liste des services
+        toggleListButton.on('click', toggleServiceList);
+
+        // écouteur pour le bouton de fermeture de l'édition
+        closeEditButton.on('click', closeEditContainer);
+    };
+
+    return { init: initEventListeners };
+})();
+
+
+
+// gestion de la liste des services et des actions éditer/supprimer
+export const ServiceListManager = (function () {
+    const serviceItemList = $('#service-item-list');
+    const tableBody = document.getElementById("body-table-list");
+    // met à jour la liste des services
+    const updateListeServices = async () => {
+        console.log('updateListeServices');
+        try {
+            const response = await fetch('/fetch/get_service');
+            const data = await response.json();
+
+            tableBody.innerHTML = '';
+            data.forEach(service => {
+                const tr = document.createElement('tr');
+
+                // colonne titre du service
+                const tdTitle = document.createElement('td');
+                tdTitle.setAttribute('data-label', 'service-title');
+                tdTitle.textContent = service.title;
+                tr.appendChild(tdTitle);
+
+                // colonne boutons (éditer/supprimer)
+                const tdButtons = document.createElement('td');
+                tdButtons.setAttribute('data-label', 'service-btn');
+                const buttonGroup = document.createElement('div');
+                buttonGroup.className = 'ui buttons';
+
+                // bouton éditer
+                const editButton = document.createElement('a');
+                editButton.className = 'ui-button ui-widget ui-corner-all toggle-edit-service';
+                editButton.innerHTML = '<span class="ui-icon ui-icon-pencil"></span>';
+                editButton.setAttribute('href', "javascript:void(0);");
+                editButton.setAttribute('data-service-id', service.id);
+                editButton.setAttribute(`data-token-${service.id}`, service.csrf_token);
+                editButton.setAttribute('title', 'éditer service');
+                buttonGroup.appendChild(editButton);
+
+                // bouton supprimer
+                const deleteButton = document.createElement('a');
+                deleteButton.className = 'ui-button ui-widget ui-corner-all toggle-trash-service';
+                deleteButton.innerHTML = '<span class="ui-icon ui-icon-trash"></span>';
+                deleteButton.setAttribute('href', "javascript:void(0);");
+                deleteButton.setAttribute('data-service-id', service.id);
+                deleteButton.setAttribute(`data-token-${service.id}`, service.csrf_token);
+                deleteButton.setAttribute('title', 'supprimer service');
+                buttonGroup.appendChild(deleteButton);
+
+                tdButtons.appendChild(buttonGroup);
+                tr.appendChild(tdButtons);
+                tableBody.appendChild(tr);
+            });
+            $('#loader-list').hide();
+
+        } catch (error) {
+            console.error('erreur lors de la récupération des services:', error);
+        }
+    };
+
+    // gère les clics sur les boutons éditer/supprimer
+    const handleListClick = async (event) => {
+        const target = event.target.closest('.ui-button');
+        if (!target) return;
+
+        // gestion de l'édition
+        if (target.classList.contains('toggle-edit-service')) {
+            $('#loader-edit').show();
+            console.log('toggle-edit-service');
+
+            const serviceId = target.getAttribute('data-service-id');
+            const csrfToken = target.getAttribute(`data-token-${serviceId}`);
+            const formData = new FormData();
+            formData.append('service_id', serviceId);
+            formData.append('_token', csrfToken);
+            // debug formdata
+            for (const pair of formData.entries()) {
+                console.log(pair[0], pair[1]);
+            }
+            try {
+                // On génére le service à éditer
+                const response = await usePostData('/fetch/service/form/generate', formData, false, false);
+                const data = response.data;
+
+                if (data.formHtml) {
+                    $('#edit-item-service').slideDown(400);
+                    document.getElementById('service-form-edit').innerHTML = data.formHtml;
+                    eventListnerFormService();
+                    $('#loader-edit').hide();
+                } else if (data.message) {
+                    showAlert('positive', data.message);
+                } else if (data.errors) {
+                    showAlert('negative', 'Une erreur est survenue lors de la récupération du formulaire.');
+                }
+
+                if ($('#service-item-list').is(':visible')) {
+                    $('#service-item-list').slideUp(400, () => $('.toggle-list-services').text('liste de mes services'));
+                }
+            } catch (error) {
+                showAlert('negative', 'Erreur lors de l\'édition du service : ' + error.message);
+                console.error('erreur lors de l\'édition du service:', error);
+            }
+
+            // gestion de la suppression
+        } else if (target.classList.contains('toggle-trash-service')) {
+            const serviceId = target.getAttribute('data-service-id');
+            const csrfToken = target.getAttribute(`data-token-${serviceId}`);
+
+            if (confirm('confirmez-vous la suppression du service?')) {
                 try {
-                    // on récupère l'id du service depuis le lien
-                    const serviceId = target.getAttribute('data-service-id');
-                    // on récupère le token du lien
-                    const csrfToken = target.getAttribute(`data-token-${serviceId}`);
-                    const url = `/fetch/service/form/generate`;
-
-                    const response = await fetch(url, {
-                        method: 'POST',
+                    const response = await fetch(`/fetch/service/delete`, {
+                        method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken // Ajouter le token CSRF dans l'en-tête
+                            'X-CSRF-TOKEN': csrfToken
                         },
-                        // Inclure le token CSRF dans le corps de la requête
-                        // et le service (title, id)
                         body: JSON.stringify({ serviceId, _token: csrfToken })
                     });
 
+                    const result = await response.json();
                     if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+                        throw new Error(result.error || 'erreur lors de la suppression');
                     }
 
-                    const contentType = response.headers.get('content-type');
-                    // s'il y'a un contenu et de type json dans le header
-                    if (contentType && contentType.indexOf('application/json') !== -1) {
-                        // on décode le contenu
-                        const data = await response.json();
-                        console.log('Form data HTML received for service:', data);
-
-                        const editService = document.querySelector('.edit-service-container');
-
-                        if (!editService.style.display || editService.style.display === 'none') {
-                            editService.style.display = 'block';
-                        }
-                        // on injecte le résultat
-                        document.getElementById('service-form-container').innerHTML = data.formHtml;
-                        eventListnerFormService();
-                    } else {
-                        const text = await response.text();
-                        console.error('Unexpected response format:', text);
-                    }
+                    target.closest('tr').remove();
+                    showAlert('positive', 'Service supprimé avec succès !'); // ajout de l'alerte de succès
                 } catch (error) {
-                    console.error('Failed to fetch or parse JSON for service form:', error);
-                }
-            } else if (target.classList.contains('toggle-trash-service')) {
-
-                // on récupère l'id du service depuis le lien
-                const serviceId = target.getAttribute('data-service-id');
-                // console.log('Id service:', serviceId);
-                // on récupère le token du lien
-                const csrfToken = target.getAttribute(`data-token-${serviceId}`);
-                // Confirmation JS (prévoir custom)
-                // console.log('token:', csrfToken);
-                if (confirm('Confirmez-vous la suppression du service?')) {
-                    try {
-                        const response = await fetch(`/fetch/service/delete`, {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': csrfToken // Ajouter le token CSRF dans l'en-tête
-                            },
-                            // Inclure le token CSRF dans le corps de la requête
-                            // body: JSON.stringify({ _token: csrfToken })
-                            body: JSON.stringify({ serviceId, _token: csrfToken })
-                        });
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        const result = await response.json();
-                        // console.log(result);
-                        if (result.error) {
-                            console.error(`Error: ${result.error}`);
-                            // alert(`Error: ${result.error}`);
-                        } else {
-                            console.log(result.message);
-                            // alert(result.message);
-                            target.closest('tr').remove();
-                        }
-                    } catch (error) {
-                        console.error('Failed to delete service:', error);
-                        // alert('Failed to delete service');
-                    }
-                }
-            }
-        });
-    }
-
-
-
-
-    // déroule le formulaire de soumission d'un nouveau service de la page profil
-    $('.toggle-service-form').on('click', function () {
-
-        const serviceForm = $('.service-form');
-        const listeServices = $('.list-services');
-
-        if (serviceForm.is(':visible')) {
-            serviceForm.slideUp(400, function () {
-                $('.toggle-service-form').text('Nouveau service');
-
-            });
-        } else {
-            serviceForm.slideDown(400, function () {
-                $('.toggle-service-form').text('Fermer le formulaire');
-            });
-            if (listeServices.is(':visible')) {
-                listeServices.slideUp(400, function () {
-                    $('.toggle-list-services').text('Liste de mes services');
-                });
-            }
-        }
-    });
-
-    // En cas d'erreur ajuster le text du bouton
-    if (serviceForm) {
-        if (serviceForm.style.display == 'block') {
-            $('.toggle-service-form').text('Fermer le formulaire');
-        }
-    }
-    // ouvre et referme la liste des services
-    $('.toggle-list-services').on('click', function () {
-        const listeServices = $('.list-services');
-        const serviceForm = $('.service-form');
-        // on mets a jour la liste des services
-        updateListeServices();
-
-        if (listeServices.is(':visible')) {
-            listeServices.slideUp(400, function () {
-                $('.toggle-list-services').text('Liste de mes services');
-            });
-        } else {
-
-            listeServices.slideDown(400, function () {
-                $('.toggle-list-services').text('Fermer la liste');
-            });
-            if (serviceForm.is(':visible')) {
-                serviceForm.slideUp(400, function () {
-                    $('.toggle-service-form').text('Nouveau service');
-                });
-            }
-        }
-    });
-
-    // EventListener sur le select Thème
-    if (service_item_course_theme) {
-        service_item_course_theme.addEventListener('change', updateCategories);
-    }
-    // EventListener sur le select Catégories
-    if (service_item_course_category) {
-        service_item_course_category.addEventListener('change', updateCourses);
-    }
-    // Ajoutez un écouteur d'événements pour le bouton de fermeture
-    const closeEdit = document.getElementById('close-edit');
-    if (closeEdit) {
-        closeEdit.addEventListener('click', () => {
-            $('.edit-service-container').slideUp();
-        });
-    }
-
-    // Interception de la soumission du formulaire d'édition d'un service
-    const eventListnerFormService = async () => {
-        // Vérifiez si nous sommes sur la page profile/edit
-        if (window.location.pathname.startsWith('/profile/edit')) {
-            if (window.location.pathname.startsWith('/profile/edit')) {
-                // Sélectionnez le formulaire par ID
-                const form = document.getElementById('serviceForm');
-                // on récupère l'id du service depuis le lien
-                const serviceId = form.getAttribute('data-service-id');
-                // si le form existe bien
-                if (form) {
-                    // on écoute la soumission du form
-                    form.addEventListener('submit', async function (event) {
-                        event.preventDefault(); // Empêche la soumission php action=''
-                        // Récupérez les données du formulaire
-                        const formData = new FormData(form);
-                        // on ajoute l'id du service et au formulaire
-                        formData.append('service_id', serviceId);
-                        console.log([...formData]);
-                        // Préparez l'appel AJAX
-                        const response = await fetch(form.action, {
-                            method: 'POST',
-                            body: formData,// on ajoute le formulaire
-                            headers: {
-                                // Indique que c'est une requête AJAX
-                                'X-Requested-With': 'XMLHttpRequest'
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                // Traitez la réponse
-                                console.log('Succès:', data);
-
-                                showAlert('positive', data.message);
-                                // Afficher un message de succès ou rediriger si nécessaire
-                            })
-                            .catch(error => {
-                                console.error('Erreur:', error);
-                                throw new Error(`HTTP error! Status: ${response.status}`);
-                            });
-
-                    });
+                    showAlert('negative', 'Erreur lors de la suppression du service : ' + error.message); // ajout de l'alerte d'erreur
+                    console.error('erreur lors de la suppression du service:', error);
                 }
             }
         }
-    }
+    };
 
+    const initEventListeners = () => {
+        if (serviceItemList.length) {
+            serviceItemList.on('click', handleListClick);
+        }
+    };
+
+    return {
+        init: initEventListeners,
+        updateListeServices: updateListeServices
+    };
+})();
+
+
+
+
+// initialisation des modules au chargement de la page
+document.addEventListener('DOMContentLoaded', () => {
+
+    initializeForm();
+    NewServiceManager.init();
+    ServiceToggleManager.init();
+    ServiceListManager.init();
 });

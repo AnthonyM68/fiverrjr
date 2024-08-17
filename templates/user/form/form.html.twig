@@ -1,9 +1,8 @@
 {% block user_form %}
 {% if formUser | default %}
     {{ form_start(formUser, {'attr': {'class': 'ui form profile', 'novalidate': 'novalidate'}}) }}
-    <div class="ui form">
         <div class="image-container">
-            <img src="{{ formUser.vars.data.picture }}" alt="Image Preview" class="image-preview {% if formUser.vars.data.picture %}img-visible{% else %}img-hidden{% endif %}">
+            <img src="{{ formUser.vars.data.picture }}" alt="Image Preview profile from {{ app.user.username }}" class="image-preview {% if formUser.vars.data.picture %}img-visible{% else %}img-hidden{% endif %}">
             <div class="{{ formUser.picture.vars.errors|length > 0 ? 'field error' }}">
                 {{ form_errors(formUser.picture) }}
                 {{ form_label(formUser.picture) }}
@@ -55,7 +54,6 @@
                 <span class="ui-icon ui-icon-check"></span> Valider
             </button>
         </div>
-    </div>
     {{ form_end(formUser) }}
 {% endif %}
 {% endblock user_form %}

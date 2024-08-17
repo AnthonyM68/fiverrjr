@@ -65,7 +65,7 @@ Encore
         './assets/styles/cards/itemUserCards.scss',
         './assets/styles/banner/banner.scss',
         './assets/styles/homePage.scss',
-        './assets/styles/user.scss',
+        './assets/styles/profile.scss',
         './assets/styles/carouselComponent.scss',
         './assets/styles/developerSearch.scss',
         './assets/styles/sticky.css',

@@ -31,7 +31,7 @@ class ServiceItemType extends AbstractType
     {
         $this->security = $security;
     }
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -94,7 +94,7 @@ class ServiceItemType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ServiceItem::class,
             // Ajout de la 3ème option avec une valeur par défaut
-            'title_form' => null, 
+            'title_form' => null,
             // 'csrf_protection' => true,
             // 'csrf_field_name' => '_token',
             // 'csrf_token_id'   => 'service_form'

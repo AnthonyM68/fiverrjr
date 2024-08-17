@@ -95,7 +95,8 @@ class UserController extends AbstractController
     ): Response {
 
         $limit = 3;
-
+        $formHasErrors = false;
+        
         $page = $request->get('page');
 
         if (!$page) {
@@ -180,57 +181,51 @@ class UserController extends AbstractController
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
 
-        // créer un nouveau formulaire ServiceItem
-        // $service = new ServiceItem();
         if (!$service) {
             $service = new ServiceItem();
         }
 
         // obtenir le nom du fichier de l'image de profil de l'utilisateur
-        $originalFilename = $service->getPicture();
-
-        $this->logger->info('Processing generateImageUrl user curent', ['user' => $user, 'role' => $role, 'originalFilename' => $originalFilename]);
-
-        if ($originalFilename) {
-            try {
-                $pictureUrl = $this->imageService->generateImageUrl($originalFilename, $role);
-                $service->setPicture($pictureUrl);
-            } catch (\Exception $e) {
-                throw $e;
-            }
-        }
+        // $originalFilename = $service->getPicture();
+        // if ($originalFilename) {
+        //     $this->imageService->setPictureUrl($service);
+        // }
 
         $formService = $this->createForm(ServiceItemType::class, $service, [
-            'action' => $this->generateUrl('service_form_update', ['id' => $user->getId(), 'serviceId' => $service->getId()]),
+            'action' => $this->generateUrl('service_form_update'),
         ]);
 
         $formService->handleRequest($request);
 
         // // traite le formulaire de service
-        if ($formService->isSubmitted() && $formService->isValid()) {
-            // récupérer l'objet file
-            $file = $formService->get('picture')->getData();
-            // si un fichier est téléchargé, traiter le fichier
-            // si $file est bien une instance de UploadedFile ( ServiceItemType )
-            if ($file instanceof UploadedFile) {
-                try {
-                    // On supprime l'image actuelle
-                    $this->imageService->deleteImage($originalFilename, $role);
-                    // On déplace la nouvelle et récupère son nom et extention
-                    $fileName = $this->imageService->uploadImage($file, $role);
-                    // On set a l'user
-                    $user->setPicture($fileName);
-                } catch (\Exception $e) {
-                    // si une exception est levée, afficher un message flash d'erreur
-                    $this->addFlash('error', 'Une erreur s\'est produite lors du traitement de l\'image: ' . $e->getMessage());
+        if ($formService->isSubmitted()) {
+            if (!$formService->isValid()) {
+                $formHasErrors = true;
+            } else {
+                // récupérer l'objet file
+                $file = $formService->get('picture')->getData();
+                // si un fichier est téléchargé, traiter le fichier
+                // si $file est bien une instance de UploadedFile ( ServiceItemType )
+                if ($file instanceof UploadedFile) {
+                    try {
+                        // On supprime l'image actuelle
+                        $this->imageService->deleteImage($originalFilename, $role);
+                        // On déplace la nouvelle et récupère son nom et extention
+                        $fileName = $this->imageService->uploadImage($file, $role);
+                        // On set a l'user
+                        $user->setPicture($fileName);
+                    } catch (\Exception $e) {
+                        // si une exception est levée, afficher un message flash d'erreur
+                        $this->addFlash('error', 'Une erreur s\'est produite lors du traitement de l\'image: ' . $e->getMessage());
+                    }
                 }
+                // associe le service à l'utilisateur
+                $service->setUser($user);
+                $entityManager->persist($service);
+                $entityManager->flush();
+                $this->addFlash('success', 'Service ajouté avec succès');
+                return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
             }
-            // associe le service à l'utilisateur
-            $service->setUser($user);
-            $entityManager->persist($service);
-            $entityManager->flush();
-            $this->addFlash('success', 'Service ajouté avec succès');
-            return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
         /**
          * REACT COMPONENT
@@ -279,15 +274,24 @@ class UserController extends AbstractController
             'title_page' => 'Profil',
             'formUser' => $formUser->createView(),
             'errorsFormUser' => $formUser->getErrors(true),
+
             'formAddService' => $formService->createView(),
+
+
             'serviceId' => $service->getId(),
+
             'errorsFormService' => $formService->getErrors(true),
+
             'orders_pending' =>  $paginationPending->getItems(),
             'pagination_pending' => $paginationPending,
             'orders_completed' => $paginationCompleted->getItems(),
             'pagination_completed' => $paginationCompleted,
+
             'lastDeveloper' => $dataDeveloper,
-            'lastClient' => $dataClient
+            'lastClient' => $dataClient,
+
+            'formHasErrors' => $formHasErrors
+
         ]);
     }
 

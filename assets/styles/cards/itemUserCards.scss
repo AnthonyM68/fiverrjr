@@ -1,84 +1,84 @@
 
 @import "./assets/styles/variables";
 
-.itemUserCard-image {
-    border-radius: 50%; 
-    width: 80px; 
-    height: 80px; 
-    object-fit: cover; 
-  }
+// .itemUserCard-image {
+//     border-radius: 50%; 
+//     width: 80px; 
+//     height: 80px; 
+//     object-fit: cover; 
+//   }
   
-  .itemUserCard-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    text-align:left;
-  }
+//   .itemUserCard-content {
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: start;
+//     text-align:left;
+//   }
   
-  .itemUserCard-header {
-    font-size: 1.2em; 
-    font-weight: bold;
-  }
+//   .itemUserCard-header {
+//     font-size: 1.2em; 
+//     font-weight: bold;
+//   }
   
-  .itemUserCard-meta {
-    color: #888; 
-    font-size: 0.9em;
-  }
+//   .itemUserCard-meta {
+//     color: #888; 
+//     font-size: 0.9em;
+//   }
   
-  .itemUserCard-description {
-    margin: 10px 0; 
-  }
+//   .itemUserCard-description {
+//     margin: 10px 0; 
+//   }
   
-  .itemUserCard-extra {
-    font-size: 0.8em; 
-    color: #555; 
-  }
+//   .itemUserCard-extra {
+//     font-size: 0.8em; 
+//     color: #555; 
+//   }
   
     
-  @media (max-width: 320px) {
-    .itemUserCard-image {
-      width: 50px;
-      height: 50px;
-    }
+//   @media (max-width: 320px) {
+//     .itemUserCard-image {
+//       width: 50px;
+//       height: 50px;
+//     }
   
-    .itemUserCard-header {
-      font-size: 0.9em;
-    }
+//     .itemUserCard-header {
+//       font-size: 0.9em;
+//     }
   
-    .itemUserCard-meta,
-    .itemUserCard-extra {
-      font-size: 0.7em;
-    }
-  }
+//     .itemUserCard-meta,
+//     .itemUserCard-extra {
+//       font-size: 0.7em;
+//     }
+//   }
   
-  @media (max-width: 480px) {
-    .itemUserCard-image {
-      width: 50px;
-      height: 50px;
-    }
+//   @media (max-width: 480px) {
+//     .itemUserCard-image {
+//       width: 50px;
+//       height: 50px;
+//     }
   
-    .itemUserCard-header {
-      font-size: 0.9em;
-    }
+//     .itemUserCard-header {
+//       font-size: 0.9em;
+//     }
   
-    .itemUserCard-meta,
-    .itemUserCard-extra {
-      font-size: 0.7em;
-    }
-  }
+//     .itemUserCard-meta,
+//     .itemUserCard-extra {
+//       font-size: 0.7em;
+//     }
+//   }
   
-  @media (max-width: 768px) {
-    .itemUserCard-image {
-      width: 60px;
-      height: 60px;
-    }
+//   @media (max-width: 768px) {
+//     .itemUserCard-image {
+//       width: 60px;
+//       height: 60px;
+//     }
   
-    .itemUserCard-header {
-      font-size: 1em;
-    }
+//     .itemUserCard-header {
+//       font-size: 1em;
+//     }
   
-    .itemUserCard-meta,
-    .itemUserCard-extra {
-      font-size: 0.8em;
-    }
-  }
+//     .itemUserCard-meta,
+//     .itemUserCard-extra {
+//       font-size: 0.8em;
+//     }
+//   }

@@ -108,4 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const root = createRoot(searchRoot);
     root.render(<BestServicesCarousel />);
   }
-});export { BestServicesCarousel };
+});
+
+export { BestServicesCarousel };

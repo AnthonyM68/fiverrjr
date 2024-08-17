@@ -75,7 +75,7 @@ export const usePostData = async (url, data, csrfToken = false, asJson = false) 
         console.log("postData => Sending POST request.");
         const response = await fetch(url, {
             method: 'POST',
-            headers: headers, // Utiliser les en-têtes définis
+            headers: headers, 
             body: body, // Utiliser le corps de la requête préparé
         });
 
@@ -86,10 +86,18 @@ export const usePostData = async (url, data, csrfToken = false, asJson = false) 
 
         const responseData = await response.json(); // Convertir la réponse en JSON
         console.log('postData => Received response data:', responseData);
-        return { data: responseData, error: null }; // Retourner les données récupérées
+
+        // Vérifier si la réponse indique un succès ou une erreur
+        if (responseData.success === false) {
+            console.error('postData => Server error:', responseData.error.message);
+            return { data: null, error: responseData.error }; // Retourner les détails de l'erreur côté serveur
+        }
+
+        return { data: responseData, error: null }; // Retourner les données récupérées si tout est OK
+
 
     } catch (error) {
-        console.error('postData => Error during POST request:', error); // Gérer les erreurs de la requête
-        return { data: null, error }; // Retourner les erreurs survenues
+        console.error('postData => Error during POST request:', error.message); // Gérer les erreurs de la requête
+         return { data: null, error: { message: error.message } }; // Retourner l'erreur capturée
     }
 };

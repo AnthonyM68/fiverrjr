@@ -4,7 +4,7 @@
     <div class="ui container custom-container-navbar grid ">
         <!-- Section pour les alertes -->
         <div id="alert-javascript-desktop">
-            <!-- Code d'affichage des alertes pour desktop -->
+            {% include "alertflash/flash_message.html.twig" %}
         </div>
         <!--Start: Desktop Nav-->
         <div class="computer only row">
@@ -54,26 +54,11 @@
             <div class="right menu">
                 <!-- Start: Search -->
                 <div class="item no-underline">
-
-
-
-
-
                     <!-- Formulaire Desktop -->
                     {% include './navbar/form/formDesktop.html.twig' with { 'attr': { 'class': 'desktop-search-form' } }
                     %}
 
-
-
                     <div class="results"></div>
-
-
-
-
-
-
-
-
                 </div>
                 <!-- End: Search -->
                 <a href="{{ path('search') }}" class="item">Avancées</a>
@@ -110,6 +95,7 @@
                         <i class="content icon"></i>
                     </div>
                 </a>
+                <div id="alert-javascript-mobile">{% include "alertflash/flash_message.html.twig" %} </div>
             </div>
             <div class="ui vertical accordion borderless fluid menu">
                 
@@ -120,7 +106,7 @@
                 </div>
 
 
-                <div id="alert-javascript-mobile"></div>
+               
 
 
 

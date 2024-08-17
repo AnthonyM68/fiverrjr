@@ -19,8 +19,8 @@ class ServiceItem
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    // #[Groups(['serviceItem'])]
-    #[Groups(['cart'])]
+
+    #[Groups(['serviceItem', 'cart'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -49,7 +49,7 @@ class ServiceItem
 
     #[ORM\Column(length: 255, nullable: false)]
     #[Groups(['serviceItem'])]
-    #[Assert\NotBlank(message: "Donnez une url d'image.")]
+    // #[Assert\NotBlank(message: "Donnez une url d'image.")]
     private ?string $picture = null;
 
     /**
