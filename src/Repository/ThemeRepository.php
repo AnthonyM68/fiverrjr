@@ -25,7 +25,7 @@ class ThemeRepository extends ServiceEntityRepository
             ->getResult();
     }
     // Requête pour rechercher un term à partir de Theme->Category/Course/Service
-    // ( prévoir axe d'amélioration)
+    // ( prévoir axe d'amélioration, filtres de terme...)
     public function searchByTermAllChilds($searchTerm)
     {
         $qb =  $this->createQueryBuilder('t')

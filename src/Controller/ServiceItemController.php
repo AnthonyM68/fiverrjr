@@ -221,6 +221,11 @@ class ServiceItemController extends AbstractController
     #[Route('/fetch/service/form/update', name: 'service_form_update', methods: ['POST'])]
     public function updateServiceForm(Request $request, ServiceItemRepository $serviceItemRepository): JsonResponse
     {
+        // Vérifier le Content-Type de la requête
+        $contentType = $request->headers->get('Content-Type');
+        if (strpos($contentType, 'multipart/form-data') === false) {
+            return new JsonResponse(['error' => 'Invalid Content-Type'], 415);
+        }
         // on récupère l'id du service
         $serviceId = $request->request->get('service_id');
         $this->logger->info('found serviceId', ['serviceId' => $serviceId]);
@@ -315,11 +320,15 @@ class ServiceItemController extends AbstractController
         // on décode le contenu de la réponse
         $body = json_decode($request->getContent(), true);
         $this->logger->info('delete_service', ['json_decode' => $body]);
-        // // on récupère l'id du service depuis javascript
+        
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return new JsonResponse(['error' => 'Invalid JSON data'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+        // on récupère l'id du service depuis javascript
         $serviceId = $body['serviceId'];
-        // // on récupère le token depuis javascript
+        // on récupère le token depuis javascript
         $csrfToken = new CsrfToken('token_' . $serviceId, $body['_token']);
-        // // on vérifie que le token soit valide
+        // on vérifie que le token soit valide
         if (!$csrfTokenManager->isTokenValid($csrfToken)) {
             return new JsonResponse(['error' => 'Invalid CSRF token'], Response::HTTP_FORBIDDEN);
         }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Service\Cart;
@@ -34,15 +33,12 @@ class CartController extends AbstractController
     }
 
     #[Route('/cart', name: 'cart_product')]
-    public function cartProduct(
-        Request $request
-    ): Response {
+    public function cartProduct(Request $request): Response
+    {
         $fullCart = $this->cart->getCart($request);
-
-        $this->addFlash('positive', 'Votre commande sera ajoutée au panier');
-
+        $this->addFlash('positive', 'votre commande sera ajoutée au panier');
         return $this->render('cart/index.html.twig', [
-            'title_page' => 'Panier',
+            'title_page' => 'panier',
             'data' => $fullCart['data'],
             'total' => $fullCart['total'],
             'nbProducts' => $fullCart['totalServiceItem'],
@@ -51,83 +47,55 @@ class CartController extends AbstractController
     }
 
     #[Route('/cart/add/service/{id}', name: 'add_service_cart')]
-    public function cartAddProduct(
-        ServiceItem $serviceItem,
-        Request $request,
-    ): Response {
-
+    public function cartAddProduct(ServiceItem $serviceItem, Request $request): Response
+    {
         if (!$serviceItem) {
-            throw $this->createNotFoundException('Le service n\'existe pas');
+            throw $this->createNotFoundException('le service n\'existe pas');
         }
-        // Ajouter le produit au panier
-        $this->cart->addProduct($serviceItem, $request);
 
-        // Obtenir le panier complet
+        $this->cart->addProduct($serviceItem, $request);
         $fullCart = $this->cart->getCart($request);
 
-        // Sérialiser les données du panier en JSON
         $jsonFullCart = $this->serializer->serialize($fullCart, 'json', ['groups' => 'cart']);
-        // Log 
-        $this->logger->info('Serialized cart data: ' . $jsonFullCart);
-        $cookieName = 'cart';
-        // créer ou mettre à jour le cookie
+        $this->logger->info('serialized cart data: ' . $jsonFullCart);
+
         $cookie = new Cookie(
-            $cookieName,
+            'cart',
             $jsonFullCart,
             time() + (30 * 24 * 60 * 60), // 30 jours
-            '/', // Path
-            null, // Domain, null pour utiliser le domaine actuel
-            false, // Secure, true si vous utilisez HTTPS
+            '/',
+            null,
+            $request->isSecure(), // définit 'secure' basé sur la connexion HTTPS
             true, // HttpOnly
-            false, // Raw
-            'strict' // SameSite, peut être 'lax', 'strict', ou 'none'
+            false,
+            'strict'
         );
-        // ajouter le cookie à la réponse
+
         $response = new Response();
         $response->headers->setCookie($cookie);
-        // Log 
-        $this->logger->info('Response headers before rendering view: ' . json_encode($response->headers->all()));
 
-        // Ajouter le rendu de la vue 
         $content = $this->renderView('cart/index.html.twig', [
-            'title_page' => 'Panier',
+            'title_page' => 'panier',
             'data' => $fullCart['data'],
             'total' => $fullCart['total'],
             'stripe_public_key' => $this->getParameter('stripe_public_key'),
         ]);
         $response->setContent($content);
-        // Log the final response headers
-        $this->logger->info('Final response headers: ' . json_encode($response->headers->all()));
+
         return $response;
     }
-
-
-
-
-
-
-
 
     #[Route('/cart/totalItemFromCart', name: 'cart_total_item', methods: ['GET'])]
     public function getTotalItemFromCart(Cart $cart, Request $request): JsonResponse
     {
-        $fullCart = $cart->getCart($request);
-
         try {
-            // Retourner la réponse JSON 
+            $fullCart = $cart->getCart($request);
             return new JsonResponse(['totalServiceItem' => $fullCart['totalServiceItem']], Response::HTTP_OK);
         } catch (\Throwable $e) {
-            // Retourner une réponse JSON avec une erreur 500 en cas d'exception
-            return new JsonResponse(['error' => 'Failed to array_sum serviceItem.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->logger->error('error fetching total items from cart: ' . $e->getMessage());
+            return new JsonResponse(['error' => 'failed to calculate total items in cart.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
-
-
-
-
 
     #[Route('/cart/remove/{id}', name: 'remove_service_cart')]
     public function cartRemoveProduct(ServiceItem $serviceItem, Request $request, Cart $cart): Response
@@ -136,7 +104,7 @@ class CartController extends AbstractController
         $fullCart = $cart->getCart($request);
 
         return $this->render('cart/index.html.twig', [
-            'title_page' => 'Panier',
+            'title_page' => 'panier',
             'data' => $fullCart['data'],
             'total' => $fullCart['total'],
             'stripe_public_key' => $this->getParameter('stripe_public_key'),
@@ -150,34 +118,26 @@ class CartController extends AbstractController
         $fullCart = $cart->getCart($request);
 
         return $this->render('cart/index.html.twig', [
-            'title_page' => 'Panier',
+            'title_page' => 'panier',
             'data' => $fullCart['data'],
             'total' => $fullCart['total'],
             'service_pictures_directory' => $this->getParameter('service_pictures_directory')
         ]);
     }
 
-
-
-
-
-
-
-
-
-
     #[Route('/empty', name: 'empty')]
-    public function empty(Cart $cart, Request $request)
+    public function empty(Cart $cart, Request $request): Response
     {
         $cart->empty($request);
         $fullCart = $cart->getCart($request);
 
         return $this->render('cart/index.html.twig', [
-            'title_page' => 'Panier',
+            'title_page' => 'panier',
             'data' => $fullCart['data'],
             'total' => $fullCart['total']
         ]);
     }
+
     // #[Route('/cart/create/order', name: 'add_order')]
     // public function createOrder(Cart $cart, Request $request, SerializerInterface $serializer): Response
     // {
@@ -185,3 +145,4 @@ class CartController extends AbstractController
     // }
 
 }
+

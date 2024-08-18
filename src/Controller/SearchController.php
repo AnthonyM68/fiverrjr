@@ -53,14 +53,7 @@ class SearchController extends AbstractController
     #[Route("/search", name: "search")]
     public function search(Request $request): Response
     {
-        // Comptage des enregistrements
-        // $themeCount = $this->entityManager->getRepository(Theme::class)->countAll();
-        // $categoryCount = $this->entityManager->getRepository(Category::class)->countAll();
-        // $courseCount = $this->entityManager->getRepository(Course::class)->countAll();
         $ServiceCount = $this->entityManager->getRepository(ServiceItem::class)->countAll();
-        // $serviceItems = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds('Développement');
-        // $results = $serviceItems->getQuery()->getResult();
-        // Rendu de la vue avec les données des formulaires et les comptes d'enregistrements
         return $this->render('search/index.html.twig', [
             'title_page' => 'Recherche de services avancées',
             'service_count' => $ServiceCount,
@@ -72,7 +65,6 @@ class SearchController extends AbstractController
     {
         // Vérifier le Content-Type de la requête
         $contentType = $request->headers->get('Content-Type');
-
         if (strpos($contentType, 'multipart/form-data') === false) {
             return new JsonResponse(['error' => 'Invalid Content-Type'], 415);
         }
@@ -80,10 +72,10 @@ class SearchController extends AbstractController
         $formData = $request->request->all();
         $this->logger->info('Received form data', ['formData' => $formData]);
 
+
+
         $searchForm = $formData['search_form'];
         $searchTerm = '';
-
-        $submittedToken = $searchForm['_token'] ?? $request->request->get('_token', '');
 
         if (isset($searchForm['search_term_mobile']) && !empty($searchForm['search_term_mobile'])) {
             $searchTerm = $searchForm['search_term_mobile'];
@@ -92,17 +84,17 @@ class SearchController extends AbstractController
             $searchTerm = $searchForm['search_term_desktop'];
             $tokenName = 'search_form';
         }
-        // } else {
-        //     $searchTerm = $request->request->get('search_term', '');
-        //     $tokenName = 'token_search_term';
-        // }
-        // // le nom du token créer par twig dans la vue
-        // $csrfToken = new CsrfToken($tokenName, $submittedToken);
+        $submittedToken = $searchForm['_token'] ?? $request->request->get('_token', '');
+        // le nom du token créer par twig dans la vue
+        $csrfToken = new CsrfToken($tokenName, $submittedToken);
 
-        // if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
-        //     $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
-        //     return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
-        // }
+        if (!$this->csrfTokenManager->isTokenValid($csrfToken)) {
+            $this->logger->info('error:', ['Invalid CSRF token' => $csrfToken]);
+            return new JsonResponse(['error' => 'Invalid CSRF token'], JsonResponse::HTTP_FORBIDDEN);
+        }
+
+
+
 
         // Vérification et traitement du terme rechercher
         if (!empty($searchTerm)) {
@@ -110,29 +102,33 @@ class SearchController extends AbstractController
             $searchTerm = trim($searchTerm);
 
             // Validation avec Symfony Validator
-            // $validator = Validation::createValidator();
-            // $violations = $validator->validate($searchTerm, [
-            //     new Assert\NotBlank(),
-            //     new Assert\Length(['min' => 3]),
-            // ]);
+            $validator = Validation::createValidator();
+            $violations = $validator->validate($searchTerm, [
+                new Assert\NotBlank(),
+                new Assert\Length(['min' => 3]),
+            ]);
 
-            // if (count($violations) > 0) {;
-            //     $this->logger->error('Validation errors:');
-            //     $errors = [];
-            //     foreach ($violations as $violation) {
-            //         $errors[] = $violation->getMessage();
-            //     }
-            //     $this->logger->error('Validation errors:', ['errors' => $errors]);
-            //     return new JsonResponse(['error' => $errors], JsonResponse::HTTP_BAD_REQUEST);
-            // }
-
+            if (count($violations) > 0) {;
+                $this->logger->error('Validation errors:');
+                $errors = [];
+                foreach ($violations as $violation) {
+                    $errors[] = $violation->getMessage();
+                }
+                $this->logger->error('Validation errors:', ['errors' => $errors]);
+                return new JsonResponse(['error' => $errors], JsonResponse::HTTP_BAD_REQUEST);
+            }
             $this->logger->info('Validation passed successfully.');
+            // on nettoye la saisie de l'utilisateur
             $searchTerm = htmlspecialchars($searchTerm, ENT_QUOTES, 'UTF-8');
         } else {
             return new JsonResponse(['error' => 'Search term is required'], JsonResponse::HTTP_BAD_REQUEST);
         }
         // Construction de la requête
         $themes = $themeRepository->searchByTermAllChilds($searchTerm);
+
+        // pour afficher l'image du service nous devons remonter 
+        // toute la hiérarchie pour setPicturelUrl
+        // mais offre des avantages pour augmenter les filtres de recherches
         $this->logger->info('Generated SQL Query:', ['sql' => $themes]);
         foreach ($themes as $theme) {
             $this->logger->info('Processing theme', ['theme' => $theme]);
@@ -162,7 +158,6 @@ class SearchController extends AbstractController
     {
         // Vérifier le Content-Type de la requête
         $contentType = $request->headers->get('Content-Type');
-
         if (strpos($contentType, 'multipart/form-data') === false) {
             return new JsonResponse(['error' => 'Invalid Content-Type'], 415);
         }
@@ -230,7 +225,7 @@ class SearchController extends AbstractController
         $this->logger->info('Received JSON data:', ['data' => $data]);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            return new JsonResponse(['error' => 'Invalid JSON data'], JsonResponse::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => 'Invalid JSON data'], 415);
         }
         // on recherche le token soumis dans le formulaire
         $submittedToken = $data['_token'];

@@ -46,14 +46,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     function handleSearch(event, element) {
         event.preventDefault();
         const form = element.closest('form');
-        // Récupérer les données du formulaire
+        // et on crée un nouveau formdata avec les données de la requête
         const formData = new FormData(form);
-
-        // Boucle sur le FormData pour vérifier son contenu
-        // for (let [key, value] of formData.entries()) {
-        //     console.log(`${key}: ${value}`);
-        // }
-
         const termDesktop = formData.get('search_form[search_term_desktop]');
         const termMobile = formData.get('search_form[search_term_mobile]');
         const term = termDesktop || termMobile;
@@ -62,7 +56,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             showAlert('warning', "Le champ de recherche ne peut pas être vide");
             return;
         }
-
         // Envoyer les données avec postData et gérer la réponse
         usePostData(form.action, formData, false, false).then(({ data, error }) => {
             if (error) {
