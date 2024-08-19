@@ -59,6 +59,7 @@ class HomeController extends AbstractController
         $lastService = $this->entityManager->getRepository(ServiceItem::class)->findby([], ['id' => 'DESC'], 10);
 
         $developer = $lastDeveloper->getQuery()->getSingleResult();
+        
         $this->imageService->setPictureUrl($developer);
         $lastDeveloperData = $serializer->serialize($developer, 'json', ['groups' => 'user']);
         $dataDeveloper = json_decode($lastDeveloperData, true);

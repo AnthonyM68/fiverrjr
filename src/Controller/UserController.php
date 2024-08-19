@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Order;
 use App\Form\UserType;
+use App\Service\UserAnonymizer;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use App\Form\ServiceItemType;
@@ -14,11 +15,13 @@ use App\Repository\UserRepository;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,7 +34,8 @@ class UserController extends AbstractController
     private $userRepository;
     private $urlGenerator;
     private $imageService;
-
+    private $security;
+    private $userAnonymizer;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -39,7 +43,9 @@ class UserController extends AbstractController
         OrderRepository $orderRepository,
         UserRepository $userRepository,
         UrlGeneratorInterface $urlGenerator,
-        ImageService $imageService
+        ImageService $imageService,
+        Security $security,
+        UserAnonymizer $userAnonymizer
     ) {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
@@ -47,6 +53,8 @@ class UserController extends AbstractController
         $this->userRepository = $userRepository;
         $this->urlGenerator = $urlGenerator;
         $this->imageService = $imageService;
+        $this->security = $security;
+        $this->userAnonymizer = $userAnonymizer;
     }
 
     #[Route('/user/list', name: 'list_users')]
@@ -96,7 +104,7 @@ class UserController extends AbstractController
 
         $limit = 3;
         $formHasErrors = false;
-        
+
         $page = $request->get('page');
 
         if (!$page) {
@@ -238,7 +246,7 @@ class UserController extends AbstractController
 
         $developer = $lastDeveloper->getQuery()->getSingleResult();
 
-        $this->imageService->setPictureUrl($developer, 'ROLE_DEVELOPER');
+        // $this->imageService->setPictureUrl($developer, 'ROLE_DEVELOPER');
 
         $lastDeveloperData = $serializer->serialize($developer, 'json', ['groups' => 'user']);
         $dataDeveloper = json_decode($lastDeveloperData, true);
@@ -274,27 +282,54 @@ class UserController extends AbstractController
             'title_page' => 'Profil',
             'formUser' => $formUser->createView(),
             'errorsFormUser' => $formUser->getErrors(true),
-
             'formAddService' => $formService->createView(),
-
-
             'serviceId' => $service->getId(),
-
             'errorsFormService' => $formService->getErrors(true),
-
             'orders_pending' =>  $paginationPending->getItems(),
             'pagination_pending' => $paginationPending,
             'orders_completed' => $paginationCompleted->getItems(),
             'pagination_completed' => $paginationCompleted,
-
             'lastDeveloper' => $dataDeveloper,
             'lastClient' => $dataClient,
-
             'formHasErrors' => $formHasErrors
-
         ]);
     }
 
+    // supprimer tous les services d'un utilisateur après avoir supprimer son propre compte
+    // #[Route('/user/delete/all-services/by-user', name: 'anonymize_user')]
+    // public function deleteAllServicesByUserCurrent(): RedirectResponse
+    // {
+    //     $user = $this->getUser();
+        
+    //     if (!$user) {
+    //         $this->addFlash('error', 'Utilisateur non trouvé');
+    //         return $this->redirectToRoute('home');
+    //     }
+    //     $services = $this->entityManager->getRepository(ServiceItem::class)->fundBy(['user_id' => $user->getId()]);
+
+    //     dd($services);
+
+    //     // $this->addFlash('success', 'User anonymized and deleted successfully.');
+    //     // return $this->redirectToRoute('home');
+    // }
+    #[Route('/user/delete/anonymize', name: 'anonymize_user')]
+    public function anonymizeAndDelete(): RedirectResponse
+    {
+        $user = $this->getUser();
+
+        $services = $this->entityManager->getRepository(ServiceItem::class)->fundBy(['user_id' => $user->getId()]);
+        dd($services);
+
+        if (!$user) {
+            $this->addFlash('error', 'Utilisateur non trouvé');
+            return $this->redirectToRoute('home');
+        }
+
+        $this->userAnonymizer->anonymizeAndDeleteUser($user);
+
+        $this->addFlash('success', 'Anonymisation données utilisateur');
+        return $this->redirectToRoute('home');
+    }
 
     /**
      * Affiche la liste des Développeurs ou des Client suivant le $role en argument

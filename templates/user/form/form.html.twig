@@ -53,6 +53,9 @@
             <button type="submit" class="ui-button ui-widget ui-corner-all">
                 <span class="ui-icon ui-icon-check"></span> Valider
             </button>
+            <a href="{{ path('anonymize_user') }}" class="ui-button ui-widget ui-corner-all">
+                <span class="ui-icon ui-icon-circle-close"></span> Supprimer
+            </a>
         </div>
     {{ form_end(formUser) }}
 {% endif %}

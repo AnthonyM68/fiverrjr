@@ -41,20 +41,22 @@
 //   border-radius: 10px;
 //   overflow: hidden;
 // }
+
+
 // // ItemUser.jsx
 // .image-container {
-//   width: 100%; // Assure que le conteneur prend toute la largeur de la carte
-//   height: 200px; //Hauteur fixe pour les images*/
+//   width: 100%; 
+//   height: 200px; 
 //   max-height:50%;
-//   overflow: hidden; // Cache toute partie de l'image qui dépasse
+//   overflow: hidden; 
 //   display: flex;
 //   align-items: center;
-//   justify-content: center;
+//   justify-content: left;
 // }
 // .profile-image {
-//   width: auto; // Ajuste la largeur
-//   height: 100%; // La hauteur de l'image est égale à la hauteur du conteneur
-//   object-fit: cover; // Assure que l'image couvre toute la surface du conteneur
+//   width: auto; 
+//   height: 100%; 
+//   object-fit: cover; 
 // }
 
 /* iPhone 5 (et appareils similaires) */

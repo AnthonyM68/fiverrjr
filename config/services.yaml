@@ -56,6 +56,8 @@ services:
   # Enregistrer le service CircularReferenceHandler
   App\Serializer\CircularReferenceHandler: ~
 
+  App\Service\UserAnonymizer: ~
+
  # Listener to intercept form submissions and set the registration date for new users (form RegistrationFormType)
   # Listener pour intercepter les soumissions de formulaire et définir la date d'inscription pour les nouveaux utilisateurs (formulaire RegistrationFormType)
   App\EventListener\UserRegistrationListener:
