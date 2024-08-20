@@ -88,7 +88,29 @@ CREATE TABLE IF NOT EXISTS `doctrine_migration_versions` (
 -- Listage des données de la table fiverrjr.doctrine_migration_versions : ~2 rows (environ)
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
 	('DoctrineMigrations\\Version20240715131353', '2024-07-15 13:15:02', 46),
-	('DoctrineMigrations\\Version20240715142815', '2024-07-15 14:28:29', 24);
+	('DoctrineMigrations\\Version20240715142815', '2024-07-15 14:28:29', 24),
+	('DoctrineMigrations\\Version20240820061815', '2024-08-20 06:19:14', 168),
+	('DoctrineMigrations\\Version20240820114626', '2024-08-20 11:46:44', 163),
+	('DoctrineMigrations\\Version20240820120457', '2024-08-20 12:05:10', 32),
+	('DoctrineMigrations\\Version20240820121916', '2024-08-20 12:19:35', 206);
+
+-- Listage de la structure de table fiverrjr. invoice
+CREATE TABLE IF NOT EXISTS `invoice` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `amount` decimal(10,2) NOT NULL,
+  `tva` decimal(5,2) NOT NULL,
+  `date_create` datetime NOT NULL,
+  `status` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `client_first_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `client_last_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `client_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `client_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `order_traceability` json DEFAULT NULL,
+  `invoice_traceability` json DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table fiverrjr.invoice : ~0 rows (environ)
 
 -- Listage de la structure de table fiverrjr. messenger_messages
 CREATE TABLE IF NOT EXISTS `messenger_messages` (
@@ -146,6 +168,25 @@ INSERT INTO `order` (`id`, `user_id`, `service_id`, `date_order`, `status`, `dat
 	(21, 2, 209, '2024-07-09 18:00:00', '{"status": "pending"}', '2024-07-13 18:00:00', 'Order 9'),
 	(22, 2, 210, '2024-07-10 19:00:00', '{"status": "completed"}', '2024-07-14 19:00:00', 'Order 10');
 
+-- Listage de la structure de table fiverrjr. payment
+CREATE TABLE IF NOT EXISTS `payment` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `order_entity_id` int DEFAULT NULL,
+  `invoice_id` int DEFAULT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `date_payment` datetime NOT NULL,
+  `payment_method` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `transaction_id` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_6D28840D2989F1FD` (`invoice_id`),
+  KEY `IDX_6D28840D3DA206A5` (`order_entity_id`),
+  CONSTRAINT `FK_6D28840D2989F1FD` FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`),
+  CONSTRAINT `FK_6D28840D3DA206A5` FOREIGN KEY (`order_entity_id`) REFERENCES `order` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table fiverrjr.payment : ~0 rows (environ)
+
 -- Listage de la structure de table fiverrjr. reset_password_request
 CREATE TABLE IF NOT EXISTS `reset_password_request` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -160,6 +201,29 @@ CREATE TABLE IF NOT EXISTS `reset_password_request` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table fiverrjr.reset_password_request : ~0 rows (environ)
+
+-- Listage de la structure de table fiverrjr. service
+CREATE TABLE IF NOT EXISTS `service` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `course_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `order_id` int DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` double NOT NULL,
+  `duration` int NOT NULL,
+  `create_date` datetime NOT NULL,
+  `picture` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_E19D9AD2591CC992` (`course_id`),
+  KEY `IDX_E19D9AD2A76ED395` (`user_id`),
+  KEY `IDX_E19D9AD28D9F6D38` (`order_id`),
+  CONSTRAINT `FK_E19D9AD2591CC992` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
+  CONSTRAINT `FK_E19D9AD28D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
+  CONSTRAINT `FK_E19D9AD2A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table fiverrjr.service : ~0 rows (environ)
 
 -- Listage de la structure de table fiverrjr. service_item
 CREATE TABLE IF NOT EXISTS `service_item` (
@@ -190,17 +254,17 @@ INSERT INTO `service_item` (`id`, `course_id`, `user_id`, `order_id`, `title`, `
 	(4, 4, 2, NULL, 'Boutique en ligne avec Shopify', 'Nous développons des boutiques en ligne performantes et sécurisées avec Shopify.', 4500, 40, '2024-07-10 19:54:03', 'group.webp'),
 	(5, 5, 2, NULL, 'Développement de boutiques WooCommerce', 'Nous développons des boutiques en ligne performantes avec WooCommerce, adaptées à vos besoins.', 2000, 35, '2024-07-10 20:00:05', 'group.webp'),
 	(6, 6, 2, NULL, 'Intégration de systèmes de paiement', 'Nous intégrons des systèmes de paiement sécurisés comme Stripe, PayPal, etc., pour votre site web.', 500, 10, '2024-07-10 20:00:05', 'group.webp'),
-	(7, 7, 2, NULL, 'Développement HTML/CSS/JavaScript', 'Nous offrons des services de développement front-end en HTML, CSS et JavaScript pour des sites web interactifs.', 1000, 20, '2024-07-10 20:00:05', 'group.webp'),
+	(7, 7, 4, NULL, 'Développement HTML/CSS/JavaScript', 'Nous offrons des services de développement front-end en HTML, CSS et JavaScript pour des sites web interactifs.', 1000, 20, '2024-07-10 20:00:05', 'group.webp'),
 	(8, 8, 2, NULL, 'Utilisation de frameworks front-end', 'Nous utilisons des frameworks front-end comme React, Angular et Vue.js pour créer des applications web modernes.', 1500, 25, '2024-07-10 20:00:05', 'group.webp'),
 	(9, 9, 1, NULL, 'Optimisation des performances front-end', 'Nous optimisons les performances front-end de votre site pour garantir une expérience utilisateur fluide et rapide.', 800, 15, '2024-07-10 20:00:05', 'group.webp'),
-	(10, 10, 1, NULL, 'Développement avec Node.js', 'Nous développons des applications back-end robustes et évolutives avec Node.js.', 1800, 30, '2024-07-10 20:00:05', 'group.webp'),
+	(10, 10, 4, NULL, 'Développement avec Node.js', 'Nous développons des applications back-end robustes et évolutives avec Node.js.', 1800, 30, '2024-07-10 20:00:05', 'group.webp'),
 	(11, 11, 1, NULL, 'Développement avec Python/Django', 'Nous offrons des services de développement avec Python et Django pour des applications web performantes.', 2000, 35, '2024-07-10 20:00:05', 'group.webp'),
 	(12, 12, 1, NULL, 'Utilisation de PHP et frameworks', 'Nous utilisons PHP et des frameworks comme Laravel et Symfony pour créer des applications web puissantes.', 1700, 30, '2024-07-10 20:00:05', 'group.webp'),
-	(13, 13, 1, NULL, 'Projets MERN', 'Nous réalisons des projets MERN (MongoDB, Express, React, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'group.webp'),
+	(13, 13, 4, NULL, 'Projets MERN', 'Nous réalisons des projets MERN (MongoDB, Express, React, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'group.webp'),
 	(14, 14, 1, NULL, 'Projets MEAN', 'Nous développons des projets MEAN (MongoDB, Express, Angular, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'group.webp'),
-	(15, 15, 1, NULL, 'Projets LAMP', 'Nous proposons des services de développement LAMP (Linux, Apache, MySQL, PHP) pour des solutions web robustes.', 1800, 30, '2024-07-10 20:00:05', 'group.webp'),
+	(15, 15, 4, NULL, 'Projets LAMP', 'Nous proposons des services de développement LAMP (Linux, Apache, MySQL, PHP) pour des solutions web robustes.', 1800, 30, '2024-07-10 20:00:05', 'group.webp'),
 	(16, 16, 1, NULL, 'Développement de thèmes et plugins WordPress', 'Nous développons des thèmes et plugins WordPress personnalisés pour répondre à vos besoins spécifiques.', 1200, 25, '2024-07-10 20:00:05', 'group.webp'),
-	(17, 17, 1, NULL, 'Développement avec Joomla et Drupal', 'Nous offrons des services de développement avec Joomla et Drupal pour des sites web performants et sécurisés.', 1500, 30, '2024-07-10 20:00:05', 'group.webp'),
+	(17, 17, 4, NULL, 'Développement avec Joomla et Drupal', 'Nous offrons des services de développement avec Joomla et Drupal pour des sites web performants et sécurisés.', 1500, 30, '2024-07-10 20:00:05', 'group.webp'),
 	(18, 18, 1, NULL, 'Développement d\'API RESTful', 'Nous développons des API RESTful pour faciliter la communication entre vos différentes applications.', 1000, 20, '2024-07-10 20:00:05', 'group.webp'),
 	(19, 19, 1, NULL, 'Intégration de services tiers', 'Nous intégrons des services tiers comme Stripe, PayPal, etc., pour enrichir les fonctionnalités de votre site web.', 700, 15, '2024-07-10 20:00:05', 'group.webp');
 
@@ -211,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `theme` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.theme : ~10 rows (environ)
+-- Listage des données de la table fiverrjr.theme : ~9 rows (environ)
 INSERT INTO `theme` (`id`, `name_theme`) VALUES
 	(1, 'Développement Web'),
 	(2, 'Développement Mobile'),
@@ -246,28 +310,28 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- Listage des données de la table fiverrjr.user : ~22 rows (environ)
 INSERT INTO `user` (`id`, `email`, `roles`, `password`, `first_name`, `last_name`, `phone_number`, `date_register`, `picture`, `city`, `portfolio`, `bio`, `is_verified`, `username`) VALUES
-	(1, 'client@gmail.com', '["ROLE_CLIENT", "ROLE_ADMIN"]', '$2y$13$030uvowwY4st0yG1THvBuuC5vjemI9k4kUMluwi.IBH32YCV.uVl2', 'Anthony', 'Formation', '330760000000', '2024-06-20 00:00:00', 'client.webp', 'Thann', 'http://portfolio11.example.com', 'En tant qu\'entreprise innovante et en pleine croissance, nous sommes constamment à la recherche de jeunes développeurs talentueux pour rejoindre notre équipe dynamique. Nous offrons des opportunités passionnantes dans le développement web et mobile, et nous cherchons des professionnels créatifs et motivés maîtrisant des technologies telles que HTML, CSS, JavaScript, React et Node.js. Si vous êtes prêt à relever des défis stimulants et à contribuer à des projets captivants, explorez notre profil et découvrez comment vous pouvez collaborer avec nous. Nous avons hâte de découvrir vos talents et de travailler ensemble pour réaliser des projets ambitieux !', 0, 'Elan-formation'),
-	(2, 'developer@gmail.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Anthony', 'Montmirail', '330760000000', '2024-06-27 00:00:00', '/uploads/admins/admin.webp', 'Thann', 'http://portfolio.example.com', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim omnis doloribus quo deserunt optio! Tempora fugiat, harum ipsa alias magnam neque! Maiores dolores molestias magnam ipsum at accusantium, commodi a.', 0, 'Anthony'),
-	(3, 'enterprise1@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Un', '1234567890', '2024-07-29 17:11:34', 'client.webp', 'Paris', 'http://portfolio1.example.com', 'Nous sommes une grande entreprise.', 1, 'Anthony'),
-	(4, 'enterprise2@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Anthony', 'Deux', '1234567891', '2024-07-29 17:11:34', 'client.webp', 'Lyon', 'http://portfolio2.example.com', 'Nous sommes une entreprise innovante.', 1, 'Anthony'),
-	(5, 'enterprise3@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Anthony', 'Trois', '1234567892', '2024-07-29 17:11:34', 'client.webp', 'Marseille', 'http://portfolio3.example.com', 'Nous offrons des services divers.', 1, 'enterprise3'),
-	(6, 'enterprise4@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Quatre', '1234567893', '2024-07-29 17:11:34', 'client.webp', 'Toulouse', 'http://portfolio4.example.com', 'Spécialistes en technologie.', 1, 'enterprise4'),
-	(7, 'enterprise5@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Cinq', '1234567894', '2024-07-29 17:11:34', 'client.webp', 'Nice', 'http://portfolio5.example.com', 'Expertise en développement.', 1, 'enterprise5'),
-	(8, 'enterprise6@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Six', '1234567895', '2024-07-29 17:11:34', 'client.webp', 'Nantes', 'http://portfolio6.example.com', 'Nous faisons la différence.', 1, 'enterprise6'),
-	(9, 'enterprise7@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Sept', '1234567896', '2024-07-29 17:11:34', 'client.webp', 'Strasbourg', 'http://portfolio7.example.com', 'Entreprise de premier plan.', 1, 'enterprise7'),
-	(10, 'enterprise8@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Huit', '1234567897', '2024-07-29 17:11:34', 'client.webp', 'Montpellier', 'http://portfolio8.example.com', 'Solutions adaptées.', 1, 'enterprise8'),
-	(11, 'enterprise9@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Neuf', '1234567898', '2024-07-29 17:11:34', 'client.webp', 'Bordeaux', 'http://portfolio9.example.com', 'Innovation continue.', 1, 'enterprise9'),
-	(12, 'enterprise10@example.com', '["ROLE_CLIENT"]', 'password_hash', 'Entreprise', 'Dix', '1234567899', '2024-07-29 17:11:34', 'client.webp', 'Rennes', 'http://portfolio10.example.com', 'Leaders en qualité.', 1, 'enterprise10'),
-	(13, 'developer1@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Un', '0987654321', '2024-07-29 17:11:34', 'developer.webp', 'Paris', 'http://portfolio1.example.com', 'Développeur web avec 5 ans d\'expérience.', 1, 'developer1'),
-	(14, 'developer2@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Deux', '0987654322', '2024-07-29 17:11:34', 'developer.webp', 'Lyon', 'http://portfolio2.example.com', 'Spécialiste en JavaScript et React.', 1, 'developer2'),
-	(15, 'developer3@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Trois', '0987654323', '2024-07-29 17:11:34', 'developer.webp', 'Marseille', 'http://portfolio3.example.com', 'Expert en Node.js et MongoDB.', 1, 'developer3'),
-	(16, 'developer4@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Quatre', '0987654324', '2024-07-29 17:11:34', 'developer.webp', 'Toulouse', 'http://portfolio4.example.com', 'Développeur front-end avec une passion pour le design.', 1, 'developer4'),
-	(17, 'developer5@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Cinq', '0987654325', '2024-07-29 17:11:34', 'developer.webp', 'Nice', 'http://portfolio5.example.com', 'Développeur full-stack avec expertise en Python.', 1, 'developer5'),
-	(18, 'developer6@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Six', '0987654326', '2024-07-29 17:11:34', 'developer.webp', 'Nantes', 'http://portfolio6.example.com', 'Développeur web avec une expérience en Vue.js.', 1, 'developer6'),
-	(19, 'developer7@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Sept', '0987654327', '2024-07-29 17:11:34', 'developer.webp', 'Strasbourg', 'http://portfolio7.example.com', 'Développeur mobile avec expérience en Flutter.', 1, 'developer7'),
-	(20, 'developer8@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Huit', '0987654328', '2024-07-29 17:11:34', 'developer.webp', 'Montpellier', 'http://portfolio8.example.com', 'Développeur backend avec compétences en Ruby on Rails.', 1, 'developer8'),
-	(21, 'developer9@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Neuf', '0987654329', '2024-07-29 17:11:34', 'developer.webp', 'Bordeaux', 'http://portfolio9.example.com', 'Développeur avec une forte expérience en PHP.', 1, 'developer9'),
-	(22, 'developer10@example.com', '["ROLE_DEVELOPER"]', 'password_hash', 'Développeur', 'Dix', '0987654330', '2024-07-29 17:11:34', 'developer.webp', 'Rennes', 'http://portfolio10.example.com', 'Développeur freelance avec expertise en CMS.', 1, 'developer10');
+	(1, 'client@gmail.com', '["ROLE_CLIENT"]', '$2y$13$030uvowwY4st0yG1THvBuuC5vjemI9k4kUMluwi.IBH32YCV.uVl2', 'Anthony', 'Formation', '330760000000', '2024-06-20 00:00:00', 'client.webp', 'Thann', 'http://portfolio11.example.com', 'En tant qu\'entreprise innovante et en pleine croissance, nous sommes constamment à la recherche de jeunes développeurs talentueux pour rejoindre notre équipe dynamique. Nous offrons des opportunités passionnantes dans le développement web et mobile, et nous cherchons des professionnels créatifs et motivés maîtrisant des technologies telles que HTML, CSS, JavaScript, React et Node.js. Si vous êtes prêt à relever des défis stimulants et à contribuer à des projets captivants, explorez notre profil et découvrez comment vous pouvez collaborer avec nous. Nous avons hâte de découvrir vos talents et de travailler ensemble pour réaliser des projets ambitieux !', 0, 'Elan-formation'),
+	(2, 'developer@gmail.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Anthony', 'Montmirail', '330760000000', '2024-06-27 00:00:00', 'client.webp', 'Thann', 'http://portfolio.example.com', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim omnis doloribus quo deserunt optio! Tempora fugiat, harum ipsa alias magnam neque! Maiores dolores molestias magnam ipsum at accusantium, commodi a.', 0, 'Anthony'),
+	(3, 'anonymized_66c4568a888c44.78065489@anonymized.com', '["ROLE_ANONYMOUS"]', '$2y$13$Oy71qR07ChY.FIoev3CYL.XesCsgUkx7s9ia74sp5hmS6PxR6CkKy', 'anonymized_66c4568a888c44.78065489', 'anonymized_66c4568a888c44.78065489', 'anonymized_66c4568a888c44.78065489', '1970-01-01 00:00:00', NULL, 'anonymized_66c4568a888c44.78065489', 'anonymized_66c4568a888c44.78065489', 'anonymized_66c4568a888c44.78065489', 0, 'anonymized_66c4568a888c44.78065489'),
+	(4, 'enterprise2@example.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Anthony', 'Deux', '1234567891', '2024-07-29 17:11:34', 'client.webp', 'Lyon', 'http://portfolio2.example.com', 'Nous sommes une entreprise innovante.', 1, 'Anthony'),
+	(5, 'enterprise3@example.com', '["ROLE_CLIENT"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Anthony', 'Trois', '1234567892', '2024-07-29 17:11:34', 'client.webp', 'Marseille', 'http://portfolio3.example.com', 'Nous offrons des services divers.', 1, 'enterprise3'),
+	(6, 'enterprise4@example.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Entreprise', 'Quatre', '1234567893', '2024-07-29 17:11:34', 'client.webp', 'Toulouse', 'http://portfolio4.example.com', 'Spécialistes en technologie.', 1, 'enterprise4'),
+	(7, 'enterprise5@example.com', '["ROLE_CLIENT"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Entreprise', 'Cinq', '1234567894', '2024-07-29 17:11:34', 'client.webp', 'Nice', 'http://portfolio5.example.com', 'Expertise en développement.', 1, 'enterprise5'),
+	(8, 'enterprise6@example.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Entreprise', 'Six', '1234567895', '2024-07-29 17:11:34', 'client.webp', 'Nantes', 'http://portfolio6.example.com', 'Nous faisons la différence.', 1, 'enterprise6'),
+	(9, 'enterprise7@example.com', '["ROLE_CLIENT"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Entreprise', 'Sept', '1234567896', '2024-07-29 17:11:34', 'client.webp', 'Strasbourg', 'http://portfolio7.example.com', 'Entreprise de premier plan.', 1, 'enterprise7'),
+	(10, 'enterprise8@example.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Entreprise', 'Huit', '1234567897', '2024-07-29 17:11:34', 'client.webp', 'Montpellier', 'http://portfolio8.example.com', 'Solutions adaptées.', 1, 'enterprise8'),
+	(11, 'enterprise9@example.com', '["ROLE_CLIENT"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Entreprise', 'Neuf', '1234567898', '2024-07-29 17:11:34', 'client.webp', 'Bordeaux', 'http://portfolio9.example.com', 'Innovation continue.', 1, 'enterprise9'),
+	(12, 'enterprise10@example.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Entreprise', 'Dix', '1234567899', '2024-07-29 17:11:34', 'client.webp', 'Rennes', 'http://portfolio10.example.com', 'Leaders en qualité.', 1, 'enterprise10'),
+	(13, 'developer1@example.com', '["ROLE_CLIENT"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Développeur', 'Un', '0987654321', '2024-07-29 17:11:34', 'developer.webp', 'Paris', 'http://portfolio1.example.com', 'Développeur web avec 5 ans d\'expérience.', 1, 'developer1'),
+	(14, 'developer2@example.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Développeur', 'Deux', '0987654322', '2024-07-29 17:11:34', 'developer.webp', 'Lyon', 'http://portfolio2.example.com', 'Spécialiste en JavaScript et React.', 1, 'developer2'),
+	(15, 'developer3@example.com', '["ROLE_CLIENT"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Développeur', 'Trois', '0987654323', '2024-07-29 17:11:34', 'developer.webp', 'Marseille', 'http://portfolio3.example.com', 'Expert en Node.js et MongoDB.', 1, 'developer3'),
+	(16, 'developer4@example.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Développeur', 'Quatre', '0987654324', '2024-07-29 17:11:34', 'developer.webp', 'Toulouse', 'http://portfolio4.example.com', 'Développeur front-end avec une passion pour le design.', 1, 'developer4'),
+	(17, 'developer5@example.com', '["ROLE_CLIENT"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Développeur', 'Cinq', '0987654325', '2024-07-29 17:11:34', 'developer.webp', 'Nice', 'http://portfolio5.example.com', 'Développeur full-stack avec expertise en Python.', 1, 'developer5'),
+	(18, 'developer6@example.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Développeur', 'Six', '0987654326', '2024-07-29 17:11:34', 'developer.webp', 'Nantes', 'http://portfolio6.example.com', 'Développeur web avec une expérience en Vue.js.', 1, 'developer6'),
+	(19, 'developer7@example.com', '["ROLE_CLIENT"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Développeur', 'Sept', '0987654327', '2024-07-29 17:11:34', 'developer.webp', 'Strasbourg', 'http://portfolio7.example.com', 'Développeur mobile avec expérience en Flutter.', 1, 'developer7'),
+	(20, 'developer8@example.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Développeur', 'Huit', '0987654328', '2024-07-29 17:11:34', 'developer.webp', 'Montpellier', 'http://portfolio8.example.com', 'Développeur backend avec compétences en Ruby on Rails.', 1, 'developer8'),
+	(21, 'developer9@example.com', '["ROLE_CLIENT"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Développeur', 'Neuf', '0987654329', '2024-07-29 17:11:34', 'developer.webp', 'Bordeaux', 'http://portfolio9.example.com', 'Développeur avec une forte expérience en PHP.', 1, 'developer9'),
+	(22, 'developer10@example.com', '["ROLE_DEVELOPER", "ROLE_ADMIN"]', '$2y$13$O/tVrl4JcD3CY3pmNdhXieKSQA6Uv6suzc2N.6FXSyOVfNrxAPYrq', 'Développeur', 'Dix', '0987654330', '2024-07-29 17:11:34', 'developer.webp', 'Rennes', 'http://portfolio10.example.com', 'Développeur freelance avec expertise en CMS.', 1, 'developer10');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
