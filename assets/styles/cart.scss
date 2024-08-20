@@ -1,25 +1,128 @@
 @import "variables";
-/* iPhone 5 (et appareils similaires) */
-@media (max-width: 320px) {
-
+.ui.container.cart {
+    padding-top: 10vh;
+    max-width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
-/* Mobile général (jusqu'à 480px) */
+.ui.items.cart {
+    padding-top: 10vh;
+}
+
+.ui.items.cart {
+    width: 80%;
+}
+
+.ui.items .item {
+    flex: 1 1 calc(50% - 20px);
+    margin-bottom: 20px;
+}
+
+/* Styles pour le conteneur de paiement */
+.payment-section {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    max-width: 800px; /* Largeur maximale pour les grands écrans */
+    width: 100%; /* La section prend toute la largeur de son conteneur parent */
+    box-sizing: border-box; /* Inclut padding et bordure dans la largeur totale */
+    margin-left: auto; /* Centre horizontalement */
+    margin-right: auto; /* Centre horizontalement */
+}
+
+/* Styles pour le champ de carte Stripe */
+#card-element {
+    width: 100%; /* Prend toute la largeur disponible du conteneur parent */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px; /* Ajoute du padding pour un meilleur espace intérieur */
+    box-sizing: border-box; /* Inclut padding et bordure dans la largeur totale */
+    margin-bottom: 10px; /* Espace sous le champ de carte */
+}
+
+/* Styles pour le bouton de paiement */
+.ui.button.green {
+    width: 100%; /* Assure que le bouton prend toute la largeur de son conteneur */
+}
+
+/* Styles de récapitulatif du panier */
+.cart-total {
+    align-self: flex-end;
+    text-align: right;
+    margin-top: 20px;
+    width: 100%; /* Prend toute la largeur disponible */
+}
+
+.cart-total h3 {
+    font-size: 24px; 
+}
+
+/* Ajustements pour les écrans de moins de 768px */
+@media (max-width: 768px) {
+    .ui.items .item {
+        flex-direction: column;
+        text-align: center;
+        width: 100%;
+    }
+
+    .ui.small.image {
+        margin-bottom: 10px;
+    }
+
+    .ui.container.cart {
+        padding-top: 5vh;
+    }
+
+    .cart-total {
+        width: 100%;
+        text-align: center;
+        align-self: center;
+    }
+
+    .ui.labeled.input {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .ui.primary.button {
+        margin-top: 10px;
+        width: 100%;
+    }
+}
+
+/* Ajustements pour les écrans de moins de 480px */
 @media (max-width: 480px) {
+    .ui.items .item {
+        font-size: 14px;
+    }
 
-}
+    .cart-total h3 {
+        font-size: 18px;
+    }
 
-/* Téléphones moyens/grands (481px à 767px) */
-@media (min-width: 481px) and (max-width: 768px) {
+    .ui.small.image {
+        width: 100%;
+        height: auto;
+    }
 
-}
+    /* Réduction du padding pour les petits écrans */
+    .payment-section {
+        padding: 15px;
+    }
 
-/* Tablettes (769px à 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
-
-}
-
-/* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
-@media (min-width: 1025px) {
-
+    #card-element {
+        padding: 8px; /* Réduit le padding pour les petits écrans */
+    }
 }

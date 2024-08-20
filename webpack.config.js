@@ -110,7 +110,7 @@ Encore
     // User edit
     .addEntry('User', './assets/js/profile/User.js')
     // Cart
-    .addEntry('cart', './assets/js/cart/cart.js')
+    // .addEntry('cart', './assets/js/cart/cart.js')
 
     .addEntry('home', './assets/js/home/home.js')
 

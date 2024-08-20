@@ -56,6 +56,10 @@ class Order
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+
+
+
+    
     /**
      * @var Collection<int, Payment>
      */
@@ -63,10 +67,30 @@ class Order
     private Collection $payments;
 
 
+
+
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $invoiceNumber = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $invoicePdfPath = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $invoiceGeneratedAt = null;
+
+    /**
+     * @var Collection<int, Invoice>
+     */
+    #[ORM\OneToMany(targetEntity: Invoice::class, mappedBy: 'orderRelation')]
+    private Collection $invoices;
+
+
     public function __construct()
     {
         $this->servicesItems = new ArrayCollection();
         $this->payments = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -212,6 +236,72 @@ class Order
             // set the owning side to null (unless already changed)
             if ($payment->getOrderEntity() === $this) {
                 $payment->setOrderEntity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInvoiceNumber(): ?string
+    {
+        return $this->invoiceNumber;
+    }
+
+    public function setInvoiceNumber(?string $invoiceNumber): static
+    {
+        $this->invoiceNumber = $invoiceNumber;
+
+        return $this;
+    }
+
+    public function getInvoicePdfPath(): ?string
+    {
+        return $this->invoicePdfPath;
+    }
+
+    public function setInvoicePdfPath(?string $invoicePdfPath): static
+    {
+        $this->invoicePdfPath = $invoicePdfPath;
+
+        return $this;
+    }
+
+    public function getInvoiceGeneratedAt(): ?\DateTimeInterface
+    {
+        return $this->invoiceGeneratedAt;
+    }
+
+    public function setInvoiceGeneratedAt(?\DateTimeInterface $invoiceGeneratedAt): static
+    {
+        $this->invoiceGeneratedAt = $invoiceGeneratedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invoice>
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices;
+    }
+
+    public function addInvoice(Invoice $invoice): static
+    {
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices->add($invoice);
+            $invoice->setOrderRelation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoice(Invoice $invoice): static
+    {
+        if ($this->invoices->removeElement($invoice)) {
+            // set the owning side to null (unless already changed)
+            if ($invoice->getOrderRelation() === $this) {
+                $invoice->setOrderRelation(null);
             }
         }
 

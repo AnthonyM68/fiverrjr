@@ -118,10 +118,11 @@ class CartController extends AbstractController
         $fullCart = $cart->getCart($request);
 
         return $this->render('cart/index.html.twig', [
-            'title_page' => 'panier',
+            'title_page' => 'Panier en cours',
             'data' => $fullCart['data'],
             'total' => $fullCart['total'],
-            'service_pictures_directory' => $this->getParameter('service_pictures_directory')
+            // 'service_pictures_directory' => $this->getParameter('service_pictures_directory'),
+            'stripe_public_key' => $this->getParameter('stripe_public_key'),
         ]);
     }
 

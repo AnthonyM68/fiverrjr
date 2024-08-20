@@ -1,143 +1,116 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<style>
-    .ui.container.cart {
-        padding-top: 10vh;
-        max-width: 100%;
-        min-height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0 auto;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-    }
-    .ui.items.cart {
-        padding-top:10vh;
-    }
-    .ui.items.cart {
-        width: 80%; 
-    }
 
-    .ui.items .item {
-        flex: 1 1 calc(50% - 20px); 
-        margin-bottom: 20px; 
-    }
-
-    .cart-total {
-        align-self: flex-end; 
-        text-align: right;
-        margin-top: 20px;
-    }
-
-    .cart-total h3 {
-        font-size: 24px;
-    }
-
-    .ui.primary.button {
-        margin-top: 10px;
-        width: auto;
-    }
-
-    .empty-cart-message {
-        text-align: center;
-        font-size: 18px;
-        color: #666;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .ui.items .item {
-            flex-direction: column;
-            text-align: center;
-            width: 100%;
-        }
-
-        .ui.small.image {
-            margin-bottom: 10px;
-        }
-
-        .ui.container.cart {
-            padding-top: 5vh;
-        }
-
-        .cart-total {
-            width: 100%;
-            text-align: center;
-            align-self: center;
-        }
-
-        .ui.labeled.input {
-            width: 100%;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .ui.primary.button {
-            margin-top: 10px;
-            width: 100%;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .ui.items .item {
-            font-size: 14px;
-        }
-
-        .cart-total h3 {
-            font-size: 18px;
-        }
-
-        .ui.small.image {
-            width: 100%;
-            height: auto;
-        }
-    }
-</style>
-
+{% if data|length > 0 %}
 <div class="ui container cart">
-    {% if data|length > 0 %}
-        <div class="ui items cart">
-            <h1 class="padding-bottom-extra-large">Récapitulatif de votre panier</h1>
-            {% for product in data %}
-            <div class="item">
-                <div class="ui small image">
-                    <img src="{{ product.serviceItem.picture }}" alt="Image produit {{ product.serviceItem.title }}">
+    <div class="ui items cart-items">
+        <h1 class="padding-bottom-extra-large">Récapitulatif de votre panier</h1>
+        {% for product in data %}
+        <div class="item">
+            <div class="ui small image">
+                <img src="{{ product.serviceItem.picture }}" alt="Image produit {{ product.serviceItem.title }}">
+            </div>
+            <div class="content">
+                <a class="header">{{ product.serviceItem.title }}</a>
+                <div class="meta">
+                    <span class="price">{{ product.serviceItem.price }}€</span>
                 </div>
-                <div class="content">
-                    <a class="header">{{ product.serviceItem.title }}</a>
-                    <div class="meta">
-                        <span class="price">{{ product.serviceItem.price }}€</span>
-                    </div>
-
-                    <div class="extra">
-                        <div class="ui right floated">
-                            <a href="{{ path('delete_service_cart', {id: product.serviceItem.id}) }}"
-                                class="ui primary button">Supprimer</a>
-                        </div>
+                <div class="extra">
+                    <div class="ui right floated">
+                        <a href="{{ path('delete_service_cart', {id: product.serviceItem.id}) }}"
+                            class="ui primary button">Supprimer</a>
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
-        <div class="cart-total">
-            <h3>Total: {{ total }}€</h3>
-            {% if stripe_public_key|default %}
-            <button class="ui button green" id="checkout-button" data-public-key="{{ stripe_public_key }}"
-                data-create-checkout="{{ path('app_stripe_charge') }}">Payer</button>
-            {% endif %}
-        </div>
-    {% else %}
-        <div class="empty-cart-message">
-            <p>Votre panier est vide.</p>
-        </div>
-    {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Conteneur pour le paiement -->
+    <section class="payment-section">
+        <h2>Informations de paiement</h2>
+        <form id="checkout-form" action="{{ path('app_stripe_charge') }}" method="POST">
+            <div id="card-element" class="card-element"></div>
+            <input type="hidden" name="amount" value="{{ total * 100 }}"> <!-- Le montant en cents -->
+            <button class="ui button green" id="checkout-button" data-public-key="{{ stripe_public_key }}">Payer</button>
+        </form>
+    </section>
+
+    <div class="cart-total">
+        <h3>Total: {{ total }}€</h3>
+    </div>
 </div>
+{% else %}
+<div class="ui warning message empty-cart-message">
+    <div class="header">Panier vide</div>
+    <p>Votre panier est vide.</p>
+</div>
+{% endif %}
+
 
 {% block javascripts %}
 {{ parent() }}
-{# {{ encore_entry_script_tags('cart') }} #}
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // je défini ici une variable selon le rendu d'affichage de twig
+        // s'il y'a des résultat javascript cherchera le moyen de paiement
+        // évitant les recherche d'Id null
+        let hasData = {{ data| length > 0 ? 'true' : 'false' }};
+        if (hasData) {
+            let stripe = Stripe("{{ stripe_public_key }}");
+            let elements = stripe.elements();
+
+            let style = {
+                base: {
+                    color: '#3498db',
+                    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                    fontSmoothing: 'antialiased',
+                    fontSize: '16px',
+                    '::placeholder': {
+                        color: '#aab7c4'
+                    }
+                },
+                invalid: {
+                    color: '#fa755a',
+                    iconColor: '#fa755a'
+                }
+            };
+
+            let cardElementContainer = document.getElementById('card-element');
+            let button = document.getElementById('checkout-button');
+
+            if (cardElementContainer) {
+                var cardElement = elements.create('card', { style: style });
+                cardElement.mount('#card-element');
+                if (button) {
+                    button.addEventListener('click', function () {
+                        stripe.createToken(cardElement).then(function (result) {
+                            if (result.error) {
+                                alert(result.error.message);
+                            } else {
+                                let tokenInput = document.createElement('input');
+                                tokenInput.setAttribute('type', 'hidden');
+                                tokenInput.setAttribute('name', 'stripeToken');
+                                tokenInput.setAttribute('value', result.token.id);
+                                document.getElementById('checkout-form').appendChild(tokenInput);
+                                document.getElementById('checkout-form').submit();
+                            }
+                        });
+                    });
+                } else {
+                    console.error('Le bouton #checkout-button n\'existe pas.');
+                }
+            } else {
+                console.error('Le conteneur #card-element n\'existe pas.');
+            }
+        } else {
+            console.log('Aucune donnée à traiter.');
+        }
+    });
+</script>
 {% endblock %}
 {% endblock %}

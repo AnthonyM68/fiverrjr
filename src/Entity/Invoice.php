@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InvoiceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -43,6 +45,20 @@ class Invoice
 
     #[ORM\Column(nullable: true)]
     private ?array $invoiceTraceability = null;
+
+    #[ORM\ManyToOne(inversedBy: 'invoices')]
+    private ?Order $orderRelation = null;
+
+    /**
+     * @var Collection<int, Payment>
+     */
+    #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'invoice_relation')]
+    private Collection $payments;
+
+    public function __construct()
+    {
+        $this->payments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -165,6 +181,48 @@ class Invoice
     public function setInvoiceTraceability(?array $invoiceTraceability): static
     {
         $this->invoiceTraceability = $invoiceTraceability;
+
+        return $this;
+    }
+
+    public function getOrderRelation(): ?Order
+    {
+        return $this->orderRelation;
+    }
+
+    public function setOrderRelation(?Order $orderRelation): static
+    {
+        $this->orderRelation = $orderRelation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setInvoiceRelation($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getInvoiceRelation() === $this) {
+                $payment->setInvoiceRelation(null);
+            }
+        }
 
         return $this;
     }

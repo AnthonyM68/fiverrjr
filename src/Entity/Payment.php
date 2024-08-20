@@ -35,6 +35,9 @@ class Payment
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Invoice $invoice = null;
 
+    #[ORM\ManyToOne(inversedBy: 'payments')]
+    private ?Invoice $invoice_relation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +123,18 @@ class Payment
     public function setInvoice(?Invoice $invoice): static
     {
         $this->invoice = $invoice;
+
+        return $this;
+    }
+
+    public function getInvoiceRelation(): ?Invoice
+    {
+        return $this->invoice_relation;
+    }
+
+    public function setInvoiceRelation(?Invoice $invoice_relation): static
+    {
+        $this->invoice_relation = $invoice_relation;
 
         return $this;
     }
