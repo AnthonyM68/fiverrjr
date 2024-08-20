@@ -295,40 +295,21 @@ class UserController extends AbstractController
         ]);
     }
 
+
+
     // supprimer tous les services d'un utilisateur après avoir supprimer son propre compte
-    // #[Route('/user/delete/all-services/by-user', name: 'anonymize_user')]
-    // public function deleteAllServicesByUserCurrent(): RedirectResponse
-    // {
-    //     $user = $this->getUser();
-        
-    //     if (!$user) {
-    //         $this->addFlash('error', 'Utilisateur non trouvé');
-    //         return $this->redirectToRoute('home');
-    //     }
-    //     $services = $this->entityManager->getRepository(ServiceItem::class)->fundBy(['user_id' => $user->getId()]);
-
-    //     dd($services);
-
-    //     // $this->addFlash('success', 'User anonymized and deleted successfully.');
-    //     // return $this->redirectToRoute('home');
-    // }
+    // sauvegarde les données utilisateur pour les factures / commandes
     #[Route('/user/delete/anonymize', name: 'anonymize_user')]
-    public function anonymizeAndDelete(): RedirectResponse
+    public function anonymizeAndDelete()
     {
         $user = $this->getUser();
 
-        $services = $this->entityManager->getRepository(ServiceItem::class)->fundBy(['user_id' => $user->getId()]);
-        dd($services);
-
         if (!$user) {
-            $this->addFlash('error', 'Utilisateur non trouvé');
-            return $this->redirectToRoute('home');
+            throw new \Exception('User not found.');
         }
+        $this->addFlash('warning', 'Anonymisation des données utilisateur');
 
-        $this->userAnonymizer->anonymizeAndDeleteUser($user);
-
-        $this->addFlash('success', 'Anonymisation données utilisateur');
-        return $this->redirectToRoute('home');
+        $this->userAnonymizer->anonymizeUser($user);
     }
 
     /**

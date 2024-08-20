@@ -56,9 +56,17 @@ class Order
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    /**
+     * @var Collection<int, Payment>
+     */
+    #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'orderEntity')]
+    private Collection $payments;
+
+
     public function __construct()
     {
         $this->servicesItems = new ArrayCollection();
+        $this->payments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,6 +184,36 @@ class Order
     public function setTitle(string $title): static
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Payment>
+     */
+    public function getPayments(): Collection
+    {
+        return $this->payments;
+    }
+
+    public function addPayment(Payment $payment): static
+    {
+        if (!$this->payments->contains($payment)) {
+            $this->payments->add($payment);
+            $payment->setOrderEntity($this);
+        }
+
+        return $this;
+    }
+
+    public function removePayment(Payment $payment): static
+    {
+        if ($this->payments->removeElement($payment)) {
+            // set the owning side to null (unless already changed)
+            if ($payment->getOrderEntity() === $this) {
+                $payment->setOrderEntity(null);
+            }
+        }
 
         return $this;
     }
