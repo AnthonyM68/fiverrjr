@@ -85,32 +85,53 @@ CREATE TABLE IF NOT EXISTS `doctrine_migration_versions` (
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
--- Listage des données de la table fiverrjr.doctrine_migration_versions : ~2 rows (environ)
+-- Listage des données de la table fiverrjr.doctrine_migration_versions : ~9 rows (environ)
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
-	('DoctrineMigrations\\Version20240715131353', '2024-07-15 13:15:02', 46),
-	('DoctrineMigrations\\Version20240715142815', '2024-07-15 14:28:29', 24),
-	('DoctrineMigrations\\Version20240820061815', '2024-08-20 06:19:14', 168),
-	('DoctrineMigrations\\Version20240820114626', '2024-08-20 11:46:44', 163),
-	('DoctrineMigrations\\Version20240820120457', '2024-08-20 12:05:10', 32),
-	('DoctrineMigrations\\Version20240820121916', '2024-08-20 12:19:35', 206);
+	('DoctrineMigrations\\Version20240821105238', '2024-08-21 10:55:42', 55),
+	('DoctrineMigrations\\Version20240821125446', '2024-08-21 12:56:01', 35),
+	('DoctrineMigrations\\Version20240821130234', '2024-08-21 13:02:47', 68);
+
+-- Listage de la structure de table fiverrjr. evaluation
+CREATE TABLE IF NOT EXISTS `evaluation` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `service_id` int NOT NULL,
+  `order_id` int NOT NULL,
+  `note` smallint NOT NULL,
+  `comment` longtext COLLATE utf8mb4_unicode_ci,
+  `date_evaluation` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table fiverrjr.evaluation : ~0 rows (environ)
 
 -- Listage de la structure de table fiverrjr. invoice
 CREATE TABLE IF NOT EXISTS `invoice` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `order_id` int NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `tva` decimal(5,2) NOT NULL,
   `date_create` datetime NOT NULL,
   `status` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `client_first_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `client_last_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `client_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `client_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `order_traceability` json DEFAULT NULL,
-  `invoice_traceability` json DEFAULT NULL,
+  `client_traceability` json DEFAULT NULL,
+  `order_traceability` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `pdf_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table fiverrjr.invoice : ~0 rows (environ)
+
+-- Listage de la structure de table fiverrjr. message
+CREATE TABLE IF NOT EXISTS `message` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `sent_id` int NOT NULL,
+  `receiver_id` int NOT NULL,
+  `subject` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date_sent` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Listage des données de la table fiverrjr.message : ~0 rows (environ)
 
 -- Listage de la structure de table fiverrjr. messenger_messages
 CREATE TABLE IF NOT EXISTS `messenger_messages` (
@@ -133,56 +154,22 @@ CREATE TABLE IF NOT EXISTS `messenger_messages` (
 CREATE TABLE IF NOT EXISTS `order` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
+  `payment_id` int NOT NULL,
   `service_id` int NOT NULL,
   `date_order` datetime NOT NULL,
   `status` json NOT NULL,
-  `date_delivery` datetime DEFAULT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_F5299398A76ED395` (`user_id`),
-  CONSTRAINT `FK_F5299398A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `date_delivery` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Listage des données de la table fiverrjr.order : ~22 rows (environ)
-INSERT INTO `order` (`id`, `user_id`, `service_id`, `date_order`, `status`, `date_delivery`, `title`) VALUES
-	(1, 1, 1, '2024-07-15 13:15:07', '[]', NULL, 'Création de site vitrine professionnel'),
-	(2, 2, 2, '2024-07-15 16:34:58', '[]', NULL, 'Développement de blog personnalisé'),
-	(3, 1, 101, '2024-07-01 10:00:00', '{"status": "pending"}', '2024-07-05 10:00:00', 'Order 1'),
-	(4, 1, 102, '2024-07-02 11:00:00', '{"status": "completed"}', '2024-07-06 11:00:00', 'Order 2'),
-	(5, 1, 103, '2024-07-03 12:00:00', '{"status": "pending"}', '2024-07-07 12:00:00', 'Order 3'),
-	(6, 1, 104, '2024-07-04 13:00:00', '{"status": "completed"}', '2024-07-08 13:00:00', 'Order 4'),
-	(7, 1, 105, '2024-07-05 14:00:00', '{"status": "pending"}', '2024-07-09 14:00:00', 'Order 5'),
-	(8, 1, 106, '2024-07-06 15:00:00', '{"status": "completed"}', '2024-07-10 15:00:00', 'Order 6'),
-	(9, 1, 107, '2024-07-07 16:00:00', '{"status": "pending"}', '2024-07-11 16:00:00', 'Order 7'),
-	(10, 1, 108, '2024-07-08 17:00:00', '{"status": "completed"}', '2024-07-12 17:00:00', 'Order 8'),
-	(11, 1, 109, '2024-07-09 18:00:00', '{"status": "pending"}', '2024-07-13 18:00:00', 'Order 9'),
-	(12, 1, 110, '2024-07-10 19:00:00', '{"status": "completed"}', '2024-07-14 19:00:00', 'Order 10'),
-	(13, 2, 201, '2024-07-01 10:00:00', '{"status": "pending"}', '2024-07-05 10:00:00', 'Order 1'),
-	(14, 2, 202, '2024-07-02 11:00:00', '{"status": "completed"}', '2024-07-06 11:00:00', 'Order 2'),
-	(15, 2, 203, '2024-07-03 12:00:00', '{"status": "pending"}', '2024-07-07 12:00:00', 'Order 3'),
-	(16, 2, 204, '2024-07-04 13:00:00', '{"status": "completed"}', '2024-07-08 13:00:00', 'Order 4'),
-	(17, 2, 205, '2024-07-05 14:00:00', '{"status": "pending"}', '2024-07-09 14:00:00', 'Order 5'),
-	(18, 2, 206, '2024-07-06 15:00:00', '{"status": "completed"}', '2024-07-10 15:00:00', 'Order 6'),
-	(19, 2, 207, '2024-07-07 16:00:00', '{"status": "pending"}', '2024-07-11 16:00:00', 'Order 7'),
-	(20, 2, 208, '2024-07-08 17:00:00', '{"status": "completed"}', '2024-07-12 17:00:00', 'Order 8'),
-	(21, 2, 209, '2024-07-09 18:00:00', '{"status": "pending"}', '2024-07-13 18:00:00', 'Order 9'),
-	(22, 2, 210, '2024-07-10 19:00:00', '{"status": "completed"}', '2024-07-14 19:00:00', 'Order 10');
+-- Listage des données de la table fiverrjr.order : ~0 rows (environ)
 
 -- Listage de la structure de table fiverrjr. payment
 CREATE TABLE IF NOT EXISTS `payment` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `order_entity_id` int DEFAULT NULL,
-  `invoice_id` int DEFAULT NULL,
-  `amount` decimal(10,2) NOT NULL,
+  `amount` decimal(7,2) NOT NULL,
   `date_payment` datetime NOT NULL,
-  `payment_method` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `transaction_id` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_6D28840D2989F1FD` (`invoice_id`),
-  KEY `IDX_6D28840D3DA206A5` (`order_entity_id`),
-  CONSTRAINT `FK_6D28840D2989F1FD` FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`),
-  CONSTRAINT `FK_6D28840D3DA206A5` FOREIGN KEY (`order_entity_id`) REFERENCES `order` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table fiverrjr.payment : ~0 rows (environ)
@@ -202,35 +189,11 @@ CREATE TABLE IF NOT EXISTS `reset_password_request` (
 
 -- Listage des données de la table fiverrjr.reset_password_request : ~0 rows (environ)
 
--- Listage de la structure de table fiverrjr. service
-CREATE TABLE IF NOT EXISTS `service` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `course_id` int NOT NULL,
-  `user_id` int NOT NULL,
-  `order_id` int DEFAULT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` double NOT NULL,
-  `duration` int NOT NULL,
-  `create_date` datetime NOT NULL,
-  `picture` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_E19D9AD2591CC992` (`course_id`),
-  KEY `IDX_E19D9AD2A76ED395` (`user_id`),
-  KEY `IDX_E19D9AD28D9F6D38` (`order_id`),
-  CONSTRAINT `FK_E19D9AD2591CC992` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
-  CONSTRAINT `FK_E19D9AD28D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
-  CONSTRAINT `FK_E19D9AD2A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Listage des données de la table fiverrjr.service : ~0 rows (environ)
-
 -- Listage de la structure de table fiverrjr. service_item
 CREATE TABLE IF NOT EXISTS `service_item` (
   `id` int NOT NULL AUTO_INCREMENT,
   `course_id` int NOT NULL,
   `user_id` int NOT NULL,
-  `order_id` int DEFAULT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` double NOT NULL,
@@ -240,33 +203,31 @@ CREATE TABLE IF NOT EXISTS `service_item` (
   PRIMARY KEY (`id`),
   KEY `IDX_D15891F2591CC992` (`course_id`),
   KEY `IDX_D15891F2A76ED395` (`user_id`),
-  KEY `IDX_D15891F28D9F6D38` (`order_id`),
   CONSTRAINT `FK_D15891F2591CC992` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
-  CONSTRAINT `FK_D15891F28D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
   CONSTRAINT `FK_D15891F2A76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table fiverrjr.service_item : ~19 rows (environ)
-INSERT INTO `service_item` (`id`, `course_id`, `user_id`, `order_id`, `title`, `description`, `price`, `duration`, `create_date`, `picture`) VALUES
-	(1, 1, 2, NULL, 'Création de site vitrine professionnel', 'Nous développons des sites vitrines professionnels pour mettre en avant votre entreprise et vos services.', 1700, 30, '2024-07-10 19:54:03', 'group.webp'),
-	(2, 2, 2, NULL, 'Développement de blog personnalisé', 'Nous offrons des services de développement de blogs personnalisés avec des fonctionnalités avancées.', 1420, 25, '2024-07-10 19:54:03', '66c03d15efb04.png'),
-	(3, 3, 1, NULL, 'Création de portfolio en ligne', 'Nous créons des portfolios en ligne élégants pour présenter vos travaux et compétences.', 1800, 20, '2024-07-10 19:54:03', 'group.webp'),
-	(4, 4, 2, NULL, 'Boutique en ligne avec Shopify', 'Nous développons des boutiques en ligne performantes et sécurisées avec Shopify.', 4500, 40, '2024-07-10 19:54:03', 'group.webp'),
-	(5, 5, 2, NULL, 'Développement de boutiques WooCommerce', 'Nous développons des boutiques en ligne performantes avec WooCommerce, adaptées à vos besoins.', 2000, 35, '2024-07-10 20:00:05', 'group.webp'),
-	(6, 6, 2, NULL, 'Intégration de systèmes de paiement', 'Nous intégrons des systèmes de paiement sécurisés comme Stripe, PayPal, etc., pour votre site web.', 500, 10, '2024-07-10 20:00:05', 'group.webp'),
-	(7, 7, 4, NULL, 'Développement HTML/CSS/JavaScript', 'Nous offrons des services de développement front-end en HTML, CSS et JavaScript pour des sites web interactifs.', 1000, 20, '2024-07-10 20:00:05', 'group.webp'),
-	(8, 8, 2, NULL, 'Utilisation de frameworks front-end', 'Nous utilisons des frameworks front-end comme React, Angular et Vue.js pour créer des applications web modernes.', 1500, 25, '2024-07-10 20:00:05', 'group.webp'),
-	(9, 9, 1, NULL, 'Optimisation des performances front-end', 'Nous optimisons les performances front-end de votre site pour garantir une expérience utilisateur fluide et rapide.', 800, 15, '2024-07-10 20:00:05', 'group.webp'),
-	(10, 10, 4, NULL, 'Développement avec Node.js', 'Nous développons des applications back-end robustes et évolutives avec Node.js.', 1800, 30, '2024-07-10 20:00:05', 'group.webp'),
-	(11, 11, 1, NULL, 'Développement avec Python/Django', 'Nous offrons des services de développement avec Python et Django pour des applications web performantes.', 2000, 35, '2024-07-10 20:00:05', 'group.webp'),
-	(12, 12, 1, NULL, 'Utilisation de PHP et frameworks', 'Nous utilisons PHP et des frameworks comme Laravel et Symfony pour créer des applications web puissantes.', 1700, 30, '2024-07-10 20:00:05', 'group.webp'),
-	(13, 13, 4, NULL, 'Projets MERN', 'Nous réalisons des projets MERN (MongoDB, Express, React, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'group.webp'),
-	(14, 14, 1, NULL, 'Projets MEAN', 'Nous développons des projets MEAN (MongoDB, Express, Angular, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'group.webp'),
-	(15, 15, 4, NULL, 'Projets LAMP', 'Nous proposons des services de développement LAMP (Linux, Apache, MySQL, PHP) pour des solutions web robustes.', 1800, 30, '2024-07-10 20:00:05', 'group.webp'),
-	(16, 16, 1, NULL, 'Développement de thèmes et plugins WordPress', 'Nous développons des thèmes et plugins WordPress personnalisés pour répondre à vos besoins spécifiques.', 1200, 25, '2024-07-10 20:00:05', 'group.webp'),
-	(17, 17, 4, NULL, 'Développement avec Joomla et Drupal', 'Nous offrons des services de développement avec Joomla et Drupal pour des sites web performants et sécurisés.', 1500, 30, '2024-07-10 20:00:05', 'group.webp'),
-	(18, 18, 1, NULL, 'Développement d\'API RESTful', 'Nous développons des API RESTful pour faciliter la communication entre vos différentes applications.', 1000, 20, '2024-07-10 20:00:05', 'group.webp'),
-	(19, 19, 1, NULL, 'Intégration de services tiers', 'Nous intégrons des services tiers comme Stripe, PayPal, etc., pour enrichir les fonctionnalités de votre site web.', 700, 15, '2024-07-10 20:00:05', 'group.webp');
+INSERT INTO `service_item` (`id`, `course_id`, `user_id`, `title`, `description`, `price`, `duration`, `create_date`, `picture`) VALUES
+	(1, 1, 2, 'Création de site vitrine professionnel', 'Nous développons des sites vitrines professionnels pour mettre en avant votre entreprise et vos services.', 1700, 30, '2024-07-10 19:54:03', 'group.webp'),
+	(2, 2, 2, 'Développement de blog personnalisé', 'Nous offrons des services de développement de blogs personnalisés avec des fonctionnalités avancées.', 1420, 25, '2024-07-10 19:54:03', 'group.webp'),
+	(3, 3, 1, 'Création de portfolio en ligne', 'Nous créons des portfolios en ligne élégants pour présenter vos travaux et compétences.', 1800, 20, '2024-07-10 19:54:03', 'group.webp'),
+	(4, 4, 2, 'Boutique en ligne avec Shopify', 'Nous développons des boutiques en ligne performantes et sécurisées avec Shopify.', 4500, 40, '2024-07-10 19:54:03', 'group.webp'),
+	(5, 5, 2, 'Développement de boutiques WooCommerce', 'Nous développons des boutiques en ligne performantes avec WooCommerce, adaptées à vos besoins.', 2000, 35, '2024-07-10 20:00:05', 'group.webp'),
+	(6, 6, 2, 'Intégration de systèmes de paiement', 'Nous intégrons des systèmes de paiement sécurisés comme Stripe, PayPal, etc., pour votre site web.', 500, 10, '2024-07-10 20:00:05', 'group.webp'),
+	(7, 7, 4, 'Développement HTML/CSS/JavaScript', 'Nous offrons des services de développement front-end en HTML, CSS et JavaScript pour des sites web interactifs.', 1000, 20, '2024-07-10 20:00:05', 'group.webp'),
+	(8, 8, 2, 'Utilisation de frameworks front-end', 'Nous utilisons des frameworks front-end comme React, Angular et Vue.js pour créer des applications web modernes.', 1500, 25, '2024-07-10 20:00:05', 'group.webp'),
+	(9, 9, 1, 'Optimisation des performances front-end', 'Nous optimisons les performances front-end de votre site pour garantir une expérience utilisateur fluide et rapide.', 800, 15, '2024-07-10 20:00:05', 'group.webp'),
+	(10, 10, 4, 'Développement avec Node.js', 'Nous développons des applications back-end robustes et évolutives avec Node.js.', 1800, 30, '2024-07-10 20:00:05', 'group.webp'),
+	(11, 11, 1, 'Développement avec Python/Django', 'Nous offrons des services de développement avec Python et Django pour des applications web performantes.', 2000, 35, '2024-07-10 20:00:05', 'group.webp'),
+	(12, 12, 1, 'Utilisation de PHP et frameworks', 'Nous utilisons PHP et des frameworks comme Laravel et Symfony pour créer des applications web puissantes.', 1700, 30, '2024-07-10 20:00:05', 'group.webp'),
+	(13, 13, 4, 'Projets MERN', 'Nous réalisons des projets MERN (MongoDB, Express, React, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'group.webp'),
+	(14, 14, 1, 'Projets MEAN', 'Nous développons des projets MEAN (MongoDB, Express, Angular, Node.js) pour des applications web complètes et performantes.', 2200, 40, '2024-07-10 20:00:05', 'group.webp'),
+	(15, 15, 4, 'Projets LAMP', 'Nous proposons des services de développement LAMP (Linux, Apache, MySQL, PHP) pour des solutions web robustes.', 1800, 30, '2024-07-10 20:00:05', 'group.webp'),
+	(16, 16, 1, 'Développement de thèmes et plugins WordPress', 'Nous développons des thèmes et plugins WordPress personnalisés pour répondre à vos besoins spécifiques.', 1200, 25, '2024-07-10 20:00:05', 'group.webp'),
+	(17, 17, 4, 'Développement avec Joomla et Drupal', 'Nous offrons des services de développement avec Joomla et Drupal pour des sites web performants et sécurisés.', 1500, 30, '2024-07-10 20:00:05', 'group.webp'),
+	(18, 18, 1, 'Développement d\'API RESTful', 'Nous développons des API RESTful pour faciliter la communication entre vos différentes applications.', 1000, 20, '2024-07-10 20:00:05', 'group.webp'),
+	(19, 19, 1, 'Intégration de services tiers', 'Nous intégrons des services tiers comme Stripe, PayPal, etc., pour enrichir les fonctionnalités de votre site web.', 700, 15, '2024-07-10 20:00:05', 'group.webp');
 
 -- Listage de la structure de table fiverrjr. theme
 CREATE TABLE IF NOT EXISTS `theme` (
