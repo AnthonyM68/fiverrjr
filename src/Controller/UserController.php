@@ -40,7 +40,7 @@ class UserController extends AbstractController
     public function __construct(
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
-        OrderRepository $orderRepository,
+       // OrderRepository $orderRepository,
         UserRepository $userRepository,
         UrlGeneratorInterface $urlGenerator,
         ImageService $imageService,
@@ -49,7 +49,7 @@ class UserController extends AbstractController
     ) {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
-        $this->orderRepository = $orderRepository;
+        //$this->orderRepository = $orderRepository;
         $this->userRepository = $userRepository;
         $this->urlGenerator = $urlGenerator;
         $this->imageService = $imageService;
@@ -117,18 +117,18 @@ class UserController extends AbstractController
 
             $status = $request->get('status');
 
-            $orders = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
+            // $orders = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
 
-            $pagination = $paginator->paginate(
-                $orders,
-                $page,
-                $limit
-            );
-            // On rends juste la liste des Orders avec pagination
-            $formHtml = $this->renderView('/user/order/' . $status . '.html.twig', [
-                'orders_' . $status =>  $pagination->getItems(),
-                'pagination_' . $status => $pagination
-            ]);
+            // $pagination = $paginator->paginate(
+            //     $orders,
+            //     $page,
+            //     $limit
+            // );
+            // // On rends juste la liste des Orders avec pagination
+            // $formHtml = $this->renderView('/user/order/' . $status . '.html.twig', [
+            //     'orders_' . $status =>  $pagination->getItems(),
+            //     'pagination_' . $status => $pagination
+            // ]);
 
             // Retourner la réponse JSON 
             return new JsonResponse(['orders' => $formHtml, 'type_order' => 'orders_' . $status], Response::HTTP_OK);

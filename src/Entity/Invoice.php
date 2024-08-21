@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\InvoiceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,6 +13,9 @@ class Invoice
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column]
+    private ?int $orderId = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $amount = null;
@@ -28,41 +29,30 @@ class Invoice
     #[ORM\Column(length: 50)]
     private ?string $status = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $clientFirstName = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $clientLastName = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $clientAddress = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $clientEmail = null;
+    #[ORM\Column(nullable: true)]
+    private ?array $clientTraceability = null;
 
     #[ORM\Column(nullable: true)]
-    private ?array $orderTraceability = null;
+    private ?string $orderTraceability = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?array $invoiceTraceability = null;
-
-    #[ORM\ManyToOne(inversedBy: 'invoices')]
-    private ?Order $orderRelation = null;
-
-    /**
-     * @var Collection<int, Payment>
-     */
-    #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'invoice_relation')]
-    private Collection $payments;
-
-    public function __construct()
-    {
-        $this->payments = new ArrayCollection();
-    }
+    #[ORM\Column(length: 255)]
+    private ?string $pdfPath = null;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getOrderId(): ?int
+    {
+        return $this->orderId;
+    }
+
+    public function setOrderId(int $orderId): static
+    {
+        $this->orderId = $orderId;
+
+        return $this;
     }
 
     public function getAmount(): ?string
@@ -113,116 +103,38 @@ class Invoice
         return $this;
     }
 
-    public function getClientFirstName(): ?string
+    public function getClientTraceability(): ?array
     {
-        return $this->clientFirstName;
+        return $this->clientTraceability;
     }
 
-    public function setClientFirstName(string $clientFirstName): static
+    public function setClientTraceability(?array $clientTraceability): static
     {
-        $this->clientFirstName = $clientFirstName;
+        $this->clientTraceability = $clientTraceability;
 
         return $this;
     }
 
-    public function getClientLastName(): ?string
-    {
-        return $this->clientLastName;
-    }
-
-    public function setClientLastName(string $clientLastName): static
-    {
-        $this->clientLastName = $clientLastName;
-
-        return $this;
-    }
-
-    public function getClientAddress(): ?string
-    {
-        return $this->clientAddress;
-    }
-
-    public function setClientAddress(string $clientAddress): static
-    {
-        $this->clientAddress = $clientAddress;
-
-        return $this;
-    }
-
-    public function getClientEmail(): ?string
-    {
-        return $this->clientEmail;
-    }
-
-    public function setClientEmail(string $clientEmail): static
-    {
-        $this->clientEmail = $clientEmail;
-
-        return $this;
-    }
-
-    public function getOrderTraceability(): ?array
+    public function getOrderTraceability(): ?string
     {
         return $this->orderTraceability;
     }
 
-    public function setOrderTraceability(?array $orderTraceability): static
+    public function setOrderTraceability(?string $orderTraceability): static
     {
         $this->orderTraceability = $orderTraceability;
 
         return $this;
     }
 
-    public function getInvoiceTraceability(): ?array
+    public function getPdfPath(): ?string
     {
-        return $this->invoiceTraceability;
+        return $this->pdfPath;
     }
 
-    public function setInvoiceTraceability(?array $invoiceTraceability): static
+    public function setPdfPath(string $pdfPath): static
     {
-        $this->invoiceTraceability = $invoiceTraceability;
-
-        return $this;
-    }
-
-    public function getOrderRelation(): ?Order
-    {
-        return $this->orderRelation;
-    }
-
-    public function setOrderRelation(?Order $orderRelation): static
-    {
-        $this->orderRelation = $orderRelation;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Payment>
-     */
-    public function getPayments(): Collection
-    {
-        return $this->payments;
-    }
-
-    public function addPayment(Payment $payment): static
-    {
-        if (!$this->payments->contains($payment)) {
-            $this->payments->add($payment);
-            $payment->setInvoiceRelation($this);
-        }
-
-        return $this;
-    }
-
-    public function removePayment(Payment $payment): static
-    {
-        if ($this->payments->removeElement($payment)) {
-            // set the owning side to null (unless already changed)
-            if ($payment->getInvoiceRelation() === $this) {
-                $payment->setInvoiceRelation(null);
-            }
-        }
+        $this->pdfPath = $pdfPath;
 
         return $this;
     }

@@ -14,29 +14,11 @@ class Payment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 7, scale: 2)]
     private ?string $amount = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $datePayment = null;
-
-    #[ORM\Column(length: 25)]
-    private ?string $paymentMethod = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $transactionId = null;
-
-    #[ORM\Column(length: 25)]
-    private ?string $status = null;
-
-    #[ORM\ManyToOne(inversedBy: 'payments')]
-    private ?Order $orderEntity = null;
-
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?Invoice $invoice = null;
-
-    #[ORM\ManyToOne(inversedBy: 'payments')]
-    private ?Invoice $invoice_relation = null;
 
     public function getId(): ?int
     {
@@ -63,78 +45,6 @@ class Payment
     public function setDatePayment(\DateTimeInterface $datePayment): static
     {
         $this->datePayment = $datePayment;
-
-        return $this;
-    }
-
-    public function getPaymentMethod(): ?string
-    {
-        return $this->paymentMethod;
-    }
-
-    public function setPaymentMethod(string $paymentMethod): static
-    {
-        $this->paymentMethod = $paymentMethod;
-
-        return $this;
-    }
-
-    public function getTransactionId(): ?string
-    {
-        return $this->transactionId;
-    }
-
-    public function setTransactionId(?string $transactionId): static
-    {
-        $this->transactionId = $transactionId;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    public function getOrderEntity(): ?Order
-    {
-        return $this->orderEntity;
-    }
-
-    public function setOrderEntity(?Order $orderEntity): static
-    {
-        $this->orderEntity = $orderEntity;
-
-        return $this;
-    }
-
-    public function getInvoice(): ?Invoice
-    {
-        return $this->invoice;
-    }
-
-    public function setInvoice(?Invoice $invoice): static
-    {
-        $this->invoice = $invoice;
-
-        return $this;
-    }
-
-    public function getInvoiceRelation(): ?Invoice
-    {
-        return $this->invoice_relation;
-    }
-
-    public function setInvoiceRelation(?Invoice $invoice_relation): static
-    {
-        $this->invoice_relation = $invoice_relation;
 
         return $this;
     }

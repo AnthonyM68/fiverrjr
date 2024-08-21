@@ -111,11 +111,7 @@ Encore
     .addEntry('User', './assets/js/profile/User.js')
     // Cart
     // .addEntry('cart', './assets/js/cart/cart.js')
-
     .addEntry('home', './assets/js/home/home.js')
-
-
-
     // REACT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
     .enableReactPreset()
     // useFetch ( effectue les requete ajax pour react)

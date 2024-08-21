@@ -84,7 +84,7 @@
             let button = document.getElementById('checkout-button');
 
             if (cardElementContainer) {
-                var cardElement = elements.create('card', { style: style });
+                let cardElement = elements.create('card', { style: style });
                 cardElement.mount('#card-element');
                 if (button) {
                     button.addEventListener('click', function () {

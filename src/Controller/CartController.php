@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Service\Cart;
@@ -10,24 +11,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
 {
-    private $serviceItemRepository;
-    private $serializer;
     private $cart;
     private $logger;
 
-    public function __construct(
-        ServiceItemRepository $serviceItemRepository,
-        SerializerInterface $serializer,
-        Cart $cart,
-        LoggerInterface $logger,
-    ) {
-        $this->serviceItemRepository = $serviceItemRepository;
-        $this->serializer = $serializer;
+    public function __construct(Cart $cart, LoggerInterface $logger)
+    {
         $this->cart = $cart;
         $this->logger = $logger;
     }
@@ -35,8 +29,12 @@ class CartController extends AbstractController
     #[Route('/cart', name: 'cart_product')]
     public function cartProduct(Request $request): Response
     {
+        // on peu crée et vérifier ici un status de paiement
+        // $status = $request->query->get('status', 'pending');
+
         $fullCart = $this->cart->getCart($request);
         $this->addFlash('positive', 'votre commande sera ajoutée au panier');
+
         return $this->render('cart/index.html.twig', [
             'title_page' => 'panier',
             'data' => $fullCart['data'],
@@ -47,32 +45,24 @@ class CartController extends AbstractController
     }
 
     #[Route('/cart/add/service/{id}', name: 'add_service_cart')]
-    public function cartAddProduct(ServiceItem $serviceItem, Request $request): Response
+    public function cartAddProduct(Cart $cart, Request $request, ServiceItem $serviceItem): Response
     {
-        if (!$serviceItem) {
-            throw $this->createNotFoundException('le service n\'existe pas');
-        }
+        // Ajoute le produit au panier via le service Cart
+        $cart->addProduct($serviceItem, $request);
 
-        $this->cart->addProduct($serviceItem, $request);
-        $fullCart = $this->cart->getCart($request);
+        // Sérialise le panier mis à jour
+        $serializedCart = $cart->serializeCart($request);
+        $this->logger->info('Serialized cart data: ' . $serializedCart);
 
-        $jsonFullCart = $this->serializer->serialize($fullCart, 'json', ['groups' => 'cart']);
-        $this->logger->info('serialized cart data: ' . $jsonFullCart);
+        // Crée un cookie avec le panier sérialisé
+        $cookie = $cart->createCartCookie($serializedCart, $request);
 
-        $cookie = new Cookie(
-            'cart',
-            $jsonFullCart,
-            time() + (30 * 24 * 60 * 60), // 30 jours
-            '/',
-            null,
-            $request->isSecure(), // définit 'secure' basé sur la connexion HTTPS
-            true, // HttpOnly
-            false,
-            'strict'
-        );
-
+        // Crée la réponse et ajoute le cookie à la réponse
         $response = new Response();
         $response->headers->setCookie($cookie);
+
+        // Récupère le panier complet pour l'affichage
+        $fullCart = $cart->getCart($request);
 
         $content = $this->renderView('cart/index.html.twig', [
             'title_page' => 'panier',
@@ -138,12 +128,4 @@ class CartController extends AbstractController
             'total' => $fullCart['total']
         ]);
     }
-
-    // #[Route('/cart/create/order', name: 'add_order')]
-    // public function createOrder(Cart $cart, Request $request, SerializerInterface $serializer): Response
-    // {
-    //     return $this->redirectToRoute('home');
-    // }
-
 }
-

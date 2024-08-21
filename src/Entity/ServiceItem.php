@@ -75,9 +75,9 @@ class ServiceItem
      *
      * @var Order|null
      */
-    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'serviceitems')]
-    #[Groups(['serviceItem'])]
-    private ?Order $order = null;
+    // #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'serviceitems')]
+    // #[Groups(['serviceItem'])]
+    // private ?Order $order = null;
 
     public function __construct()
     {
@@ -101,6 +101,13 @@ class ServiceItem
         $this->course = $course;
         return $this;
     }
+
+
+
+
+
+
+    
     /**
      * Undocumented User
      *
@@ -116,22 +123,33 @@ class ServiceItem
 
         return $this;
     }
+
+
+
+
+
+
     /**
      * Undocumented Order
      *
      * @return Order|null
      */
-    public function getOrder(): ?Order
-    {
-        return $this->order;
-    }
+    // public function getOrders(): ?Order
+    // {
+    //     return $this->order;
+    // }
 
-    public function setOrders(?Order $order): static
-    {
-        $this->order = $order;
+    // public function setOrders(?Order $order): static
+    // {
+    //     $this->order = $order;
 
-        return $this;
-    }
+    //     return $this;
+    // }
+
+
+
+
+
 
     public function getTitle(): ?string
     {

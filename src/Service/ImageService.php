@@ -37,6 +37,7 @@ class ImageService
     public function generateImageUrl(string $filename, string $role): string
     {
         $filePath = $this->getImagePath($filename, $role);
+        // dd($filePath);
 
         if (!file_exists($filePath)) {
             throw new \Exception('Image not found' . $filePath);
@@ -72,6 +73,16 @@ class ImageService
     // déplace une image et retourne son nom unique de fichier
     public function uploadImage(UploadedFile $file, string $role): string
     {
+        // on vérfie l'extention du format si autorisé
+        $allowedMimeTypes = ['image/jpeg', 'image/webp', 'image/gif'];
+        if (!in_array($file->getMimeType(), $allowedMimeTypes)) {
+            throw new \Exception('Format de fichier non autorisé. Seules les images JPEG, webp, et GIF sont acceptées.');
+        }
+        // Limite à 2MB
+        if ($file->getSize() > 2097152) {
+            throw new \Exception('Le fichier est trop volumineux');
+        }
+        // on lui attribut un id unique
         $uploadsDirectory = $this->getUploadDirectory($role);
         $filename = uniqid() . '.' . $file->guessExtension();
 
@@ -104,17 +115,15 @@ class ImageService
     {
         $role = null;
         $roles = null;
-        
+
         if (!$entity instanceof User) {
             $role = 'SERVICE';
-          
         } else {
             $roles = $entity->getRoles();
             $role = $this->handlerRoles($roles);
-
         }
         $pictureFilename = $entity->getPicture();
-        
+
         if ($pictureFilename) {
             try {
                 $pictureUrl = $this->generateImageUrl($pictureFilename, $role);
