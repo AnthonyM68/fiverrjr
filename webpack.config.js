@@ -23,7 +23,7 @@ Encore
 
     //jQuery UI
     .addEntry('jquery_ui', './node_modules/jquery-ui-dist/jquery-ui.js')
-    .addStyleEntry('jquery_ui_theme', './node_modules/jquery-ui/dist/themes/redmond/theme.css')
+    .addStyleEntry('jquery_ui_theme', './node_modules/jquery-ui/dist/themes/smoothness/theme.css')
     .addStyleEntry('jquery_structure', './node_modules/jquery-ui-dist/jquery-ui.structure.css')
     // semantic-ui
     .addEntry('semantic', './semantic/dist/semantic.js')

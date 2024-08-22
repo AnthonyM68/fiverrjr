@@ -27,7 +27,7 @@ class CategoryType extends AbstractType
             ->add('NameCategory', TextType::class, [
                 'label' => 'Nom de Catégorie',
             ])
-            ->add('Valider', SubmitType::class, [
+            ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'ui-button ui-widget ui-corner-all'
                 ]

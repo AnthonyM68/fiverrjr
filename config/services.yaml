@@ -40,6 +40,7 @@ services:
         tags:
             - { name: 'kernel.event_subscriber' }
 
+
     App\Twig\AppExtension:
         tags: ['twig.extension']
 

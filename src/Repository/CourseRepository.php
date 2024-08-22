@@ -23,6 +23,13 @@ class CourseRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function countAll()
+    {
+        return $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     //    /**
     //     * @return Course[] Returns an array of Course objects
     //     */

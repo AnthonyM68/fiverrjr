@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 
+
+
+  /*********************************************************
+   * Dropdonw
+   */
   // Configuration du dropdown navbar Theme Category Course
   $('.ui.dropdown').dropdown({
     on: 'hover',
@@ -85,4 +90,21 @@ document.addEventListener('DOMContentLoaded', function () {
       subMenu.style.top = parentOffset.top + 'px';
     });
   }
+
+  /**********************************************************************************
+   * Search motor 
+   */
+  // Sélectionnez tous les éléments de menu
+  const menuItems = document.querySelectorAll('.ui.vertical.fluid.menu .item.field');
+  // Ajoutez un gestionnaire de clic à chaque élément de menu
+  menuItems.forEach(item => {
+    item.addEventListener('click', function () {
+      // Supprimez la classe 'active teal' de tous les éléments de menu
+      menuItems.forEach(menu => menu.classList.remove('active', 'teal'));
+      // Ajoutez la classe 'active teal' à l'élément cliqué
+      this.classList.add('active', 'teal');
+    });
+  });
 });
+
+

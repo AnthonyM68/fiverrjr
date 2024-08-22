@@ -15,6 +15,8 @@ class Category
     #[ORM\Column]
     private ?int $id = null;
 
+    private $services;
+
     #[ORM\Column(length: 50)]
     private ?string $nameCategory = null;
 

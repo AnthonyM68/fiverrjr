@@ -19,7 +19,7 @@ class ThemeType extends AbstractType
             ->add('nameTheme', TextType::class, [
                 'label' => 'Nom de Thême',
             ])
-            ->add('Valider', SubmitType::class, [
+            ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'ui-button ui-widget ui-corner-all'
                 ]

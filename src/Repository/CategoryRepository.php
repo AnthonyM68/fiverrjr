@@ -23,6 +23,13 @@ class CategoryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function countAll()
+    {
+        return $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     //    /**
     //     * @return Category[] Returns an array of Category objects
     //     */
