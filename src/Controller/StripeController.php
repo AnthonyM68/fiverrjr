@@ -50,6 +50,7 @@ class StripeController extends AbstractController
     #[Route('/stripe/create-charge', name: 'app_stripe_charge', methods: ['POST'])]
     public function createCharge(Request $request): Response
     {
+        dd('app_stripe_charge');
 
         if ($request->isMethod('POST')) {
             $stripeToken = $request->request->get('stripeToken');
@@ -65,6 +66,7 @@ class StripeController extends AbstractController
                     'description' => 'Achat en ligne',
                 ]);
                 $order = $this->cart->createOrder($request);
+          
                 // on enregistre les informations de la commande en base de données
                 $this->entityManager->persist($order);
                 $this->entityManager->flush();

@@ -70,16 +70,17 @@
                 <a href="{{ path('login') }}" class="ui item">Se connecter</a>
                 <a href="{{ path('register') }}" class="ui item">S'enregistrer</a>
                 {% endif %}
+                <!-- Bloc cart -->
                 <a href="{{ path('cart_product') }}" class="ui item">
                     <i class="cart arrow down icon"></i>
+                    <div class="cart-info">
+                        <span class="cart-item-count">{{ totalServiceItem }} Article(s)</span>
+                        <span class="cart-total">{{ total }} €</span>
+                    </div>
                 </a>
             </div>
         </div>
         <!--End: Desktop Nav-->
-
-
-
-
         <!--Start: Mobile Nav-->
         <div class="tablet mobile only row">
             <a class="header item">Fiverr Junior</a>
@@ -98,19 +99,19 @@
                 <div id="alert-javascript-mobile">{% include "alertflash/flash_message.html.twig" %} </div>
             </div>
             <div class="ui vertical accordion borderless fluid menu">
-                
-                  
+
+
                 <!-- Start: Search -->
                 <div class="item">
                     {% include './navbar/form/formMobile.html.twig' with { 'attr': { 'class': 'mobile-search-form' } }%}
                 </div>
 
 
-               
 
 
 
-                
+
+
                 <!-- End: Search -->
                 <!-- Code d'affichage des alertes pour mobile -->
                 <a href="{{ path('home') }}" class="item">Accueil</a>

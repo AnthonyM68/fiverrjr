@@ -115,6 +115,7 @@ class CartService
     {
         // récupère la session et le panier actuel
         $session = $request->getSession();
+
         $id = $serviceItem->getId();
         $cart = $session->get('cart', []);
 
@@ -184,6 +185,7 @@ class CartService
         $fullCart = $this->getCart($request);
         return $this->serializer->serialize($fullCart, 'json', ['groups' => 'cart']);
     }
+    // on crée un cookie avec les informations nécessaire
     public function createCartCookie(string $serializedCart, Request $request): Cookie
     {
         return new Cookie(
@@ -216,11 +218,13 @@ class CartService
             $serviceIds = array_map(function ($itemCart) {
                 return $itemCart['serviceItem']['id'];
             }, $fullCart['data']);
-
             // on récupère les service du tableau d'id
             $serviceItems = $this->serviceItemRepository->findBy(['id' => $serviceIds]);
             // on ajoute chacun de services a la commande
             foreach ($serviceItems as $serviceItem) {
+                // avant d'ajouter les services
+                // on reset les url déjà générés
+                $this->imageService->setPictureUrl($serviceItem);
                 $order->addService($serviceItem);
             }
         }

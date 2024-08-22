@@ -3,16 +3,18 @@
 namespace App\Controller;
 // Importation des classes nécessaires
 use App\Entity\User;
-use App\Service\Cart;
+use App\Service\CartService;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use App\Service\ImageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+// use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+// use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -22,35 +24,36 @@ class HomeController extends AbstractController
     private $entityManager;
     private $logger;
     private $imageService;
-
+    // private $security;
+    // private $session;
     // Constructeur pour injecter l'EntityManager
     public function __construct(
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
-        ImageService $imageService
+        ImageService $imageService,
+        // Security $security,
+        // SessionInterface $session
+        
     ) {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
         $this->imageService = $imageService;
+        // $this->security = $security;
+        // $this->session = $session;
     }
-
-
     /**
      * Route pour la page d'accueil
      *
      * @return Response
      */
-
-
     #[Route('/home', name: 'home')]
     public function index(
-        Cart $cart,
-        Request $request,
         SerializerInterface $serializer,
         CsrfTokenManagerInterface $csrfTokenManager,
         UrlGeneratorInterface $urlGenerator
 
     ): Response {
+
         // Récupérer le dernier utilisateur avec le rôle ROLE_ENTERPRISE
         $lastClient = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_CLIENT');
         // Récupérer le dernier utilisateur avec le rôle ROLE_DEVELOPER
@@ -59,7 +62,7 @@ class HomeController extends AbstractController
         $lastService = $this->entityManager->getRepository(ServiceItem::class)->findby([], ['id' => 'DESC'], 10);
 
         $developer = $lastDeveloper->getQuery()->getSingleResult();
-        
+
         $this->imageService->setPictureUrl($developer);
         $lastDeveloperData = $serializer->serialize($developer, 'json', ['groups' => 'user']);
         $dataDeveloper = json_decode($lastDeveloperData, true);

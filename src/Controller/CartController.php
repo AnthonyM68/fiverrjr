@@ -47,14 +47,14 @@ class CartController extends AbstractController
     #[Route('/cart/add/service/{id}', name: 'add_service_cart')]
     public function cartAddProduct(Request $request, ServiceItem $serviceItem): Response
     {
-        // Ajoute le produit au panier via le service Cart
+        // ona joute le produit au panier via le service Cart
         $this->cart->addProduct($serviceItem, $request);
 
-        // Sérialise le panier mis à jour
+        // on sérialise le panier mis à jour
         $serializedCart = $this->cart->serializeCart($request);
         $this->logger->info('Serialized cart data: ' . $serializedCart);
 
-        // Crée un cookie avec le panier sérialisé
+        // on crée un cookie avec le panier sérialisé
         $cookie = $this->cart->createCartCookie($serializedCart, $request);
 
         // Crée la réponse et ajoute le cookie à la réponse
@@ -64,15 +64,12 @@ class CartController extends AbstractController
         // Récupère le panier complet pour l'affichage
         $fullCart = $this->cart->getCart($request);
 
-        $content = $this->renderView('cart/index.html.twig', [
+        return $this->renderView('cart/index.html.twig', [
             'title_page' => 'panier',
             'data' => $fullCart['data'],
             'total' => $fullCart['total'],
             'stripe_public_key' => $this->getParameter('stripe_public_key'),
         ]);
-        $response->setContent($content);
-
-        return $response;
     }
 
     #[Route('/cart/totalItemFromCart', name: 'cart_total_item', methods: ['GET'])]
