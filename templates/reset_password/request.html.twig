@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialiser votre mot de passe{% endblock %}
+
+{% block body %}
+{% include "alertflash/flash_message.html.twig" %}
+    <div class="ui middle aligned center aligned grid">
+        <div class="ui segment login-register" style="width:350px">
+            <h2 class="ui teal image header">
+                <img src="https://fomantic-ui.com/examples/assets/images/logo.png" class="image">
+                <div class="content">
+                    Réinitialiser le mot de passe
+                </div>
+            </h2>
+            {{ form_start(requestForm, {'attr': {'class': 'ui large form'}}) }}
+                <div class="ui stacked segment">
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="envelope icon"></i>
+                            {{ form_widget(requestForm.email, {'attr': {'placeholder': 'Adresse email'}}) }}
+                        </div>
+                        {{ form_errors(requestForm.email) }}
+                    </div>
+                    <div>
+                        <small>
+                            Entrez votre adresse email, et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+                        </small>
+                    </div>
+                    <button class="ui fluid large teal submit button">Envoyer le lien de réinitialisation</button>
+                </div>
+            {{ form_end(requestForm) }}
+
+            <div class="field">
+                Rappelez-vous de votre mot de passe? <a href="{{ path('login') }}">Se connecter</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

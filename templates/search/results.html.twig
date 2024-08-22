@@ -1,0 +1,82 @@
+{% block search_results %}
+<style>
+    .ui.modal {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        width: 95%;
+        max-width: 1000px;
+        margin: 20px auto;
+        position: relative;
+        overflow: auto;
+        max-height: 80vh; /* Limite la hauteur pour un meilleur affichage */
+    }
+
+    /* Bouton de fermeture */
+    #fixed-close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: none;
+        z-index: 1050;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    /* Media queries */
+    @media (max-width: 320px) {
+        #fixed-close-button {
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #fixed-close-button {
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+        }
+    }
+
+    @media (min-width: 481px) and (max-width: 768px) {
+        #fixed-close-button {
+            width: auto;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        #fixed-close-button {
+            width: auto;
+            max-width: 150px;
+            margin: 0;
+        }
+    }
+</style>
+
+<div class="ui modal" id="search-modal">
+    <div class="header">
+        Résultats de recherche
+    </div>
+    <div class="content">
+        <div class="ui grid">
+            <div class="sixteen wide column">
+                <div id="search-results-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="ui button icon close-modal" id="fixed-close-button">
+    <i class="close icon"></i> Fermer
+</button>
+
+
+{% endblock search_results %}

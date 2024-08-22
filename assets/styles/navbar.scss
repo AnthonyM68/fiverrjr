@@ -1,0 +1,263 @@
+@import "variables";
+
+.custom-container-navbar {
+  width: $container-navbar-width !important;
+  padding: 0 10px;
+}
+@function hex-to-rgba($hex, $alpha: 1) {
+  @if not(type-of($hex) == color) {
+    @error "Le paramètre doit être une couleur hexadécimale.";
+  }
+  @return rgba($hex, $alpha);
+}
+
+// Couleurs avec opacité
+$primary-color-rgba: hex-to-rgba($primary, $alpha-navbar);
+$secondary-color-rgba: hex-to-rgba($secondary, $alpha-navbar);
+
+// Nav Général
+.ui.fixed.borderless.menu {
+  background-color: $secondary-color-rgba;
+  min-height: $navbar-height !important;
+  // height: $navbar-height !important;
+  display: flex; // Utiliser flexbox pour une meilleure gestion des éléments
+  justify-content: space-between; // Espace entre les éléments
+  align-items: center; // Centrer verticalement les éléments
+}
+.ui .computer.only .item {
+  color: $link-navbar;
+}
+// Soulignement animé au survol
+.ui.fixed.borderless.menu .computer.only .item {
+  position: relative;
+  color: $link-navbar;
+  transition: color 0.3s;
+}
+.ui.fixed.borderless.menu .computer.only .item:hover {
+  color: $primary;
+}
+.ui.fixed.borderless.menu .computer.only .item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: $primary;
+  transition: width 0.3s ease-in-out;
+}
+/* Annule l'effet de soulignement sur les éléments avec la classe .no-underline */
+.ui.fixed.borderless.menu .computer.only .item.no-underline::after {
+  display: none;
+  cursor: pointer;
+}
+.ui.fixed.borderless.menu .computer.only .item:hover::after {
+  width: 100%;
+}
+
+// .ui .computer.only .item:hover {
+//   background: $primary !important;
+//   color: #fff !important;
+//   border-bottom: 1px solid hsl(0, 0%, 100%);
+// }
+.ui .computer .item.active {
+  color: #fff;
+  border-bottom: 1px solid #fff;
+}
+// Couleur des liens gauche
+.computer.only.row a {
+  color: $link-navbar;
+  font-size: $font-size-navbar-desktop;
+  z-index: 999;
+}
+
+.ui.dropdown.item .menu {
+}
+.ui.menu .ui.dropdown .menu > .item {
+}
+.ui.menu .ui.dropdown .menu > .item.active {
+}
+.ui.menu .ui.dropdown .menu > .item:hover {
+}
+
+// moteur de recherche input search
+.prompt.desktop {
+  font-size: $font-size-navbar-desktop-small;
+  height: $margin-extra-large;
+}
+.right.menu {
+}
+.item-prompt {
+}
+// search motor
+.ajax-form {
+  // display: flex;
+  // flex-direction: colum;
+  // justify-content: center;
+  // align-items: center;
+}
+.ajax-form .search.link.icon {
+  // position: relative;
+  // bottom: 0;
+  // font-size: $font-size-navbar-desktop;
+}
+// Mobile
+.tablet.mobile.only .header,
+.ui.icon.button > .icon {
+  color: $link-navbar;
+}
+
+.tablet.mobile.only .header:hover {
+  background-color: $primary !important;
+  color: $link-navbar !important;
+  border-bottom: 1px solid $link-navbar;
+}
+
+// menu cart icon panier
+// menu burger
+.ui.basic.button:hover {
+  background: $primary !important;
+  color: $link-navbar !important;
+  border-bottom: 1px solid $link-navbar;
+}
+// positions pour le menu mobile
+.ui.vertical.accordion.borderless.menu {
+  display: none;
+  position: fixed;
+  top: $navbar-height;
+  right: 0;
+  width: 100%;
+  max-width: 300px;
+  height: 100%;
+  overflow-y: auto;
+  background-color: $primary-color-rgba;
+  box-shadow: 0 2px 5px $primary-color-rgba;
+  font-size: $font-size-navbar-mobile;
+}
+.ui.vertical.accordion.borderless.menu > .item {
+  padding-left: 1.428em;
+  color: $link-navbar;
+}
+
+.ui.vertical.accordion.borderless.menu > .item.active {
+  padding-left: 1.428em;
+  background-color: #00ba49 !important;
+  color: #fff !important;
+  border-bottom: 1px solid #fff;
+}
+
+.ui.vertical.accordion.borderless.menu > .item:hover {
+  padding-left: 1.428em;
+  background-color: $primary !important;
+  color: $link-navbar !important;
+  border-bottom: 1px solid $link-navbar;
+}
+.ui.vertical.accordion.borderless.menu .item .title {
+  color: $link-navbar;
+}
+.ui.vertical.accordion.borderless.menu .item .title .dropdown.icon {
+  float: none;
+  color: $link-navbar;
+}
+
+.ui.vertical.accordion.borderless.menu .title {
+  padding: 1em 1.5em;
+  color: $link-navbar;
+}
+
+// themes
+.ui.vertical.accordion.borderless.menu .title:hover {
+  color: $link-navbar;
+  background-color: $primary-color-rgba;
+}
+.ui.vertical.content {
+  padding: 0.5em 1em;
+  color: $link-navbar;
+  overflow: auto;
+}
+.ui.vertical.accordion.borderless.menu .content:hover {
+  color: $link-navbar;
+  background-color: $primary-color-rgba;
+}
+.ui.vertical.accordion.borderless.menu .item .content .item {
+  padding: 0.5em 1em;
+  color: $link-navbar;
+}
+
+.ui.vertical.accordion.borderless.menu .item .content .item:hover {
+  padding: 0.5em 1em;
+  background-color: $primary-color-rgba !important;
+  color: $link-navbar !important;
+  border-bottom: 1px solid $link-navbar;
+}
+
+.ui.vertical.accordion.borderless.menu .item .content .item.active {
+  padding: 0.5em 1em;
+  background-color: $primary !important;
+  color: $link-navbar !important;
+  border-bottom: 1px solid $link-navbar;
+}
+
+// .ui.vertical.accordion.borderless.menu .header.item {
+//   text-transform: uppercase;
+//   color: $link-navbar;
+// }
+
+#search-results-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  z-index: 2;
+  overflow-y: auto;
+  color: $secondary;
+}
+
+#close-results {
+  margin-left: auto;
+}
+
+
+
+
+/* iPhone 5 (et appareils similaires) */
+@media (max-width: 320px) {
+  .active {
+    display: block;
+  }
+  .tablet.mobile.only .right.menu > .item {
+    font-size: 10px;
+  }
+  .ui.vertical.accordion.borderless.menu {
+    display: none;
+    top: $navbar-height-mobile !important;
+  }
+}
+/* Mobile général (jusqu'à 480px) */
+@media (max-width: 480px) {
+  .ui.fixed.borderless.menu {
+    height: $navbar-height-tablet !important;
+    .ui.vertical.accordion.borderless.menu {
+      top: $navbar-height-tablet !important;
+    }
+
+  }
+}
+/* Téléphones moyens/grands (481px à 767px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .ui.fixed.borderless.menu {
+    height: $navbar-height-tablet !important;
+    .ui.vertical.accordion.borderless.menu {
+      top: $navbar-height-tablet !important;
+    }
+  }
+}
+/* Tablettes (769px à 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+}
+
+/* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
+@media (min-width: 1023px) {
+}

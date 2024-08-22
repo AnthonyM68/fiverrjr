@@ -1,0 +1,64 @@
+@import "variables";
+/* Alert styles */
+.ui.message.anim {
+  display: none; /* Caché par défaut */
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  position: absolute; /* Position absolue pour flotter */
+  top: 10px; /* Ajustez selon votre besoin */
+  right: 10px; /* Ajustez selon votre besoin */
+  max-width: 90%; /* Ajustez selon votre besoin */
+  z-index: 1000; /* Pour être au-dessus des autres éléments */
+  padding: 10px;
+}
+
+/* Slide-in animation */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Slide-out animation */
+@keyframes slide-out-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Apply styles for the alert to show */
+.ui.message.anim.show {
+  display: block; /* Affiche l’alerte */
+  opacity: 1;
+  animation: slide-in-right 0.5s forwards;
+}
+
+/* Hide the alert */
+.ui.message.anim.hide {
+  animation: slide-out-right 0.5s forwards;
+}
+.ui.message.anim .header{
+  color:#1a1a1a !important;
+}
+/* Ensure mobile-specific styles */
+@media (max-width: 768px) {
+  #alert-javascript-mobile {
+    display: block; /* Assurez-vous que le conteneur est visible sur mobile */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    min-width: 100%;
+    z-index: 1000;
+    padding: 10px;
+  }
+}

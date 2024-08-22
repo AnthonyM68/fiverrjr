@@ -1,0 +1,148 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<style>
+    /* Conteneur principal avec flexbox pour un agencement fluide */
+    .ui.container.service {
+        padding-top: 10vh;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 20px); /* Ajustement pour laisser de l'espace pour le footer */
+        overflow: hidden;
+    }
+
+    /* Zone de contenu avec scroll si nécessaire */
+    .ui.list.service, .ui.segment {
+        overflow-y: auto;
+        flex: 1; /* Prend tout l'espace disponible */
+        margin-bottom: 20px; /* Espace pour le footer */
+    }
+
+    /* Styles spécifiques aux sections */
+    .ui.two.column.stackable.equal.height.grid {
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .ui.two.column.stackable.equal.height.grid > .column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        margin-bottom: 20px; /* Espace pour éviter tout débordement */
+    }
+
+    /* Alignement des images dans les détails des services */
+    .product-image.service img {
+        vertical-align: bottom;
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Flexbox pour aligner les colonnes à la fin */
+    .flex-end {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    /* Box-shadow pour les cartes */
+    .ui.two.column.stackable {
+        margin-top: 20px;
+        box-shadow: 1px 3px 8px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Adaptation pour mobile */
+    @media (max-width: 768px) {
+        .ui.container.service {
+            padding: 5vh 2vw;
+            height: calc(100vh - 15px);
+        }
+    }
+</style>
+
+<div class="ui container service">
+    <!-- Titre avec animation -->
+    <div class="uk-animation">
+        <div class="uk-animation-slide-right">
+            <h1 class="title uk-animation-slide-right">
+                {% if service is defined %}
+                {{ service.title }}
+                {% else %}
+                {{ title_page }}
+                {% endif %}
+            </h1>
+        </div>
+    </div>
+
+    <!-- Formulaire d'ajout de service, si défini -->
+    {% if formAddService is defined %}
+    <div class="ui segment">
+        {% include "itemService/form/form.html.twig" %}
+    </div>
+    {% endif %}
+
+    <!-- Liste des services -->
+    {% if services is defined %}
+    <div class="ui list service">
+        {% for service in services %}
+        <div class="item">
+            <i class="folder icon"></i>
+            <div class="content">
+                <div class="header">
+                    <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Détail d'un service -->
+    {% if service is defined %}
+    <div class="ui two column stackable equal height grid uk-animation-fade">
+        <div class="column">
+            <div class="product-image service">
+                <img src="{{ asset(service.picture) }}" alt="Image {{ service.title }}" class="ui fluid image">
+            </div>
+            <div class="ui segment">
+                <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
+            </div>
+        </div>
+
+        <div class="column flex-end">
+            <div class="ui mini card">
+                <div class="content">
+                    <div class="header">{{ service.user.username }}</div>
+                    <div class="meta">
+                        <span class="date">Propose ce service</span>
+                    </div>
+                </div>
+                <div class="extra content">
+                    <a href="{{ path('detail_user', {'id': service.user.id}) }}">
+                        <i class="user icon"></i>
+                        Voir le profil
+                    </a>
+                </div>
+            </div>
+
+            <p><strong>Description: </strong>{{ service.description }}</p>
+            <p><strong>Prix: </strong>{{ service.price }}€</p>
+            <p><strong>Catégories: </strong>{{ service.course.nameCourse }}</p>
+            <p><strong>Créé le: </strong>{{ service.createDate|date('d/m/Y') }}</p>
+            <p><strong>Réf: </strong>{{ service.id }}</p>
+            <a href="{{ path('add_service_cart', {'id': service.id}) }}" class="ui primary button add-to-cart-btn">Ajouter au panier</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% block javascripts %}
+{{ parent() }}
+{% if formAddService is defined %}
+{{ encore_entry_script_tags('Service') }}
+{{ encore_entry_script_tags('previewImage') }}
+{% endif %}
+{% endblock %}
+{% endblock %}

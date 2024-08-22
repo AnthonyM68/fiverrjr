@@ -1,0 +1,167 @@
+@import "./assets/styles/variables";
+
+/* Fonction pour convertir les couleurs hexadécimales en rgba */
+@function hex-to-rgba($hex, $alpha: 1) {
+  @if not(type-of($hex) == color) {
+    @error "Le paramètre doit être une couleur hexadécimale.";
+  }
+  @return rgba($hex, $alpha);
+}
+
+$overlay-parallax-home: hex-to-rgba($secondary, $alpha-parallax-home);
+$text-shadow-primary: hex-to-rgba($primary, $alpha-parallax-home);
+
+.parallax.parallax-home {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url("../../../public/uploads/background-home.jpg");
+}
+
+.overlay-parallax-home {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $parallax-container-home-height;
+  background-color: $overlay-parallax-home;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.floating-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: $white;
+  padding: 20px;
+  z-index: 3;
+  background-color: $overlay-parallax-home;
+  border: 1px solid $white;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+.parallax-home {
+  height: $parallax-container-home-height;
+}
+.floating-title h1 {
+  display: inline-block;
+}
+
+.fiverr-animate,
+.junior-animate {
+  position: relative;
+  float: left;
+  padding:25px;
+}
+div .fiverr-animate {
+  color: $primary !important;
+  margin-right: $margin-large;
+  font-size: $font-size-animate;
+}
+div .junior-animate {
+  color: $white !important;
+  margin-right: $margin-large;
+  font-size: $font-size-animate;
+}
+p.sub-animate {
+  font-size: 10px;
+  color: $link-navbar;
+  text-transform: uppercase;
+  font-weight: 400;
+  z-index: 999;
+  text-shadow: 2px 2px 4px $text-shadow-primary;
+  font-size: $font-size-animate-p;
+  z-index: 999;
+}
+@media (max-width: 320px) {
+  .parallax-container,
+  .parallax-content {
+    min-height: 100vh;
+    width:100vw;
+  }
+}
+// iPhone 5 (et appareils similaires)
+// Mobile général (jusqu'à 480px)
+@media (max-width: 480px) {
+  .parallax-container,
+  .parallax-content {
+    min-height: 100vh;
+    width:100vw;
+  }
+  .floating-title h1 {
+    font-size: $font-size-animate-mobile;
+    font-size: $font-size-animate-mobile;
+    display: flex;
+    justify-content: center;
+  }
+  .floating-title  {
+    width:50%;
+  }
+  div .fiverr-animate {
+    font-size: $font-size-animate-mobile;
+    margin-right:5px;
+  }
+  div .junior-animate {
+    font-size: $font-size-animate-mobile;
+    margin-right:5px;
+  }
+  p.sub-animate {
+    font-size: 10px !important;
+  }
+}
+
+// Téléphones moyens/grands (481px à 767px)
+@media (min-width: 481px) and (max-width: 768px) {
+  .parallax-container,
+  .parallax-content {
+    min-height: 100vh;
+  }
+  .floating-title h1 {
+    font-size: $font-size-animate-tablet;
+  }
+  p.sub-animate {
+    font-size: $font-size-animate-p;
+    font-weight: 600;
+  }
+  div .fiverr-animate {
+    font-size: $font-size-animate-mobile;
+  }
+  div .junior-animate {
+    font-size: $font-size-animate-mobile;
+  }
+  p.sub-animate {
+    font-size: 1rem;
+  }
+}
+
+// Tablettes (769px à 1024px)
+@media (min-width: 769px) and (max-width: 1024px) {
+  .floating-title h1 {
+    font-size: $font-size-animate-tablet;
+  }
+  .parallax-container,
+  .parallax-content {
+    min-height: 100vh;
+  }
+  div .fiverr-animate {
+    font-size: 2.2rem;
+  }
+  div .junior-animate {
+    font-size: 2.2rem;
+  }
+  p.sub-animate {
+    font-size: 1rem;
+  }
+}
+
+// Ordinateurs de bureau et plus grands appareils (1025px et plus)
+@media (min-width: 1025px) {
+}

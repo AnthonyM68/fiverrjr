@@ -1,0 +1,80 @@
+@import "variables";
+
+.bestservices-container {
+  width:100%;  
+  max-width: $bestservices-container;
+  margin: 0 auto;
+  padding: $container-padding;
+  height:100%;
+}
+.best-services-carousel {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.module-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.carousel-container-item {
+  padding: 0 10px;
+}
+
+.carousel-item {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+.card-content {
+  height: 200px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-description {
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-header, .card-meta {
+  margin-bottom: 10px;
+}
+
+.card-meta {
+  font-size: 0.9em;
+  color: #666;
+}
+
+/* iPhone 5 (et appareils similaires) */
+@media (max-width: 320px) {
+
+}
+
+/* Mobile général (jusqu'à 480px) */
+@media (max-width: 480px) {
+
+}
+
+/* Téléphones moyens/grands (481px à 767px) */
+@media (min-width: 481px) and (max-width: 768px) {
+
+}
+
+/* Tablettes (769px à 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+}
+
+/* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
+@media (min-width: 1025px) {
+
+}

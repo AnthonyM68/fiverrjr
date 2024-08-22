@@ -1,0 +1,24 @@
+{% block alert %}
+
+{# mappage pour convertir les types de messages #}
+{% set typeMapping = {
+    'success': 'ui positive message anim show',
+    'warning': 'ui warning message anim show',
+    'error': 'ui negative message anim show'
+} %}
+
+{# on itère sur chaque type de message flash  #}
+{% for type, messages in app.flashes %}
+    {% set mappedType = typeMapping[type] ?? type %}
+
+    {# on itère sur chaque message de ce type #}
+    {% for message in messages %}
+        <div class="{{ mappedType }}">
+            <div class="header">
+                {{ message }}
+            </div>
+        </div>
+    {% endfor %}
+{% endfor %}
+
+{% endblock %}

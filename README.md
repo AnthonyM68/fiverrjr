@@ -1,93 +1,88 @@
-# Bienvenue sur notre plateforme d'échange de services !
+# 🎉 Bienvenue sur la plateforme Fiverr Junior !
+Une plateforme d'échange de services dédiée aux entrepreneurs et développeurs juniors de la région Alsace.
 
-### Sommaire
-    Introduction
-*	Objectif du Projet
-*	Fonctionnalités Principales
-*	Technologies Utilisées
-*	Organisation du Projet
-*	Installation et Utilisation
-*	Contributions
-*	Contact
+## 🚀 Sommaire
+### Introduction
+#### Objectif du Projet
+* 🔥 Fonctionnalités Principales
+* 🏆 Technologies Utilisées
+* 📂 Organisation du Projet
+* 💻 Installation et Utilisation
+* 🤝 Contributions
+* 📬 Contact
+* 📊 Schémas
 
 ### Introduction
-Bienvenue sur ma plateforme d'échange de services dédiée aux entrepreneurs et développeurs de la région Alsace (Haut-Rhin, Bas-Rhin). Mon application offre une expérience simplifiée et efficace pour la mise en relation de clients à la recherche de services spécifiques et de développeurs prêts à les offrir.
+Bienvenue sur Fiverr Junior, une plateforme d'échange de services simplifiée pour les développeurs juniors et les entrepreneurs d’Alsace (Haut-Rhin, Bas-Rhin). Ce projet vise à faciliter la mise en relation entre clients à la recherche de services spécifiques et développeurs en quête de missions.
 
 ### Objectif du Projet
-L'objectif principal de mon projet, réalisé dans le cadre de mon examen de fin de formation de développeur web, est de créer une plateforme intuitive et accessible, inspirée des meilleures pratiques d'UI/UX, tout en maintenant un design sobre et clair. Ma mission est de favoriser l'échange de compétences et de services au sein de notre communauté locale.
+L’objectif de ce projet, développé dans le cadre de mon examen de fin de formation, est de créer une plateforme intuitive et fonctionnelle, tout en mettant l’accent sur un design simple et conforme aux meilleures pratiques en matière d’UI/UX.
 
-### Fonctionnalités Principales
+### 🔥 Fonctionnalités Principales
+Catégorisation avancée des services : Thèmes, catégories et sous-catégories pour une navigation fluide.
+Inscription et profils utilisateur : Gestion des profils pour développeurs juniors et entrepreneurs.
+Interface d’administration : Outil de gestion des contenus.
+Dispositif de facturation : Gestion des transactions entre utilisateurs.
+Accessibilité et design responsif : Un design épuré et conforme aux normes d'accessibilité.
+#### 🏆 Technologies Utilisées
+Framework : Symfony PHP
+ORM : Doctrine
+Moteur de Templates : Twig
+Frameworks CSS : Semantic UI, jQuery UI, Uikit, Bootstrap
+Base de Données : MySQL
+### 📂 Organisation du Projet
+Le projet est structuré en trois modules principaux :
 
-*	Catégorisation avancée des services : Thèmes, Catégories, Sous-Catégories jusqu'au niveau de service spécifique.
-*	Inscription et Profils Utilisateur : Gestion complète des profils pour développeurs juniors et entrepreneurs.
-*	Interface d'Administration : Outil de gestion de contenu pour les administrateurs.
-*	Dispositif de Facturation : Système intégré pour la gestion des transactions entre utilisateurs.
-*	Accessibilité et Design Responsif : Couleurs simples et claires conformes aux normes d'accessibilité.
+* Backend : Gestion des données et logique métier.
+* Frontend : Interface utilisateur basée sur des templates Twig.
+* Administration : Interface sécurisée pour la gestion des services et des utilisateurs.
+💻 Installation et Utilisation.
 
-### Technologies Utilisées
+### Étapes d'installation
+Clonez le repository depuis GitHub.
 
-*	Symfony PHP Framework
-*	Doctrine ORM
-*	Twig Template Engine
-*	Semantic/Semantic-thêmes/Jquery/Jquery-ui/Uikit/Bootstrap CSS Framework
-*	MySQL Database
+> git clone https://github.com/AnthonyM68/fiverrjr.git
 
-## Organisation du Projet
+> composer update
 
-### Le projet est structuré en plusieurs modules principaux :
+> npm install
 
-*	Backend : Gestion des données et logique métier.
-*	Frontend : Interface utilisateur basée sur des templates Twig.
-*	Administration : Interface d'administration sécurisée.
+>symfony serve -d
 
-## Installation et Utilisation
+>npm run dev-server
 
-### Pour installer et utiliser notre application, suivez les instructions suivantes :
+Attendez la fin des compilations et commencez à travailler !
+⚙️ Configuration de la base de données :
+Assurez-vous que votre fichier .env est correctement configuré :
 
-* Clonez le repository depuis GitHub.
-* Installez les dépendances avec Composer.
-* Configurez votre base de données MySQL.
-* Lancez le serveur Webpack.
-* Lancez le serveur Symfony.
+> DATABASE_URL="mysql://root@127.0.0.1:3306/fiverrjr"
+MAILER_DSN=smtp://localhost:1025
+Compte administrateur pour l’accès au dashboard :
 
-### Contributions
-S’agissant d’un projet d’examen la contribution n’est pas envisageable.
-### Contact
-Pour toute question ou commentaire, n'hésitez pas à nous contacter via notre page GitHub.
+Email : admin@gmail.com
+Mot de passe : mdp
+🤝 Contributions
+Étant donné que ce projet fait partie de mon examen de fin de formation, les contributions externes ne sont pas envisageables.
 
-### Schémas :
+📬 Contact
+Pour toute question ou suggestion, n’hésitez pas à me contacter via ma page GitHub.
 
-> Réalisation des schémas conceptuels de données :
+📊 Schémas
+Voici les schémas conceptuels de données utilisés dans ce projet :
+
 > ![MCD](https://github.com/AnthonyM68/fiverrjr/blob/master/MCD.jpg)
 > ![UML](https://github.com/AnthonyM68/fiverrjr/blob/master/UML.jpg)
 > ![MLD](https://github.com/AnthonyM68/fiverrjr/blob/master/MLD.jpg)
 
-### NOTE :
-```php
-$ git clone https://github.com/AnthonyM68/fiverrjr.git
-```
-```php
-$ composer update 
-$ npm install
-```
-Utilisez la base de données fournie dans le dépot et modifiez le fichier .env si besoin
 
-> DATABASE_URL="mysql://root@127.0.0.1:3306/fiverrjr"
 
-> MAILER_DSN=smtp://localhost:1025
 
-```php
-$ npm run dev-server 
-```
-et depuis une autre console...
-```php
-$ symfony serve -d
-```
-
-<h3 align="center">Languages and Tools:</h3>
-<div align="center">
-<a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a>
-<a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://github.com/AwesomeLogos/logomono/blob/gh-pages/logos/symfony.svg" alt="mysql" width="40" height="40"/> </a>
-<a href="https://www.mysql.com/" target="_blank" rel="noreferrer"> <img src="https://github.com/AnthonyM68/fiverrjr/blob/master/js.svg" alt="javascript" width="40" height="40"/> </a>
-<a href="https://www.php.net" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg" alt="php" width="40" height="40"/> </a>
-</div>
+🖥️ Langages et Outils
+<p align="center">
+  <img src="https://img.shields.io/badge/HTML-%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20-E34F26" alt="HTML" />
+  <img src="https://img.shields.io/badge/CSS-%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20-1572B6" alt="CSS" />
+  <img src="https://img.shields.io/badge/JavaScript-%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20-FFFF00" alt="JavaScript" />
+  <img src="https://img.shields.io/badge/React-%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20-61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/PHP-%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20-787CB5" alt="PHP" />
+  <img src="https://img.shields.io/badge/MySQL-%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20-4479A1" alt="MySQL" />
+</p>

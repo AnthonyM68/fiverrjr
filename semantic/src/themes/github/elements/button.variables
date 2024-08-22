@@ -60,7 +60,7 @@
 
 @basicHoverBackground: #e0e0e0;
 
-@blue: #3072b3;
+@blue: #3498db;
 @green: #60b044;
 @black: #5d5d5d;
 

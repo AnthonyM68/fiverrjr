@@ -1,11 +1,12 @@
-import 'jquery';
-import './styles/navbar.css';
-import './styles/dropdown.css';
-import './styles/login-register.css';
-import './styles/app.css';
+document.addEventListener("DOMContentLoaded", function() {
+    console.log('=> app.js loaded');
+    // bouton back to top home
+    const backToTopButton = document.querySelector(".back-to-top");
 
-document.addEventListener('DOMContentLoaded', function () {
+    backToTopButton.addEventListener("click", function(e) {
+        e.preventDefault(); 
 
+<<<<<<< HEAD
   // Admin filtres
   $('.ui.vertical.fluid.menu .item').on('click', function () {
     // Récupérer l'attribut data-tab correspondant
@@ -108,3 +109,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+=======
+        $('html, body').animate({ scrollTop: 0 }, 'smooth');
+    });
+});
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0

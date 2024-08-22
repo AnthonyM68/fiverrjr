@@ -1,0 +1,108 @@
+@import "./assets/styles/variables";
+/* Fonction pour convertir les couleurs hexadécimales en rgba */
+@function hex-to-rgba($hex, $alpha: 1) {
+  @if not(type-of($hex) == color) {
+    @error "Le paramètre doit être une couleur hexadécimale.";
+  }
+  @return rgba($hex, $alpha);
+}
+$overlay-parallax-footer: hex-to-rgba($secondary, $alpha-parallax-footer);
+$overlay-parallax-floating-text-footer: hex-to-rgba($secondary, 0.5);
+
+.parallax-container {
+  min-height: $parallax-container-footer-height;
+}
+.parallax-content {
+  min-height: $parallax-container-footer-height;
+}
+
+.parallax-footer {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $parallax-container-footer-height;
+  background-image: url("../../../public/uploads/background-footer.jpg");
+}
+.overlay-parallax-footer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $parallax-container-footer-height;
+  background-color: $overlay-parallax-footer !important;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.floating-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: $white;
+  padding: 20px;
+  z-index: 1;
+  width: 100%;
+  background-color: $overlay-parallax-floating-text-footer !important;
+}
+.floating-text h1 {
+  position: relative;
+  color: $white;
+}
+.floating-text h1 span:first-child span:last-child {
+    color:$primary;
+}
+.text-primary,
+.text-sub {
+  display: block;
+  text-align: center;
+  color: $white;
+  padding: 25px 0;
+}
+
+.text-primary {
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing;
+    font-size: $font-size-animate-footer;
+
+  }
+.text-sub {
+  letter-spacing: $letter-spacing;
+  font-size: 1em;
+  text-shadow: 0 0 4px $white;
+  font-size: $font-size-animate-footer-p;
+}
+/* iPhone 5 (et appareils similaires) */
+@media (max-width: 320px) {
+  .text-primary {
+    font-size: $font-size-animate-footer-mobile;
+    letter-spacing: $letter-spacing-mobile;
+  }
+  .text-sub {
+    font-size: $font-size-animate-footer-p-mobile;
+    letter-spacing: $letter-spacing-mobile;
+    font-size: $font-size-animate-footer-p-mobile;
+  }
+}
+
+// /* Mobile général (jusqu'à 480px) */
+// @media (max-width: 480px) {
+
+// }
+
+// /* Téléphones moyens/grands (481px à 767px) */
+// @media (min-width: 481px) and (max-width: 768px) {
+
+// }
+
+// /* Tablettes (769px à 1024px) */
+// @media (min-width: 769px) and (max-width: 1024px) {
+
+// }
+
+// /* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
+// @media (min-width: 1025px) {
+
+// }

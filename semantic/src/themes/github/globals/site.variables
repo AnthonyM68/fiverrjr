@@ -2,14 +2,19 @@
      User Global Variables
 *******************************/
 
+@myCustomBackgroundColor: #12172b;
+@bodyFontColorH1: #fff; 
+@formLabelFontColor: #fff;
+
 @pageMinWidth: 1049px;
 @pageOverflowX: visible;
 
+
 @emSize: 13px;
 @fontSize: 13px;
-@fontName: "Arial";
-@importGoogleFonts: false;
-@importFonts: false;
+@fontName: "Merriweather";
+@importGoogleFonts: true;
+@importFonts: true;
 
 @h1: 2.25em;
 
@@ -18,15 +23,23 @@
 @disabledOpacity: 0.3;
 
 /* Colors */
-@blue: #80a6cd;
+
+/* @blue: #80a6cd; */
+@blue: #3498db;
 @green: #78cb5b;
 @orange: #d26911;
-@black: #333;
-@primaryColor: @green;
+/* @black: #333; */
+@black: #1a1a1a;
+
+/* @primaryColor: @green; */ 
+@primaryColor: @blue;
 @secondaryColor: @black;
 
+/* fiverrjr*/
+@pageBackground: #fff; 
+
 /* Links */
-@linkColor: #4078c0;
+@linkColor: @primaryColor;
 @linkHoverColor: @linkColor;
 @linkHoverUnderline: underline;
 
@@ -46,3 +59,4 @@
 @infoTextColor: #4e575b;
 @warningTextColor: #613a00;
 @errorTextColor: #911;
+

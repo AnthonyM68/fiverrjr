@@ -1,10 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Recherche{% endblock %}
+{% block title %}{{ title_page }}{% endblock %}
 
 {% block body %}
-<div class="sperator"></div>
+<style>
+    .ui.grid.stackable {
+        margin-top: 10vh;
+        height: calc(100vh - 10vh);
+        display: flex;
+        align-items: center; 
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
 
+<<<<<<< HEAD
 <div class="ui grid">
     <div class="four wide left attached column">
         <div class="ui vertical fluid menu">
@@ -90,7 +98,148 @@
         {% if results.empty|default %}
         <h2>Aucun résultats</h2>
         {% endif %}
+=======
+    .custom-container {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    
+    /* Style du segment */
+    .ui.segment {
+        background-color: #ffffff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Champs de recherche avec un affichage plein-width */
+    .full-width-input input {
+        width: 100%;
+    }
+    
+    /* Colonne de recherche avec une largeur maximale */
+    .search-form-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center;
+        border: 1px solid green; 
+    }
+    
+    /* Colonne des résultats avec une largeur maximale */
+    .ten.wide.column {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center;
+
+        min-height: 100%;
+    }
+    
+    /* Conteneur des résultats avec un fond blanc */
+    #search-results-container {
+        display:none;
+        width: 100%;
+        max-height: calc(100vh - 10vh); 
+        overflow-y: auto; 
+        padding: 20px;
+    }
+    
+    /* Résultats de recherche */
+    #search-results {
+        width: 100%;
+        max-height: 100%;
+        overflow-y: auto; 
+    }
+    #close-search-results-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1050;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    @media (max-width: 768px) {
+        .custom-container {
+            padding: 10px;
+        }
+    
+        .content {
+            max-width: 100%;
+            padding: 10px;
+        }
+    
+        .field.padding {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+<div class="ui grid stackable">
+    <!-- Colonne de gauche : Moteur de recherche -->
+    <div class="six wide column">
+
+        <div class="custom-container">
+            <h2 class="margined padding-large">{{ title_page }}</h2>
+            <div class="content padding-large">
+                <div class="ui vertical fluid menu">
+                    <div id="menu-service"
+                        class="item field {% if submitted_form|default %}{{ submitted_form == 'form_service' ? 'active teal' : '' }}{% endif %}">
+
+                        <form method="POST" action="/search/results/formdata" class="ui form ajax-search-form">
+                            <input type="hidden" name="_token" value="{{ csrf_token('token_search_term') }}">
+
+                            <div class="ui icon input full-width-input">
+                                <input type="text" name="search_term" required>
+                                <i class="search icon"></i>
+                            </div>
+
+                            <div class="field padding">
+                                <div class="ui radio checkbox padding-small">
+                                    <input type="radio" name="price_filter" value="low_to_high">
+                                    <label>Du moins au plus cher</label>
+                                </div>
+                                <div class="ui radio checkbox padding-small">
+                                    <input type="radio" name="price_filter" value="high_to_low">
+                                    <label>Du plus au moins cher</label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="ui button widget primary">Rechercher</button>
+                        </form>
+
+                        <div class="ui label">{{ service_count }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Colonne de droite : Résultats de recherche -->
+    <div class="ten wide column">
+        <div id="search-results-container" class="ui segment">
+            <h3>Résultats de recherche</h3>
+            <button class="ui button icon close-modal" id="close-search-results-button">
+                <i class="close icon"></i> Fermer
+            </button>
+            <div id="search-results" class="ui divided items">
+                <!-- Les résultats seront insérés ici -->
+            </div>
+        </div>
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     </div>
 </div>
-<div class="sperator"></div>
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('searchMotor') }}
+{% endblock %}
 {% endblock %}

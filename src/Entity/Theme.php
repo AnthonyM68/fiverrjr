@@ -2,10 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ThemeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
+use App\Repository\ThemeRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ThemeRepository::class)]
 class Theme
@@ -13,15 +17,19 @@ class Theme
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['serviceItem'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: "Choisissez un thème")]
+    #[Groups(['serviceItem'])]
     private ?string $nameTheme = null;
 
     /**
      * @var Collection<int, Category>
      */
     #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'theme')]
+    #[Groups(['serviceItem'])]
     private Collection $categories;
 
     public function __construct()
@@ -29,6 +37,11 @@ class Theme
         $this->categories = new ArrayCollection();
     }
 
+    /**
+     * Theme
+     *
+     * @return integer|null
+     */
     public function getId(): ?int
     {
         return $this->id;

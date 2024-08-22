@@ -1,49 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ServiceController!{% endblock %}
+{% block title %}{{ title_page }} {% endblock %}
 
 {% block body %}
 <div class="sperator"></div>
 
-
-<div class="ui grid">
-    <div class="four wide left attached column">
-        <div class="ui vertical fluid menu">
-            <div class="active teal item">
-                {{ form_start(form_theme) }}
-                {{ form_widget(form_theme) }}
-                {{ form_end(form_theme) }}
-                <div class="ui label">Nb Th.</div>
-            </div>
-            <div class="item">
-                {{ form_start(form_category) }}
-                {{ form_widget(form_category) }}
-                {{ form_end(form_category) }}
-                <div class="ui label">Nb Cat.</div>
-            </div>
-            <div class="item">
-                {{ form_start(form_course) }}
-                {{ form_widget(form_course) }}
-                {{ form_end(form_course) }}
-                <div class="ui label">Nb Crs.</div>
-            </div>
-            <div class="item">
-                <div class="ui transparent icon input">
-                    <input type="text" placeholder="Autres...">
-                    <i class="search icon"></i>
-                </div>
-            </div>
-        </div>
-        
-    </div>
-    <div class="twelve wide stretched column">
-        <!-- Contenu dynamique pour afficher les résultats de la recherche -->
-        <!-- Vous pouvez laisser cette partie vide pour l'instant -->
-    </div>
-</div>
-
-<div class="sperator"></div>
-
+<h1>{{ title_page }}</h1>
 
 
 {% endblock %}

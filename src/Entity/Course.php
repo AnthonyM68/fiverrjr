@@ -2,64 +2,66 @@
 
 namespace App\Entity;
 
-use App\Entity\Service;
+use App\Entity\ServiceItem;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CourseRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
+
 class Course
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+
+    #[Groups(['course' , 'serviceItem'])]
     private ?int $id = null;
 
+     
     #[ORM\Column(length: 100)]
+    #[Groups(['serviceItem'])]
+    #[Assert\NotBlank(message: "Choisissez une sous-catégorie")]
     private ?string $nameCourse = null;
 
-    #[ORM\ManyToOne(inversedBy: 'courses')]
+    /**
+     * ServiceItem
+     *
+     * @var Collection<int
+     */
+     #[Groups(['serviceItem'])]
+    #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'course')]
+    private Collection $serviceItems;
+
+
+
+
+    /**
+     * Undocumented variable
+     *
+     * @var Category|null
+     */
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'courses')]
+     #[Groups(['serviceItem'])]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'course')]
-    private Collection $services;
+
 
     public function __construct()
     {
-        $this->services = new ArrayCollection();
+        $this->serviceItems = new ArrayCollection();
     }
 
     /**
-     * @return Collection<int, Service>
+     * Course
+     *
+     * @return integer|null
      */
-    public function getServices(): ?Collection
-    {
-        return $this->services;
-    }
-
-    public function addService(Service $service): self
-    {
-        if (!$this->services->contains($service)) {
-            $this->services[] = $service;
-            $service->setCourse($this);
-        }
-
-        return $this;
-    }
-
-    public function removeService(Service $service): self
-    {
-        if ($this->services->removeElement($service)) {
-            // set the owning side to null (unless already changed)
-            if ($service->getCourse() === $this) {
-                $service->setCourse(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -77,6 +79,45 @@ class Course
         return $this;
     }
 
+
+
+
+    /**
+     * @return Collection<int, ServiceItem>
+     */
+    public function getServiceItems(): ?Collection
+    {
+        return $this->serviceItems;
+    }
+    public function addServiceItem(ServiceItem $serviceItem): self
+    {
+        if (!$this->serviceItems->contains($serviceItem)) {
+            $this->serviceItems[] = $serviceItem;
+            $serviceItem->setCourse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeServiceItem(ServiceItem $serviceItem): self
+    {
+        if ($this->serviceItems->removeElement($serviceItem)) {
+            // set the owning side to null (unless already changed)
+            if ($serviceItem->getCourse() === $this) {
+                $serviceItem->setCourse(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+    /**
+     * Undocumented function
+     *
+     * @return Category|null
+     */
     public function getCategory(): ?Category
     {
         return $this->category;
@@ -88,6 +129,10 @@ class Course
 
         return $this;
     }
+
+
+
+
 
     public function __toString()
     {

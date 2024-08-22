@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+{% if data|length > 0 %}
+<div class="ui container cart">
+
+    <div class="ui items cart-items">
+        <h1 class="padding-bottom-extra-large uk-animation-slide-right">Récapitulatif de votre panier</h1>
+        
+        {% for product in data %}
+        <div class="item uk-animation-fade">
+            <div class="ui small image">
+                <img src="{{ product.serviceItem.picture }}" alt="Image produit {{ product.serviceItem.title }}">
+            </div>
+            <div class="content">
+                <a class="header">{{ product.serviceItem.title }}</a>
+                <div class="meta">
+                    <span class="price">{{ product.serviceItem.price }}€</span>
+                </div>
+                <div class="extra">
+                    <p>Service proposé par: {{ product.serviceItem.user.firstName ~ product.serviceItem.user.lastName}}
+                    </p>
+                    <div class="ui right floated">
+                        <a href="{{ path('delete_service_cart', {id: product.serviceItem.id}) }}"
+                            class="ui-button ui-corner-all">
+                            <span class="ui-icon ui-icon-trash"></span> Supprimer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- Conteneur pour le paiement -->
+    <section class="payment-section uk-animation-fade">
+        <h2>Informations de paiement</h2>
+        <form id="checkout-form" action="{{ path('app_stripe_charge') }}" method="POST">
+            <div id="card-element" class="card-element"></div>
+            <input type="hidden" name="amount" value="{{ total * 100 }}"> <!-- Le montant en cents -->
+            <button class="ui button green" id="checkout-button"
+                data-public-key="{{ stripe_public_key }}">Payer</button>
+        </form>
+    </section>
+
+    <div class="cart-total">
+        <h3>Total: {{ total }}€</h3>
+    </div>
+</div>
+{% else %}
+<div class="ui container">
+    <div class="ui warning message empty-cart-message">
+        <div class="header">Panier vide</div>
+        <p>Votre panier est vide.</p>
+    </div>
+</div>
+{% endif %}
+
+
+{% block javascripts %}
+{{ parent() }}
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // je défini ici une variable selon le rendu d'affichage de twig
+        // s'il y'a des résultat javascript cherchera le moyen de paiement
+        // évitant les recherche d'Id null
+        let hasData = {{ data| length > 0 ? 'true' : 'false'
+    }};
+    if (hasData) {
+        let stripe = Stripe("{{ stripe_public_key }}");
+        let elements = stripe.elements();
+
+        let style = {
+            base: {
+                color: '#3498db',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        };
+
+        let cardElementContainer = document.getElementById('card-element');
+        let button = document.getElementById('checkout-button');
+
+        if (cardElementContainer) {
+            let cardElement = elements.create('card', { style: style });
+            cardElement.mount('#card-element');
+            if (button) {
+                button.addEventListener('click', function () {
+                    stripe.createToken(cardElement).then(function (result) {
+                        if (result.error) {
+                            alert(result.error.message);
+                        } else {
+                            let tokenInput = document.createElement('input');
+                            tokenInput.setAttribute('type', 'hidden');
+                            tokenInput.setAttribute('name', 'stripeToken');
+                            tokenInput.setAttribute('value', result.token.id);
+                            document.getElementById('checkout-form').appendChild(tokenInput);
+                            document.getElementById('checkout-form').submit();
+                        }
+                    });
+                });
+            } else {
+                console.error('Le bouton #checkout-button n\'existe pas.');
+            }
+        } else {
+            console.error('Le conteneur #card-element n\'existe pas.');
+        }
+    } else {
+        console.log('Aucune donnée à traiter.');
+    }
+    });
+</script>
+{% endblock %}
+{% endblock %}

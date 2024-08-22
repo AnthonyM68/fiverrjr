@@ -1,11 +1,173 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
-
 {% block body %}
+<script>
+    // User.js
+    window.__INITIAL_DATA__ = {
+        lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
+    lastClient: {{ lastClient | json_encode() | raw }} };
+</script>
 
-<a href="{{ path('new_service') }}" class="ui button primary">
-    Déposer une annonce
-</a>
+{# Détail d'un utilisateur #}
+{% if user| default %}
+<div class="ui container">
+    <div class="uk-animation">
+        <div class="uk-animation-slide-right">
+            <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
+        </div>
+    </div>
+    <div class="ui two column stackable grid">
+        <div class="eight wide column">
+            <div class="ui segment equal-height">
+                <div class="product-image">
+                    <img src="{{ asset(user.picture) }}"
+                        alt="Image de profil de {{ user.firstName }} {{ user.lastName }}"
+                        class="ui fluid image portrait">
+                </div>
+                <div class="ui segment equal-height">
+                    <h2 class="ui header">{{ user.firstName }} {{ user.lastName }}</h2>
+                    <div class="aligned center">
+                        <p><strong>Inscrit depuis: </strong>{{ user.dateRegister|date('d/m/Y') }}</p>
+                        {% set roles = [] %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                        {% set roles = roles|merge(['Administrateur']) %}
+                        {% endif %}
+                        {% if is_granted('ROLE_CLIENT') %}
+                        {% set roles = roles|merge(['Entreprise / Client']) %}
+                        {% endif %}
+                        {% if is_granted('ROLE_DEVELOPER') %}
+                        {% set roles = roles|merge(['Développeur']) %}
+                        {% endif %}
+                        {% if roles is not empty %}
+                        <p>Rôle{% if roles|length > 1 %}s{% endif %}: {{ roles|join(', ') }}</p>
+                        {% endif %}
+                        <p><strong>Localité: </strong>{{ user.city }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="eight wide column">
+            <div class="ui segment equal-height">
+                <h3><strong>Bio: </strong></h3>
+                <div class="product-details">
+                    <p>{{ user.bio }}</p>
+                </div>
+            </div>
 
+            <div class="ui segment equal-height">
+                <h3><strong>Portfolio: </strong></h3>
+                <div class="product-details">
+                    <p><a href="{{ user.portfolio }}" target="_blank" rel="noopener noreferrer">Voir le portfolio {{
+                            user.portfolio }}</a></p>
+                </div>
+            </div>
+            <div class="container">
+                <a href="{{ path('list_services_by_userID', { 'id': user.id }) }}"
+                    class="ui button primary">
+                    Ces service
+                </a>
+                <a href="javascript:void(0);" class="ui button primary">
+                    ...
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{# profile de l'utilisateur, interface #}
+{% else %}
+<div class="ui container user">
+    <div class="uk-animation padding-bottom-large">
+        <div class="uk-animation-slide-right">
+            <h1 class="title uk-animation-slide-right">Bonjour {{ app.user.firstName ~ app.user.lastName }}</h1>
+        </div>
+    </div>
+    <div class="ui grid equal-height-columns ">
+        <div class="column">
+            <div class="ui grid equal-height-columns">
+                <div class="column">
+                    <div id="user-form">{% include "user/form/form.html.twig" %}</div>
+                </div>
+                <div class="column">
+                    <div class="item padding-bottom-large">
+                        <div id="last-developer-profile"></div>
+                    </div>
+                    <div class="item padding-bottom-large">
+                        <div id="last-client-profile"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui segment">
+                <a href="javascript:void(0);" class="ui button primary toggle-new-service"
+                    data-token="{{ csrf_token('token_new_service') }}">
+                    Nouveau service
+                </a>
+                <a href="javascript:void(0);" class="ui button primary toggle-list-services">
+                    Liste de mes services
+                </a>
+            </div>
+
+
+            {# Crée un nouveau service #}
+            <div id="service-form" class="ui segment"
+                style="display: {{ formHasErrors ? 'block' : 'none' }}">
+                <h2>Nouveau service</h2>
+                <div id="loader-new" class="ui loader"></div>
+                <div id="service-form-new"></div>
+            </div>
+            {# liste des services de l'utilisateur #}
+            <div id="service-item-list" class="ui segment" style="display: none;">
+                <h2>Mes services</h2>
+                <div id="loader-list" class="ui loader"></div>
+                <table class="ui celled table">
+                    <thead>
+                        <tr>
+                            <th>Intitulé du service</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body-table-list" class="parent-container"></tbody>
+                </table>
+            </div>
+            {# editer un service existant #}
+            <div id="edit-item-service" class="ui segment" >
+                <h2>J'édite mon service</h2>
+                <div id="loader-edit" class="ui loader"></div>
+                <div class="ui grid">
+                    <div class="sixteen wide column btn-close">
+                        <button id="close-edit" class="ui button primary" >Fermer</button>
+                    </div>
+                    <div class="sixteen wide column search-results">
+                        
+                        <div id="service-form-edit"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui segment">
+                <div id="orders_pending">{% include "/user/order/pending.html.twig" %}</div>
+            </div>
+            <div class="ui segment">
+                <div id="orders_completed">{% include "/user/order/completed.html.twig" %}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% block javascripts %}
+{{ parent() }}
+
+{# Order.js #}
+{{ encore_entry_script_tags('Order') }}
+{# Service.js #}
+{{ encore_entry_script_tags('Service') }}
+{# User.js #}
+{{ encore_entry_script_tags('User') }}
+{# preview.js #}
+{{ encore_entry_script_tags('previewImage') }}
+
+{% endblock %}
 {% endblock %}

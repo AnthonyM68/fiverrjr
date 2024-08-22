@@ -1,33 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    {# balise pour la gestion d'affichage multi écran #}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>{% block title %} {{ title_page }}{% endblock %}</title>
+
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
     {% block stylesheets %}
     {{ encore_entry_link_tags('jquery_ui_css') }}
     {{ encore_entry_link_tags('jquery_ui_theme') }}
+<<<<<<< HEAD
     {{ encore_entry_link_tags('jquery_structure') }}
     {{ encore_entry_link_tags('uikit_css') }}
     {{ encore_entry_link_tags('semantic_css') }}
     {{ encore_entry_link_tags('app_styles') }}
     {# {{ encore_entry_link_tags('semantic_less') }} #}
+=======
+    {{ encore_entry_link_tags('jquery_ui_structure') }}
+    {{ encore_entry_link_tags('jquery_popup') }}
+    {{ encore_entry_link_tags('uikit_css') }}
+    {{ encore_entry_link_tags('semantic_css') }}
+    {{ encore_entry_link_tags('tarteaucitron_css') }}
+    {{ encore_entry_link_tags('app_styles') }}
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     {% endblock %}
 </head>
 
 <body>
-    <header>{% include 'navbar/navbar.html.twig' %}</header>
-    <artcile>
-        <div class="ui container">
-            <div class="separator"></div>
-            {% block body %}{% endblock %}
-        </div>
-    </artcile>
+    <header>
+        {# On utilise un controller pour rendre un form search dans la navbar #}
+        {{ render(controller('App\\Controller\\NavbarController::index')) }}
+    </header>
+    <main class="content home">
+        {# affichage les résultats de recherche du moteur de la navbar #}
+        {% include "search/results.html.twig" %} 
+        {% block body %} {% endblock %}
+    </main>
     <footer>{% include 'footer/footer.html.twig' %}</footer>
-
+    <div id="tarteaucitron"></div>
     {% block javascripts %}
+<<<<<<< HEAD
     {{ encore_entry_script_tags('jquery_ui') }}
 
     {# {{ encore_entry_script_tags('uikit') }} #}
@@ -38,6 +54,45 @@
 
     {{ encore_entry_script_tags('app') }}
 
+=======
+    {{ encore_entry_script_tags('messageFlash') }}
+    {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('jquery_ui_js') }}
+    {{ encore_entry_script_tags('semantic') }}
+    {{ encore_entry_script_tags('uikit') }}
+    {{ encore_entry_script_tags('uikit-icons') }}
+
+
+    {# {{ encore_entry_script_tags('StickyFooter') }} #}
+
+    {# <script src="{{ asset('tarteaucitron.js')}}"></script> 
+
+    <script type="text/javascript">
+        if (typeof tarteaucitron !== 'undefined') {
+
+            tarteaucitron.init({
+                "privacyUrl": "", /* Privacy policy url */
+                "hashtag": "#tarteaucitron", /* Open the panel with this hashtag */
+                "cookieName": "tarteaucitron", /* Cookie name */
+                "orientation": "bottom", /* Banner position (top - bottom) */
+                "showAlertSmall": true, /* Show the small banner on bottom right */
+                "cookieslist": true, /* Show the cookie list */
+                "adblocker": false, /* Show a Warning if an adblocker is detected */
+                "AcceptAllCta": true, /* Show the accept all button when highPrivacy on */
+                "highPrivacy": true, /* Disable auto consent */
+                "handleBrowserDNTRequest": false, /* If Do Not Track == 1, disallow all */
+                "removeCredit": false, /* Remove credit link */
+                "moreInfoLink": true, /* Show more info link */
+                "useExternalCss": false, /* If false, the tarteaucitron.css file will be loaded */
+                "useExternalJs": false, /* If false, the tarteaucitron.js file will be loaded */
+                "readmoreLink": "", /* Change the default readmore link */
+                "mandatory": true /* Show a message about mandatory cookies */
+            });
+        } else {
+            console.error('Tarteaucitron is not defined');
+        }
+    </script> #}
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     {% endblock %}
 </body>
 

@@ -1,0 +1,59 @@
+/* Component React StickyFooter 
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  background: #f1f1f1;
+  padding: 50px;
+  font-size: 20px;
+}
+.container {
+  height: 700px;
+  overflow: auto; 
+}
+.container::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+} 
+.outer-container {
+  height: 700px;
+  overflow: hidden;
+  position: relative;
+}
+.inner-container {
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 15px; 
+  box-sizing: content-box; 
+}
+.inner-container::-webkit-scrollbar {
+  width: 0; 
+}
+.context {
+  padding: 20px;
+  background: #eee;
+}  */
+/* iPhone 5 (et appareils similaires) */
+@media (max-width: 320px) {
+
+}
+
+/* Mobile général (jusqu'à 480px) */
+@media (max-width: 480px) {
+
+}
+
+/* Téléphones moyens/grands (481px à 767px) */
+@media (min-width: 481px) and (max-width: 768px) {
+
+}
+
+/* Tablettes (769px à 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+}
+
+/* Ordinateurs de bureau et plus grands appareils (1025px et plus) */
+@media (min-width: 1025px) {
+
+}

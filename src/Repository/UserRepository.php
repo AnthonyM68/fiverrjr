@@ -39,7 +39,48 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getSingleScalarResult();
     }
+<<<<<<< HEAD
 
+=======
+    public function findUsersByRole(?string $role)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.roles LIKE :role')
+            ->setParameter('role', '%' . $role . '%');
+    }
+    public function findOneUserByRole(?string $role)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.roles LIKE :role')
+            ->setParameter('role', '%' . $role . '%')
+            ->orderBy('u.dateRegister', 'DESC')
+            ->setMaxResults(1);
+    }
+    public function searchByTerm(?string $searchTerm, ?string $userType)
+    {
+        return $this->createQueryBuilder('u')
+        ->where('u.username LIKE :searchTerm')
+        ->orWhere('u.firstName LIKE :searchTerm')
+        ->orWhere('u.lastName LIKE :searchTerm')
+        ->andWhere('u.roles LIKE :role')
+        ->setParameter('searchTerm', '%' . $searchTerm . '%')
+        ->setParameter('role', '%' . $userType . '%')
+        ->orderBy('u.dateRegister', 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
+    public function searchByTermFromCity(?string $searchTerm, ?string $userType)
+    {
+        return $this->createQueryBuilder('u')
+        ->where('u.city LIKE :searchTerm')
+        ->andWhere('u.roles LIKE :role')
+        ->setParameter('searchTerm', '%' . $searchTerm . '%')
+        ->setParameter('role', '%' . $userType . '%')
+        ->orderBy('u.dateRegister', 'DESC')
+        ->getQuery()
+        ->getResult();
+    }
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

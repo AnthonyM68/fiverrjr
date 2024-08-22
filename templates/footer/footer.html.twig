@@ -1,47 +1,49 @@
-<div class="uk-container ">
+{# StickyFooter #}
+{# <div id="sticky-root"></div> #}
 
-    <div class="uk-padding uk-child-width-1-2 uk-text-center" uk-grid>
-
-        <div class="uk-width-expand@m">
-
-            <div class="uk-child-width-1-2" uk-grid>
-
-                {# <ul class="uk-list uk-list-line">
-                    <i class="accessible icon" style="visibility: visible;"></i>
-                    <i class="american sign language interpreting icon" style="visibility: visible;"></i>
-                    <i class="assistive listening systems icon" style="visibility: visible;"></i>
-                </ul>
-                <ul class="uk-list uk-list-line">
-                    <i class="accessible icon" style="visibility: visible;"></i>
-                    <i class="american sign language interpreting icon" style="visibility: visible;"></i>
-                    <i class="assistive listening systems icon" style="visibility: visible;"></i>
-                </ul> #}
-
-            </div>
+<footer class="ui container footer">
+    <div class="footer-container">
+        <div class="footer-section link">
+            <h3>Liens rapides</h3>
+            <ul>
+                <li><a href="#"><i class="info circle icon"></i> A propos</a></li>
+                <li><a href="#"><i class="envelope icon"></i> Contact</a></li>
+                <li><a href="#"><i class="shield alternate icon"></i> Politique de confidentialité</a></li>
+                <li><a href="#"><i class="file alternate icon"></i> Conditions d'utilisation</a></li>
+            </ul>
         </div>
-        <div class="uk-width-auto@m" uk-grid>
-            <div>
-                <div class="uk-width-small-1-1">
-                    <div class="mk-brand-bw">
-                        <div class="mk-logo-bw">
-                            <a class="uk-navbar-item uk-logo container-logo" href="{{ asset('home') }}">
-                                <div class="ui tiny image">
-                                    {# <img src="{{ asset('img.webp') }}"> #}
-                                </div>
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                    <div class="uk-text-center">
-                        <a href="" class="uk-icon-button  uk-margin-small-right"><i class="facebook f icon"></i></a>
-                        <a href="" class="uk-icon-button  uk-margin-small-right"><i class="twitter icon"></i></a>
-                        <a href="" class="uk-icon-button  uk-margin-small-right"><i class="youtube icon"></i></a>
-                        <a href="" class="uk-icon-button  uk-margin-small-right"><i class="instagram icon"></i></a>
-                    </div>
-                </div>
+        <div class="footer-section services">
+            <h3>Nos services</h3>
+            <ul>
+                <li><a href="#" alt=""><i class="laptop code icon"></i> Développement web</a></li>
+                <li><a href="#" alt=""><i class="mobile alternate icon"></i> Application mobile</a></li>
+            </ul>
+        </div>
+        <div class="footer-section connect">
+            <h3>Connecte-toi avec nous</h3>
+            <div class="social-links">
+                <a href="#" class="ui icon button" alt=""><i class="facebook f icon"></i></a>
+                <a href="#" class="ui icon button" alt=""><i class="twitter icon"></i></a>
+                <a href="#" class="ui icon button" alt=""><i class="youtube icon"></i></a>
+                <a href="#" class="ui icon button" alt=""><i class="instagram icon"></i></a>
+            </div>
+            <div class="newsletter">
+                <h4>Abonnez-vous à notre newsletter</h4>
+                <form>
+                    <input type="email" placeholder="Votre Email" aria-label="Email for newsletter">
+                    <button class="ui button primary" type="submit">S'abonner</button>
+                </form>
             </div>
         </div>
     </div>
-</div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 fiverrJR @Elan-Formation</p>
+        <a href="#" class="back-to-top" aria-label="Back to top"><i class="chevron up icon"></i></a>
+    </div>
+</footer>
+
+
+{% block javascripts %}
+{# {{ encore_entry_script_tags('StickyFooter') }} #}
+{# {{ encore_entry_script_tags('StickyFooter') }} #}
+{% endblock %}

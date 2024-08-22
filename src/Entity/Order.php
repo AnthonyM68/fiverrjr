@@ -18,28 +18,47 @@ class Order
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $serviceId = null;
-
-    #[ORM\Column]
     private ?int $userId = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateOrder = null;
 
     #[ORM\Column]
-    private array $status = [];
+    private ?string $status = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDelivery = null;
-
-    #[ORM\ManyToOne(inversedBy: 'orders')]
+    /**
+     * Undocumented variable
+     *
+     * @var User|null
+     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
     /**
-     * @var Collection<int, Service>
+     * Undocumented variable
+     *
+     * @var Invoice|null
      */
-    #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'orders')]
+    #[ORM\OneToOne(mappedBy: 'orderRelation', targetEntity: Invoice::class)]
+    private ?Invoice $invoice = null;
+    /**
+     * Undocumented variable
+     *
+     * @var Collection
+     */
+    #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'order', cascade: ['persist'])]
     private Collection $services;
+    /**
+     * Undocumented variable
+     *
+     * @var Payment|null
+     */
+    #[ORM\OneToOne(targetEntity: Payment::class, mappedBy: 'orderRelation', cascade: ['persist', 'remove'])]
+    private ?Payment $payment = null;
+
 
     public function __construct()
     {
@@ -51,30 +70,29 @@ class Order
         return $this->id;
     }
 
-    public function getServiceId(): ?int
+    public function getUser(): ?User
     {
-        return $this->serviceId;
+        return $this->user;
     }
 
-    public function setServiceId(int $serviceId): static
+    public function setUser(?User $user): self
     {
-        $this->serviceId = $serviceId;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getUserId(): ?int
+    public function getPayment(): ?Payment
     {
-        return $this->userId;
+        return $this->payment;
     }
 
-    public function setUserId(int $userId): static
+    public function setPayment(Payment $payment): static
     {
-        $this->userId = $userId;
+        $this->payment = $payment;
 
         return $this;
     }
-
     public function getDateOrder(): ?\DateTimeInterface
     {
         return $this->dateOrder;
@@ -87,12 +105,12 @@ class Order
         return $this;
     }
 
-    public function getStatus(): array
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    public function setStatus(array $status): static
+    public function setStatus(string $status): static
     {
         $this->status = $status;
 
@@ -111,44 +129,38 @@ class Order
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getInvoice(): ?Invoice
     {
-        return $this->user;
+        return $this->invoice;
     }
 
-    public function setUser(?User $user): static
+    public function setInvoice(Invoice $invoice): static
     {
-        $this->user = $user;
+        $this->invoice = $invoice;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Service>
+     * @return Collection<int, ServiceItem>
      */
     public function getServices(): Collection
     {
         return $this->services;
     }
 
-    public function addService(Service $service): static
+    public function addService(ServiceItem $service): static
     {
         if (!$this->services->contains($service)) {
             $this->services->add($service);
-            $service->setOrders($this);
         }
 
         return $this;
     }
 
-    public function removeService(Service $service): static
+    public function removeService(ServiceItem $service): static
     {
-        if ($this->services->removeElement($service)) {
-            // set the owning side to null (unless already changed)
-            if ($service->getOrder() === $this) {
-                $service->setOrders(null);
-            }
-        }
+        $this->services->removeElement($service);
 
         return $this;
     }

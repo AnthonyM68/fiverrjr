@@ -24,23 +24,27 @@ class ThemeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-     // Requête pour rechercher un searchterm à partir de Theme->Category/Course/Service
+    // Requête pour rechercher un term à partir de Theme->Category/Course/Service
+    // ( prévoir axe d'amélioration, filtres de terme...)
     public function searchByTermAllChilds($searchTerm)
     {
-        return $this->createQueryBuilder('theme')
-        ->leftJoin('theme.categories', 'category')
-        ->leftJoin('category.courses', 'course')
-        ->leftJoin('course.services', 'service')
-        ->addSelect('category', 'course', 'service')
-        ->where('theme.nameTheme LIKE :searchTerm')
-        ->orWhere('category.nameCategory LIKE :searchTerm')
-        ->orWhere('course.nameCourse LIKE :searchTerm')
-        ->orWhere('service.title LIKE :searchTerm')
-        ->orWhere('service.description LIKE :searchTerm')
-        ->setParameter('searchTerm', '%' . $searchTerm . '%')
-        ->getQuery()
-        ->getResult();
+        $qb =  $this->createQueryBuilder('t')
+            ->leftJoin('t.categories', 'c')
+            ->leftJoin('c.courses', 'co')
+            ->leftJoin('co.serviceItems', 'si')
+            ->addSelect('c', 'co', 'si')
+            ->where('t.nameTheme LIKE :searchTerm')
+            ->orWhere('c.nameCategory LIKE :searchTerm')
+            ->orWhere('co.nameCourse LIKE :searchTerm')
+            ->orWhere('si.title LIKE :searchTerm')
+            ->orWhere('si.description LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->getQuery()
+            ->getResult();
+
+            return $qb;
     }
+<<<<<<< HEAD
     public function countAll()
 {
     return $this->createQueryBuilder('t')
@@ -49,6 +53,17 @@ class ThemeRepository extends ServiceEntityRepository
         ->getSingleScalarResult();
 }
     
+=======
+
+    public function countAll()
+    {
+        return $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     //    /**
     //     * @return Theme[] Returns an array of Theme objects
     //     */

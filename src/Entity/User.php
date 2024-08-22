@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\ServiceItem;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -19,63 +22,115 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user', 'serviceItem'])]
     private ?int $id = null;
 
+    // Contrainte pour le champ email login
+    #[Assert\NotBlank]
+    #[Assert\Email(message: "Veuillez saisir une adresse email valide.")]
+    #[Assert\Length(
+        min: 5,
+        minMessage: "Votre email doit comporter au moins {{ limit }} caractères.",
+        max: 180,
+        maxMessage: "Votre email ne peut pas comporter plus de {{ limit }} caractères."
+    )]
     #[ORM\Column(length: 180)]
+    // #[Groups(['user', 'serviceItem'])]
     private ?string $email = null;
 
     /**
-     * @var list<string> The user roles
+     * @var array The user roles
      */
-    #[ORM\Column]
+
+    #[ORM\Column(type: 'json')]
+    #[Groups(['user', 'serviceItem'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+
+    #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 12,
+        minMessage: "Le mot de passe doit comporter au moins {{ limit }} caractères."
+    )]
+    #[Assert\Regex(
+        pattern: "/[a-z]/",
+        message: "Le mot de passe doit contenir au moins une lettre minuscule."
+    )]
+    #[Assert\Regex(
+        pattern: "/[A-Z]/",
+        message: "Le mot de passe doit contenir au moins une lettre majuscule."
+    )]
+    #[Assert\Regex(
+        pattern: "/\d/",
+        message: "Le mot de passe doit contenir au moins un chiffre."
+    )]
+    #[Assert\Regex(
+        pattern: "/\W/",
+        message: "Le mot de passe doit contenir au moins un caractère spécial."
+    )]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $password = null;
 
+
+    #[Assert\NotBlank(message: "Veuillez indiquer votre prénom.")]
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $firstName = null;
 
+    #[Assert\NotBlank(message: "Veuillez indiquer votre nom.")]
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $lastName = null;
 
+    #[Assert\NotBlank(message: "Le numéro de téléphone ne peut pas être vide.")]
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $phoneNumber = null;
 
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['user', 'serviceItem'])]
     private ?\DateTimeInterface $dateRegister = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $picture = null;
 
+    #[Assert\NotBlank(message: "Veuillez indiquer votre ville.")]
     #[ORM\Column(length: 100, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $portfolio = null;
 
+    #[Assert\NotBlank(message: "La bio ne peut pas être vide.")]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $bio = null;
 
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[Assert\NotBlank(message: "Le nom d'utilisateur ne peut pas être vide.")]
     #[ORM\Column(length: 100)]
+    #[Groups(['user', 'serviceItem'])]
     private ?string $username = null;
 
     /**
      * @var Collection<int, Service>
      */
-    #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'user')]
-    private Collection $service;
+    #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'user')]
+    private Collection $serviceItems;
 
     public function __construct()
     {
-        $this->service = new ArrayCollection();
-        $this->orders = new ArrayCollection();
+        $this->serviceItems = new ArrayCollection();
+        //$this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -252,27 +307,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Service>
      */
-    public function getService(): Collection
+    public function getServiceItems(): Collection
     {
-        return $this->service;
+        return $this->serviceItems;
     }
 
-    public function addService(Service $service): static
+    public function addServiceItem(ServiceItem $serviceItem): static
     {
-        if (!$this->service->contains($service)) {
-            $this->service->add($service);
-            $service->setUser($this);
+        if (!$this->serviceItems->contains($serviceItem)) {
+            $this->serviceItems->add($serviceItem);
+            $serviceItem->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeService(Service $service): static
+    public function removeService(ServiceItem $serviceItem): static
     {
-        if ($this->service->removeElement($service)) {
+        if ($this->serviceItems->removeElement($serviceItem)) {
             // set the owning side to null (unless already changed)
-            if ($service->getUser() === $this) {
-                $service->setUser(null);
+            if ($serviceItem->getUser() === $this) {
+                $serviceItem->setUser(null);
             }
         }
 
@@ -295,10 +350,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->username;
     }
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
 
+        return $this;
+    }
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
-    private Collection $orders;
+    // #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    // private Collection $orders;
 
 
     /**
@@ -330,10 +390,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    public function setUsername(string $username): static
-    {
-        $this->username = $username;
 
-        return $this;
+    public function __toString()
+    {
+        return $this->username;
     }
 }

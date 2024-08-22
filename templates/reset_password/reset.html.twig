@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block body %}
+{% include "alertflash/flash_message.html.twig" %}
+<div class="ui middle aligned center aligned grid">
+    <div class="ui segment login-register" style="width:350px">
+        <h2 class="ui teal image header">
+            <img src="https://fomantic-ui.com/examples/assets/images/logo.png" class="image">
+            <div class="content">
+                Réinitialiser le mot de passe
+            </div>
+        </h2>
+        {{ form_start(resetForm, {'attr': {'class': 'ui large form', 'novalidate': 'novalidate'}}) }}
+        <div class="ui stacked segment">
+            <div class="field">
+                {{ form_row(resetForm.plainPassword) }}
+            </div>
+            <button class="ui fluid large teal submit button">Validé</button>
+        </div>
+        {{ form_end(resetForm) }}
+
+        <div class="field">
+            Rappelez-vous de votre mot de passe? <a href="{{ path('login') }}">Se connecter</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

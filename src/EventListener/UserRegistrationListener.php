@@ -5,7 +5,7 @@ namespace App\EventListener;
 use App\Entity\User;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 
-
+// Ajoute la date d'enregistrement d'un User
 class UserRegistrationListener
 {
     public function prePersist(PrePersistEventArgs $args): void

@@ -1,0 +1,216 @@
+@import "./assets/styles/variables";
+
+@function hex-to-rgba($hex, $alpha: 1) {
+  @if not(type-of($hex) == color) {
+    @error "Le paramètre doit être une couleur hexadécimale.";
+  }
+  @return rgba($hex, $alpha);
+}
+$homepage-overlay-rgba: hex-to-rgba($secondary, $alpha-navbar);
+
+.homepage-container {
+  max-width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  background-color: $pageBackground;
+}
+
+.homepage-overlay {
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  // width: 100%;
+  // height: 100%;
+  // background: $homepage-overlay-rgba;
+  // z-index: 1;
+}
+
+.homepage-home {
+  position: relative;
+  z-index: 2;
+}
+
+.homepage-ui-header {
+  color: $primary;
+  margin-bottom: 20px;
+}
+
+.homepage-segment {
+  background-color: $text-secondary-color;
+  // padding: 20px;
+  border-radius: 8px;
+}
+
+.homepage-card {
+  background-color: $homepage-overlay-rgba;
+  color: $text-secondary-color;
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+
+  .homepage-ui-header {
+    color: $text-secondary-color;
+  }
+
+  .homepage-card .description {
+    color: $text-secondary-color;
+  }
+
+  .homepage-card .meta {
+    color: $text-secondary-color;
+  }
+
+  .homepage-ui-image {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.homepage-card-content {
+  padding: 15px;
+}
+
+.homepage-card-description {
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.homepage-category {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: $primary;
+  color: $text-secondary-color;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.homepage-ui-form .field .label {
+  color: $primary;
+}
+
+.homepage-ui-form .input input {
+  border: 1px solid $text-secondary-color;
+  border-radius: 4px;
+  padding: 10px;
+  color: #333;
+}
+
+.homepage-ui-button {
+  background-color: $primary;
+  color: $text-secondary-color;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($primary, 10%);
+  }
+}
+
+.homepage-custom-margin {
+  margin-top: 30px;
+}
+
+.homepage-custom-padding {
+  padding: 30px;
+}
+
+.homepage-uk-animation-scale-up {
+  animation: scaleUp 1s ease-in-out;
+}
+
+.homepage-uk-animation-slide-right {
+  animation: slideRight 1s ease-in-out;
+}
+
+.homepage-uk-animation-slide-left {
+  animation: slideLeft 1s ease-in-out;
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// Media Queries (ajustez selon vos besoins)
+@media (max-width: 320px) {
+}
+
+// Mobile général (jusqu'à 480px)
+@media (max-width: 480px) {
+}
+
+// Téléphones moyens/grands (481px à 767px)
+@media (min-width: 481px) and (max-width: 768px) {
+}
+
+// Tablettes (769px à 1024px)
+@media (min-width: 769px) and (max-width: 1024px) {
+}
+
+// Ordinateurs de bureau et plus grands appareils (1025px et plus)
+@media (min-width: 1025px) {
+}
+
+//Fonction pour convertir les couleurs hexadécimales en rgba
+// @function hex-to-rgba($hex, $alpha: 1) {
+//   @if not(type-of($hex) == color) {
+//     @error "Le paramètre doit être une couleur hexadécimale.";
+//   }
+//   @return rgba($hex, $alpha);
+// }
+
+// $overlay-homepage: hex-to-rgba($secondary, $alpha-homepage-jsx);
+
+// .custom-grid-container {
+//     position: relative;
+//     max-width: $container-grid-max-width;
+//     margin: 0 auto;
+//     padding: $padding-extra-large;
+//     overflow: hidden;
+//     box-sizing: border-box;
+//     // background-color: $primary;
+//   }
+
+//   .overlay-homepage {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     // background-color: $overlay-homepage;
+//     pointer-events: none;
+//     z-index: 1;
+//   }
