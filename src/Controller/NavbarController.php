@@ -15,17 +15,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class NavbarController extends AbstractController
 {
-   
-
     #[Route('/navbar', name: 'app_navbar')]
     public function index(
         Request $request,
-        EntityManagerInterface $entityManager,
         CartService $cart
 
     ): Response {
         // récupère le panier depuis le service
-        $cart = $cart->getCart($request);
+         $cart = $cart->getCart($request);
 
         $formServiceDesktop = $this->createForm(SearchFormType::class, null, [
             'id_suffix' => 'desktop', // Identifiant unique pour la version desktop
@@ -39,8 +36,8 @@ class NavbarController extends AbstractController
             'formServiceDesktop' => $formServiceDesktop->createView(),
             'formServiceMobile' => $formServiceMobile->createView(),
             'page' => '1',
-            'totalServiceItem' => $cart['totalServiceItem'],
-            'total' => $cart['total'],
+            'totalServiceItem' => '',
+            'total' => '',
         ]);
     }
 }

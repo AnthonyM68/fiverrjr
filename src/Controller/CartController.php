@@ -31,9 +31,10 @@ class CartController extends AbstractController
     {
         // on peu crée et vérifier ici un status de paiement
         // $status = $request->query->get('status', 'pending');
-
         $fullCart = $this->cart->getCart($request);
+
         $this->addFlash('positive', 'votre commande sera ajoutée au panier');
+    
 
         return $this->render('cart/index.html.twig', [
             'title_page' => 'panier',

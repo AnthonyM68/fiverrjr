@@ -37,8 +37,6 @@ class ImageService
     public function generateImageUrl(string $filename, string $role): string
     {
         $filePath = $this->getImagePath($filename, $role);
-        // dd($filePath);
-
         if (!file_exists($filePath)) {
             throw new \Exception('Image not found' . $filePath);
         }

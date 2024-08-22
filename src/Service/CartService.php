@@ -65,40 +65,32 @@ class CartService
         // on itère sur chaque élément du panier pour obtenir les détails des services ajoutés
         foreach ($cart as $id => $quantity) {
             $service = $this->serviceItemRepository->find($id);
-
             if ($service) {
-
-
-                // récupère et génère l'url de l'image pour chaque service
-                $originalFilename = $service->getPicture();
-                $this->logger->info('processing generateImageUrl service cart', ['originalFilename' => $originalFilename]);
-
-                if ($originalFilename) {
-                    try {
-                        // on extrait seulement le nom du fichier et l'extension
-                        $filename = basename($originalFilename);
-
-                        // génère l'url de l'image et la met à jour dans l'entité
-                        $pictureUrl = $this->imageService->generateImageUrl($filename, 'SERVICE');
-                        $service->setPicture($pictureUrl);
-                    } catch (\Exception $e) {
-                        throw $e;
-                    }
+                // on recherche l'url du service
+                $picture = $service->getPicture();
+                // si l'URL n'est pas déjà généré dans le panier
+                if (strpos($picture, '/uploads/') !== 0) {
+                    // on la génère
+                    $this->imageService->setPictureUrl($service);
                 }
-
-                // ajoute les détails du service et la quantité à l'ensemble des données du panier
+                // on ajoute les détails du service que l'on souhaite afficher et la quantité 
+                // à l'ensemble des données du panier
                 $data[] = [
+                    // les data du panier
                     'serviceItem' => [
                         'id' => $service->getId(),
                         'title' => $service->getTitle(),
                         'price' => $service->getPrice(),
-                        'picture' => $service->getPicture()
+                        'picture' => $service->getPicture(),
+                        'user' => $service->getUser()
                     ],
+                    // la quantité par item
                     'quantity' => $quantity
                 ];
 
-                // calcule le total et le nombre d'articles dans le panier
+                // calcule le total
                 $total += $service->getPrice() * $quantity;
+                // quantité total
                 $totalServiceItem += $quantity;
             }
         }

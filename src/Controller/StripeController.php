@@ -6,12 +6,9 @@ namespace App\Controller;
 
 use Stripe\Charge;
 use Stripe\Stripe;
-
 use App\Entity\Order;
-
 use App\Service\CartService;
 use App\Service\InvoiceService;
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,9 +47,11 @@ class StripeController extends AbstractController
     #[Route('/stripe/create-charge', name: 'app_stripe_charge', methods: ['POST'])]
     public function createCharge(Request $request): Response
     {
-        dd('app_stripe_charge');
+
 
         if ($request->isMethod('POST')) {
+
+            
             $stripeToken = $request->request->get('stripeToken');
             $amount = $request->request->get('amount', 0);
 
@@ -66,6 +65,7 @@ class StripeController extends AbstractController
                     'description' => 'Achat en ligne',
                 ]);
                 $order = $this->cart->createOrder($request);
+                dd($order);
           
                 // on enregistre les informations de la commande en base de données
                 $this->entityManager->persist($order);

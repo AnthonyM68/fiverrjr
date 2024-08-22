@@ -104,12 +104,8 @@ class HomeController extends AbstractController
     {
         $lastDeveloper = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_DEVELOPER');
         $developer = $lastDeveloper->getQuery()->getSingleResult();
+        $this->imageService->setPictureUrl($developer);
 
-        $pictureFilename = $developer->getPicture();
-        if ($pictureFilename) {
-            $pictureUrl = $this->imageService->generateImageUrl($pictureFilename, 'ROLE_DEVELOPER');
-            $developer->setPicture($pictureUrl);
-        }
         $jsonFullCart = $serializer->serialize($developer, 'json', ['groups' => 'serviceItem']);
         $this->logger->info('developer', [
             'developer' => $jsonFullCart
@@ -123,11 +119,7 @@ class HomeController extends AbstractController
         $lastClient = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_CLIENT');
         $client = $lastClient->getQuery()->getSingleResult();
 
-        $pictureFilename = $client->getPicture();
-        if ($pictureFilename) {
-            $pictureUrl = $this->imageService->generateImageUrl($pictureFilename, 'ROLE_CLIENT');
-            $client->setPicture($pictureUrl);
-        }
+        $this->imageService->setPictureUrl($client);
         $this->logger->info('client', [
             'client' => $client
         ]);
