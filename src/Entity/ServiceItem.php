@@ -75,9 +75,9 @@ class ServiceItem
      *
      * @var Order|null
      */
-    // #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'serviceitems')]
-    // #[Groups(['serviceItem'])]
-    // private ?Order $order = null;
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'serviceitems')]
+    #[Groups(['serviceItem'])]
+    private ?Order $order = null;
 
     public function __construct()
     {

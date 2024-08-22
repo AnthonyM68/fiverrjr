@@ -20,6 +20,10 @@ class Payment
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $datePayment = null;
 
+    #[ORM\OneToOne(inversedBy: 'payment')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Order $orderRelation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class Payment
     public function setDatePayment(\DateTimeInterface $datePayment): static
     {
         $this->datePayment = $datePayment;
+
+        return $this;
+    }
+
+    public function getOrderRelation(): ?Order
+    {
+        return $this->orderRelation;
+    }
+
+    public function setOrderRelation(?Order $orderRelation): static
+    {
+        $this->orderRelation = $orderRelation;
 
         return $this;
     }

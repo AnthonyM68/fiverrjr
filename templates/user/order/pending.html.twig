@@ -1,5 +1,3 @@
-{# pending.html.twig #}
-
 {% block pending_orders %}
 <h2>Commandes en cours...</h2>
 
@@ -9,7 +7,7 @@
                 <div class="item">
                     <i class="large middle aligned history icon"></i>
                     <div class="content">
-                        <a class="header">{{ order.title }}</a>
+                        {# <a class="header">{{ order.title }}</a> #}
                         <div class="description">{{ order.dateOrder|date("d/m/Y H:i") }}</div>
                     </div>
                 </div>
@@ -27,7 +25,7 @@
             </div>
         {% endif %}
     {% else %}
-        <p>No pending orders found.</p>
+        <p>Pas de commande en cours</p>
     {% endif %}
 {% endblock %}
 

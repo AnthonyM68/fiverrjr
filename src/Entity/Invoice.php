@@ -14,9 +14,6 @@ class Invoice
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $orderId = null;
-
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $amount = null;
 
@@ -33,27 +30,21 @@ class Invoice
     private ?array $clientTraceability = null;
 
     #[ORM\Column(nullable: true)]
-    private ?string $orderTraceability = null;
+    private ?array $orderTraceability = null;
 
     #[ORM\Column(length: 255)]
     private ?string $pdfPath = null;
+
+    #[ORM\OneToOne(inversedBy: 'invoice')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Order $orderRelation = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getOrderId(): ?int
-    {
-        return $this->orderId;
-    }
 
-    public function setOrderId(int $orderId): static
-    {
-        $this->orderId = $orderId;
-
-        return $this;
-    }
 
     public function getAmount(): ?string
     {
@@ -103,12 +94,12 @@ class Invoice
         return $this;
     }
 
-    public function getClientTraceability(): ?array
+    public function getClientTraceability(): ?string
     {
         return $this->clientTraceability;
     }
 
-    public function setClientTraceability(?array $clientTraceability): static
+    public function setClientTraceability(?string $clientTraceability): static
     {
         $this->clientTraceability = $clientTraceability;
 
@@ -135,6 +126,18 @@ class Invoice
     public function setPdfPath(string $pdfPath): static
     {
         $this->pdfPath = $pdfPath;
+
+        return $this;
+    }
+
+    public function getOrderRelation(): ?Order
+    {
+        return $this->orderRelation;
+    }
+
+    public function setOrderRelation(Order $orderRelation): static
+    {
+        $this->orderRelation = $orderRelation;
 
         return $this;
     }

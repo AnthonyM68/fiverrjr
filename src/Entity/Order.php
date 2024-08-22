@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,62 +20,79 @@ class Order
     #[ORM\Column]
     private ?int $userId = null;
 
-    #[ORM\Column]
-    private ?int $paymentId = null;
-
-    #[ORM\Column]
-    private ?int $serviceId = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateOrder = null;
 
     #[ORM\Column]
-    private array $status = [];
+    private ?string $status = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDelivery = null;
+    /**
+     * Undocumented variable
+     *
+     * @var User|null
+     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    /**
+     * Undocumented variable
+     *
+     * @var Invoice|null
+     */
+    #[ORM\OneToOne(mappedBy: 'orderRelation', targetEntity: Invoice::class)]
+    private ?Invoice $invoice = null;
+    /**
+     * Undocumented variable
+     *
+     * @var Collection
+     */
+    #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'order', cascade: ['persist'])]
+    private Collection $services;
+    /**
+     * Undocumented variable
+     *
+     * @var Payment|null
+     */
+    #[ORM\OneToOne(targetEntity: Payment::class, mappedBy: 'orderRelation', cascade: ['persist', 'remove'])]
+    private ?Payment $payment = null;
+
+
+    public function __construct()
+    {
+        $this->services = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?int
+    public function getUser(): ?User
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(int $userId): static
+    public function setUser(?User $user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getPaymentId(): ?int
+    public function getPayment(): ?Payment
     {
-        return $this->paymentId;
+        return $this->payment;
     }
 
-    public function setPaymentId(int $paymentId): static
+    public function setPayment(Payment $payment): static
     {
-        $this->paymentId = $paymentId;
+        $this->payment = $payment;
 
         return $this;
     }
-
-    public function getServiceId(): ?int
-    {
-        return $this->serviceId;
-    }
-
-    public function setServiceId(int $serviceId): static
-    {
-        $this->serviceId = $serviceId;
-
-        return $this;
-    }
-
     public function getDateOrder(): ?\DateTimeInterface
     {
         return $this->dateOrder;
@@ -86,12 +105,12 @@ class Order
         return $this;
     }
 
-    public function getStatus(): array
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    public function setStatus(array $status): static
+    public function setStatus(string $status): static
     {
         $this->status = $status;
 
@@ -106,6 +125,42 @@ class Order
     public function setDateDelivery(\DateTimeInterface $dateDelivery): static
     {
         $this->dateDelivery = $dateDelivery;
+
+        return $this;
+    }
+
+    public function getInvoice(): ?Invoice
+    {
+        return $this->invoice;
+    }
+
+    public function setInvoice(Invoice $invoice): static
+    {
+        $this->invoice = $invoice;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ServiceItem>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(ServiceItem $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+        }
+
+        return $this;
+    }
+
+    public function removeService(ServiceItem $service): static
+    {
+        $this->services->removeElement($service);
 
         return $this;
     }

@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\Chunk\LastChunk;
 
 class UserController extends AbstractController
 {
@@ -40,7 +41,7 @@ class UserController extends AbstractController
     public function __construct(
         EntityManagerInterface $entityManager,
         LoggerInterface $logger,
-       // OrderRepository $orderRepository,
+        OrderRepository $orderRepository,
         UserRepository $userRepository,
         UrlGeneratorInterface $urlGenerator,
         ImageService $imageService,
@@ -49,7 +50,7 @@ class UserController extends AbstractController
     ) {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
-        //$this->orderRepository = $orderRepository;
+        $this->orderRepository = $orderRepository;
         $this->userRepository = $userRepository;
         $this->urlGenerator = $urlGenerator;
         $this->imageService = $imageService;
@@ -117,18 +118,18 @@ class UserController extends AbstractController
 
             $status = $request->get('status');
 
-            // $orders = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
+            $orders = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
 
-            // $pagination = $paginator->paginate(
-            //     $orders,
-            //     $page,
-            //     $limit
-            // );
-            // // On rends juste la liste des Orders avec pagination
-            // $formHtml = $this->renderView('/user/order/' . $status . '.html.twig', [
-            //     'orders_' . $status =>  $pagination->getItems(),
-            //     'pagination_' . $status => $pagination
-            // ]);
+            $pagination = $paginator->paginate(
+                $orders,
+                $page,
+                $limit
+            );
+            // On rends juste la liste des Orders avec pagination
+            $formHtml = $this->renderView('/user/order/' . $status . '.html.twig', [
+                'orders_' . $status =>  $pagination->getItems(),
+                'pagination_' . $status => $pagination
+            ]);
 
             // Retourner la réponse JSON 
             return new JsonResponse(['orders' => $formHtml, 'type_order' => 'orders_' . $status], Response::HTTP_OK);
@@ -238,15 +239,16 @@ class UserController extends AbstractController
         /**
          * REACT COMPONENT
          */
-        // Récupérer le dernier utilisateur avec le rôle ROLE_ENTERPRISE
+        // Récupérer le dernier utilisateur avec le rôle ROLE_CLIENT
         $lastClient = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_CLIENT');
+        $this->logger->info('lastClient', ['user' => $lastClient->getQuery()->getResult()]);
         // Récupérer le dernier utilisateur avec le rôle ROLE_DEVELOPER
         $lastDeveloper = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_DEVELOPER');
+        $this->logger->info('lastDeveloper', ['user' => $lastDeveloper->getQuery()->getResult()]);
 
 
         $developer = $lastDeveloper->getQuery()->getSingleResult();
-
-        // $this->imageService->setPictureUrl($developer, 'ROLE_DEVELOPER');
+        $this->imageService->setPictureUrl($developer, 'ROLE_DEVELOPER');
 
         $lastDeveloperData = $serializer->serialize($developer, 'json', ['groups' => 'user']);
         $dataDeveloper = json_decode($lastDeveloperData, true);
@@ -257,9 +259,11 @@ class UserController extends AbstractController
 
         $lastClientData = $serializer->serialize($client, 'json', ['groups' => 'user']);
         $dataClient = json_decode($lastClientData, true);
-
-        // recherche des commandes nouvelles
-        $status = 'pending';
+        /**
+         *  recherche des commandes nouvelles
+         */
+        //
+        $status = 'pendding';
         $ordersPending = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
 
         $paginationPending = $paginator->paginate(
@@ -267,8 +271,9 @@ class UserController extends AbstractController
             $page,
             $limit
         );
-
-        // recherche des commandes complètes
+        /**
+         * recherche des commandes complètes
+         */
         $status = 'completed';
         $ordersCompleted = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
 

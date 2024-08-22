@@ -2,41 +2,51 @@
 
 namespace App\Service;
 
+use DateTime;
+use App\Entity\User;
+use App\Entity\Order;
+use App\Entity\Payment;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Cookie;
+use App\Repository\PaymentRepository;
 use App\Repository\ServiceItemRepository;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class Cart
+
+class CartService
 {
-    private $entityManager;
+
     private $serviceItemRepository;
+    private $paymentRepository;
     private $imageService;
-    private $httpKernel;
+
     private $logger;
     private $serializer;
+    private $security;
 
     public function __construct(
         ServiceItemRepository $serviceItemRepository,
-        EntityManagerInterface $entityManager,
+        PaymentRepository $paymentRepository,
+
         HttpKernelInterface $httpKernel,
         LoggerInterface $logger,
         ImageService $imageService,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        Security $security
     ) {
-        // injecte les dépendances nécessaires pour manipuler les services et gérer les données du panier
-        $this->entityManager = $entityManager;
+
+
         $this->serviceItemRepository = $serviceItemRepository;
-        $this->httpKernel = $httpKernel;
+        $this->paymentRepository = $paymentRepository;
+
         $this->logger = $logger;
         $this->imageService = $imageService;
         $this->serializer = $serializer;
-
+        $this->security = $security;
     }
 
     // récupère les données du panier depuis la session
@@ -57,7 +67,7 @@ class Cart
             $service = $this->serviceItemRepository->find($id);
 
             if ($service) {
-              
+
 
                 // récupère et génère l'url de l'image pour chaque service
                 $originalFilename = $service->getPicture();
@@ -66,8 +76,8 @@ class Cart
                 if ($originalFilename) {
                     try {
                         // on extrait seulement le nom du fichier et l'extension
-                        $filename = basename($originalFilename);  
-        
+                        $filename = basename($originalFilename);
+
                         // génère l'url de l'image et la met à jour dans l'entité
                         $pictureUrl = $this->imageService->generateImageUrl($filename, 'SERVICE');
                         $service->setPicture($pictureUrl);
@@ -189,4 +199,47 @@ class Cart
         );
     }
 
+    public function createOrder(Request $request): ?Order
+    {
+        // pour obtenir l'utilisateur authentifié depuis le service
+        $user = $this->security->getUser();
+        if ($user instanceof User) {
+            // on crée la commande
+            $order = new Order();
+            $order->setUser($user);
+            $order->setStatus('pendding');
+            $order->setDateDelivery(new \DateTime('+7 days'));
+
+            // on récupère les données du panier
+            $fullCart = $this->getCart($request);
+            // On extrait et crée un tableau d'id des services du panier
+            $serviceIds = array_map(function ($itemCart) {
+                return $itemCart['serviceItem']['id'];
+            }, $fullCart['data']);
+
+            // on récupère les service du tableau d'id
+            $serviceItems = $this->serviceItemRepository->findBy(['id' => $serviceIds]);
+            // on ajoute chacun de services a la commande
+            foreach ($serviceItems as $serviceItem) {
+                $order->addService($serviceItem);
+            }
+        }
+        return $order;
+    }
+
+    public function createPayment(Request $request, Order $order,): ?Payment
+    {
+        // pour obtenir l'utilisateur authentifié depuis le service
+        $user = $this->security->getUser();
+        if ($user instanceof User) {
+            $fullCart = $this->getCart($request);
+            // on crée un paiement 
+            $payment = new Payment();
+            $payment->setAmount($fullCart['total']);
+            $payment->setDatePayment(new \DateTime());
+            // on associe la commande au payment
+            $payment->setOrderRelation($order);
+        }
+        return $payment;
+    }
 }

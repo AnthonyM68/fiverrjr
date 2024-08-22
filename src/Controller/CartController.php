@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Service\Cart;
+use App\Service\CartService;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
 use App\Repository\ServiceItemRepository;
@@ -20,7 +20,7 @@ class CartController extends AbstractController
     private $cart;
     private $logger;
 
-    public function __construct(Cart $cart, LoggerInterface $logger)
+    public function __construct(CartService $cart, LoggerInterface $logger)
     {
         $this->cart = $cart;
         $this->logger = $logger;
@@ -45,24 +45,24 @@ class CartController extends AbstractController
     }
 
     #[Route('/cart/add/service/{id}', name: 'add_service_cart')]
-    public function cartAddProduct(Cart $cart, Request $request, ServiceItem $serviceItem): Response
+    public function cartAddProduct(Request $request, ServiceItem $serviceItem): Response
     {
         // Ajoute le produit au panier via le service Cart
-        $cart->addProduct($serviceItem, $request);
+        $this->cart->addProduct($serviceItem, $request);
 
         // Sérialise le panier mis à jour
-        $serializedCart = $cart->serializeCart($request);
+        $serializedCart = $this->cart->serializeCart($request);
         $this->logger->info('Serialized cart data: ' . $serializedCart);
 
         // Crée un cookie avec le panier sérialisé
-        $cookie = $cart->createCartCookie($serializedCart, $request);
+        $cookie = $this->cart->createCartCookie($serializedCart, $request);
 
         // Crée la réponse et ajoute le cookie à la réponse
         $response = new Response();
         $response->headers->setCookie($cookie);
 
         // Récupère le panier complet pour l'affichage
-        $fullCart = $cart->getCart($request);
+        $fullCart = $this->cart->getCart($request);
 
         $content = $this->renderView('cart/index.html.twig', [
             'title_page' => 'panier',
@@ -76,10 +76,10 @@ class CartController extends AbstractController
     }
 
     #[Route('/cart/totalItemFromCart', name: 'cart_total_item', methods: ['GET'])]
-    public function getTotalItemFromCart(Cart $cart, Request $request): JsonResponse
+    public function getTotalItemFromCart(Request $request): JsonResponse
     {
         try {
-            $fullCart = $cart->getCart($request);
+            $fullCart = $this->cart->getCart($request);
             return new JsonResponse(['totalServiceItem' => $fullCart['totalServiceItem']], Response::HTTP_OK);
         } catch (\Throwable $e) {
             $this->logger->error('error fetching total items from cart: ' . $e->getMessage());
@@ -88,10 +88,10 @@ class CartController extends AbstractController
     }
 
     #[Route('/cart/remove/{id}', name: 'remove_service_cart')]
-    public function cartRemoveProduct(ServiceItem $serviceItem, Request $request, Cart $cart): Response
+    public function cartRemoveProduct(ServiceItem $serviceItem, Request $request): Response
     {
-        $cart->removeProduct($serviceItem, $request);
-        $fullCart = $cart->getCart($request);
+        $this->cart->removeProduct($serviceItem, $request);
+        $fullCart = $this->cart->getCart($request);
 
         return $this->render('cart/index.html.twig', [
             'title_page' => 'panier',
@@ -102,10 +102,10 @@ class CartController extends AbstractController
     }
 
     #[Route('/cart/delete/{id}', name: 'delete_service_cart')]
-    public function cartDeleteProduct(Cart $cart, ServiceItem $serviceItem, Request $request): Response
+    public function cartDeleteProduct(ServiceItem $serviceItem, Request $request): Response
     {
-        $cart->deleteProduct($serviceItem, $request);
-        $fullCart = $cart->getCart($request);
+        $this->cart->deleteProduct($serviceItem, $request);
+        $fullCart = $this->cart->getCart($request);
 
         return $this->render('cart/index.html.twig', [
             'title_page' => 'Panier en cours',
@@ -117,10 +117,10 @@ class CartController extends AbstractController
     }
 
     #[Route('/empty', name: 'empty')]
-    public function empty(Cart $cart, Request $request): Response
+    public function empty(Request $request): Response
     {
-        $cart->empty($request);
-        $fullCart = $cart->getCart($request);
+        $this->cart->empty($request);
+        $fullCart = $this->cart->getCart($request);
 
         return $this->render('cart/index.html.twig', [
             'title_page' => 'panier',

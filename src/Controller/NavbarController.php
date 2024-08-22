@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Theme;
-use App\Service\Cart;
+use App\Service\CartService;
 use App\Form\SearchFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +18,7 @@ class NavbarController extends AbstractController
     public function index(
         Request $request,
         EntityManagerInterface $entityManager,
-        Cart $cart
+        CartService $cart
     ): Response {
         // On vérifie si un panier existe en session
         // $fullCart = $cart->getCart($request);

@@ -21,7 +21,6 @@ class AddDateOrderFiledOrderForm implements EventSubscriberInterface
         if ($entity instanceof Order) {
             // Définit la date de création à la date et heure actuelles
             $entity->setDateOrder(new \DateTime());
-
             // Récupère l'utilisateur associé à l'entité
             $user = $entity->getUser();
             // Vérifie si l'utilisateur est nul (non défini)
