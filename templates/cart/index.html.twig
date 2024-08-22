@@ -7,8 +7,8 @@
 
     <div class="ui items cart-items">
         <h1 class="padding-bottom-extra-large uk-animation-slide-right">Récapitulatif de votre panier</h1>
+        
         {% for product in data %}
-
         <div class="item uk-animation-fade">
             <div class="ui small image">
                 <img src="{{ product.serviceItem.picture }}" alt="Image produit {{ product.serviceItem.title }}">
