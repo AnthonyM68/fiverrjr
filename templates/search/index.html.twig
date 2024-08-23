@@ -12,6 +12,93 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
+<<<<<<< HEAD
+<div class="ui grid">
+    <div class="four wide left attached column">
+        <div class="ui vertical fluid menu">
+            <p>Date: <input type="text" id="datepicker"></p>
+            <div id="menu-service" class="item field {{ submitted_form == 'form_service' ? 'active teal' : '' }}">
+                <form method="post" action="{{ path('search') }}" class="ui form">
+                    <div class="ui icon input full-width-input">
+                        <input type="text" name="service_search_term">
+                        <i class="search icon"></i>
+                    </div>
+                    <input type="hidden" name="submitted_form_type" value="service">
+                    <button type="submit" class="ui button">Rechercher</button>
+                </form>
+                <div class="ui label">{{ service_count }}</div>
+            </div>
+            <div id="menu-theme" class="item field {{ submitted_form == 'form_theme' ? 'active teal' : '' }}">
+                {{ form_start(form_theme, {'attr': {'id': 'form_theme', 'class': 'ui form'}}) }}
+                {{ form_row(form_theme.search_term) }}
+                {{ form_row(form_theme.submit) }}
+                <input type="hidden" name="submitted_form_type" value="theme">
+                {{ form_end(form_theme) }}
+                <div class="ui label">{{ theme_count }}</div>
+            </div>
+            <div id="menu-category" class="item field {{ submitted_form == 'form_category' ? 'active teal' : '' }}">
+                {{ form_start(form_category, {'attr': {'id': 'form_category', 'class': 'ui form'}}) }}
+                {{ form_row(form_category.search_term) }}
+                {{ form_row(form_category.submit) }}
+                <input type="hidden" name="submitted_form_type" value="category">
+                {{ form_end(form_category, {'attr': {'class': 'full-width-input'}}) }}
+                <div class="ui label">{{ category_count }}</div>
+            </div>
+            <div id="menu-course" class="item field {{ submitted_form == 'form_course' ? 'active teal' : '' }}">
+                {{ form_start(form_course, {'attr': {'id': 'form_course', 'class': 'ui form'}}) }}
+                {{ form_row(form_course.search_term) }}
+                {{ form_row(form_course.submit) }}
+                <input type="hidden" name="submitted_form_type" value="course">
+                {{ form_end(form_course, {'attr': {'class': 'full-width-input'}}) }}
+                <div class="ui label">{{ course_count }}</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="twelve wide stretched column">
+        {# Affichage dynamique des résultats de recherche #}
+        {% if submitted_form == 'form_theme' and results.theme|default %}
+        <h2>Résultats pour Thème</h2>
+        <ul>
+            {% for theme in results.theme %}
+            <li>{{ theme.nameTheme }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if submitted_form == 'form_category' and results.category|default %}
+        <h2>Résultats pour Catégorie</h2>
+        <ul>
+            {% for category in results.category %}
+            <li>{{ category.nameCategory }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if submitted_form == 'form_course' and results.course|default %}
+        <h2>Résultats pour Sous-catégorie</h2>
+        <ul>
+            {% for course in results.course %}
+            <li>{{ course.nameCourse }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if submitted_form == 'form_service' and results.service|default %}
+        <h2>Résultats pour Service</h2>
+        <ul>
+            {% for service in results.service %}
+            <li>{{ service.title }}</li>
+            <li>{{ service.description }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {# Si aucun résultats trouvés #}
+        {% if results.empty|default %}
+        <h2>Aucun résultats</h2>
+        {% endif %}
+=======
     .custom-container {
         background-color: #f9f9f9;
         padding: 20px;
@@ -148,6 +235,7 @@
                 <!-- Les résultats seront insérés ici -->
             </div>
         </div>
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     </div>
 </div>
 {% block javascripts %}

@@ -82,10 +82,21 @@ class ServiceItemType extends AbstractType
                 'label' => false, // masquer le label
                 'mapped' => false, // Ne pas mapper ce champ avec les données du formulaire
             ])
+<<<<<<< HEAD:src/Form/ServiceType.php
+            ->add('submit', SubmitType::class, [
+                'attr' => [
+                    'class' => 'ui-button ui-widget ui-corner-all'
+                ]
+            ])
+            // Écouteur pour ajouter l'utilisateur
+            ->addEventSubscriber(new AddUserFieldServiceForm($this->security))
+            // Écouteur pour ajouter la date de création
+=======
 
             // Écouteur pour ajouter l'ID utilisateur avant de persister
             ->addEventSubscriber(new AddUserField($this->security))
             // Écouteur pour ajouter la date de création avant de persister
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0:src/Form/ServiceItemType.php
             ->addEventSubscriber(new AddCreateDateFiledServiceForm());
     }
 

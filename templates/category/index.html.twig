@@ -4,7 +4,27 @@
 
 {% block body %}
 
+<<<<<<< HEAD
+
+{% if formAddCategory|default %}
+
+{{ form_start(formAddCategory, {'attr': {'class': 'ui form'}}) }}
+
+<div class="field">
+    {{ form_row(formAddCategory.NameCategory) }}
+</div>
+<div class="field">
+    {{ form_row(formAddCategory.theme) }}
+</div>
+<div class="field">
+    {{ form_row(formAddCategory.submit) }}
+</div>
+
+{{ form_end(formAddCategory) }}
+{% endif %}
+=======
 <style>
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
 
 
     /* Zone de contenu avec scroll si nécessaire */

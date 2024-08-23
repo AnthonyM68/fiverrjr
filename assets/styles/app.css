@@ -1,0 +1,20 @@
+.visible {
+  display: block !important;
+}
+.separator {
+  height: 100px;
+}
+/* Search motor  */
+.full-width-input {
+  width: 100% !important; /* Prend toute la largeur disponible */
+  box-sizing: border-box; 
+}
+/* On masque les * des required des moteur de recherche*/
+label.required::after {
+  content: "";
+  display: none !important;
+}
+/* Assurez-vous que les champs ne sont pas en état d'erreur par défaut */
+.ui.form .field.error input {
+  border-color: #e0e1e2;
+}

@@ -44,6 +44,16 @@ class ThemeRepository extends ServiceEntityRepository
 
             return $qb;
     }
+<<<<<<< HEAD
+    public function countAll()
+{
+    return $this->createQueryBuilder('t')
+        ->select('count(t.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+    
+=======
 
     public function countAll()
     {
@@ -53,6 +63,7 @@ class ThemeRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     //    /**
     //     * @return Theme[] Returns an array of Theme objects
     //     */

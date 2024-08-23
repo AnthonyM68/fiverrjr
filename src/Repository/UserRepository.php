@@ -39,6 +39,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getSingleScalarResult();
     }
+<<<<<<< HEAD
+
+=======
     public function findUsersByRole(?string $role)
     {
         return $this->createQueryBuilder('u')
@@ -77,6 +80,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ->getQuery()
         ->getResult();
     }
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

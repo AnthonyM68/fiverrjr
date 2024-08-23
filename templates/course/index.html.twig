@@ -41,11 +41,33 @@
     }
 </style>
 
+<<<<<<< HEAD
+<div class="field">
+    {{ form_row(formAddCourse.submit) }}
+</div>
+
+{{ form_end(formAddCourse) }}
+{% endif %}
+
+
+
+
+{% if courses | default %}
+
+<div class="ui list">
+    {% for course in courses %}
+    <div class="item">
+        <i class="folder icon"></i>
+        <div class="content">
+            <div class="header">{{ course.nameCourse}}</div>
+            {# <div class="description">Source files for project</div> #}
+=======
 <div class="ui container course">
     <!-- Titre avec animation -->
     <div class="uk-animation padding-top-large">
         <div class="uk-animation-slide-right">
             <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
         </div>
     </div>
 

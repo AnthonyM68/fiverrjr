@@ -20,14 +20,39 @@ class SearchFormType extends AbstractType
         // afin d'éviter tout conflit entre deux formulaire du même type
         $key = 'search_term_' . $options['id_suffix'];
         $builder
+<<<<<<< HEAD
+            ->add('search_table', TextType::class, [
+                'label' => 'Table',
+                'label_attr' => [
+                    'style' => 'display: none;'
+                ],
+                'attr' => [
+                    'readonly' => true,
+                    'style' => 'display:none'
+                ],
+                'data' => $options['search_table'],
+            ])
+            ->add('search_term', TextType::class, [
+                'label' => $options['search_label'],
+=======
             // Input du terme a rechercher
             ->add($key, TextType::class, [
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
                 'required' => true,
                 'attr' => [
                     'placeholder' => 'Services',
                     'class' => 'prompt ' . $options['id_suffix']
                 ],
+<<<<<<< HEAD
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Rechercher',
+                'attr' => [
+                    'class' => 'ui-button ui-widget ui-corner-all'
+                ]
+=======
                 'label' => false
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
             ]);
     }
 

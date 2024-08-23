@@ -20,6 +20,8 @@ class Category
      #[Groups(['serviceItem'])]
     private ?int $id = null;
 
+    private $services;
+
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank(message: "Choisissez une Catégorie")]
      #[Groups(['serviceItem'])]

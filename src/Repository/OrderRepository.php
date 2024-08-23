@@ -15,6 +15,14 @@ class OrderRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Order::class);
     }
+<<<<<<< HEAD
+    public function countAll()
+    {
+        return $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+=======
     public function findByUserIdAndStatus(int $userId, string $status): array
     {
         return $this->createQueryBuilder('o')
@@ -24,6 +32,7 @@ class OrderRepository extends ServiceEntityRepository
             ->setParameter('status', $status)
             ->getQuery()
             ->getResult();
+>>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     }
 
     //    /**
