@@ -4,11 +4,24 @@
 
 {% block body %}
 <style>
+    /* Conteneur principal avec flexbox pour un agencement fluide */
+    .ui.container.course {
+        padding-top: 10vh;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 20px);
+        /* Ajustement pour laisser de l'espace pour le footer */
+        overflow: hidden;
+    }
+
     /* Zone de contenu avec scroll si nécessaire */
-    .ui.list.course, .ui.segment {
+    .ui.list.course,
+    .ui.segment {
         overflow-y: auto;
-        flex: 1; /* Remplit l'espace disponible */
-        margin-bottom: 20px; /* Laisse un espace pour le footer */
+        flex: 1;
+        /* Remplit l'espace disponible */
+        margin-bottom: 20px;
+        /* Laisse un espace pour le footer */
     }
 
     .uk-animation.padding-top-large {
@@ -60,7 +73,8 @@
         {% for service in services %}
         <div class="ui card custom-card">
             <div class="custom-image-client">
-                <img src="{{ service.picture }}" alt="Image illustrant {{ service.title }} - {{ title_page }} - Service proposé par {{ service.user.username }}">
+                <img src="{{ service.picture }}"
+                    alt="Image illustrant {{ service.title }} - {{ title_page }} - Service proposé par {{ service.user.username }}">
             </div>
             <div class="content custom-card-content">
                 <div class="header">
@@ -77,8 +91,8 @@
             </div>
             <div class="extra content">
                 <p>Service proposé par : <strong>{{ service.user.username }}</strong></p>
-                <a href="{{ path('detail_service', { 'id': service.id }) }}">
-                    <strong>Plus d'infos</strong>
+                <a href="{{ path('detail_service', { 'id': service.id }) }}" class="ui-button ui-widget ui-corner-all">
+                    <span class="ui-icon ui-icon-info"></span> <strong>Plus d'infos</strong>
                 </a>
             </div>
         </div>

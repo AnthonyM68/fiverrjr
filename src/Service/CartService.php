@@ -201,7 +201,7 @@ class CartService
             // on crée la commande
             $order = new Order();
             $order->setUser($user);
-            $order->setStatus('pendding');
+            $order->setStatus('paid');// 
             $order->setDateDelivery(new \DateTime('+7 days'));
 
             // on récupère les données du panier
@@ -216,7 +216,7 @@ class CartService
             foreach ($serviceItems as $serviceItem) {
                 // avant d'ajouter les services
                 // on reset les url déjà générés
-                $this->imageService->setPictureUrl($serviceItem);
+                // $this->imageService->setPictureUrl($serviceItem);
                 $order->addService($serviceItem);
             }
         }

@@ -481,7 +481,7 @@ class ServiceItemController extends AbstractController
         Request $request,
         ?ServiceItem $service
     ): Response {
-        $this->imageService->setPictureUrl($service);
+        // $this->imageService->setPictureUrl($service);
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Détail:',
             'service' => $service,
@@ -774,9 +774,10 @@ class ServiceItemController extends AbstractController
         $services = $course->getServiceItems();
 
         $page = $request->get('page');
+       
 
-        foreach ($services as $service) {
-            $this->imageService->setPictureUrl($service);
+        foreach ($services as $service) { 
+            // $this->imageService->setPictureUrl($service);
         }
 
         $pagination = $paginator->paginate(

@@ -62,8 +62,7 @@
                 </div>
             </div>
             <div class="container">
-                <a href="{{ path('list_services_by_userID', { 'id': user.id }) }}"
-                    class="ui button primary">
+                <a href="{{ path('list_services_by_userID', { 'id': user.id }) }}" class="ui button primary">
                     Ces service
                 </a>
                 <a href="javascript:void(0);" class="ui button primary">
@@ -111,8 +110,7 @@
 
 
             {# Crée un nouveau service #}
-            <div id="service-form" class="ui segment"
-                style="display: {{ formHasErrors ? 'block' : 'none' }}">
+            <div id="service-form" class="ui segment" style="display: {{ formHasErrors ? 'block' : 'none' }}">
                 <h2>Nouveau service</h2>
                 <div id="loader-new" class="ui loader"></div>
                 <div id="service-form-new"></div>
@@ -132,15 +130,15 @@
                 </table>
             </div>
             {# editer un service existant #}
-            <div id="edit-item-service" class="ui segment" >
+            <div id="edit-item-service" class="ui segment">
                 <h2>J'édite mon service</h2>
                 <div id="loader-edit" class="ui loader"></div>
                 <div class="ui grid">
                     <div class="sixteen wide column btn-close">
-                        <button id="close-edit" class="ui button primary" >Fermer</button>
+                        <button id="close-edit" class="ui button primary">Fermer</button>
                     </div>
                     <div class="sixteen wide column search-results">
-                        
+
                         <div id="service-form-edit"></div>
                     </div>
                 </div>

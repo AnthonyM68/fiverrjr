@@ -1,138 +1,137 @@
 @import "variables";
 
 .ui.container.cart {
-    position: relative;
-    top: 0;
-    left: 0;
-    margin-top:20vh;
-    min-height: 100%;
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding:20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    -ms-border-radius: 8px;
-    -o-border-radius: 8px;
+  position: relative;
+  top: 0;
+  left: 0;
+  margin-top: 20vh;
+  min-height: 100%;
+  max-width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
 }
 
 .cart-items {
-    width: 80%;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding:20px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+.ui.items.item.content {
+    text-align: left !important;
 }
 
-
-.ui.items .item {
-    flex: auto;
-    margin-bottom: 20px;
-}
-
-/* Styles pour le conteneur de paiement */
+// .ui.items .item {
+//   flex: 1 1;
+//   margin-bottom: 20px;
+// }
+// .ui.items .item {
+//     text-align:left;
+//   }
+// /* Styles pour le conteneur de paiement */
 .payment-section {
-    flex: auto;
-    // margin-top: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    width: 80%; /* Largeur maximale pour les grands écrans */
-   
-    box-sizing: border-box; /* Inclut padding et bordure dans la largeur totale */
-    margin-left: auto; /* Centre horizontalement */
-    margin-right: auto; /* Centre horizontalement */
+  flex: auto;
+  // margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Styles pour le champ de carte Stripe */
 #card-element {
-    width: 100%; /* Prend toute la largeur disponible du conteneur parent */
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 10px; /* Ajoute du padding pour un meilleur espace intérieur */
-    box-sizing: border-box; /* Inclut padding et bordure dans la largeur totale */
-    margin-bottom: 10px; /* Espace sous le champ de carte */
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
 }
 
 /* Styles pour le bouton de paiement */
 .ui.button.green {
-    width: 100%; /* Assure que le bouton prend toute la largeur de son conteneur */
+  width: 100%;
 }
 
-/* Styles de récapitulatif du panier */
+// /* Styles de récapitulatif du panier */
 .cart-total {
-    align-self: flex-end;
-    text-align: right;
-    margin-top: 20px;
-    width: 100%; /* Prend toute la largeur disponible */
+  align-self: flex-end;
+  text-align: right;
+  margin-top: 20px;
+  width: 100%;
 }
 
-.cart-total h3 {
-    font-size: 24px; 
-}
+// .cart-total h3 {
+//   font-size: 24px;
+// }
+// /* Ajustements pour les écrans de moins de 480px */
+// @media (max-width: 320px) {
+//   .cart-items {
+//     width: 100%;
+//     padding: 20px;
+//   }
+// }
 
-/* Ajustements pour les écrans de moins de 768px */
-@media (max-width: 768px) {
-    .ui.items .item {
-        flex-direction: column;
-        text-align: center;
-        width: 100%;
-    }
+// /* Ajustements pour les écrans de moins de 480px */
+// @media (max-width: 480px) {
+//     .cart-items {
+//         width: 100%;
+//         padding: 20px;
+//       }
+//       .ui.items .item {
 
-    .ui.small.image {
-        margin-bottom: 10px;
-    }
+//         // flex-direction: r
+//         border:1px solid red;
+//         // justify-content: start;
+//         // text-align: left;
+//       }
+// }
 
-    .ui.container.cart {
-        padding-top: 5vh;
-    }
+// /* Ajustements pour les écrans de moins de 768px */
+// @media (max-width: 768px) {
+//   .cart-items {
+//     width: 100%;
+//     padding: 20px;
+//   }
+//   .ui.items .item {
+//     flex-direction: row;
+//     justify-content: start;
+//     text-align: left;
+//   }
 
-    .cart-total {
-        width: 100%;
-        text-align: center;
-        align-self: center;
-    }
+//   .ui.small.image {
+//     margin-bottom: 10px;
+//   }
 
-    .ui.labeled.input {
-        width: 100%;
-        justify-content: center;
-        margin-top: 10px;
-    }
+//   .ui.container.cart {
+//     padding-top: 5vh;
+//   }
 
-    .ui.primary.button {
-        margin-top: 10px;
-        width: 100%;
-    }
-}
+//   .cart-total {
+//     width: 100%;
+//     text-align: center;
+//     align-self: center;
+//   }
 
-/* Ajustements pour les écrans de moins de 480px */
-@media (max-width: 480px) {
-    .ui.items .item {
-        font-size: 14px;
-    }
+//   .ui.labeled.input {
+//     width: 100%;
+//     justify-content: center;
+//     margin-top: 10px;
+//   }
 
-    .cart-total h3 {
-        font-size: 18px;
-    }
-
-    .ui.small.image {
-        width: 100%;
-        height: auto;
-    }
-
-    /* Réduction du padding pour les petits écrans */
-    .payment-section {
-        padding: 15px;
-    }
-
-    #card-element {
-        padding: 8px; /* Réduit le padding pour les petits écrans */
-    }
-}
+//   .ui.primary.button {
+//     margin-top: 10px;
+//     width: 100%;
+//   }
+// }

@@ -17,7 +17,7 @@ class InvoiceService
     private $parameters;
 
     private $logger;
-    public function __construct(EntityManagerInterface $em,  Security $security, ParameterBagInterface $parameters, LoggerInterface $logger)
+    public function __construct(Security $security, ParameterBagInterface $parameters, LoggerInterface $logger)
     {
         $this->security = $security;
         $this->parameters = $parameters;

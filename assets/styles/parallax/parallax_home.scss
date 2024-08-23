@@ -7,7 +7,7 @@
   }
   @return rgba($hex, $alpha);
 }
-
+$overlay-floating-title: hex-to-rgba($secondary, 0.5);
 $overlay-parallax-home: hex-to-rgba($secondary, $alpha-parallax-home);
 $text-shadow-primary: hex-to-rgba($primary, $alpha-parallax-home);
 
@@ -30,57 +30,57 @@ $text-shadow-primary: hex-to-rgba($primary, $alpha-parallax-home);
   pointer-events: none;
   z-index: 2;
 }
-
 .floating-title {
   position: absolute;
   top: 50%;
   left: 50%;
+  width: 100%;
+  min-height:auto;
   transform: translate(-50%, -50%);
   text-align: center;
   color: $white;
-  padding: 20px;
   z-index: 3;
-  background-color: $overlay-parallax-home;
-  border: 1px solid $white;
+  background-color: $overlay-floating-title;
+  // border-top: 1px solid $white;
+  // border-bottom:2px solid $primary;
   border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
 }
-.parallax-home {
-  height: $parallax-container-home-height;
-}
-.floating-title h1 {
-  display: inline-block;
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:100px;
+  padding:20px;
+  margin-bottom: $margin-small; 
 }
 
 .fiverr-animate,
 .junior-animate {
   position: relative;
-  float: left;
-  padding:25px;
+  font-size: calc($font-size-animate * 2); 
+  padding: 0 15px;
 }
-div .fiverr-animate {
+
+.fiverr-animate {
   color: $primary !important;
-  margin-right: $margin-large;
-  font-size: $font-size-animate;
 }
-div .junior-animate {
+
+.junior-animate {
   color: $white !important;
-  margin-right: $margin-large;
-  font-size: $font-size-animate;
 }
-p.sub-animate {
-  font-size: 10px;
+
+.sub-animate {
+  font-size: calc($font-size-animate-p * 1.5); 
   color: $link-navbar;
   text-transform: uppercase;
   font-weight: 400;
-  z-index: 999;
   text-shadow: 2px 2px 4px $text-shadow-primary;
-  font-size: $font-size-animate-p;
-  z-index: 999;
+  margin-top: $margin-medium;
+  padding-bottom:10px;
 }
+
+
+
 @media (max-width: 320px) {
   .parallax-container,
   .parallax-content {

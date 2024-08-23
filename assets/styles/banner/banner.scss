@@ -1,9 +1,6 @@
 @import "./assets/styles/variables";
 
-.custom-container-navbar {
-  width: $container-navbar-width !important;
-  padding: 0 10px;
-}
+
 @function hex-to-rgba($hex, $alpha: 1) {
   @if not(type-of($hex) == color) {
     @error "Le paramètre doit être une couleur hexadécimale.";
@@ -17,14 +14,13 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-banner-parallax-home);
   background-color: $secondary-color-rgba;
   text-align: center;
   overflow: hidden;
-  height: auto; 
+  height: 200px; 
 }
 
 .ad-carousel {
   position: relative;
   top: 0;
   left: 0;
-  height: auto;
   display: flex;
   max-width: 100%;
 }
@@ -54,18 +50,19 @@ $secondary-color-rgba: hex-to-rgba($secondary, $alpha-banner-parallax-home);
   text-decoration: none;
   color: $primary;
 }
-/* Couleur du dot sélectionné */
-.slick-dots li.slick-active button {
-  // background-color: $secondary;
-  color: $white;
-}
+
+
 .slick-dots li.slick-active button:before {
-  // background-color: $secondary;
-  color: $white;
+  color: $white !important;
 }
 .slick-dots li button:before {
-  // background-color: $secondary;
-  color: $white;
+  color: $white !important;
+}
+.slick-dots li button {
+  &:before {
+    font-size: 10px; 
+    transition: color 0.3s ease;
+  }
 }
 /* iPhone 5 (et appareils similaires) */
 @media (max-width: 320px) {

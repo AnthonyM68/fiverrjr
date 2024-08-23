@@ -60,11 +60,13 @@ const ParallaxHome = ({ id }) => {
             inView ? "uk-animation-fade floating-title" : "floating-title"
           }`}
         >
-          <h1>
+          <div className="title-container">
             <div
               ref={ref}
               className={`${
-                inView ? "fiverr-animate uk-animation-slide-left" : ""
+                inView
+                  ? "fiverr-animate uk-animation-slide-left"
+                  : "fiverr-animate"
               }`}
             >
               Fiverr
@@ -72,18 +74,19 @@ const ParallaxHome = ({ id }) => {
             <div
               ref={ref}
               className={`${
-                inView ? "junior-animate uk-animation-slide-right" : ""
+                inView
+                  ? "junior-animate uk-animation-slide-right"
+                  : "junior-animate"
               }`}
             >
               Junior
             </div>
-          </h1>
+          </div>
           <p className="sub-animate uk-animation-slide-bottom-medium">
             Rejoignez une communauté de talents
           </p>
         </div>
       </div>
-      <div className="overlay"></div>
       <div className="ad-banner ">
         <div className="custom-container text-center">
           <div className={`ad-carousel-${id} ad-carousel`}>
@@ -141,11 +144,11 @@ const ParallaxHome = ({ id }) => {
 };
 
 const ParallaxHomeFooter = () => {
-    // State pour suivre si l'élément est en vue
-    const [ref, inView] = useInView({
-      triggerOnce: true, // Déclenche l'observation une seule fois
-      threshold: 0.5, // Détecte lorsque 50% de l'élément est visible
-    });
+  // State pour suivre si l'élément est en vue
+  const [ref, inView] = useInView({
+    triggerOnce: true, // Déclenche l'observation une seule fois
+    threshold: 0.5, // Détecte lorsque 50% de l'élément est visible
+  });
   return (
     <div className="parallax-container">
       <div className="parallax-content">
@@ -153,18 +156,21 @@ const ParallaxHomeFooter = () => {
         <div className="parallax parallax-footer"></div>
         <div className="floating-text uk-animation-fade">
           <h1>
-            <span 
-            ref={ref}
-             className={`${
-              inView ? "text-primary uk-animation-slide-left-medium" : "text-primary"
-            }`}
+            <span
+              ref={ref}
+              className={`${
+                inView
+                  ? "text-primary uk-animation-slide-left-medium"
+                  : "text-primary"
+              }`}
             >
-              <span>Fiverr</span> <span>Junior</span></span>
-            <span 
-            ref={ref}
-            className={`${
-              inView ? "text-sub uk-animation-slide-right-medium" : "text-sub"
-            }`}
+              <span>Fiverr</span> <span>Junior</span>
+            </span>
+            <span
+              ref={ref}
+              className={`${
+                inView ? "text-sub uk-animation-slide-right-medium" : "text-sub"
+              }`}
             >
               Vos projets, nos meilleurs talents.
             </span>

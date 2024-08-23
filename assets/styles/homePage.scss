@@ -1,135 +1,135 @@
 @import "./assets/styles/variables";
 
-@function hex-to-rgba($hex, $alpha: 1) {
-  @if not(type-of($hex) == color) {
-    @error "Le paramètre doit être une couleur hexadécimale.";
-  }
-  @return rgba($hex, $alpha);
-}
-$homepage-overlay-rgba: hex-to-rgba($secondary, $alpha-navbar);
+// @function hex-to-rgba($hex, $alpha: 1) {
+//   @if not(type-of($hex) == color) {
+//     @error "Le paramètre doit être une couleur hexadécimale.";
+//   }
+//   @return rgba($hex, $alpha);
+// }
+// $homepage-overlay-rgba: hex-to-rgba($secondary, $alpha-navbar);
 
-.homepage-container {
-  max-width: 100%;
-  height: 100%;
-  margin: 0 auto;
-  background-color: $pageBackground;
-}
+// .homepage-container {
+//   max-width: 100%;
+//   height: 100%;
+//   margin: 0 auto;
+//   background-color: $pageBackground;
+// }
 
-.homepage-overlay {
-  // position: absolute;
-  // top: 0;
-  // left: 0;
-  // width: 100%;
-  // height: 100%;
-  // background: $homepage-overlay-rgba;
-  // z-index: 1;
-}
+// .homepage-overlay {
+//   // position: absolute;
+//   // top: 0;
+//   // left: 0;
+//   // width: 100%;
+//   // height: 100%;
+//   // background: $homepage-overlay-rgba;
+//   // z-index: 1;
+// }
 
-.homepage-home {
-  position: relative;
-  z-index: 2;
-}
+// .homepage-home {
+//   position: relative;
+//   z-index: 2;
+// }
 
-.homepage-ui-header {
-  color: $primary;
-  margin-bottom: 20px;
-}
+// .homepage-ui-header {
+//   color: $primary;
+//   margin-bottom: 20px;
+// }
 
-.homepage-segment {
-  background-color: $text-secondary-color;
-  // padding: 20px;
-  border-radius: 8px;
-}
+// .homepage-segment {
+//   background-color: $text-secondary-color;
+//   // padding: 20px;
+//   border-radius: 8px;
+// }
 
-.homepage-card {
-  background-color: $homepage-overlay-rgba;
-  color: $text-secondary-color;
-  border: none;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 20px;
+// .homepage-card {
+//   background-color: $homepage-overlay-rgba;
+//   color: $text-secondary-color;
+//   border: none;
+//   border-radius: 8px;
+//   overflow: hidden;
+//   margin-bottom: 20px;
 
-  .homepage-ui-header {
-    color: $text-secondary-color;
-  }
+//   .homepage-ui-header {
+//     color: $text-secondary-color;
+//   }
 
-  .homepage-card .description {
-    color: $text-secondary-color;
-  }
+//   .homepage-card .description {
+//     color: $text-secondary-color;
+//   }
 
-  .homepage-card .meta {
-    color: $text-secondary-color;
-  }
+//   .homepage-card .meta {
+//     color: $text-secondary-color;
+//   }
 
-  .homepage-ui-image {
-    max-width: 100%;
-    height: auto;
-  }
-}
+//   .homepage-ui-image {
+//     max-width: 100%;
+//     height: auto;
+//   }
+// }
 
-.homepage-card-content {
-  padding: 15px;
-}
+// .homepage-card-content {
+//   padding: 15px;
+// }
 
-.homepage-card-description {
-  max-height: 60px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+// .homepage-card-description {
+//   max-height: 60px;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   white-space: nowrap;
+// }
 
-.homepage-category {
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: $primary;
-  color: $text-secondary-color;
-  border-radius: 4px;
-  font-size: 0.9rem;
-}
+// .homepage-category {
+//   display: inline-block;
+//   padding: 5px 10px;
+//   background-color: $primary;
+//   color: $text-secondary-color;
+//   border-radius: 4px;
+//   font-size: 0.9rem;
+// }
 
-.homepage-ui-form .field .label {
-  color: $primary;
-}
+// .homepage-ui-form .field .label {
+//   color: $primary;
+// }
 
-.homepage-ui-form .input input {
-  border: 1px solid $text-secondary-color;
-  border-radius: 4px;
-  padding: 10px;
-  color: #333;
-}
+// .homepage-ui-form .input input {
+//   border: 1px solid $text-secondary-color;
+//   border-radius: 4px;
+//   padding: 10px;
+//   color: #333;
+// }
 
-.homepage-ui-button {
-  background-color: $primary;
-  color: $text-secondary-color;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  cursor: pointer;
+// .homepage-ui-button {
+//   background-color: $primary;
+//   color: $text-secondary-color;
+//   border: none;
+//   border-radius: 4px;
+//   padding: 10px 20px;
+//   cursor: pointer;
 
-  &:hover {
-    background-color: darken($primary, 10%);
-  }
-}
+//   &:hover {
+//     background-color: darken($primary, 10%);
+//   }
+// }
 
-.homepage-custom-margin {
-  margin-top: 30px;
-}
+// .homepage-custom-margin {
+//   margin-top: 30px;
+// }
 
-.homepage-custom-padding {
-  padding: 30px;
-}
+// .homepage-custom-padding {
+//   padding: 30px;
+// }
 
-.homepage-uk-animation-scale-up {
-  animation: scaleUp 1s ease-in-out;
-}
+// .homepage-uk-animation-scale-up {
+//   animation: scaleUp 1s ease-in-out;
+// }
 
-.homepage-uk-animation-slide-right {
-  animation: slideRight 1s ease-in-out;
-}
+// .homepage-uk-animation-slide-right {
+//   animation: slideRight 1s ease-in-out;
+// }
 
-.homepage-uk-animation-slide-left {
-  animation: slideLeft 1s ease-in-out;
-}
+// .homepage-uk-animation-slide-left {
+//   animation: slideLeft 1s ease-in-out;
+// }
 
 @keyframes scaleUp {
   from {
@@ -163,6 +163,79 @@ $homepage-overlay-rgba: hex-to-rgba($secondary, $alpha-navbar);
     opacity: 1;
   }
 }
+
+.content-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 50%; // Limite la largeur du bloc à 50% de l'écran
+  margin: 0 auto 40px auto; // Centre horizontalement le bloc avec une marge en bas
+  padding: 20px;
+  margin:20px;
+  background-color: $secondary;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  &:nth-child(even) {
+    flex-direction: row-reverse; // Inverse l’ordre pour les blocs pairs
+    margin-left: auto; // Aligne le bloc pair à droite
+  }
+
+  &:nth-child(odd) {
+    margin-right: auto; // Aligne le bloc impair à gauche
+  }
+}
+
+.image-container {
+  flex: 1;
+  padding: 10px;
+  max-width: 50%;
+  text-align: center;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+}
+
+.text-container {
+  flex: 1;
+  padding: 10px 20px;
+
+  h2 {
+    font-size: 1.4rem;
+    color: $primary;
+    margin-bottom: 15px;
+  }
+
+  p {
+    font-size: 1rem;
+    color: $white;
+    line-height: 1.6;
+  }
+}
+
+.separator {
+  width: 100%;
+  height: 2px;
+  margin: 40px 0;
+}
+
+// Media Queries (pour ajustements sur mobile)
+@media (max-width: 768px) {
+  .content-block {
+    flex-direction: column;
+    max-width: 100%; // Occupe 100% de l’espace disponible sur mobile
+    text-align: center;
+  }
+
+  .image-container, .text-container {
+    max-width: 100%;
+    padding: 10px;
+  }
+}
+
 
 // Media Queries (ajustez selon vos besoins)
 @media (max-width: 320px) {

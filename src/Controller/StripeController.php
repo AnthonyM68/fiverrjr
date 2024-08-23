@@ -7,6 +7,7 @@ namespace App\Controller;
 use Stripe\Charge;
 use Stripe\Stripe;
 use App\Entity\Order;
+use Psr\Log\LoggerInterface;
 use App\Service\CartService;
 use App\Service\InvoiceService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,12 +22,14 @@ class StripeController extends AbstractController
     private $cart;
     private $invoiceService;
     private $entityManager;
+    private $logger;
 
-    public function __construct(CartService $cart, EntityManagerInterface $entityManager, InvoiceService $invoiceService)
+    public function __construct(CartService $cart, EntityManagerInterface $entityManager, InvoiceService $invoiceService, LoggerInterface $logger)
     {
         $this->cart = $cart;
         $this->invoiceService = $invoiceService;
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
     }
     #[Route('/stripe', name: 'app_stripe')]
     public function index(Request $request): Response
@@ -48,9 +51,9 @@ class StripeController extends AbstractController
     public function createCharge(Request $request): Response
     {
 
-
+        $this->logger->info('charge', ['charge' =>  $request]);
         if ($request->isMethod('POST')) {
-
+            $this->logger->info('POST', ['POST' =>  $request]);
             
             $stripeToken = $request->request->get('stripeToken');
             $amount = $request->request->get('amount', 0);
@@ -65,7 +68,7 @@ class StripeController extends AbstractController
                     'description' => 'Achat en ligne',
                 ]);
                 $order = $this->cart->createOrder($request);
-                dd($order);
+                //dd($order);
           
                 // on enregistre les informations de la commande en base de données
                 $this->entityManager->persist($order);
@@ -96,6 +99,7 @@ class StripeController extends AbstractController
                 return $this->redirectToRoute('cart_product', ['status' => 'paid'], Response::HTTP_SEE_OTHER);
             } catch (\Exception $e) {
                 //$this->addFlash('error', $e->getMessage());
+                $this->logger->info('error', ['error' =>   $e->getMessage()]);
                 return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
             }
         }

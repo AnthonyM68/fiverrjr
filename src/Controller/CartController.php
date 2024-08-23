@@ -25,7 +25,7 @@ class CartController extends AbstractController
         $this->cart = $cart;
         $this->logger = $logger;
     }
-
+    // affiche le panier
     #[Route('/cart', name: 'cart_product')]
     public function cartProduct(Request $request): Response
     {
@@ -44,7 +44,7 @@ class CartController extends AbstractController
             'stripe_public_key' => $this->getParameter('stripe_public_key')
         ]);
     }
-
+    // ajoute un service au panier
     #[Route('/cart/add/service/{id}', name: 'add_service_cart')]
     public function cartAddProduct(Request $request, ServiceItem $serviceItem): Response
     {
@@ -65,7 +65,7 @@ class CartController extends AbstractController
         // Récupère le panier complet pour l'affichage
         $fullCart = $this->cart->getCart($request);
 
-        return $this->renderView('cart/index.html.twig', [
+        return $this->render('cart/index.html.twig', [
             'title_page' => 'panier',
             'data' => $fullCart['data'],
             'total' => $fullCart['total'],

@@ -68,18 +68,17 @@ class SearchController extends AbstractController
         if (strpos($contentType, 'multipart/form-data') === false) {
             return new JsonResponse(['error' => 'Invalid Content-Type'], 415);
         }
-
+        // on recherche le contenu du formdata
         $formData = $request->request->all();
         $this->logger->info('Received form data', ['formData' => $formData]);
-
-
-
+        // on recherche le terme de recherche
         $searchForm = $formData['search_form'];
         $searchTerm = '';
-
+        // si la clé search_term_mobile existe et si elle n'est pas vide
         if (isset($searchForm['search_term_mobile']) && !empty($searchForm['search_term_mobile'])) {
+            // on assigne aux variables prévus la valeur du terme rechercher
             $searchTerm = $searchForm['search_term_mobile'];
-            $tokenName = 'search_form';
+            $tokenName = 'search_form'; // on recherche le terme de rechercher
         } elseif (isset($searchForm['search_term_desktop']) && !empty($searchForm['search_term_desktop'])) {
             $searchTerm = $searchForm['search_term_desktop'];
             $tokenName = 'search_form';

@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\InvoiceRepository;
+use App\Entity\Order;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\InvoiceRepository;
 
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
 class Invoice

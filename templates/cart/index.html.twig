@@ -2,24 +2,26 @@
 
 {% block body %}
 
-{% if data|length > 0 %}
+
 <div class="ui container cart">
 
-    <div class="ui items cart-items">
+    <div class="ui items cart-items ">
+
         <h1 class="padding-bottom-extra-large uk-animation-slide-right">Récapitulatif de votre panier</h1>
-        
+        {% if data|length > 0 %}
         {% for product in data %}
+
         <div class="item uk-animation-fade">
             <div class="ui small image">
-                <img src="{{ product.serviceItem.picture }}" alt="Image produit {{ product.serviceItem.title }}">
+                <img src="{{ product.serviceItem.picture }}" alt="Picture product {{ product.serviceItem.title ~ product.serviceItem.user.firstName ~ product.serviceItem.user.lastName}} from service ">
             </div>
             <div class="content">
-                <a class="header">{{ product.serviceItem.title }}</a>
+                <a class="header"><strong>{{ product.serviceItem.title }}</strong></a>
                 <div class="meta">
-                    <span class="price">{{ product.serviceItem.price }}€</span>
+                    <span class="price"><strong>{{ product.serviceItem.price }}€</strong></span>
                 </div>
                 <div class="extra">
-                    <p>Service proposé par: {{ product.serviceItem.user.firstName ~ product.serviceItem.user.lastName}}
+                    <p>Service proposé par: <strong>{{ product.serviceItem.user.firstName ~ product.serviceItem.user.lastName}}</strong>
                     </p>
                     <div class="ui right floated">
                         <a href="{{ path('delete_service_cart', {id: product.serviceItem.id}) }}"
@@ -31,27 +33,29 @@
             </div>
         </div>
         {% endfor %}
-    </div>
-    <!-- Conteneur pour le paiement -->
-    <section class="payment-section uk-animation-fade">
-        <h2>Informations de paiement</h2>
-        <form id="checkout-form" action="{{ path('app_stripe_charge') }}" method="POST">
-            <div id="card-element" class="card-element"></div>
-            <input type="hidden" name="amount" value="{{ total * 100 }}"> <!-- Le montant en cents -->
-            <button class="ui button green" id="checkout-button"
-                data-public-key="{{ stripe_public_key }}">Payer</button>
-        </form>
-    </section>
 
-    <div class="cart-total">
-        <h3>Total: {{ total }}€</h3>
-    </div>
-</div>
-{% else %}
-<div class="ui container">
-    <div class="ui warning message empty-cart-message">
-        <div class="header">Panier vide</div>
-        <p>Votre panier est vide.</p>
+        <!-- Conteneur pour le paiement -->
+        <section class="payment-section uk-animation-fade">
+            <h2>Informations de paiement</h2>
+            <form id="checkout-form" action="{{ path('app_stripe_charge') }}" method="POST">
+                <div id="card-element" class="card-element"></div>
+                <input type="hidden" name="amount" value="{{ total * 100 }}"> <!-- Le montant en cents -->
+                <button class="ui button green" id="checkout-button"
+                    data-public-key="{{ stripe_public_key }}">Payer</button>
+            </form>
+        </section>
+
+        <div class="cart-total">
+            <h3>Total: {{ total }}€</h3>
+        </div>
+
+        {% else %}
+        <div class="ui container">
+            <div class="ui warning message empty-cart-message">
+                <div class="header">Panier vide</div>
+                <p>Votre panier est vide.</p>
+            </div>
+        </div>
     </div>
 </div>
 {% endif %}
@@ -88,19 +92,26 @@
                 iconColor: '#fa755a'
             }
         };
-
+        // on crée le container qui recois la cart stripe
         let cardElementContainer = document.getElementById('card-element');
+        // on recherche le outon de soumission
         let button = document.getElementById('checkout-button');
-
+        // si le container est présent
         if (cardElementContainer) {
+            // on crée une carte de paiement en appliquant notre syle
             let cardElement = elements.create('card', { style: style });
+            // on mount la carte dans le DOM
             cardElement.mount('#card-element');
+            // si le bouton de soumission est présent
             if (button) {
+                // on lui place un écouteur d'événement
                 button.addEventListener('click', function () {
+                    // on demande a stripe un token de paiement
                     stripe.createToken(cardElement).then(function (result) {
                         if (result.error) {
                             alert(result.error.message);
                         } else {
+                            // si la réponse est positive on attibut a notre carte le token
                             let tokenInput = document.createElement('input');
                             tokenInput.setAttribute('type', 'hidden');
                             tokenInput.setAttribute('name', 'stripeToken');

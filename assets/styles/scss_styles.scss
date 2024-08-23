@@ -19,21 +19,18 @@ body {
   overflow-x: hidden;
 }
 
-
 .content.home {
   position: relative;
   top: 0;
   left: 0;
-  margin-top:10vh;
+  margin-top: 10vh;
   min-height: 100%;
   max-width: 100%;
-  // padding: 20px 20px;
 }
-/* Masquer tous les loaders par défaut */
+
 .loader {
   display: none;
 }
-
 
 .separator {
   position: relative;
@@ -78,34 +75,28 @@ body {
 .padding-bottom-small {
   padding-bottom: $padding-small;
 }
-
 .padding-bottom-large {
   padding-bottom: $padding-large;
 }
 .padding-bottom-extra-large {
   padding-bottom: $padding-extra-large;
 }
-
 // Margin
 .margin {
-  margin: $margin-medium; // Valeur par défaut
+  margin: $margin-medium;
 }
-
 .margin-small {
   margin: $margin-small;
 }
-
 .margin-large {
   margin: $margin-large;
 }
 .margin-extra-large {
   margin: $margin-extra-large;
 }
-
 .margin-top {
   margin-top: $margin-medium;
 }
-
 .margin-top-small {
   margin-top: $margin-small;
 }
