@@ -98,7 +98,7 @@ class CartController extends AbstractController
             'stripe_public_key' => $this->getParameter('stripe_public_key'),
         ]);
     }
-
+    // supprime un service par ID du panier
     #[Route('/cart/delete/{id}', name: 'delete_service_cart')]
     public function cartDeleteProduct(ServiceItem $serviceItem, Request $request): Response
     {

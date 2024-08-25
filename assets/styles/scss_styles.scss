@@ -18,7 +18,18 @@ body {
   height: 100%;
   overflow-x: hidden;
 }
+.image-container {
+  flex: 1;
+  padding: 10px;
+  max-width: 100%;
+  text-align: center;
 
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+}
 .content.home {
   position: relative;
   top: 0;
@@ -38,7 +49,26 @@ body {
   max-height: 80px;
   height: 80px;
 }
-
+.visible {
+  display: block !important;
+}
+.separator {
+  height: 100px;
+}
+/* Search motor  */
+.full-width-input {
+  width: 100% !important; /* Prend toute la largeur disponible */
+  box-sizing: border-box; 
+}
+/* On masque les * des required des moteur de recherche*/
+label.required::after {
+  content: "";
+  display: none !important;
+}
+/* Assurez-vous que les champs ne sont pas en état d'erreur par défaut */
+.ui.form .field.error input {
+  border-color: #e0e1e2;
+}
 // Padding
 .padding {
   padding: $padding-medium; // Valeur par défaut

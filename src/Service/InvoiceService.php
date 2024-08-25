@@ -74,25 +74,27 @@ class InvoiceService
     {
         // pour obtenir l'utilisateur authentifié depuis le invoiceService
         $user = $this->security->getUser();
-
+        // on s'assure que $user soit bien une instance de User
         if ($user instanceof User) {
             // on crée une nouvelle facture
             $invoice = new Invoice();
-
             // on lie la commande à la facture
             $invoice->setOrderRelation($order);
             $this->logger->info('invoice', ['invoice' =>  $invoice]);
 
             // on recherche le payment
             $payment = $order->getPayment();
-
+            // si le paiement existe
             if ($payment) {
-                // Obtenez le montant du paiement
+                // recherche le montant du paiement
                 $invoice->setAmount($payment->getAmount());
+                // on set le status a payé
                 $invoice->setStatus('paid');
             } else {
+                // Axe d'amélioration
                 // s'il n'ya pas de payment
                 $invoice->setAmount('0.00');
+                // status en attente
                 $invoice->setStatus('pennding');
             }
             $invoice->setTva('20.00');
