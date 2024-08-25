@@ -18,7 +18,7 @@
 
             <h2 class="ui header uk-animation-slide-right">Enregistrement</h2>
 
-            {{ form_start(registrationForm, {'attr': {'class': 'ui large form register'}}) }}
+            {{ form_start(registrationForm, {'attr': {'class': 'ui large form register', 'novalidate': 'novalidate'}}) }}
             <div class="ui stacked segment">
                 <div class="{{ registrationForm.username.vars.errors|length > 0 ? 'field error' }}">
                     {{ form_errors(registrationForm.username) }}

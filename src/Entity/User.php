@@ -25,30 +25,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user', 'serviceItem'])]
     private ?int $id = null;
 
-    // Contrainte pour le champ email login
-    #[Assert\NotBlank]
-    #[Assert\Email(message: "Veuillez saisir une adresse email valide.")]
-    #[Assert\Length(
-        min: 5,
-        minMessage: "Votre email doit comporter au moins {{ limit }} caractères.",
-        max: 180,
-        maxMessage: "Votre email ne peut pas comporter plus de {{ limit }} caractères."
-    )]
-    #[ORM\Column(length: 180)]
-    // #[Groups(['user', 'serviceItem'])]
-    private ?string $email = null;
-
-    /**
-     * @var array The user roles
-     */
-
-    #[ORM\Column(type: 'json')]
+    #[Assert\NotBlank(message: "Le nom d'utilisateur ne peut pas être vide.")]
+    #[ORM\Column(length: 100)]
     #[Groups(['user', 'serviceItem'])]
-    private array $roles = [];
+    private ?string $username = null;
 
-    /**
-     * @var string The hashed password
-     */
+        // Contrainte pour le champ email login
+        #[Assert\NotBlank]
+        #[Assert\Email(message: "Veuillez saisir une adresse email valide.")]
+        #[Assert\Length(
+            min: 5,
+            minMessage: "Votre email doit comporter au moins {{ limit }} caractères.",
+            max: 180,
+            maxMessage: "Votre email ne peut pas comporter plus de {{ limit }} caractères."
+        )]
+        // l'email doit être unique
+        #[ORM\Column(length: 180, unique: true)]
+        #[Groups(['user', 'serviceItem'])]
+        private ?string $email = null;
+
+    #[ORM\Column]
+    private ?string $password = null;
 
     #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide.")]
     #[Assert\Length(
@@ -71,25 +68,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         pattern: "/\W/",
         message: "Le mot de passe doit contenir au moins un caractère spécial."
     )]
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $password = null;
+    private ?string $plainPassword = null;
 
+    #[ORM\Column]
+    private bool $isVerified = false;
+    /**
+     * @var array The user roles
+     */
+    #[ORM\Column(type: 'json')]
+    #[Groups(['user', 'serviceItem'])]
+    private array $roles = [];
 
-    #[Assert\NotBlank(message: "Veuillez indiquer votre prénom.")]
     #[ORM\Column(length: 50, nullable: true)]
     #[Groups(['user', 'serviceItem'])]
     private ?string $firstName = null;
 
-    #[Assert\NotBlank(message: "Veuillez indiquer votre nom.")]
     #[ORM\Column(length: 50, nullable: true)]
     #[Groups(['user', 'serviceItem'])]
     private ?string $lastName = null;
 
-    #[Assert\NotBlank(message: "Le numéro de téléphone ne peut pas être vide.")]
+    
     #[ORM\Column(length: 50, nullable: true)]
     #[Groups(['user', 'serviceItem'])]
     private ?string $phoneNumber = null;
-
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['user', 'serviceItem'])]
@@ -99,7 +100,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user', 'serviceItem'])]
     private ?string $picture = null;
 
-    #[Assert\NotBlank(message: "Veuillez indiquer votre ville.")]
     #[ORM\Column(length: 100, nullable: true)]
     #[Groups(['user', 'serviceItem'])]
     private ?string $city = null;
@@ -108,19 +108,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user', 'serviceItem'])]
     private ?string $portfolio = null;
 
-    #[Assert\NotBlank(message: "La bio ne peut pas être vide.")]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['user', 'serviceItem'])]
     private ?string $bio = null;
 
-    #[ORM\Column]
-    private bool $isVerified = false;
 
-    #[Assert\NotBlank(message: "Le nom d'utilisateur ne peut pas être vide.")]
-    #[ORM\Column(length: 100)]
-    #[Groups(['user', 'serviceItem'])]
-    private ?string $username = null;
 
+
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
     /**
      * @var Collection<int, Service>
      */
@@ -358,7 +364,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     // #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
-    // private Collection $orders;
+    private Collection $orders;
 
 
     /**

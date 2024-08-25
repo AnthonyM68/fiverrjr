@@ -68,8 +68,6 @@ class StripeController extends AbstractController
                     'description' => 'Achat en ligne',
                 ]);
                 $order = $this->cart->createOrder($request);
-                //dd($order);
-          
                 // on enregistre les informations de la commande en base de données
                 $this->entityManager->persist($order);
                 $this->entityManager->flush();

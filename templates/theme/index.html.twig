@@ -1,11 +1,5 @@
 {% extends 'base.html.twig' %}
 
-<<<<<<< HEAD
-{% block title %}Hello ServiceController!{% endbl ock %}
-=======
-{% block title %}{{ title_page }}{% endblock %}
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
-
 {% block body %}
 <style>
     /* Zone de contenu avec scroll si nécessaire */
@@ -25,11 +19,6 @@
         margin-top: 20px;
     }
 
-<<<<<<< HEAD
-<div class="field">
-    {{ form_row(formAddTheme.submit) }}
-</div>
-=======
     /* Adaptation pour le mobile */
     @media (max-width: 768px) {
         .ui.container.theme {
@@ -38,13 +27,12 @@
         }
     }
 </style>
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
 
 <div class="ui container theme">
     <!-- Titre avec animation -->
     <div class="uk-animation">
         <div class="uk-animation-slide-right">
-            <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
+            <h1 class="title uk-animation-slide-right">{{ title_page|e }}</h1>
         </div>
     </div>
 
@@ -56,7 +44,7 @@
             <i class="folder icon"></i>
             <div class="content">
                 <div class="header">
-                    <a href="{{ path('detail_theme', { 'id': theme.id }) }}">{{ theme.nameTheme }}</a>
+                    <a href="{{ path('detail_theme', { 'id': theme.id|e }) }}">{{ theme.nameTheme|e }}</a>
                 </div>
             </div>
         </div>
@@ -82,7 +70,7 @@
             <i class="folder icon"></i>
             <div class="content">
                 <div class="header">
-                    <a href="{{ path('detail_category', { 'id': category.id }) }}">{{ category.nameCategory }}</a>
+                    <a href="{{ path('detail_category', { 'id': category.id|e }) }}">{{ category.nameCategory|e }}</a>
                 </div>
             </div>
         </div>

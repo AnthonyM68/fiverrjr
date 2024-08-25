@@ -31,18 +31,6 @@ Encore
     // Jquery-ui.js
     .addEntry('jquery_ui_js', './assets/js/jquery-ui/jquery-ui.js')
 
-<<<<<<< HEAD
-    // Ajouts des entrées
-
-    //jQuery UI
-    .addEntry('jquery_ui', './node_modules/jquery-ui-dist/jquery-ui.js')
-    .addStyleEntry('jquery_ui_theme', './node_modules/jquery-ui/dist/themes/smoothness/theme.css')
-    .addStyleEntry('jquery_structure', './node_modules/jquery-ui-dist/jquery-ui.structure.css')
-    // semantic-ui
-    .addEntry('semantic', './semantic/dist/semantic.js')
-    .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
-=======
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     // semantic-themes
     .addStyleEntry('semantic_css', './semantic/dist/semantic.css')
     // semantic-source-theme
@@ -56,7 +44,8 @@ Encore
     .addStyleEntry('uikit_css', './node_modules/uikit/dist/css/uikit.css')
     // tarteaucitron
     .addStyleEntry('tarteaucitron_css', './node_modules/tarteaucitronjs/css/tarteaucitron.css')
-    // .addEntry('tarteaucitron', './node_modules/tarteaucitronjs/tarteaucitron.js')
+    // Slick-carousel
+    .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
     // Slick-carousel CSS
     .addStyleEntry('slick-carousel-css', './node_modules/slick-carousel/slick/slick.css')
     .addStyleEntry('slick-carousel-theme-css', './node_modules/slick-carousel/slick/slick-theme.css')
@@ -111,8 +100,8 @@ Encore
     .addEntry('searchMotor', './assets/js/searchMotor/searchMotor.js')
     // Dropdown navbar
     .addEntry('dropdown', './assets/js/dropdown/dropdown.js')
-    // Slick-carousel
-    .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
+    // // Slick-carousel
+    // .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
     // Preview image FileUpload
     .addEntry('previewImage', './assets/js/preview/previewImage.js')
     // Orders list pending / completed

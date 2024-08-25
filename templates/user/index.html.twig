@@ -13,19 +13,19 @@
 <div class="ui container">
     <div class="uk-animation">
         <div class="uk-animation-slide-right">
-            <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
+            <h1 class="title uk-animation-slide-right">{{ title_page|e }}</h1>
         </div>
     </div>
     <div class="ui two column stackable grid">
         <div class="eight wide column">
             <div class="ui segment equal-height">
                 <div class="product-image">
-                    <img src="{{ asset(user.picture) }}"
-                        alt="Image de profil de {{ user.firstName }} {{ user.lastName }}"
+                    <img src="{{ asset(user.picture|e) }}"
+                        alt="Image de profil de {{ user.firstName|e }} {{ user.lastName|e }}"
                         class="ui fluid image portrait">
                 </div>
                 <div class="ui segment equal-height">
-                    <h2 class="ui header">{{ user.firstName }} {{ user.lastName }}</h2>
+                    <h2 class="ui header">{{ user.firstName|e }} {{ user.lastName|e }}</h2>
                     <div class="aligned center">
                         <p><strong>Inscrit depuis: </strong>{{ user.dateRegister|date('d/m/Y') }}</p>
                         {% set roles = [] %}
@@ -41,7 +41,7 @@
                         {% if roles is not empty %}
                         <p>Rôle{% if roles|length > 1 %}s{% endif %}: {{ roles|join(', ') }}</p>
                         {% endif %}
-                        <p><strong>Localité: </strong>{{ user.city }}</p>
+                        <p><strong>Localité: </strong>{{ user.city|e }}</p>
                     </div>
                 </div>
             </div>
@@ -50,19 +50,19 @@
             <div class="ui segment equal-height">
                 <h3><strong>Bio: </strong></h3>
                 <div class="product-details">
-                    <p>{{ user.bio }}</p>
+                    <p>{{ user.bio|e }}</p>
                 </div>
             </div>
 
             <div class="ui segment equal-height">
                 <h3><strong>Portfolio: </strong></h3>
                 <div class="product-details">
-                    <p><a href="{{ user.portfolio }}" target="_blank" rel="noopener noreferrer">Voir le portfolio {{
-                            user.portfolio }}</a></p>
+                    <p><a href="{{ user.portfolio|e }}" target="_blank" rel="noopener noreferrer">Voir le portfolio {{
+                            user.portfolio|e }}</a></p>
                 </div>
             </div>
             <div class="container">
-                <a href="{{ path('list_services_by_userID', { 'id': user.id }) }}" class="ui button primary">
+                <a href="{{ path('list_services_by_userID', { 'id': user.id|e }) }}" class="ui button primary">
                     Ces service
                 </a>
                 <a href="javascript:void(0);" class="ui button primary">

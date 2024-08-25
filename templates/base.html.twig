@@ -4,29 +4,23 @@
 <head>
     <meta charset="UTF-8">
     {# balise pour la gestion d'affichage multi écran #}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-    <title>{% block title %} {{ title_page }}{% endblock %}</title>
+    <meta name="description" content="{% if description| default %} {{ description|e }} {% endif  %}" />
+
+    <title>{% block title %}{{ title_page|title }}{% endblock %}</title>
 
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
     {% block stylesheets %}
     {{ encore_entry_link_tags('jquery_ui_css') }}
     {{ encore_entry_link_tags('jquery_ui_theme') }}
-<<<<<<< HEAD
-    {{ encore_entry_link_tags('jquery_structure') }}
-    {{ encore_entry_link_tags('uikit_css') }}
-    {{ encore_entry_link_tags('semantic_css') }}
-    {{ encore_entry_link_tags('app_styles') }}
-    {# {{ encore_entry_link_tags('semantic_less') }} #}
-=======
     {{ encore_entry_link_tags('jquery_ui_structure') }}
     {{ encore_entry_link_tags('jquery_popup') }}
     {{ encore_entry_link_tags('uikit_css') }}
     {{ encore_entry_link_tags('semantic_css') }}
     {{ encore_entry_link_tags('tarteaucitron_css') }}
     {{ encore_entry_link_tags('app_styles') }}
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     {% endblock %}
 </head>
 
@@ -43,18 +37,6 @@
     <footer>{% include 'footer/footer.html.twig' %}</footer>
     <div id="tarteaucitron"></div>
     {% block javascripts %}
-<<<<<<< HEAD
-    {{ encore_entry_script_tags('jquery_ui') }}
-
-    {# {{ encore_entry_script_tags('uikit') }} #}
-
-    {# {{ encore_entry_script_tags('uikit-icons') }} #}
-
-    {{ encore_entry_script_tags('semantic') }}
-
-    {{ encore_entry_script_tags('app') }}
-
-=======
     {{ encore_entry_script_tags('messageFlash') }}
     {{ encore_entry_script_tags('app') }}
     {{ encore_entry_script_tags('jquery_ui_js') }}
@@ -92,7 +74,6 @@
             console.error('Tarteaucitron is not defined');
         }
     </script> #}
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     {% endblock %}
 </body>
 

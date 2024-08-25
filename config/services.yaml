@@ -14,6 +14,7 @@ parameters:
   # Définition des répertoires pour les images selon le type d'utilisateur ou de service
   pictures_directory: "%kernel.project_dir%/public/uploads"
   developer_pictures_directory: "%kernel.project_dir%/public/uploads/developers"
+  
   client_pictures_directory: "%kernel.project_dir%/public/uploads/clients"
   # ServiceItem
   service_pictures_directory: "%kernel.project_dir%/public/uploads/services"
@@ -66,17 +67,11 @@ services:
     tags:
       - { name: doctrine.event_listener, event: prePersist }
 
-<<<<<<< HEAD
-
-    App\Twig\AppExtension:
-        tags: ['twig.extension']
-=======
   # Listener to intercept form submissions and set the creation date for a new service (form Service)
   # Listener pour intercepter les soumissions de formulaire et définir la date de création d'un nouveau service (formulaire Service)
   App\EventListener\AddDateOrderFiledOrderForm:
     tags:
       - { name: doctrine.event_listener, event: prePersist }
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
 
   # Listener to intercept form submissions and set the creation date for a new service (form Service)
   # Listener pour intercepter les soumissions de formulaire et définir la date de création d'un service (formulaire Service)

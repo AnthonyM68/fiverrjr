@@ -1,13 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{title_page}}{% endblock %}
-
 {% block body %}
-
-<div class="separator"></div>
-
 <div class="custom-container">
-    <h1 class="uk-animation-slide-right">{{ title_page }}</h1>
+    <h1 class="uk-animation-slide-right">{{ title_page|e }}</h1>
 
     <div class="separator">{% include "alertflash/flash_message.html.twig" %}</div>
 
@@ -43,7 +38,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('profile_edit', {'id':app.user.id} ) }}" class="ui button primary">
+    <a href="{{ path('profile_edit', {'id':app.user.id|e} ) }}" class="ui button primary">
         Mon Profil
     </a>
     <a href="" class="ui button primary">

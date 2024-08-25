@@ -41,8 +41,6 @@ $text-shadow-primary: hex-to-rgba($primary, $alpha-parallax-home);
   color: $white;
   z-index: 3;
   background-color: $overlay-floating-title;
-  // border-top: 1px solid $white;
-  // border-bottom:2px solid $primary;
   border-radius: 5px;
 }
 .title-container {

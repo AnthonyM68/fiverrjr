@@ -24,21 +24,9 @@ class CourseType extends AbstractType
                     'class' => 'ui fluid search dropdown'
                 ]
             ])
-<<<<<<< HEAD
-        ->add('nameCourse', TextType::class, [
-            'label' => 'Nom de sous catégorie',
-        ])
-        ->add('submit', SubmitType::class, [
-            'attr' => [
-                'class' => 'ui-button ui-widget ui-corner-all'
-            ]
-        ])
-    ;
-=======
             ->add('nameCourse', TextType::class, [
                 'label' => 'Nom de sous-catégorie'
             ]);
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
     }
 
     public function configureOptions(OptionsResolver $resolver): void

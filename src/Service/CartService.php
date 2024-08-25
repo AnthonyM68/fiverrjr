@@ -49,7 +49,7 @@ class CartService
         $this->security = $security;
     }
 
-    // récupère les données du panier depuis la session
+    // récupère les données du panier depuis la session et non serialiser
     public function getCart(Request $request)
     {
         // récupère la session
@@ -118,7 +118,6 @@ class CartService
             // sinon, ajoute le produit avec une quantité de 1
             $cart[$id] = 1;
         }
-
         // met à jour le panier dans la session
         $session->set('cart', $cart);
     }
@@ -173,7 +172,6 @@ class CartService
 
     public function serializeCart(Request $request): string
     {
-
         $fullCart = $this->getCart($request);
         return $this->serializer->serialize($fullCart, 'json', ['groups' => 'cart']);
     }

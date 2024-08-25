@@ -91,7 +91,7 @@
             <i class="folder icon"></i>
             <div class="content">
                 <div class="header">
-                    <a href="{{ path('detail_service', { 'id': service.id }) }}">{{ service.title }}</a>
+                    <a href="{{ path('detail_service', { 'id': service.id|e }) }}">{{ service.title|e }}</a>
                 </div>
             </div>
         </div>
@@ -99,30 +99,30 @@
     </div>
     {% endif %}
 
-    <!-- Détail d'un service -->
+    <!-- détail d'un service -->
     {% if service is defined %}
     <div class="ui two column stackable equal height grid uk-animation-fade">
         <div class="column">
             <div class="product-image service">
-                <img src="{{ asset(service.picture) }}" alt="Image {{ service.title }}" class="ui fluid image">
+                <img src="{{ asset(service.picture|e) }}" alt="Image {{ service.title|e }}" class="ui fluid image">
             </div>
             <div class="ui segment">
-                <p><strong>Catégorie : </strong>{{ service.course.nameCourse }}</p>
+                <p><strong>Catégorie : </strong>{{ service.course.nameCourse|e }}</p>
             </div>
         </div>
 
         <div class="column flex-end">
             <div class="ui mini card styled-card">
                 <div class="image">
-                    <img src="{{ asset(service.user.picture) }}" alt="Profil {{ service.user.username }}">
+                    <img src="{{ asset(service.user.picture|e) }}" alt="Profil {{ service.user.username|e }}">
                 </div>
                 <div class="content">
-                    <div class="header">{{ service.user.username }}</div>
-                    <div class="meta"><storng>{{ service.user.firstName ~ ' ' ~ service.user.lastName }}</storng>
+                    <div class="header">{{ service.user.username|e }}</div>
+                    <div class="meta"><storng>{{ service.user.firstName|e ~ ' ' ~ service.user.lastName|e }}</storng>
                         <span class="date">Membre depuis:</span>
                     </div>
                     <div class="description">
-                        <p>{{ service.user.bio|slice(0, 50) }}...</p> <!-- Courte bio de l'utilisateur -->
+                        <p>{{ service.user.bio|e|slice(0, 50) }}...</p> 
                     </div>
                 </div>
                 <div class="extra content">
@@ -132,16 +132,16 @@
                     </span>
                     <span>
                         <i class="user icon"></i>
-                        <a href="{{ path('detail_user', {'id': service.user.id}) }}">Voir le profil</a>
+                        <a href="{{ path('detail_user', {'id': service.user.id|e }) }}">Voir le profil</a>
                     </span>
                 </div>
             </div>
 
-            <p><strong>Description : </strong>{{ service.description }}</p>
-            <p><strong>Prix : </strong>{{ service.price }}<i class="euro icon"></i></p>
-            <p><strong>Catégorie : </strong><i class="tag icon"></i>{{ service.course.nameCourse }}</p>
+            <p><strong>Description : </strong>{{ service.description|e }}</p>
+            <p><strong>Prix : </strong>{{ service.price|e }}<i class="euro icon"></i></p>
+            <p><strong>Catégorie : </strong><i class="tag icon"></i>{{ service.course.nameCourse|e }}</p>
             <p><strong>Créé le : </strong><i class="calendar icon"></i>{{ service.createDate|date('d/m/Y') }}</p>
-            <p><strong>Réf : </strong>{{ service.id }}</p>
+            <p><strong>Réf : </strong>{{ service.id|e }}</p>
             <a href="{{ path('add_service_cart', {'id': service.id}) }}" class="ui primary button add-to-cart-btn">Ajouter au panier</a>
         </div>
     </div>

@@ -123,8 +123,8 @@ class ServiceItemController extends AbstractController
         ServiceItemRepository $serviceItemRepository,
         CsrfTokenManagerInterface $csrfTokenManager
     ): JsonResponse {
-        // récupère l'utilisateur actuel depuis le token
-        $user = $this->tokenStorage->getToken()->getUser();
+        // récupère l'utilisateur actuel 
+        $user = $this->getUser();
         // vérifie que l'utilisateur est bien une instance de User
         if (!$user instanceof User) {
             return new JsonResponse(['error' => 'utilisateur non trouvé'], Response::HTTP_UNAUTHORIZED);
@@ -138,7 +138,6 @@ class ServiceItemController extends AbstractController
         foreach ($services as $service) {
             // génère un token csrf pour chaque service
             $csrfToken = $csrfTokenManager->getToken('token_' . $service->getId())->getValue();
-
             $data[] = [
                 'id' => $service->getId(), // identifiant du service, utilisé en javascript
                 'title' => $service->getTitle(), // titre du service
@@ -380,8 +379,8 @@ class ServiceItemController extends AbstractController
     /**
      * Créer un nouveau service ou éditer un existant
      */
-    #[Route('/developer/service/new', name: 'new_service')]
-    #[Route('/developer/service/edit/{id}', name: 'edit_service', methods: ['GET', 'POST'])]
+    #[Route('/client/service/new', name: 'new_service')]
+    #[Route('/client/service/edit/{id}', name: 'edit_service', methods: ['GET', 'POST'])]
     // restreint l'accès aux utilisateurs authentifiés
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
 

@@ -20,30 +20,32 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    public function __construct(private EmailVerifier $emailVerifier)
-    {
-    }
+    public function __construct(private EmailVerifier $emailVerifier) {}
     // Route par la page de connection
     #[Route('/register', name: 'register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
-    {
+    public function register(
+
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        Security $security,
+        EntityManagerInterface $entityManager
+
+    ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+        // dd($form->getData());
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+             // Encode le mot de passe en utilisant plainPassword
+            $user->setPassword($userPasswordHasher->hashPassword($user, $user->getPlainPassword()));
             // set roles
             $user->setRoles($form->get('roles')->getData());
 
             $entityManager->persist($user);
             $entityManager->flush();
+
 
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation(
@@ -55,7 +57,8 @@ class RegistrationController extends AbstractController
                     ->subject('Veuillez confirmeé votre Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
-
+            $this->addFlash('success', 'Félicitations ! Votre inscription a été enregistrée avec succès. Un e-mail de confirmation a été envoyé.
+r');
             // do anything else you need here, like send an email
             return $security->login($user, AppAuthenticator::class, 'main');
         }
@@ -81,7 +84,7 @@ class RegistrationController extends AbstractController
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash('success', 'Votre adresse e-mail a été vérifiée');
 
         return $this->redirectToRoute('login');
     }

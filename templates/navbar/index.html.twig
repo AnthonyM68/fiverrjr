@@ -21,24 +21,24 @@
                 <div class="menu menu-dropdown-desktop">
                     {% for theme in get_navbar_data() %}
                     <div class="item">
-                        <a href="{{ path('detail_theme', { 'id': theme.id }) }}">
+                        <a href="{{ path('detail_theme', { 'id': theme.id|e } ) }}">
                             <i class="dropdown icon"></i>
-                            {{ theme.name }}
+                            {{ theme.name|e }}
                         </a>
-                        <div class="menu">
+                        <div class="menu"> 
                             {% for category in theme.categories %}
                             <div class="item">
-                                <a href="{{ path('detail_category', { 'id': category.id }) }}">
+                                <a href="{{ path('detail_category', { 'id': category.id|e }) }}">
                                     <i class="dropdown icon"></i>
-                                    {{ category.name }}
+                                    {{ category.name|e }}
                                 </a>
                                 <div class="menu">
                                     {% for course in category.courses %}
                                     <div class="item">
-                                        <a href="{{ path('detail_course', {'id': course.id, 'page' : '1' }) }}">
+                                        <a href="{{ path('detail_course', {'id': course.id|e, 'page' : '1' }) }}">
                                             {# <a href="{{ path('detail_course', {'id': course.id, 'page' : '1'}) }}">
                                                 #}
-                                                {{ course.name }}
+                                                {{ course.name|e }}
                                             </a>
                                     </div>
                                     {% endfor %}
@@ -62,9 +62,8 @@
                 </div>
                 <!-- End: Search -->
                 <a href="{{ path('search') }}" class="item">Avancées</a>
-                {% if app.user %}
-                <a href="{{ path('profile_edit', {'id': app.user.id}) }}" class="ui item">Bonjour {{ app.user.username
-                    }}</a>
+                {% if app.user|e %}
+                <a href="{{ path('profile_edit', {'id': app.user.id|e }) }}" class="ui item">Bonjour {{ app.user.username|e }}</a>
                 <a href="{{ path('logout') }}" class="ui item">Se déconnecter</a>
                 {% else %}
                 <a href="{{ path('login') }}" class="ui item">Se connecter</a>
@@ -74,8 +73,8 @@
                 <a href="{{ path('cart_product') }}" class="ui item">
                     <i class="cart arrow down icon"></i>
                     <div class="cart-info">
-                        <span class="cart-item-count">{{ totalServiceItem }} Article(s)</span>
-                        <span class="cart-total">{{ total }} €</span>
+                        <span class="cart-item-count">{{ totalServiceItem|e }} Article(s)</span>
+                        <span class="cart-total">{{ total|e }} €</span>
                     </div>
                 </a>
             </div>
@@ -103,15 +102,8 @@
 
                 <!-- Start: Search -->
                 <div class="item">
-                    {% include './navbar/form/formMobile.html.twig' with { 'attr': { 'class': 'mobile-search-form' } }%}
+                    {# {% include './navbar/form/formMobile.html.twig' with { 'attr': { 'class': 'mobile-search-form' } }%} #}
                 </div>
-
-
-
-
-
-
-
                 <!-- End: Search -->
                 <!-- Code d'affichage des alertes pour mobile -->
                 <a href="{{ path('home') }}" class="item">Accueil</a>
@@ -129,22 +121,22 @@
                     <div class="item">
                         <div class="title">
                             <i class="dropdown icon"></i>
-                            {{ theme.name }}
+                            {{ theme.name|e }}
                         </div>
                         <div class="content">
                             {% for category in theme.categories %}
                             <div class="item">
                                 <div class="title">
                                     <i class="dropdown icon"></i>
-                                    {{ category.name }}
+                                    {{ category.name|e }}
                                 </div>
                                 <div class="content">
                                     {% for course in category.courses %}
                                     <div class="item">
-                                        <a href="{{ path('detail_course', {'id': course.id, 'page' : '1' }) }}">
+                                        <a href="{{ path('detail_course', {'id': course.id|e, 'page' : '1' }) }}">
                                             {# <a href="{{ path('detail_course', {'id': course.id, 'page' : '1'}) }}">
                                                 #}
-                                                {{ course.name }}
+                                                {{ course.name|e }}
                                             </a>
                                     </div>
                                     {% endfor %}
@@ -157,8 +149,7 @@
                 </div>
                 <div class="ui divider"></div>
                 {% if app.user %}
-                <a href="{{ path('profile_edit', {'id': app.user.id}) }}" class="ui item">Bonjour {{ app.user.username
-                    }}</a>
+                <a href="{{ path('profile_edit', {'id': app.user.id|e }) }}" class="ui item">Bonjour {{ app.user.username|e }}</a>
                 <a href="{{ path('logout') }}" class="ui item">Se déconnecter</a>
                 {% else %}
                 <a href="{{ path('login') }}" class="ui item">Se connecter</a>

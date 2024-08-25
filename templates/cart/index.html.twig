@@ -13,18 +13,20 @@
 
         <div class="item uk-animation-fade">
             <div class="ui small image">
-                <img src="{{ product.serviceItem.picture }}" alt="Picture product {{ product.serviceItem.title ~ product.serviceItem.user.firstName ~ product.serviceItem.user.lastName}} from service ">
+                <img src="{{ product.serviceItem.picture|e }}"
+                    alt="Picture product {{ product.serviceItem.title|e ~ product.serviceItem.user.firstName|e ~ product.serviceItem.user.lastName|e }}} from service ">
             </div>
             <div class="content">
-                <a class="header"><strong>{{ product.serviceItem.title }}</strong></a>
+                <a class="header"><strong>{{ product.serviceItem.title|e }}</strong></a>
                 <div class="meta">
-                    <span class="price"><strong>{{ product.serviceItem.price }}€</strong></span>
+                    <span class="price"><strong>{{ product.serviceItem.price|e }}€</strong></span>
                 </div>
                 <div class="extra">
-                    <p>Service proposé par: <strong>{{ product.serviceItem.user.firstName ~ product.serviceItem.user.lastName}}</strong>
+                    <p>Service proposé par: <strong>{{ product.serviceItem.user.firstName ~
+                            product.serviceItem.user.lastName}}</strong>
                     </p>
                     <div class="ui right floated">
-                        <a href="{{ path('delete_service_cart', {id: product.serviceItem.id}) }}"
+                        <a href="{{ path('delete_service_cart', {id: product.serviceItem.id|e }) }}"
                             class="ui-button ui-corner-all">
                             <span class="ui-icon ui-icon-trash"></span> Supprimer
                         </a>
@@ -39,14 +41,14 @@
             <h2>Informations de paiement</h2>
             <form id="checkout-form" action="{{ path('app_stripe_charge') }}" method="POST">
                 <div id="card-element" class="card-element"></div>
-                <input type="hidden" name="amount" value="{{ total * 100 }}"> <!-- Le montant en cents -->
+                <input type="hidden" name="amount" value="{{ total|e * 100 }}"> <!-- Le montant en cents -->
                 <button class="ui button green" id="checkout-button"
-                    data-public-key="{{ stripe_public_key }}">Payer</button>
+                    data-public-key="{{ stripe_public_key|e }}">Payer</button>
             </form>
         </section>
 
         <div class="cart-total">
-            <h3>Total: {{ total }}€</h3>
+            <h3>Total: {{ total|e }}€</h3>
         </div>
 
         {% else %}

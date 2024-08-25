@@ -1,11 +1,4 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}{{ title_page }} {% endblock %}
-
 {% block body %}
-<div class="sperator"></div>
-
-<h1>{{ title_page }}</h1>
-
-
+<h1>{{ title_page|e }}</h1>
 {% endblock %}

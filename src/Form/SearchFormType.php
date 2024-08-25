@@ -15,44 +15,25 @@ class SearchFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // N'ayant pas trouvé de solution pour modifier l'id selon les règles de symfony
-        // j'ai opter pour un id_suffix fournit à la construction du formulaire
-        // afin d'éviter tout conflit entre deux formulaire du même type
         $key = 'search_term_' . $options['id_suffix'];
+        $tokenId = 'search_form_' . $options['id_suffix'] . '_token';
+
         $builder
-<<<<<<< HEAD
-            ->add('search_table', TextType::class, [
-                'label' => 'Table',
-                'label_attr' => [
-                    'style' => 'display: none;'
-                ],
-                'attr' => [
-                    'readonly' => true,
-                    'style' => 'display:none'
-                ],
-                'data' => $options['search_table'],
-            ])
-            ->add('search_term', TextType::class, [
-                'label' => $options['search_label'],
-=======
             // Input du terme a rechercher
             ->add($key, TextType::class, [
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
                 'required' => true,
                 'attr' => [
                     'placeholder' => 'Services',
-                    'class' => 'prompt ' . $options['id_suffix']
+                    'class' => 'prompt ' . $options['id_suffix'], 
+                    'id' => $key
                 ],
-<<<<<<< HEAD
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Rechercher',
-                'attr' => [
-                    'class' => 'ui-button ui-widget ui-corner-all'
-                ]
-=======
                 'label' => false
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
+            ])
+            ->add($tokenId, HiddenType::class, [
+                'data' => $options['csrf_token'],
+                'attr' => [
+                    'id' => $tokenId // Ajout de l'ID unique pour le token
+                ]
             ]);
     }
 
@@ -60,6 +41,7 @@ class SearchFormType extends AbstractType
     {
         $resolver->setDefaults([
             'search_label' => null,
+            'csrf_token' => null,
             'search_table' => 'theme',// Point d'entrée de notre recherche
             'id_suffix' => 'default'
         ]);

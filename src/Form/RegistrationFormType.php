@@ -25,31 +25,11 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username', TextType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Saisissez votre nom d\'utilisateur',
-                    ]),
-                    new Assert\Length([
-                        'min' => 3, // 12
-                        'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères.',
-                        'max' => 100,
-                    ]),
-                    
-                ]
-            ])
-            ->add('email', EmailType::class, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Saisissez votre Email',
-                    ]),
-                    new Assert\Email([
-                        'message' => 'Veuillez saisir une adresse email valide.',
-                    ])
-                ]
-            ])
+            ->add('username', TextType::class, [])
+            ->add('email', EmailType::class, [])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
+                // RGPD
                 'constraints' => [
                     new IsTrue([
                         'message' => 'S\'ìl vous plait, vous devez accepter nos conditions.',
@@ -58,23 +38,16 @@ class RegistrationFormType extends AbstractType
                 'required' => false,
             ])
             ->add('plainPassword', RepeatedType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Saisissez votre mot de passe',
-                    ]),
-                    new Assert\Length([
-                        'min' => 3,
-                        'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères.',
-                        'max' => 255,
-                    ]),
-                ],
                 'type' => PasswordType::class,
-                'invalid_message' => 'Votre saisie ne correspond pas.',
+                'mapped' => true,
+                'invalid_message' => 'Les mots de passe doivent correspondre.',
                 'options' => ['attr' => [
                     'class' => 'password-field'
                 ]],
                 'required' => true,
+                'first_options'  => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Confirmer le mot de passe']
+
             ])
             ->add('roles', ChoiceType::class, [
                 'choices' => [
@@ -85,11 +58,10 @@ class RegistrationFormType extends AbstractType
                     'class' => 'ui checkbox checkbox-container',
                 ],
                 'multiple' => true,
-                // 'expanded' => true,
                 'label' => false,
                 'data' => []
             ])
-            ;
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

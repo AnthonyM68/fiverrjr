@@ -9,6 +9,7 @@
 
 {% block body %}
 
+
 <script>
     window.__INITIAL_DATA__ = {
     lastDeveloper: {{ lastDeveloper | json_encode() | raw }},
@@ -19,14 +20,12 @@
     searchDeveloper: "{{ search_developer }}", // route search_developer
     searchClient: "{{ search_client }} "};// route search_client Optionel
 </script>
-
-
 <div id="ParallaxHome"></div>
 
 <div class="ui container ">
 <div class="content-block">
     <div class="image-container">
-        <img src="{{ asset('uploads/group2.webp') }}" alt="Description of the image">
+        <img src="{{ asset('uploads/group2.webp') }}" alt="image of a group of developers gathered in front of a computer">
     </div>
     <div class="text-container">
         <h2>Trouvez le bon profil</h2>
@@ -42,7 +41,6 @@
 <div class="separator"></div>
 <div class="bestservices-container" id="bestservices-root"></div>
 <div class="separator"></div>
-
 <div class="content-block">
     <div class="text-container">
         <h2>Évoluez dans un endroit sûr et un service sécurisé</h2>
@@ -51,9 +49,8 @@
             aux missions garanties et aux profils de freelances vérifiés.</p>
     </div>
     <div class="image-container">
-        <img src="{{ asset('uploads/group.webp') }}" alt="Description of the image">
+        <img src="{{ asset('uploads/group.webp') }}" alt="image of a group of developers gathered in front of a project manager">
     </div>
-
 </div>
 </div>
 {# <div id="last-developers"></div> #}

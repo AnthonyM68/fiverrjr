@@ -27,17 +27,10 @@ class CategoryType extends AbstractType
             ])
             ->add('nameCategory', TextType::class, [
                 'label' => 'Nom de Catégorie',
-<<<<<<< HEAD
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
                     'class' => 'ui-button ui-widget ui-corner-all'
-=======
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un nom de Catégorie',
-                    ]),
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
                 ]
             ]);
     }

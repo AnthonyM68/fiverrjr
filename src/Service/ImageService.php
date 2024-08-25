@@ -71,27 +71,53 @@ class ImageService
     // déplace une image et retourne son nom unique de fichier
     public function uploadImage(UploadedFile $file, string $role): string
     {
-        // on vérfie l'extention du format si autorisé
-        $allowedMimeTypes = ['image/jpeg', 'image/webp', 'image/gif'];
+        // on vérifie le type mime
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
         if (!in_array($file->getMimeType(), $allowedMimeTypes)) {
-            throw new \Exception('Format de fichier non autorisé. Seules les images JPEG, webp, et GIF sont acceptées.');
+            throw new \Exception('Format de fichier non autorisé. Seules les images JPEG, PNG, et GIF sont acceptées.');
         }
-        // Limite à 2MB
+        // limite de taille
         if ($file->getSize() > 2097152) {
             throw new \Exception('Le fichier est trop volumineux');
         }
-        // on lui attribut un id unique
+        // détermine le répertoire de destination
         $uploadsDirectory = $this->getUploadDirectory($role);
-        $filename = uniqid() . '.' . $file->guessExtension();
+        // on attribue un nom unique (lutte contre la faille upload)
+        $filename = uniqid();
 
-        try {
-            $file->move($uploadsDirectory, $filename);
-        } catch (FileException $e) {
-            throw new \Exception('Failed to upload image');
+        // on recherche le fichier source
+        $sourcePath = $file->getPathname();
+        // on défini la destination
+        $destinationPath = $uploadsDirectory . '/' . $filename . '.webp';
+        // on convertit l'image selon son type MIME en utilisant GD de php
+        switch ($file->getMimeType()) {
+            case 'image/jpeg':
+            case 'image/jpg':
+                // Charge l'image JPEG
+                $image = imagecreatefromjpeg($sourcePath);
+                break;
+            case 'image/png':
+                // Charge l'image PNG
+                $image = imagecreatefrompng($sourcePath);
+                break;
+            case 'image/gif':
+                // Charge l'image GIF
+                $image = imagecreatefromgif($sourcePath);
+                break;
+            default:
+                throw new \Exception('Format d\'image non supporté pour la conversion en WebP.');
         }
-
-        return $filename;
+        // on convertit l'image chargée en WebP avec une compression de qualité (80%)
+        $compressionQuality = 80;
+        if (!imagewebp($image, $destinationPath, $compressionQuality)) {
+            throw new \Exception('La conversion en WebP a échoué.');
+        }
+        // on liibère la mémoire utilisée par l'image
+        imagedestroy($image);
+        // nom du fichier WebP créé
+        return $filename . '.webp';
     }
+
     // efface une image
     public function deleteImage(string $filename, string $role): void
     {

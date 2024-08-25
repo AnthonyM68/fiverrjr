@@ -15,7 +15,7 @@
     {% for message in messages %}
         <div class="{{ mappedType }}">
             <div class="header">
-                {{ message }}
+                {{ message|e }}
             </div>
         </div>
     {% endfor %}

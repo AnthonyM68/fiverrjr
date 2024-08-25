@@ -33,7 +33,7 @@ class HomeController extends AbstractController
         ImageService $imageService,
         // Security $security,
         // SessionInterface $session
-        
+
     ) {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
@@ -47,92 +47,6 @@ class HomeController extends AbstractController
      * @return Response
      */
     #[Route('/home', name: 'home')]
-<<<<<<< HEAD
-    public function index(Request $request): Response
-    {
-        // Création et gestion du formulaire de recherche
-        $formTheme = $this->createForm(SearchFormType::class, null, [
-            'search_table' => 'theme',
-            'search_label' => 'Recherchez votre service',
-        ]);
-        $formTheme->handleRequest($request);
-        $results = [];
-        $searchTerm= null;
-        $submittedFormName = null;
-        // Vérification si le formulaire est soumis et valide
-        if ($formTheme->isSubmitted() && $formTheme->isValid() && $request->request->get('submitted_form_type') === 'theme_category_course') {
-            // On récupére les données de l'input
-            $searchTerm = $formTheme->get('search_term')->getData();
-            // Recherche des résultats correspondants au terme de recherche
-            $results = $this->entityManager->getRepository(Theme::class)->searchByTermAllChilds($searchTerm);
-            // Si aucun résultat n'est trouvé, on ajoute un indicateur 'empty'
-            if (empty($results)) {
-                $results['empty'] = true;
-            }
-            $submittedFormName = 'form_service';
-        }
-        // Rendu de la vue avec les résultats de la recherche
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'SearchController',
-            'form_service' => $formTheme->createView(),
-            'results' => $results,
-            'search_term' => $searchTerm,
-            'submitted_form' => $submittedFormName,
-             'title_page' => 'Accueil'
-        ]);
-    }
-    /**
-     * Page d'administration
-     *
-     * @return Response
-     */
-    #[Route('/admin', name: 'admin')]
-    public function administrator(): Response
-    {
-        return $this->render('administrator/index.html.twig', [
-            'controller_name' => 'HomeController',
-            'title_page' => 'Tableau de bord'
-        ]);
-    }
-
-
-    /**
-     * Route pour la recherche dans l'entité Service
-     *
-     * @param Request $request
-     * @return Response
-     */
-    #[Route("/home/service", name: "home_service_search")]
-    public function search(Request $request): Response
-    {
-        // Création et gestion du formulaire de recherche
-        $formService = $this->createForm(SearchFormType::class, null, [
-            'search_table' => 'service',
-            'search_label' => 'Recherchez votre service',
-        ]);
-        $formService->handleRequest($request);
-        $results = [];
-        $submittedFormName = null;
-        // Vérification si le formulaire est soumis et valide
-        if ($formService->isSubmitted() && $formService->isValid() && $request->request->get('submitted_form_type') === 'service') {
-            // On récupére les données de l'input
-            $searchTerm = $formService->get('search_term')->getData();
-            // Recherche des résultats correspondants au terme de recherche dans l'entité Service
-            $results['service'] = $this->entityManager->getRepository(Service::class)->findByTerm($searchTerm);
-            // Si aucun résultat n'est trouvé, on ajoute un indicateur 'empty'
-            if (empty($results['service'])) {
-                $results['empty'] = true;
-            }
-            $submittedFormName = 'form_service';
-        }
-        // Rendu de la vue avec les résultats de la recherche
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'SearchController',
-            'title_page' => 'Résultats de la recherche',
-            'form_service' => $formService->createView(),
-            'results' => $results,
-            'submitted_form' => $submittedFormName,
-=======
     public function index(
         SerializerInterface $serializer,
         CsrfTokenManagerInterface $csrfTokenManager,
@@ -181,7 +95,8 @@ class HomeController extends AbstractController
             'search_developer' => $searchDeveloper,
             'search_client' => $searchClient,
             'submitted_form' => null,
-            'title_page' => 'Accueil'
+            'title_page' => 'Accueil',
+            'description' => '<meta name="description" content="Fiverr Junior - La plateforme idéale pour les jeunes freelances. Trouvez des opportunités de travail, développez vos compétences et lancez votre carrière en ligne. Rejoignez une communauté dynamique où des talents émergents de vos meilleurs projet." />'
         ]);
     }
 
@@ -208,7 +123,6 @@ class HomeController extends AbstractController
         $this->imageService->setPictureUrl($client);
         $this->logger->info('client', [
             'client' => $client
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
         ]);
         return new JsonResponse($client, JsonResponse::HTTP_OK);
     }

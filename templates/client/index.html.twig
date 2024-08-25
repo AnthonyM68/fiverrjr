@@ -5,7 +5,7 @@
 
     <div class="uk-animation">
         <div class="uk-animation-slide-right">
-            <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
+            <h1 class="title uk-animation-slide-right">{{ title_page|e }}</h1>
         </div>
     </div>
     
@@ -14,7 +14,7 @@
         {% for user in users %}
         <div class="ui card custom-card">
             <div class="custom-image-client">
-                <img src="{{ user.picture }}" alt="{{ user.username }}">
+                <img src="{{ user.picture|e }} " alt="{{ user.username|e }}">
             </div>
             <div class="content custom-card-content">
                 <div class="header">{{ user.username }}</div>
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="extra content">
-                <a href="{{ path('detail_user', {'id': user.id}) }}" class="ui button primary">
+                <a href="{{ path('detail_user', {'id': user.id|e }) }}" class="ui button primary">
                     Plus d'infos
                 </a>
             </div>
@@ -37,8 +37,8 @@
     <div class="ui pagination menu centered custom-margin-top">
         {% for page in range(1, pagination.pageCount) %}
         <a class="item{% if page == pagination.currentPageNumber %} active{% endif %}"
-            href="{{ path('list_user_type', {'role': role, 'page': page }) }}">
-            {{ page }}
+            href="{{ path('list_user_type', {'role': role|e, 'page': page|e }) }}">
+            {{ page|e }}
         </a>
         {% endfor %}
     </div>

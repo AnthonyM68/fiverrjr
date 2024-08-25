@@ -41,33 +41,11 @@
     }
 </style>
 
-<<<<<<< HEAD
-<div class="field">
-    {{ form_row(formAddCourse.submit) }}
-</div>
-
-{{ form_end(formAddCourse) }}
-{% endif %}
-
-
-
-
-{% if courses | default %}
-
-<div class="ui list">
-    {% for course in courses %}
-    <div class="item">
-        <i class="folder icon"></i>
-        <div class="content">
-            <div class="header">{{ course.nameCourse}}</div>
-            {# <div class="description">Source files for project</div> #}
-=======
 <div class="ui container course">
     <!-- Titre avec animation -->
     <div class="uk-animation padding-top-large">
         <div class="uk-animation-slide-right">
-            <h1 class="title uk-animation-slide-right">{{ title_page }}</h1>
->>>>>>> a5feb3db027be62ad942fe5c640558f052dbbba0
+            <h1 class="title uk-animation-slide-right">{{ title_page|e }}</h1>
         </div>
     </div>
 
@@ -79,8 +57,8 @@
             <i class="folder icon"></i>
             <div class="content">
                 <div class="header">
-                    <a href="{{ path('detail_course', { 'id': course.id, 'page' : '1' }) }}">
-                        <strong>{{ course.nameCourse }}</strong>
+                    <a href="{{ path('detail_course', { 'id': course.id|e, 'page' : '1' }) }}">
+                        <strong>{{ course.nameCourse|e }}</strong>
                     </a>
                 </div>
             </div>
@@ -95,12 +73,12 @@
         {% for service in services %}
         <div class="ui card custom-card">
             <div class="custom-image-client">
-                <img src="{{ service.picture }}"
-                    alt="Image illustrant {{ service.title }} - {{ title_page }} - Service proposé par {{ service.user.username }}">
+                <img src="{{ service.picture|e }}"
+                    alt="Image {{ service.title|e }} - {{ title_page|e }} - service offered by {{ service.user.username|e }}">
             </div>
             <div class="content custom-card-content">
                 <div class="header">
-                    <strong>{{ service.title }}</strong>
+                    <strong>{{ service.title|e }}</strong>
                 </div>
                 <div class="meta">
                     <span class="date">
@@ -108,12 +86,12 @@
                     </span>
                 </div>
                 <div class="description">
-                    {{ service.description|slice(0, 100) }}...
+                    {{ service.description|e|slice(0, 100) }}...
                 </div>
             </div>
             <div class="extra content">
-                <p>Service proposé par : <strong>{{ service.user.username }}</strong></p>
-                <a href="{{ path('detail_service', { 'id': service.id }) }}" class="ui-button ui-widget ui-corner-all">
+                <p>Service proposé par : <strong>{{ service.user.username|e }}</strong></p>
+                <a href="{{ path('detail_service', { 'id': service.id|e }) }}" class="ui-button ui-widget ui-corner-all">
                     <span class="ui-icon ui-icon-info"></span> <strong>Plus d'infos</strong>
                 </a>
             </div>
