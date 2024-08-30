@@ -11,6 +11,8 @@ Une plateforme d'échange de services dédiée aux entrepreneurs et développeur
 * 🤝 Contributions
 * 📬 Contact
 * 📊 Schémas
+> ![MCD](https://github.com/AnthonyM68/fiverrjr/blob/master/fiverr_junior_home_parallax.png
+> ![UML](https://github.com/AnthonyM68/fiverrjr/blob/master/Maquettage%20Figma.png)
 
 ### Introduction
 Bienvenue sur Fiverr Junior, une plateforme d'échange de services simplifiée pour les développeurs juniors et les entrepreneurs d’Alsace (Haut-Rhin, Bas-Rhin). Ce projet vise à faciliter la mise en relation entre clients à la recherche de services spécifiques et développeurs en quête de missions.
