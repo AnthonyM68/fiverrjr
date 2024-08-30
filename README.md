@@ -12,7 +12,7 @@ Une plateforme d'échange de services dédiée aux entrepreneurs et développeur
 * 📬 Contact
 * 📊 Schémas
 
-> ![home](https://github.com/AnthonyM68/fiverrjr/blob/master/fiverr_junior_home_parallax.png
+> ![home](https://github.com/AnthonyM68/fiverrjr/blob/master/fiverr_junior_home_parallax.png)
 > ![figma](https://github.com/AnthonyM68/fiverrjr/blob/master/Maquettage%20Figma.png)
 
 ### Introduction
