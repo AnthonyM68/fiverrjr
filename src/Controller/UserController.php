@@ -238,6 +238,25 @@ class UserController extends AbstractController
 
         $lastClientData = $serializer->serialize($client, 'json', ['groups' => 'user']);
         $dataClient = json_decode($lastClientData, true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         /**
          *  recherche des commandes nouvelles
          */

@@ -20,7 +20,7 @@ framework:
     # Configure le seralizer pour qu'il utilise le gestionaire de référence circulaire
     serializer:
         enabled: true
-        circular_reference_handler: 'App\Serializer\CircularReferenceHandler'
+        circular_reference_handler: 'App\Service\Serializer\CircularReferenceHandler'
 when@test:
     framework:
         test: true

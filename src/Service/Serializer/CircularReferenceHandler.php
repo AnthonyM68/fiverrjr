@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Serializer;
+namespace App\Service\Serializer;
 
 class CircularReferenceHandler
 {
