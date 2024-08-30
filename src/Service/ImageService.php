@@ -41,7 +41,25 @@ class ImageService
             throw new \Exception('Image not found' . $filePath);
         }
 
-        return str_replace($this->parameters->get('kernel.project_dir') . '/public', '', $filePath);
+        // return str_replace($this->parameters->get('kernel.project_dir') . '/public', '', $filePath);
+        // Générez le chemin relatif basé sur le chemin public
+        $publicDir = $this->parameters->get('kernel.project_dir') . '/public';
+        // dd($filePath);
+
+        // Assurez-vous que $filePath commence par $publicDir avant de faire un str_replace
+        if (strpos($filePath, $publicDir) === 0) {
+            $relativePath = str_replace($publicDir, '', $filePath);
+            // dd($relativePath);
+        } else {
+            throw new \Exception('The file path does not start with the public directory.');
+        }
+
+        // Assurez-vous que le chemin commence par une barre oblique "/"
+        if ($relativePath[0] !== '/') {
+            $relativePath = '/' . $relativePath;
+        }
+
+        return $relativePath;
     }
 
     // recherche une image a partir de son nom de fichier et d'un rôle pour iddentifier le répertoire

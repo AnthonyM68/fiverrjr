@@ -2,31 +2,47 @@
 
 namespace App\Controller;
 
-use App\Service\CartService;
 use App\Entity\ServiceItem;
+use App\Service\CartService;
 use Psr\Log\LoggerInterface;
+use App\Service\InvoiceService;
+use App\Repository\OrderRepository;
 use App\Repository\ServiceItemRepository;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class CartController extends AbstractController
 {
     private $cart;
     private $logger;
+    private $invoiceService;
 
-    public function __construct(CartService $cart, LoggerInterface $logger)
+
+    public function __construct(
+        CartService $cart, 
+        LoggerInterface $logger,
+        InvoiceService  $invoiceService,
+        
+        )
     {
         $this->cart = $cart;
         $this->logger = $logger;
+        $this->invoiceService = $invoiceService;
+        
+        
     }
     // affiche le panier
-    #[Route('/cart', name: 'cart_product')]
+    #[Route('/client/cart', name: 'cart_product')]
+    #[IsGranted('ROLE_CLIENT')]
     public function cartProduct(Request $request): Response
     {
         // on peu crée et vérifier ici un status de paiement
@@ -34,7 +50,7 @@ class CartController extends AbstractController
         $fullCart = $this->cart->getCart($request);
 
         $this->addFlash('positive', 'votre commande sera ajoutée au panier');
-    
+
 
         return $this->render('cart/index.html.twig', [
             'title_page' => 'panier',
@@ -45,10 +61,11 @@ class CartController extends AbstractController
         ]);
     }
     // ajoute un service au panier
-    #[Route('/cart/add/service/{id}', name: 'add_service_cart')]
+    #[Route('/client/cart/add/service/{id}', name: 'add_service_cart')]
+    #[IsGranted('ROLE_CLIENT')]
     public function cartAddProduct(Request $request, ServiceItem $serviceItem): Response
     {
-        // ona joute le produit au panier via le service Cart
+        // on joute le produit au panier via le service Cart
         $this->cart->addProduct($serviceItem, $request);
 
         // on sérialise le panier mis à jour
@@ -73,7 +90,9 @@ class CartController extends AbstractController
         ]);
     }
 
-    #[Route('/cart/totalItemFromCart', name: 'cart_total_item', methods: ['GET'])]
+
+    #[Route('/client/cart/totalItemFromCart', name: 'cart_total_item', methods: ['GET'])]
+    #[IsGranted('ROLE_CLIENT')]
     public function getTotalItemFromCart(Request $request): JsonResponse
     {
         try {
@@ -85,7 +104,8 @@ class CartController extends AbstractController
         }
     }
 
-    #[Route('/cart/remove/{id}', name: 'remove_service_cart')]
+    #[Route('/client/cart/remove/{id}', name: 'remove_service_cart')]
+    #[IsGranted('ROLE_CLIENT')]
     public function cartRemoveProduct(ServiceItem $serviceItem, Request $request): Response
     {
         $this->cart->removeProduct($serviceItem, $request);
@@ -99,7 +119,8 @@ class CartController extends AbstractController
         ]);
     }
     // supprime un service par ID du panier
-    #[Route('/cart/delete/{id}', name: 'delete_service_cart')]
+    #[Route('/client/cart/delete/{id}', name: 'delete_service_cart')]
+    #[IsGranted('ROLE_CLIENT')]
     public function cartDeleteProduct(ServiceItem $serviceItem, Request $request): Response
     {
         $this->cart->deleteProduct($serviceItem, $request);
@@ -114,7 +135,8 @@ class CartController extends AbstractController
         ]);
     }
 
-    #[Route('/empty', name: 'empty')]
+    #[Route('/client/empty', name: 'empty')]
+    #[IsGranted('ROLE_CLIENT')]
     public function empty(Request $request): Response
     {
         $this->cart->empty($request);
@@ -125,5 +147,27 @@ class CartController extends AbstractController
             'data' => $fullCart['data'],
             'total' => $fullCart['total']
         ]);
+    }
+
+    #[Route('/client/invoice/pdf/{id}', name: 'invoice_pdf')]
+    #[IsGranted('ROLE_CLIENT')]
+    public function downloadPdf($id, Request $request): Response
+    {
+        return $this->invoiceService->downloadPdf($id, $request);
+    }
+
+    #[Route('/client/invoice/delete/completed/{id}', name: 'delete_completed_invoice')]
+    #[IsGranted('ROLE_CLIENT')]
+    public function deleteCompletedInvoice(int $id): RedirectResponse
+    {
+        try {
+            // appel au service pour supprimer la facture
+            $this->invoiceService->deleteCompletedInvoice($id);
+            $this->addFlash('success', 'La facture a été supprimée avec succès.');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Erreur lors de la suppression de la facture : ' . $e->getMessage());
+        }
+
+        return $this->redirectToRoute('cart_completed_orders');
     }
 }

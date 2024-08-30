@@ -75,7 +75,7 @@ const preloadImages = async (urls) => {
             <Card>
               {imageUrl && (
                 <div className="image-container">
-                  <Image src={imageUrl} wrapped ui={false} />
+                  <Image src={imageUrl} wrapped ui={false} alt="image of the parallax home with a developer shown from behind"/>
                 </div>
               )}
               <Card.Content className="card-content">

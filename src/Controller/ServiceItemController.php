@@ -167,6 +167,7 @@ class ServiceItemController extends AbstractController
         $token = $request->request->get('_token');
         // validation du token csrf
         $csrfToken = new CsrfToken('token_' . ($serviceId ?: 'new_service'), $token);
+        
         if (!$csrfTokenManager->isTokenValid($csrfToken)) {
             return new JsonResponse(['error' => 'invalid csrf token'], Response::HTTP_FORBIDDEN);
         }
@@ -366,10 +367,10 @@ class ServiceItemController extends AbstractController
         ]);
     }
     #[Route('/services/user/{id}', name: 'list_services_by_userID')]
-    public function listServiceByUserID(ServiceItemRepository $ServiceItemRepository, int $id): Response
+    public function listServiceByUserID(ServiceItemRepository $ServiceItemRepository, ?User $user): Response
     {
         // Récupère tous les service triés par date
-        $services = $ServiceItemRepository->findByUserId($id);
+        $services = $ServiceItemRepository->findByUserId($user);
         // Rend la vue avec les services récupérés
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Liste des Services',
@@ -480,7 +481,7 @@ class ServiceItemController extends AbstractController
         Request $request,
         ?ServiceItem $service
     ): Response {
-        // $this->imageService->setPictureUrl($service);
+        $this->imageService->setPictureUrl($service);
         return $this->render('itemService/index.html.twig', [
             'title_page' => 'Détail:',
             'service' => $service,
@@ -773,12 +774,10 @@ class ServiceItemController extends AbstractController
         $services = $course->getServiceItems();
 
         $page = $request->get('page');
-       
 
         foreach ($services as $service) { 
-            // $this->imageService->setPictureUrl($service);
+            $this->imageService->setPictureUrl($service);
         }
-
         $pagination = $paginator->paginate(
             $services,
             $page,

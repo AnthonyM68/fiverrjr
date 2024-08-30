@@ -102,12 +102,6 @@ class ServiceItem
         return $this;
     }
 
-
-
-
-
-
-    
     /**
      * Undocumented User
      *

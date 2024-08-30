@@ -11,17 +11,12 @@
 {# Détail d'un utilisateur #}
 {% if user| default %}
 <div class="ui container">
-    <div class="uk-animation">
-        <div class="uk-animation-slide-right">
-            <h1 class="title uk-animation-slide-right">{{ title_page|e }}</h1>
-        </div>
-    </div>
     <div class="ui two column stackable grid">
         <div class="eight wide column">
             <div class="ui segment equal-height">
                 <div class="product-image">
                     <img src="{{ asset(user.picture|e) }}"
-                        alt="Image de profil de {{ user.firstName|e }} {{ user.lastName|e }}"
+                        alt="Image de profil de {{ user.firstName|e ~ ' ' ~ user.lastName|e }}"
                         class="ui fluid image portrait">
                 </div>
                 <div class="ui segment equal-height">
@@ -72,12 +67,15 @@
         </div>
     </div>
 </div>
+
+
+
 {# profile de l'utilisateur, interface #}
 {% else %}
 <div class="ui container user">
     <div class="uk-animation padding-bottom-large">
         <div class="uk-animation-slide-right">
-            <h1 class="title uk-animation-slide-right">Bonjour {{ app.user.firstName ~ app.user.lastName }}</h1>
+            <h1 class="title uk-animation-slide-right">Bonjour {{ app.user.firstName ~ ' ' ~ app.user.lastName }}</h1>
         </div>
     </div>
     <div class="ui grid equal-height-columns ">
@@ -94,10 +92,13 @@
                         <div id="last-client-profile"></div>
                     </div>
                 </div>
-
             </div>
         </div>
         <div class="column">
+
+
+
+            {% if is_granted('ROLE_DEVELOPER') %}
             <div class="ui segment">
                 <a href="javascript:void(0);" class="ui button primary toggle-new-service"
                     data-token="{{ csrf_token('token_new_service') }}">
@@ -107,6 +108,17 @@
                     Liste de mes services
                 </a>
             </div>
+            {% else %}
+            <div class="ui segment">
+                <a href="{{path('new_service')}}" class="ui button primary toggle-new-service"
+                    data-token="{{ csrf_token('token_new_service') }}">
+                    Nouveau service
+                </a>
+                <a href="javascript:void(0);" class="ui button primary toggle-list-services">
+                    Liste de mes services
+                </a>
+            </div>
+            {% endif %}
 
 
             {# Crée un nouveau service #}
@@ -144,10 +156,10 @@
                 </div>
             </div>
             <div class="ui segment">
-                <div id="orders_pending">{% include "/user/order/pending.html.twig" %}</div>
+                <div id="orders_pending">{% include "/user/order/paid.html.twig" %}</div>
             </div>
             <div class="ui segment">
-                <div id="orders_completed">{% include "/user/order/completed.html.twig" %}</div>
+                {# <div id="orders_completed">{% include "/user/order/completed.html.twig" %}</div> #}
             </div>
         </div>
     </div>

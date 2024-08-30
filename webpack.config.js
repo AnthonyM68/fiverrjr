@@ -78,15 +78,12 @@ Encore
     .addEntry('app', './assets/app.js')
     // semantic-ui Framework
     .addEntry('semantic', './semantic/dist/semantic.js')
-
     // Styles et scripts de Semantic UI
-    .addStyleEntry('semantic_ui_react_css', './node_modules/semantic-ui-css/semantic.min.css') // Assurez-vous que le chemin est correct
+    .addStyleEntry('semantic_ui_react_css', './node_modules/semantic-ui-css/semantic.min.css') 
     .addEntry('semantic_ui_react_js', './node_modules/semantic-ui-css/semantic.min.js')
-
     // uikit Framework
     .addEntry('uikit', './node_modules/uikit/dist/js/uikit.js')
     .addEntry('uikit-icons', './node_modules/uikit/dist/js/uikit-icons.js')
-
     // Message_flash
     .addEntry('messageFlash', './assets/js/alert/messageFlash.js')
     // DisplayResults 
@@ -98,8 +95,6 @@ Encore
     .addEntry('searchMotor', './assets/js/searchMotor/searchMotor.js')
     // Dropdown navbar
     .addEntry('dropdown', './assets/js/dropdown/dropdown.js')
-    // // Slick-carousel
-    // .addEntry('slick-carousel', './node_modules/slick-carousel/slick/slick.js')
     // Preview image FileUpload
     .addEntry('previewImage', './assets/js/preview/previewImage.js')
     // Orders list pending / completed

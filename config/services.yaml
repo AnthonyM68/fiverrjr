@@ -61,6 +61,8 @@ services:
 
   App\Service\UserAnonymizer: ~
 
+  App\Service\UserService: ~
+
  # Listener to intercept form submissions and set the registration date for new users (form RegistrationFormType)
   # Listener pour intercepter les soumissions de formulaire et définir la date d'inscription pour les nouveaux utilisateurs (formulaire RegistrationFormType)
   App\EventListener\UserRegistrationListener:

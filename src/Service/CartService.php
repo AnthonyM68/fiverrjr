@@ -31,7 +31,6 @@ class CartService
     public function __construct(
         ServiceItemRepository $serviceItemRepository,
         PaymentRepository $paymentRepository,
-
         HttpKernelInterface $httpKernel,
         LoggerInterface $logger,
         ImageService $imageService,

@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\ServiceItem;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Service>
@@ -27,16 +28,17 @@ class ServiceItemRepository extends ServiceEntityRepository
         // Retourne le QueryBuilder au lieu d'exécuter immédiatement la requête
         return $qb;
     }
-    public function findByUserId(int $userId): array
+    public function findByUser(User $user): array
     {
         return $this->createQueryBuilder('su')
             ->innerJoin('su.user', 'u')
-            ->where('u.id = :userId')
-            ->setParameter('userId', $userId)
+            ->where('u = :user') // On compare directement l'entité User
+            ->setParameter('user', $user) // On passe l'objet User en paramètre
             ->orderBy('su.createDate', 'DESC')
             ->getQuery()
             ->getResult();
     }
+    
     public function countAll()
     {
         return $this->createQueryBuilder('s')

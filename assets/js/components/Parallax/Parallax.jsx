@@ -132,7 +132,7 @@ const ParallaxHome = ({ id }) => {
           <h2 className="ui center aligned icon header">
             <img
               src="/uploads/services/alsace.png"
-              alt="Friends Icon"
+              alt="Alsace region Icon"
               className="circular icon"
             />
           </h2>

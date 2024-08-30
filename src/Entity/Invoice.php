@@ -28,15 +28,15 @@ class Invoice
     private ?string $status = null;
 
     #[ORM\Column(nullable: true)]
-    private ?array $clientTraceability = null;
+    private ?string $clientTraceability = null;
 
     #[ORM\Column(nullable: true)]
-    private ?array $orderTraceability = null;
+    private ?string $orderTraceability = null;
 
     #[ORM\Column(length: 255)]
     private ?string $pdfPath = null;
 
-    #[ORM\OneToOne(inversedBy: 'invoice')]
+    #[ORM\OneToOne(inversedBy: 'invoice',cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $orderRelation = null;
 
@@ -44,9 +44,6 @@ class Invoice
     {
         return $this->id;
     }
-
-
-
     public function getAmount(): ?string
     {
         return $this->amount;

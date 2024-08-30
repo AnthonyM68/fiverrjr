@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OrderRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -17,15 +18,14 @@ class Order
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $userId = null;
-
+    #[Groups(['order'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateOrder = null;
 
     #[ORM\Column]
     private ?string $status = null;
 
+    #[Groups(['order'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDelivery = null;
     /**
@@ -34,7 +34,7 @@ class Order
      * @var User|null
      */
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
     /**
@@ -49,14 +49,14 @@ class Order
      *
      * @var Collection
      */
-    #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'order', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: ServiceItem::class, mappedBy: 'order')]
     private Collection $services;
     /**
      * Undocumented variable
      *
      * @var Payment|null
      */
-    #[ORM\OneToOne(targetEntity: Payment::class, mappedBy: 'orderRelation', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Payment::class, mappedBy: 'orderRelation')]
     private ?Payment $payment = null;
 
 

@@ -35,10 +35,8 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        // dd($form->getData());
-
         if ($form->isSubmitted() && $form->isValid()) {
-             // Encode le mot de passe en utilisant plainPassword
+             // Encode le mot de passe en utilisant plainPassword Algorythme Bcrypt 
             $user->setPassword($userPasswordHasher->hashPassword($user, $user->getPlainPassword()));
             // set roles
             $user->setRoles($form->get('roles')->getData());

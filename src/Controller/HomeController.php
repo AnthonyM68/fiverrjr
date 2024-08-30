@@ -1,82 +1,65 @@
 <?php
 
 namespace App\Controller;
-// Importation des classes nécessaires
+
 use App\Entity\User;
-use App\Service\CartService;
 use App\Entity\ServiceItem;
 use Psr\Log\LoggerInterface;
+use App\Service\UserService;
 use App\Service\ImageService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-// use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
-// use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class HomeController extends AbstractController
 {
-    private $entityManager;
     private $logger;
     private $imageService;
-    // private $security;
-    // private $session;
-    // Constructeur pour injecter l'EntityManager
+    private $entityManager;
+    private $serializer;
+
     public function __construct(
         EntityManagerInterface $entityManager,
+        SerializerInterface $serializer,
         LoggerInterface $logger,
         ImageService $imageService,
-        // Security $security,
-        // SessionInterface $session
-
     ) {
         $this->entityManager = $entityManager;
-        $this->logger = $logger;
         $this->imageService = $imageService;
-        // $this->security = $security;
-        // $this->session = $session;
+        $this->serializer = $serializer;
+        $this->logger = $logger;
+        
     }
-    /**
-     * Route pour la page d'accueil
-     *
-     * @return Response
-     */
+
     #[Route('/home', name: 'home')]
-    public function index(
-        SerializerInterface $serializer,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        UrlGeneratorInterface $urlGenerator
+    public function index(UserService $userService, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager): Response {
 
-    ): Response {
+        $lastClient = $userService->getLastUser('ROLE_CLIENT');
+        // si un client est trouvé
+        if ($lastClient) {
+            // on sérialize l'objet incluant la convertion JSON
+            $lastClientData = $this->serializer->serialize($lastClient, 'json', ['groups' => 'user']);
+            // convertit la chaine JSON en un tableau associatif PHP manipulatble
+            $dataClient = json_decode($lastClientData, true);
+        } 
 
-        // Récupérer le dernier utilisateur avec le rôle ROLE_ENTERPRISE
-        $lastClient = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_CLIENT');
-        // Récupérer le dernier utilisateur avec le rôle ROLE_DEVELOPER
         $lastDeveloper = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_DEVELOPER');
-        // // Récupérer le dernier service ajouté
+        if($lastDeveloper) {
+            $lastDeveloperData = $this->serializer->serialize($lastDeveloper, 'json', ['groups' => 'user']);
+            $dataDeveloper = json_decode($lastDeveloperData, true);
+        }
+
         $lastService = $this->entityManager->getRepository(ServiceItem::class)->findby([], ['id' => 'DESC'], 10);
-
-        $developer = $lastDeveloper->getQuery()->getSingleResult();
-
-        $this->imageService->setPictureUrl($developer);
-        $lastDeveloperData = $serializer->serialize($developer, 'json', ['groups' => 'user']);
-        $dataDeveloper = json_decode($lastDeveloperData, true);
-
-        $client = $lastClient->getQuery()->getSingleResult();
-        $this->imageService->setPictureUrl($client, 'ROLE_CLIENT');
-        $lastClientData = $serializer->serialize($client, 'json', ['groups' => 'user']);
-        $dataClient = json_decode($lastClientData, true);
-
         // Définir les URL des images pour chaque service
         foreach ($lastService as $service) {
             $this->imageService->setPictureUrl($service);
         }
-        $lastServiceData = $serializer->serialize($lastService, 'json', ['groups' => 'serviceItem']);
+        $lastServiceData = $this->serializer->serialize($lastService, 'json', ['groups' => 'serviceItem']);
         $dataService = json_decode($lastServiceData, true);
 
         // Générez les tokens 

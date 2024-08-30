@@ -86,39 +86,37 @@ class UserController extends AbstractController
             'orders_pending' => null,
             'orders_completed' => null,
             'user' => $user
-
         ]);
     }
-
-
-    #[Route('/profile/edit/{id}/{service}', name: 'profile_edit')]
+    #[Route('/user/profile/edit/{service}', name: 'profile_edit')]
     public function edit(
-        int $id,
         Request $request,
-        UserRepository $userRepository,
         EntityManagerInterface $entityManager,
         SerializerInterface $serializer,
         PaginatorInterface $paginator,
         ?ServiceItem $service = null
-
     ): Response {
 
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createNotFoundException('Utilisateur non trouvé');
+        }
         $limit = 3;
         $formHasErrors = false;
-
         $page = $request->get('page');
 
         if (!$page) {
             $page = 1;
         }
-        // Récupérer l'utilisateur par ID
-        $user = $userRepository->find($id);
         // s'il y'a une action AJAX sur la pagination 
         if ($request->isXmlHttpRequest()) {
 
             $status = $request->get('status');
+            $this->logger->info('status: ', ['status' => $status]);
 
-            $orders = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
+            $orders = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($user, $status);
+            $this->logger->info('orders: ', ['orders' => $orders]);
 
             $pagination = $paginator->paginate(
                 $orders,
@@ -130,14 +128,10 @@ class UserController extends AbstractController
                 'orders_' . $status =>  $pagination->getItems(),
                 'pagination_' . $status => $pagination
             ]);
-
-            // Retourner la réponse JSON 
             return new JsonResponse(['orders' => $formHtml, 'type_order' => 'orders_' . $status], Response::HTTP_OK);
         }
 
-        if (!$user) {
-            throw $this->createNotFoundException('Utilisateur non trouvé');
-        }
+
         // détermine le répertoire de destination de l'image en fonction du role de l'utilisateur
         // permet de construire l'url de l'image
         $roles = $user->getRoles();
@@ -149,18 +143,8 @@ class UserController extends AbstractController
         };
         // obtenir le nom du fichier de l'image de profil de l'utilisateur
         $originalFilename = $user->getPicture();
-
-        $this->logger->info('Processing generateImageUrl user curent', ['user' => $user, 'role' => $role, 'originalFilename' => $originalFilename]);
-
-        if ($originalFilename) {
-            try {
-                $pictureUrl = $this->imageService->generateImageUrl($originalFilename, $role);
-                $user->setPicture($pictureUrl);
-            } catch (\Exception $e) {
-                throw $e;
-            }
-        }
-
+       
+        // $this->imageService->setPictureUrl($user);
         // crée le formulaire pour l'utilisateur
         $formUser = $this->createForm(UserType::class, $user);
         $formUser->handleRequest($request);
@@ -190,15 +174,11 @@ class UserController extends AbstractController
             return $this->redirectToRoute('profile_edit', ['id' => $user->getId()]);
         }
 
+        $this->imageService->setPictureUrl($user);
+
         if (!$service) {
             $service = new ServiceItem();
         }
-
-        // obtenir le nom du fichier de l'image de profil de l'utilisateur
-        // $originalFilename = $service->getPicture();
-        // if ($originalFilename) {
-        //     $this->imageService->setPictureUrl($service);
-        // }
 
         $formService = $this->createForm(ServiceItemType::class, $service, [
             'action' => $this->generateUrl('service_form_update'),
@@ -246,7 +226,6 @@ class UserController extends AbstractController
         $lastDeveloper = $this->entityManager->getRepository(User::class)->findOneUserByRole('ROLE_DEVELOPER');
         $this->logger->info('lastDeveloper', ['user' => $lastDeveloper->getQuery()->getResult()]);
 
-
         $developer = $lastDeveloper->getQuery()->getSingleResult();
         $this->imageService->setPictureUrl($developer, 'ROLE_DEVELOPER');
 
@@ -263,8 +242,8 @@ class UserController extends AbstractController
          *  recherche des commandes nouvelles
          */
         //
-        $status = 'pendding';
-        $ordersPending = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
+        $status = 'paid';
+        $ordersPending = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($user, $status);
 
         $paginationPending = $paginator->paginate(
             $ordersPending,
@@ -275,7 +254,7 @@ class UserController extends AbstractController
          * recherche des commandes complètes
          */
         $status = 'completed';
-        $ordersCompleted = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($id, $status);
+        $ordersCompleted = $entityManager->getRepository(Order::class)->findByUserIdAndStatus($user, $status);
 
         $paginationCompleted = $paginator->paginate(
             $ordersCompleted,
@@ -315,13 +294,16 @@ class UserController extends AbstractController
         $this->addFlash('warning', 'Anonymisation des données utilisateur');
 
         $this->userAnonymizer->anonymizeUser($user);
+
+        return $this->redirectToRoute('home');
+
     }
 
     /**
      * Affiche la liste des Développeurs ou des Client suivant le $role en argument
      */
     #[Route('/usertype/list/{role}/{page}', name: 'list_user_type')]
-    public function listUserType(String $role, int $page, Request $request, PaginatorInterface $paginator, SerializerInterface $serializer): Response
+    public function listUserType(String $role, int $page, PaginatorInterface $paginator, SerializerInterface $serializer): Response
     {
         $limit = 3;
         // Récupération les User par le role: ROLE_CLIENT

@@ -2,29 +2,45 @@
 
 namespace App\Service;
 
-use App\Entity\Order;
+use TCPDF;
 use App\Entity\User;
+use App\Entity\Order;
 use App\Entity\Invoice;
+use App\Entity\Payment;
 use Psr\Log\LoggerInterface;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use TCPDF;
 
 class InvoiceService
 {
     private $security;
     private $parameters;
-
+    private $orderRepository;
     private $logger;
-    public function __construct(Security $security, ParameterBagInterface $parameters, LoggerInterface $logger)
-    {
+    private $entityManager;
+    private $serializer;
+
+    public function __construct(
+        Security $security,
+        ParameterBagInterface $parameters,
+        LoggerInterface $logger,
+        OrderRepository $orderRepository,
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer
+    ) {
         $this->security = $security;
         $this->parameters = $parameters;
         $this->logger = $logger;
+        $this->orderRepository = $orderRepository;
+        $this->entityManager = $entityManager;
+        $this->serializer = $serializer;
     }
-
-
     public function generateInvoicePdf($invoiceData): string
     {
         // Déterminez le chemin de sauvegarde du fichier PDF
@@ -38,6 +54,7 @@ class InvoiceService
         // Création du PDF
         $pdf = new TCPDF();
         $pdf->AddPage();
+        // font github thème fiverr junior not work here ???
         $pdf->SetFont('helvetica', '', 12);
 
         // Titre
@@ -55,17 +72,19 @@ class InvoiceService
             $pdf->Cell(0, 10, '- ' . $serviceItem->getTitle() . ' - ' . $serviceItem->getPrice() . ' EUR', 0, 1);
         }
 
+        // Récupération et affichage du montant total
+        $payment = $order->getPayment();
+        if ($payment instanceof Payment) {
+            $pdf->Cell(0, 10, 'Total Amount: ' . $payment->getAmount() . ' EUR', 0, 1);
 
-        $totalAmount = $order->getPayment();
-        $pdf->Cell(0, 10, 'Total Amount: ' . $totalAmount . ' EUR', 0, 1);
+            // Détails de paiement
+            $pdf->Cell(0, 10, 'Payment ID: ' . $payment->getId(), 0, 1);
+            $pdf->Cell(0, 10, 'Payment Date: ' . $payment->getDatePayment()->format('d-m-Y H:i:s'), 0, 1);
+        } else {
+            $pdf->Cell(0, 10, 'Total Amount: 0.00 EUR', 0, 1);
+        }
 
-        // Détails de paiement
-        $payment = $invoiceData['payment'];
-        $pdf->Cell(0, 10, 'Payment ID: ' . $payment->getId(), 0, 1);
-        $pdf->Cell(0, 10, 'Payment Date: ' . $payment->getDatePayment()->format('Y-m-d H:i:s'), 0, 1);
 
-        // Sauvegarde du fichier PDF
-        $pdf->Output($filePath, 'F');
 
         return $filePath;
     }
@@ -104,5 +123,96 @@ class InvoiceService
         }
 
         throw new \Exception('Utilisateur non authentifié.');
+    }
+
+    public function downloadPdf($id): Response
+    {
+        $order = $this->orderRepository->find($id);
+
+        if (!$order instanceof Order) {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Order not found.');
+        }
+
+
+        $invoice = $order->getInvoice();
+        // if (!$invoice instanceof Invoice) {
+        //     throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Invoice not found for this order.');
+        // }
+
+        if (!$this->security->isGranted('ROLE_CLIENT', $order)) {
+            throw new AccessDeniedException('Access Denied');
+        }
+
+        $filePath = $invoice->getPdfPath();
+
+        if (!file_exists($filePath)) {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('File not found.');
+        }
+
+        $response = new StreamedResponse(function () use ($filePath) {
+            readfile($filePath);
+        });
+
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'inline; filename="' . basename($filePath) . '"');
+
+        return $response;
+    }
+    public function deleteCompletedInvoice(int $id): bool
+    {
+        $order = $this->entityManager->getRepository(Order::class)->find($id);
+
+        if (!$order instanceof Order) {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Order not found.');
+        }
+
+        $invoice = $order->getInvoice();
+
+        if (!$invoice instanceof Invoice) {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Invoice not found.');
+        }
+
+        if (!$this->security->isGranted('ROLE_CLIENT', $order)) {
+            throw new AccessDeniedException('Access Denied');
+        }
+
+        if ($order->getStatus() === 'completed') {
+            $this->archiveInvoiceData($invoice, $order);
+
+            $this->entityManager->persist($order);
+            $this->entityManager->remove($invoice);
+            $this->entityManager->flush();
+
+            $this->logger->info('Invoice deleted successfully.', ['invoiceId' => $id]);
+            return true;
+        } else {
+            $this->logger->info('Invoice not deleted. Order status is not "completed".', ['invoiceId' => $id]);
+            return false;
+        }
+    }
+
+    private function archiveInvoiceData(Invoice $invoice, Order $order): void
+    {
+        $orderData = $this->serializer->serialize($order, 'json', ['groups' => 'order']);
+        $orderSerialize = json_decode($orderData, true);
+
+        $payment = $order->getPayment();
+        $paymentData = $this->serializer->serialize($payment, 'json', ['groups' => 'payment']);
+        $paymentSerialize = json_decode($paymentData, true);
+
+        $user = $order->getUser();
+        $userData = $user ? $this->serializer->serialize($user, 'json', ['groups' => 'userTraceability']) : [];
+        
+        $invoice->setOrderTraceability(json_encode([
+            'order' => $orderSerialize,
+            'payment' => $paymentSerialize,
+        ]));
+
+        $invoice->setClientTraceability(json_encode([
+            'invoice_id' => $invoice->getId(),
+            'user' => $userData,
+        ]));
+
+        $this->entityManager->persist($invoice);
     }
 }

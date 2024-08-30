@@ -66,30 +66,22 @@ const resetFieldErrors = () => {
 // écoute les événements du formulaire pour l'envoi ajax
 const eventListnerFormService = async () => {
     const form = document.getElementById('service_form_ajax');
+
     if (!form) return;
-    console.log(form);
     // on annule tout autre écouteur sur cet élément
     form.removeEventListener("submit", handleFormSubmit);
     // on en crée un nouveau
     form.addEventListener("submit", handleFormSubmit);
-
     async function handleFormSubmit(event) {
         event.preventDefault();
         event.stopPropagation();
-
         const formData = new FormData(form);
         const serviceId = form.getAttribute('data-service-id');
-
-        console.log(serviceId);
-
-
         if (serviceId) formData.append('service_id', serviceId);
-
         // Display the key/value pairs
-        for (const pair of formData.entries()) {
+        /*for (const pair of formData.entries()) {
             console.log(pair[0], pair[1]);
-        }
-
+        }*/
         try {
             const { data, error } = await usePostData(form.action, formData, false, false);
 
@@ -106,21 +98,8 @@ const eventListnerFormService = async () => {
                     $('#loader-new').hide();
                     $('#loader-edit').hide();
                 }
-
-                // if (error.formHtml) {
-                //     document.getElementById('service-form-new').innerHTML = error.formHtml;
-                //     if ($('#loader-new').is(':visible')) {
-                //         $('#loader-new').hide();
-                //     }
-                //     if ($('#loader-edit').is(':visible')) {
-                //         $('#loader-edit').hide();
-                //     }
-                //     initializeForm();
-                //     eventListnerFormService();
-                // }
             } else {
                 showAlert('positive', data.message); 
-
             }
         } catch (error) {
             showAlert('negative', 'Erreur lors de l\'envoi du formulaire : ' + error.message);
@@ -166,21 +145,18 @@ const NewServiceManager = (function () {
                     console.error(response.error);
                     return;
                 }
-
                 const data = response.data;
                 if (data.formHtml) {
                     document.getElementById('service-form-new').innerHTML = data.formHtml;
                     initializeForm();
                     eventListnerFormService();
                     loader.hide();
-
                 }
             } catch (error) {
                 showAlert('negative', 'Erreur lors de la requête AJAX : ' + error.message);
                 console.error('erreur lors de la requête ajax:', error);
             }
         });
-
         // ferme la liste des services si visible
         if (serviceListContainer.is(':visible')) {
             serviceListContainer.slideUp(400, () => $('.toggle-list-services').text('liste de mes services'));
@@ -193,6 +169,8 @@ const NewServiceManager = (function () {
 
     return { init: initEventListeners };
 })();
+
+
 // gestion de l'affichage de la liste des services
 const ServiceToggleManager = (function () {
     const serviceListContainer = $('#service-item-list');
@@ -257,7 +235,9 @@ const ServiceToggleManager = (function () {
 
 // gestion de la liste des services et des actions éditer/supprimer
 export const ServiceListManager = (function () {
+    // container
     const serviceItemList = $('#service-item-list');
+    // table
     const tableBody = document.getElementById("body-table-list");
     // met à jour la liste des services
     const updateListeServices = async () => {

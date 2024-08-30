@@ -49,7 +49,7 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/client, roles: ROLE_CLIENT }
         - { path: ^/developer, roles: ROLE_DEVELOPER }
-        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/user, roles: ROLE_USER }
         # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # - { path: ^/service, roles: IS_AUTHENTICATED_FULLY }
 

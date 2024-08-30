@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Order;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Order>
@@ -15,15 +16,25 @@ class OrderRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Order::class);
     }
-    public function findByUserIdAndStatus(int $userId, string $status): array
+    public function findByUserIdAndStatus(User $user, string $status): array
     {
         return $this->createQueryBuilder('o')
-            ->andWhere('o.userId = :userId')
+            ->andWhere('o.user = :user')
             ->andWhere('o.status = :status')
-            ->setParameter('userId', $userId)
+            ->setParameter('user', $user)
             ->setParameter('status', $status)
             ->getQuery()
             ->getResult();
+    }
+    public function getPaymentFromOrderByUser(User $user)
+    {
+        $query = $this->getEntityManager()->createQuery(
+            'SELECT o, p FROM App\Entity\Order o
+             LEFT JOIN o.payment p
+             WHERE o.user = :user'
+        )->setParameter('user', $user);
+
+        return $query->getResult();
     }
 
     //    /**

@@ -17,6 +17,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -30,19 +32,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user', 'serviceItem'])]
     private ?string $username = null;
 
-        // Contrainte pour le champ email login
-        #[Assert\NotBlank]
-        #[Assert\Email(message: "Veuillez saisir une adresse email valide.")]
-        #[Assert\Length(
-            min: 5,
-            minMessage: "Votre email doit comporter au moins {{ limit }} caractères.",
-            max: 180,
-            maxMessage: "Votre email ne peut pas comporter plus de {{ limit }} caractères."
-        )]
-        // l'email doit être unique
-        #[ORM\Column(length: 180, unique: true)]
-        #[Groups(['user', 'serviceItem'])]
-        private ?string $email = null;
+    // Contrainte pour le champ email login
+    #[Assert\NotBlank]
+    #[Assert\Email(message: "Veuillez saisir une adresse email valide.")]
+    #[Assert\Length(
+        min: 5,
+        minMessage: "Votre email doit comporter au moins {{ limit }} caractères.",
+        max: 180,
+        maxMessage: "Votre email ne peut pas comporter plus de {{ limit }} caractères."
+    )]
+    // l'email doit être unique
+    #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['user', 'serviceItem'])]
+    private ?string $email = null;
 
     #[ORM\Column]
     private ?string $password = null;
@@ -80,14 +82,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['user', 'serviceItem'])]
+    #[Groups(['user', 'serviceItem', 'userTraceability'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    #[Groups(['user', 'serviceItem'])]
+    #[Groups(['user', 'serviceItem', 'userTraceability'])]
     private ?string $lastName = null;
-
     
+    #[ORM\Column(length: 100, nullable: true)]
+    #[Groups(['user', 'serviceItem', 'userTraceability'])]
+    private ?string $city = null;
+
+
+
     #[ORM\Column(length: 50, nullable: true)]
     #[Groups(['user', 'serviceItem'])]
     private ?string $phoneNumber = null;
@@ -100,9 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user', 'serviceItem'])]
     private ?string $picture = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
-    #[Groups(['user', 'serviceItem'])]
-    private ?string $city = null;
+ 
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['user', 'serviceItem'])]
@@ -111,10 +116,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['user', 'serviceItem'])]
     private ?string $bio = null;
-
-
-
-
 
     public function getPlainPassword(): ?string
     {
@@ -136,7 +137,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->serviceItems = new ArrayCollection();
-        //$this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
